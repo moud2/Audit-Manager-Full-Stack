@@ -26,7 +26,8 @@ stages:          # List of stages for jobs, and their order of execution
 before_script:
     - export TestingVar=$TestingVar && echo $TestingVar #exporting custom variables and displaying them 
     - apt update && apt upgrade -y
-    - cd $(pwd)/frontend && npm install 
+    - apt install docker
+    - cd $(pwd)/frontend && npm install
 
 
 unit-test-job:   # This job runs in the test stage.
@@ -57,6 +58,7 @@ docker-build-job:
   #  - if: $CI_COMMIT_REF_NAME == "main"
   script:
     - echo "Building Docker Image"
+    #- docker build -t insight #-> This needs an custom configured Dockerfile
 
 docker-register-job:
   stage: deploy
