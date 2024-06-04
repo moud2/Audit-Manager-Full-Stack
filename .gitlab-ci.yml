@@ -29,7 +29,7 @@ build-env-job:       # This job runs in the build stage, which runs first.
     - env
     - echo "Configurating the environment..."
     - apt update && apt upgrade -y
-    - #maybe firewall configurations
+    - echo "firewall configuration" #maybe firewall configurations
     - echo "Configuration complete."
 
 build-frontend-job:       # This job runs in the build stage, which runs first.
