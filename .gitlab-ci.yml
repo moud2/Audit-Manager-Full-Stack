@@ -19,20 +19,15 @@
 image: node:latest
 
 stages:          # List of stages for jobs, and their order of execution
-  - config
   - test
   - build
   - deploy
-  
-env-config-job:       # This job runs in the build stage, which runs first.
-  stage: config
-  script:
-    - echo "Configurating the environment..."
-    - env
+
+before_script:
     - export TestingVar=$TestingVar && echo $TestingVar #exporting custom variables and displaying them 
     - apt update && apt upgrade -y
     - cd $(pwd)/frontend && npm install 
-    - echo "Configuration complete."
+
 
 unit-test-job:   # This job runs in the test stage.
   stage: test    # It only starts when the job in the build stage completes successfully.
@@ -53,7 +48,7 @@ frontend-build-job:       # This job runs in the build stage, which runs first.
   #  - if: $CI_COMMIT_REF_NAME == "main"
   script:
     - echo "Building the application..."
-    - cd $(pwd)/frontend && npm install && npm run build
+    - npm run build
     - echo "Building complete."
 
 docker-build-job:
