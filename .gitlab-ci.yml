@@ -77,7 +77,7 @@ frontend-deploy-job:      # This job runs in the deploy stage.
     name: production
     url: http://141.57.8.208
   rules:
-      if: $CI_COMMIT_REF_NAME == "main"
+    - if: $CI_COMMIT_REF_NAME == "main"
   script:
     - echo "Deploying application..."
     - echo "Application successfully deployed."
