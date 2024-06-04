@@ -26,7 +26,7 @@ stages:          # List of stages for jobs, and their order of execution
 before_script:
     - export TestingVar=$TestingVar && echo $TestingVar #exporting custom variables and displaying them 
     - apt update && apt upgrade -y
-    - apt install docker
+    - apt -y install docker
     - cd $(pwd)/frontend && npm install
 
 
