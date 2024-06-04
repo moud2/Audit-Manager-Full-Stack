@@ -41,7 +41,19 @@ lint-test-job:   # This job also runs in the test stage.
     - sleep 10
     - echo "No lint issues found."
 
-deploy-job:      # This job runs in the deploy stage.
+docker-build-job:
+  stage: deploy
+  environment: production
+  script:
+    - echo "Building Docker Image"
+
+docker-register-job:
+  stage: deploy
+  environment: production
+  script:
+    - echo "Registering Docker Image"
+
+frontend-deploy-job:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
   environment: production
   script:
