@@ -53,7 +53,7 @@ frontend-build-job:       # This job runs in the build stage, which runs first.
   #  - if: $CI_COMMIT_REF_NAME == "main"
   script:
     - echo "Building the application..."
-    - cd $(pwd)/frontend && npm run build
+    - cd $(pwd)/frontend && npm install && npm run build
     - echo "Building complete."
 
 docker-build-job:
