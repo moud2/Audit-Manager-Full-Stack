@@ -19,12 +19,13 @@
 image: node:latest
 
 stages:          # List of stages for jobs, and their order of execution
-  - build
+  - config
   - test
+  - build
   - deploy
   
-build-env-job:       # This job runs in the build stage, which runs first.
-  stage: build
+env-config-job:       # This job runs in the build stage, which runs first.
+  stage: config
   script:
     - echo "Configurating the environment..."
     - env
@@ -46,13 +47,13 @@ lint-test-job:   # This job also runs in the test stage.
     - echo "No lint issues found."
 
 frontend-build-job:       # This job runs in the build stage, which runs first.
-  stage: deploy
+  stage: build
   environment: produktion
   #rules:
   #  - if: $CI_COMMIT_REF_NAME == "main"
   script:
     - echo "Building the application..."
-    - npm run build
+    - cd $(pwd)/frontend && npm run build
     - echo "Building complete."
 
 docker-build-job:
