@@ -21,11 +21,11 @@ stages:          # List of stages for jobs, and their order of execution
   - test
   - deploy
   
-build-env-job:
+build-env-job:       # This job runs in the build stage, which runs first.
   stage: build
   script:
-    - echo "Configuring Environment..."
-    - echo "Compile complete.
+    - echo "Configurating the environment..."
+    - echo "Configuration complete."
 
 build-frontend-job:       # This job runs in the build stage, which runs first.
   stage: build
