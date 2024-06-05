@@ -1,4 +1,4 @@
-package com.insight.backend;
+package com.insight.backend.model;
 
 /*placeholder class for Categories */
 public class Category {

@@ -1,4 +1,7 @@
-package com.insight.backend;
+package com.insight.backend.controller;
+
+
+import com.insight.backend.model.Category;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import com.google.gson.Gson;
@@ -13,7 +16,7 @@ public class GetCategoriesController {
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     /*GET request fpr categories with placeholder data */
-    @GetMapping("api/hw")
+    @GetMapping("api/v1/categories")
     public ResponseEntity<Object> getCategory() {
         List<Category> response = new ArrayList<>();
         response.add(new Category(0, "a"));
