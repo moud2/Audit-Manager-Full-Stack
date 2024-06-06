@@ -80,6 +80,7 @@ frontend-build-job:       # This job runs in the build stage, which runs first.
   environment: produktion
   #rules:
   #  - if: $CI_COMMIT_REF_NAME == "main"
+  #  - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
   script:
     - echo "Building the application..."
     - npm run build
@@ -89,6 +90,7 @@ docker-build-job:
   stage: build
   #rules:
   #  - if: $CI_COMMIT_REF_NAME == "main"
+  #  - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
   script:
     - echo "Building Docker Image"
     #- docker build -t insight #-> This needs an custom configured Dockerfile
@@ -99,6 +101,7 @@ docker-register-job:
   environment: production
   #rules:
   #  - if: $CI_COMMIT_REF_NAME == "main"
+  #  - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
   script:
     - echo "Registering Docker Image"
 
@@ -109,6 +112,7 @@ frontend-deploy-job:      # This job runs in the deploy stage.
     url: http://141.57.8.208
   #rules:
   #  - if: $CI_COMMIT_REF_NAME == "main"
+  #  - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
   script:
     - echo "Deploying application..."
     - echo "Application successfully deployed."
