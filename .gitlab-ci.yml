@@ -27,7 +27,8 @@ stages:          # List of stages for jobs, and their order of execution
 #TESTING STAGE
 #Testing Framework scheint cyprus zu werden https://docs.cypress.io/guides/guides/command-line
 before_script:
-    - echo $TESTING #exporting custom variables and displaying them 
+    - env
+    - echo $SOFTLINE #exporting custom variables and displaying them 
     - apt update && apt upgrade -y
     - apt -y install docker
     - cd $(pwd)/frontend && npm install
