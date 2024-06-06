@@ -24,10 +24,11 @@ stages:          # List of stages for jobs, and their order of execution
   - deploy
 
 before_script:
-    - export TestingVar=$TestingVar && echo $TestingVar #exporting custom variables and displaying them 
+    - echo $TESTING #exporting custom variables and displaying them 
     - apt update && apt upgrade -y
     - apt -y install docker
     - cd $(pwd)/frontend && npm install
+
 
 
 unit-test-job:   # This job runs in the test stage.
