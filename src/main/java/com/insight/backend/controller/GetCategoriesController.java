@@ -16,7 +16,7 @@ public class GetCategoriesController {
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     /*GET request for categories with placeholder data */
-    @GetMapping("api/v1/categories")
+    @GetMapping("/api/v1/categories")
     public ResponseEntity<Object> getCategory() {
         List<Category> response = new ArrayList<>();
         response.add(new Category(0, "a"));
