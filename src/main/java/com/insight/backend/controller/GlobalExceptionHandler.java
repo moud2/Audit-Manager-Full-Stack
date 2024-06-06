@@ -1,4 +1,4 @@
-package com.codechallenge.backend;
+package com.insight.backend.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
