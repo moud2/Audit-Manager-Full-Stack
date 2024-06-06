@@ -62,7 +62,7 @@ public class PatchController {
                 if (updatedRating.getNA() != null) {
                     rating.setNA(updatedRating.getNA());
                 }
-                return gson.toJson(rating);
+                return "Operation Succesful";
             }
         }
         return "Rating not found";
