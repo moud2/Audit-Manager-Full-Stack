@@ -17,14 +17,11 @@ public class Rating {
         setNA(nA);
     }
 
-    public void setRatingId(int id){
-        
+    public void setRatingId(int id) {
         this.id = id;
-
     }
 
-    public int getRatingId(){
-
+    public int getRatingId() {
         return this.id;
     }
 
@@ -36,48 +33,35 @@ public class Rating {
         return this.category;
     }
 
-    public void setQuestion(String name){
-
-        this.question = name;
-
+    public void setQuestion(String question) {
+        this.question = question;
     }
 
-    public String getQuestion(){
-
+    public String getQuestion() {
         return this.question;
     }
 
-    public void setComment(String comment){
-
+    public void setComment(String comment) {
         this.comment = comment;
-
     }
 
-    public String getComment(){
-
+    public String getComment() {
         return this.comment;
     }
 
-    public void setPoints(int points){
-
+    public void setPoints(int points) {
         this.points = points;
-
     }
 
-    public int getPoints(){
-
+    public int getPoints() {
         return this.points;
     }
 
-    public void setNA(Boolean nA){
-
+    public void setNA(Boolean nA) {
         this.nA = nA;
-
     }
 
-    public Boolean getNA(){
-
+    public Boolean getNA() {
         return this.nA;
     }
-
 }

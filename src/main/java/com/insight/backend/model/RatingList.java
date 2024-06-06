@@ -10,7 +10,7 @@ public class RatingList {
     }
 
     public List<Rating> getRatings() {
-        return ratings;
+        return this.ratings;
     }
 
     public void setRatings(List<Rating> ratings) {
