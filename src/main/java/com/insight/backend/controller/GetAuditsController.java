@@ -20,10 +20,10 @@ public class GetAuditsController {
     public ResponseEntity<String> getAudits() {
         List<Audit> auditList = new ArrayList<>();
 
-        // TODO: Temporär Code Zeilen für Grundfunktion | später entfernen und neu implementieren
+        // TODO: Temporary code for basic functionality | remove and reimplement properly later
         Audit audit1 = new Audit(0, "ISO-2123");
         Audit audit2 = new Audit(1, "ISO-2124");
-        Audit audit3 = new Audit(2, "ISO.2125");
+        Audit audit3 = new Audit(2, "ISO-2125");
         auditList.add(audit1);
         auditList.add(audit2);
         auditList.add(audit3);
