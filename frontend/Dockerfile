@@ -21,4 +21,3 @@ EXPOSE 8080
 
 # Define the command to run the application
 CMD ["npm", "run", "dev"]
-CMD ["firefox", "localhost:8080"]
