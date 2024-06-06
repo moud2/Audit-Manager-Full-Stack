@@ -20,16 +20,24 @@ image: node:latest
 
 stages:          # List of stages for jobs, and their order of execution
   - test
+  - security
   - build
   - deploy
 
+include:
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/Dependency-Scanning.gitlab-ci.yml
+  - template: Security/Secret-Detection.gitlab-ci.yml
+  - template: Security/Container-Scanning.gitlab-ci.yml
+  - template: Code-Quality.gitlab-ci.yml
+  - template: Security/License-Scanning.gitlab-ci.yml
+
+#TESTING STAGE
 before_script:
     - echo $TESTING #exporting custom variables and displaying them 
     - apt update && apt upgrade -y
     - apt -y install docker
     - cd $(pwd)/frontend && npm install
-
-
 
 unit-test-job:   # This job runs in the test stage.
   stage: test    # It only starts when the job in the build stage completes successfully.
@@ -49,6 +57,23 @@ lint-test-job:   # This job also runs in the test stage.
     - echo "Linting code... This will take about 10 seconds."
     - echo "No lint issues found."
 
+code_quality:
+  stage: test
+
+#SECURITY STAGE
+sast:
+  stage: security
+
+dependency_scanning:
+  stage: security
+
+secret_detection:
+  stage: security
+
+container_scanning:
+  stage: security
+
+#BUILD STAGE
 frontend-build-job:       # This job runs in the build stage, which runs first.
   stage: build
   environment: produktion
@@ -60,13 +85,14 @@ frontend-build-job:       # This job runs in the build stage, which runs first.
     - echo "Building complete."
 
 docker-build-job:
-  stage: deploy
+  stage: build
   #rules:
   #  - if: $CI_COMMIT_REF_NAME == "main"
   script:
     - echo "Building Docker Image"
     #- docker build -t insight #-> This needs an custom configured Dockerfile
 
+#DEPLOYMENT STAGE
 docker-register-job:
   stage: deploy
   environment: production
