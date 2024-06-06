@@ -29,24 +29,28 @@ stages:          # List of stages for jobs, and their order of execution
 before_script:
     - env
     - echo $SOFTLINE #exporting custom variables and displaying them 
-    - apt update && apt upgrade -y
-    - apt -y install docker
+
+.setupNpm:
+  image: node:20
+  before_script:
     - cd $(pwd)/frontend && npm install
 
-
 unit-test-job:   # This job runs in the test stage.
+  image: node:20 #konkrete version
   stage: test    # It only starts when the job in the build stage completes successfully.
   script:
     - echo "Running unit tests... This will take about 60 seconds."
     - echo "Code coverage is 90%"
 
 integration-test-job:
+  image: node:20 #konkrete version
   stage: test
   script:
     - echo "Starting Integration Test...."
     - echo "Integration Test coverage is 100 %"
 
 lint-test-job:   # This job also runs in the test stage.
+  image: node:20 #konkrete version
   stage: test    # It can run at the same time as unit-test-job (in parallel).
   script:
     - echo "Linting code... This will take about 10 seconds."
@@ -55,8 +59,11 @@ lint-test-job:   # This job also runs in the test stage.
 
 #BUILD STAGE
 frontend-build-job:       # This job runs in the build stage, which runs first.
+  image: node:20 #konkrete version
   stage: build
   environment: production
+  extends: 
+    - .setupNpm
   rules:
     - if: $CI_COMMIT_REF_NAME == "main"
   script:
@@ -65,6 +72,7 @@ frontend-build-job:       # This job runs in the build stage, which runs first.
     - echo "Building complete."
 
 docker-deploy-job:
+  image: docker:latest
   stage: build
   rules:
     - if: $CI_COMMIT_REF_NAME == "main"
