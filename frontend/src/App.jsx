@@ -1,37 +1,45 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React from 'react';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link
+} from 'react-router-dom';
+import Dashboard from './components/Dashboard.jsx';
+import NewAudit from './components/NewAudit.jsx';
+import PerformAudit from './components/PerformAudit.jsx';
+import Evaluation from './components/Evaluation.jsx';
 
-const App = () => {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    axios.post('http://localhost:8080/api/hw',{name:"Merlin"})
-      .then(response => {
-        setData(response.data);
-        setLoading(false);
-      })
-      .catch(err => {
-        setError(err);
-        setLoading(false);
-      });
-  }, []);
-
-  if (loading) {
-    return <p>Laden...</p>;
-  }
-
-  if (error) {
-    return <p>Fehler: {error.message}</p>;
-  }
-
+function App() {
   return (
-    <div>
-      <h1>{data.topic}</h1>
-      <p>{data.message}</p>
-    </div>
+    <Router>
+      <div>
+        <nav>
+          <ul>
+            <li>
+              <Link to="/">Dashboard</Link>
+            </li>
+            <li>
+              <Link to="/newAudit">NewAudit</Link>
+            </li>
+            <li>
+              <Link to="/performAudit">PerformAudit</Link>
+            </li>
+            <li>
+              <Link to="/evaluation">Evaluation</Link>
+            </li>
+          </ul>
+        </nav>
+
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/newAudit" element={<NewAudit />} />
+          <Route path="/performAudit" element={<PerformAudit />} />
+          <Route path="/evaluation" element={<Evaluation />} />
+        </Routes>
+      </div>
+    </Router>
   );
-};
+}
 
 export default App;
