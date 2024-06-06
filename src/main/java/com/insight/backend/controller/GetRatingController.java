@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
 
+import com.insight.backend.model.Category;
 import com.insight.backend.model.Rating;
 import com.insight.backend.model.RatingList;
 
@@ -16,14 +17,19 @@ public class GetRatingController {
     @GetMapping("/api/v1/audits/{auditId}/ratings")
     public ResponseEntity<String> get(@PathVariable("auditId") Integer auditId) {
         final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+        //Test-Kategorien generieren
+        Category category1 = new Category(0, "categorytest1");
+        Category category2 = new Category(0, "categorytest2");
+        Category category3 = new Category(0, "categorytest3");
         
         //Rating 1 und 2 zum Abschicken erstellen
-        Rating rating1 = new Rating(1, "Bob", "Kommentar1", 0, true);
-        Rating rating2 = new Rating(2, "Ben", "Kommentar2", 1, false);
-        Rating rating3 = new Rating(3, "Boris", "Kommentar3", 2, false);
-        Rating rating4 = new Rating(4, "Berthold", "Kommentar4", 3, false);
+        Rating rating1 = new Rating(1, category1, "Bob", 0 , "Kommentar1", true);
+        Rating rating2 = new Rating(2, category2, "Ben", 1, "Kommentar2", false);
+        Rating rating3 = new Rating(3, category3, "Boris", 2, "Kommentar3", false);
+        Rating rating4 = new Rating(4, category1, "Berthold", 3, "Kommentar4", false);
 
-        //Liste aus Ratings machen
+        //Liste aus Ratings erstellen
         List<Rating> ratings1 = new ArrayList<Rating>();
         ratings1.add(rating1);
         ratings1.add(rating2);
@@ -37,8 +43,13 @@ public class GetRatingController {
         HashMap<Integer, RatingList> ratingsAssigned = new HashMap<Integer, RatingList>();
         ratingsAssigned.put(1, ratingList1);
         ratingsAssigned.put(2, ratingList2);
-        RatingList ratingListSend = ratingsAssigned.get(auditId);
         
-        return ResponseEntity.ok(gson.toJson(ratingListSend));
+        //Error Handling 404 - Nicht existierendes Audit
+        if (ratingsAssigned.containsKey(auditId)){
+            RatingList ratingListSend = ratingsAssigned.get(auditId);
+            return ResponseEntity.ok(gson.toJson(ratingListSend));
+        } else {
+            return ResponseEntity.status(404).body("auditID not existing");
+        }
     }
 }

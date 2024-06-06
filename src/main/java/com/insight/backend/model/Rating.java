@@ -2,39 +2,49 @@ package com.insight.backend.model;
 
 public class Rating {
     private int id;
-    private String name;
+    private Category category;
+    private String question;
     private String comment; 
     private int points;
     private Boolean nA;
 
-    public Rating(int id, String name, String comment, int points, Boolean nA) {
-        setId(id);
-        setName(name);
+    public Rating(int id, Category category, String question, int points, String comment, Boolean nA) {
+        setRatingId(id);
+        setCategory(category);
+        setQuestion(question);
         setComment(comment);
         setPoints(points);
         setNA(nA);
     }
 
-    public void setId(int id){
+    public void setRatingId(int id){
         
         this.id = id;
 
     }
 
-    public int getId(){
+    public int getRatingId(){
 
         return this.id;
     }
 
-    public void setName(String name){
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 
-        this.name = name;
+    public Category getCategory() {
+        return this.category;
+    }
+
+    public void setQuestion(String name){
+
+        this.question = name;
 
     }
 
-    public String getName(){
+    public String getQuestion(){
 
-        return this.name;
+        return this.question;
     }
 
     public void setComment(String comment){
