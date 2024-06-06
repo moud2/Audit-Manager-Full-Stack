@@ -34,26 +34,12 @@ public class GetRatingController {
         ratings2.add(rating4);
         RatingList ratingList2 = new RatingList(ratings2);
 
+        //Ratings in per ID abrufbare Map
         HashMap<Integer, RatingList> ratingsAssigned = new HashMap<Integer, RatingList>();
         ratingsAssigned.put(1, ratingList1);
         ratingsAssigned.put(2, ratingList2);
         RatingList ratingListSend = ratingsAssigned.get(ratingId);
-        //return ResponseEntity.ok(gson.toJson(ratingList));
+        
         return ResponseEntity.ok(gson.toJson(ratingListSend));
     }
-
-    /*@GetMapping("/api/v1/audits/{id}/ratings")
-    public ResponseEntity<Map<String, String>> get() {
-        Map<String, String> response = new HashMap<>();
-        //Rating zum Abschicken erstellen
-        Rating rating = new Rating();
-        rating.setId(1);
-        rating.setName("Bob");
-        rating.setComment("Kommentar");
-        rating.setPoints(3);
-        rating.setNA(false);
-        response.put("topic", "erster Test");
-        response.put("message", "hello world!");
-        return ResponseEntity.ok(response);*/
-    
-    }
+}
