@@ -7,6 +7,14 @@ public class Rating {
     private int points;
     private Boolean nA;
 
+    public Rating(int id, String name, String comment, int points, Boolean nA) {
+        setId(id);
+        setName(name);
+        setComment(comment);
+        setPoints(points);
+        setNA(nA);
+    }
+
     public void setId(int id){
         
         this.id = id;

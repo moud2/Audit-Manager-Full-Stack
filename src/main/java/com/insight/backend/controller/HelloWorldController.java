@@ -3,7 +3,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
-import com.insight.backend.model.Rating;
+//import com.insight.backend.model.Rating;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,12 +15,7 @@ public class HelloWorldController {
     public ResponseEntity<Map<String, String>> get() {
         Map<String, String> response = new HashMap<>();
         //Rating zum abschicken erstellen
-        Rating rating = new Rating();
-        rating.setId(1);
-        rating.setName("Bob");
-        rating.setComment("Kommentar");
-        rating.setPoints(3);
-        rating.setNA(false);
+        //Rating rating = new Rating(1, "Bob", "Kommentar", 3, false);
         response.put("topic", "erster Test");
         response.put("message", "hello world!");
         return ResponseEntity.ok(response);
@@ -45,4 +40,5 @@ public class HelloWorldController {
         response.put("message", "hello " + name + "!");
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
 }
