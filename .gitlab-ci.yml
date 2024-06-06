@@ -33,6 +33,7 @@ include:
   - template: Security/License-Scanning.gitlab-ci.yml
 
 #TESTING STAGE
+#Testing Framework scheint cyprus zu werden https://docs.cypress.io/guides/guides/command-line
 before_script:
     - echo $TESTING #exporting custom variables and displaying them 
     - apt update && apt upgrade -y
@@ -57,21 +58,21 @@ lint-test-job:   # This job also runs in the test stage.
     - echo "Linting code... This will take about 10 seconds."
     - echo "No lint issues found."
 
-code_quality:
-  stage: test
+#code_quality:
+#  stage: test
 
 #SECURITY STAGE
-sast:
-  stage: security
+#sast:
+#  stage: security
 
-dependency_scanning:
-  stage: security
+#dependency_scanning:
+#  stage: security
 
-secret_detection:
-  stage: security
+#secret_detection:
+#  stage: security
 
-container_scanning:
-  stage: security
+#container_scanning:
+#  stage: security
 
 #BUILD STAGE
 frontend-build-job:       # This job runs in the build stage, which runs first.
