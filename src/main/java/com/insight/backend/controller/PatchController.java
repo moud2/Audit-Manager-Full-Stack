@@ -1,13 +1,11 @@
 package com.insight.backend.controller;
 
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.insight.backend.model.Rating;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,9 +42,15 @@ public class PatchController {
     }
 
     @PatchMapping("/api/v1/ratings/{id}")
-    public String updateRating(@PathVariable("id") int id, @RequestBody String requestBody) {
+    public ResponseEntity<String> updateRating(@PathVariable("id") int id, @RequestBody String requestBody) {
         Gson gson = new Gson();
-        Rating updatedRating = gson.fromJson(requestBody, Rating.class);
+        Rating updatedRating;
+
+        try {
+            updatedRating = gson.fromJson(requestBody, Rating.class);
+        } catch (JsonSyntaxException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid JSON");
+        }
 
         for (Rating rating : ratings) {
             if (rating.getId() == id) {
@@ -62,10 +66,10 @@ public class PatchController {
                 if (updatedRating.getNA() != null) {
                     rating.setNA(updatedRating.getNA());
                 }
-                return "Operation Succesful";
+                return ResponseEntity.ok("Operation Successful");
             }
         }
-        return "Rating not found";
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Rating not found");
     }
 
     @GetMapping("/api/v1/ratings")

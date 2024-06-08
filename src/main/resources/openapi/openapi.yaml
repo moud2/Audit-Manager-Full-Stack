@@ -20,7 +20,6 @@ paths:
               $ref: '#/components/schemas/Rating'
             examples:
               example1:
-               Endpoint: /api/v1/ratings/1
                 summary: Update Rating Example 1
                 value:
                   name: "Updated Name 1"
@@ -28,7 +27,6 @@ paths:
                   points: 4
                   NA: "Updated NA 1"
               example2:
-               Endpoint: /api/v1/ratings/2
                 summary: Update Rating Example 2
                 value:
                   name: "Updated Name 2"
@@ -36,7 +34,6 @@ paths:
                   points: 5
                   NA: "Updated NA 2"
               example3:
-               Endpoint: /api/v1/ratings/3
                 summary: Update Rating Example 3
                 value:
                   name: "Updated Name 3"
@@ -50,8 +47,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Rating'
+        '400':
+          description: Invalid JSON
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                example:
+                  message: "Invalid JSON"
         '404':
           description: Rating not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                example:
+                  message: "Rating not found"
 components:
   schemas:
     Rating:
