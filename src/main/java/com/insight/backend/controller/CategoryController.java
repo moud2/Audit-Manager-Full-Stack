@@ -11,17 +11,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-public class GetCategoriesController {
+public class CategoryController {
 
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     /*GET request for categories with placeholder data */
     @GetMapping("/api/v1/categories")
-    public ResponseEntity<Object> getCategory() {
+    public ResponseEntity<List<Category>> getCategory() {
         List<Category> response = new ArrayList<>();
         response.add(new Category(0, "a"));
         response.add(new Category(1, "b"));
         response.add(new Category(2, "c"));
-        return ResponseEntity.ok(gson.toJson(response));
+        return ResponseEntity.ok(response);
     }
 }

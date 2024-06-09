@@ -18,7 +18,7 @@ import com.insight.backend.model.Category;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class GetCategoriesControllerTests {
+public class CategoryControllerTests {
 
     @Autowired
 	private MockMvc mockMvc;
