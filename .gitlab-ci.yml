@@ -72,7 +72,7 @@ frontend-build-job:       # This job runs in the build stage, which runs first.
     - echo "Building complete."
 
 docker-deploy-job:
-  image: docker:latest
+  image: docker:23
   stage: build
   rules:
     - if: $CI_COMMIT_REF_NAME == "main"
