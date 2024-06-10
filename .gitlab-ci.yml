@@ -37,6 +37,7 @@ unit-test-job:   # This job runs in the test stage.
   script:
     - echo "Running unit tests... This will take about 60 seconds."
     - echo "Code coverage is 90%"
+    - env
 
 integration-test-job:
   image: node:20 #konkrete version
@@ -73,10 +74,10 @@ docker-deploy-job:
     - if: $CI_COMMIT_REF_NAME == "main"
   script:
     - echo "Building & Deploying Docker Image..."
-    #- echo "$CI_DEPLOY_PASSWORD" | docker login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin #Authenticate against the gitlab container registry
-    #- docker build --pull #pulling the latest image
-    #- docker build -t gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend . #creating an image
-    #- docker push gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend    #deploying an image
+    - echo "$CI_DEPLOY_PASSWORD" | docker login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin true #Authenticate against the gitlab container registry
+    - docker build --pull #pulling the latest image
+    - docker build -t gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend . #creating an image
+    - docker push gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend    #deploying an image
     - echo "Image Build & Deployment was executed!"
 
 publish-job:      # This job runs in the deploy stage.
