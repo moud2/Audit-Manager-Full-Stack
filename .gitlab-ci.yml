@@ -77,6 +77,7 @@ docker-deploy-job:
   #rules:
   # - if: $CI_COMMIT_REF_NAME == "main"
   script:
+    - echo "${CI_DEPLOY_PASSWORD}"
     - echo "Building & Deploying Docker Image..."
     - echo "${CI_DEPLOY_PASSWORD}" | docker login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin #Authenticate against the gitlab container registry
     - docker build --pull #pulling the latest image
