@@ -74,11 +74,11 @@ docker-deploy-job:
   #  - if: $CI_COMMIT_REF_NAME == "main"
   script:
     - echo "Building & Deploying Docker Image..."
-    - docker login $CI_REGISTRY -u $CI_DEPLOY_USER -p $$CI_DEPLOY_PASSWORD #Authenticate against the gitlab container registry
+    - docker login -u $CI_DEPLOY_USER -p $CI_DEPLOY_PASSWORD $CI_REGISTRY #Authenticate against the gitlab container registry
     - docker build --pull #pulling the latest image
     - docker build -t gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend . #creating an image
     - docker push gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend    #deploying an image
-    - echo "[*]Image Build & Deployment was executed!"
+    - echo "Image Build & Deployment was executed!"
 
 
 frontend-deploy-job:      # This job runs in the deploy stage.
