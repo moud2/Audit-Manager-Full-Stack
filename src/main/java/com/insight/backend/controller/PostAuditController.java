@@ -12,7 +12,7 @@ public class PostAuditController {
 
     @PostMapping("/api/v1/audits/new")
     public ResponseEntity<Map<String, Object>> postWithRequestBody(@RequestBody AuditRequest request) {
-        Integer ID = 0; 
+        Integer ID; 
         // Check if both keys are correctly given
         if (request.getName() == null || request.getCategories() == null) {
             Map<String, Object> errorResponse = new HashMap<>();
