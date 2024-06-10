@@ -2,7 +2,7 @@
 #needs to be tested and adjusted
 #------------------- 
 # Use an official Node.js runtime as a parent image
-FROM node:latest
+FROM node:20
 
 # Set the working directory in the container
 WORKDIR /usr/src/app
