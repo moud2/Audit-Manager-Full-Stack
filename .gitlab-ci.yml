@@ -79,8 +79,7 @@ docker-deploy-job:
     #- docker push gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend    #deploying an image
     - echo "Image Build & Deployment was executed!"
 
-
-frontend-deploy-job:      # This job runs in the deploy stage.
+publish-job:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
   environment: 
     name: production
