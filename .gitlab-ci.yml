@@ -83,7 +83,7 @@ docker-deploy-job:
     - cd $(pwd)/frontend
     - docker build -t $CI_REGISTRY . #creating an image
     - docker push $CI_REGISTRY  #deploying an image
-    - echo "Image Build & Deployment was executed!lolo"
+    - echo "Image Build & Deployment was executed!"
 
 publish-job:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
