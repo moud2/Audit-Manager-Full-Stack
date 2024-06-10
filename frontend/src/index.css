@@ -1,15 +1,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* header {
-  background-color:#c5aa6a; 
-  padding: 20px 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: #fff;
-  font-family: 'Poppins', sans-serif;
-  font-size: larger;
-  font-weight: 400;
-} */
