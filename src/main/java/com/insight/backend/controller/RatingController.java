@@ -11,11 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-public class PatchController {
+public class RatingController {
 
     private List<Rating> ratings;
 
-    public PatchController() {
+    /**
+     * Initializes the RatingController with a list of sample ratings.
+     */
+    public RatingController() {
         ratings = new ArrayList<>();
 
         Rating rating1 = new Rating();
@@ -41,6 +44,13 @@ public class PatchController {
         ratings.add(rating3);
     }
 
+    /**
+     * Updates an existing rating based on the provided id and JSON request body.
+     *
+     * @param id          the id of the rating to update
+     * @param requestBody the JSON representation of the updated rating
+     * @return a ResponseEntity indicating the result of the update operation
+     */
     @PatchMapping("/api/v1/ratings/{id}")
     public ResponseEntity<String> updateRating(@PathVariable("id") int id, @RequestBody String requestBody) {
         Gson gson = new Gson();
@@ -66,15 +76,9 @@ public class PatchController {
                 if (updatedRating.getNA() != null) {
                     rating.setNA(updatedRating.getNA());
                 }
-                return ResponseEntity.ok("Operation Successful");
+                return ResponseEntity.ok("Successfull operation");
             }
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Rating not found");
-    }
-
-    @GetMapping("/api/v1/ratings")
-    public String getRatings() {
-        Gson gson = new Gson();
-        return gson.toJson(ratings);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("RatingID not found");
     }
 }
