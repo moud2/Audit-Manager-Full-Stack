@@ -69,8 +69,8 @@ frontend-build-job:       # This job runs in the build stage, which runs first.
 docker-deploy-job:
   image: docker:20.10.16
   stage: build
-  #rules:
-  #  - if: $CI_COMMIT_REF_NAME == "main"
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
   script:
     - echo "Building & Deploying Docker Image..."
     #- echo "$CI_DEPLOY_PASSWORD" | docker login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin #Authenticate against the gitlab container registry
