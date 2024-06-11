@@ -7,17 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.insight.backend.model.Audit;
 
 @RestController
 public class AuditsController {
 
-    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
     @GetMapping("api/v1/audits")
-    public ResponseEntity<String> getAudits() {
+    public ResponseEntity<List<Audit>> getAudits() {
         List<Audit> auditList = new ArrayList<>();
 
         // TODO: Temporary code for basic functionality | remove and reimplement properly later
@@ -28,7 +24,7 @@ public class AuditsController {
         auditList.add(audit2);
         auditList.add(audit3);
 
-        return ResponseEntity.ok(gson.toJson(auditList));
+        return ResponseEntity.ok(auditList);
     }
 
 
