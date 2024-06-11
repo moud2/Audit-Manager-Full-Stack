@@ -80,7 +80,6 @@ docker-deploy-job:
     - echo "${CI_DEPLOY_PASSWORD}"
     - echo "Building & Deploying Docker Image..."
     - echo -n "${CI_DEPLOY_PASSWORD}" | docker login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin #Authenticate against the gitlab container registry
-    - docker build --pull #pulling the latest image
     - cd $(pwd)/frontend
     - docker build -t $CI_REGISTRY . #creating an image
     - docker push $CI_REGISTRY  #deploying an image
