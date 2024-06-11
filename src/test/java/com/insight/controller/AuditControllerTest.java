@@ -19,7 +19,7 @@ import com.insight.backend.model.Audit;
 @SpringBootTest
 @AutoConfigureMockMvc
 
-class BackendApplicationTests {
+class AuditControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;

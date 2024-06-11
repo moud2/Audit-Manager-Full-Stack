@@ -12,7 +12,7 @@ import com.google.gson.GsonBuilder;
 import com.insight.backend.model.Audit;
 
 @RestController
-public class GetAuditsController {
+public class AuditsController {
 
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
