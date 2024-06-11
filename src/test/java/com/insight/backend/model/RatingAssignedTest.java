@@ -3,6 +3,7 @@ package com.insight.backend.model;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import java.util.HashMap;
 
 public class RatingAssignedTest {
