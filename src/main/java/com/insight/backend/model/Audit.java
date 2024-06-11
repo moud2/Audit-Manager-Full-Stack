@@ -2,6 +2,8 @@ package com.insight.backend.model;
 
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
 public class Audit {
     @Id
@@ -9,6 +11,16 @@ public class Audit {
     private Long id;
     @Column(nullable = false)
     private String name;
+    @OneToMany(mappedBy = "audit")
+    private Set<Rating> ratings;
+
+    public Set<Rating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(Set<Rating> ratings) {
+        this.ratings = ratings;
+    }
 
     public Long getId() {
         return id;

@@ -15,6 +15,13 @@ public class Rating {
     @Min(0)
     @Max(5)
     private Integer points;
+    @ManyToOne
+    @JoinColumn(name="audit_id", nullable=false)
+    private Audit audit;
+    @ManyToOne
+    @JoinColumn(name="question_id", nullable=false)
+    private Question question;
+
 
     public void setId(Long id) {
         this.id = id;

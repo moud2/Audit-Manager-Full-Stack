@@ -3,6 +3,8 @@ package com.insight.backend.model;
 
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
 public class Category {
 
@@ -11,7 +13,16 @@ public class Category {
     private Long id;
     @Column(nullable = false)
     private String name;
+    @OneToMany(mappedBy = "category")
+    private Set<Question> questions;
 
+    public Set<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(Set<Question> questions) {
+        this.questions = questions;
+    }
 
     public Long getId() {
         return id;
