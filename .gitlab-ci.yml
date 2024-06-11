@@ -29,7 +29,7 @@ stages:          # List of stages for jobs, and their order of execution
   before_script:
     - cd $(pwd)/frontend && npm install
 
-.setupCypress
+.setupCypress:
   image: node:20
   before_script:
     - cd $(pwd)/frontend && npm install
