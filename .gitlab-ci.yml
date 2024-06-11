@@ -42,8 +42,8 @@ integration-test-job:
   image: node:20 #konkrete version
   stage: test
   script:
-    - echo "Starting Integration Test...."
-    - echo "Integration Test coverage is 100 %"
+    - echo "[*] Starting Integration Test...."
+    - echo "[*] Integration Test coverage is 100 %"
 
 lint-test-job:   # This job also runs in the test stage.
   image: node:20 #konkrete version
