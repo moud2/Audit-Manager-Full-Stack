@@ -27,11 +27,15 @@ docker-compose up -d
 
 - create a database called `insight`
 
+----
+docker compose exec -it mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'YourStrong@Passw0rd' -Q 'CREATE DATABASE insight;'
+----
+
 == Running the application
 
 (Linux)
 
 [source,bash]
 ----
-./gradlw bootRun
+./gradlew bootRun
 ----
