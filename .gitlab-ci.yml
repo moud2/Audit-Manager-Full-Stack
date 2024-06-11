@@ -1,0 +1,94 @@
+# This file is a template, and might need editing before it works on your project.
+# This is a sample GitLab CI/CD configuration file that should run without any modifications.
+# It demonstrates a basic 3 stage CI/CD pipeline. Instead of real tests or scripts,
+# it uses echo commands to simulate the pipeline execution.
+#
+# A pipeline is composed of independent jobs that run scripts, grouped into stages.
+# Stages run in sequential order, but jobs within stages run in parallel.
+#
+# For more information, see: https://docs.gitlab.com/ee/ci/yaml/index.html#stages
+#
+# You can copy and paste this template into a new `.gitlab-ci.yml` file.
+# You should not add this template to an existing `.gitlab-ci.yml` file by using the `include:` keyword.
+#
+# To contribute improvements to CI/CD templates, please follow the Development guide at:
+# https://docs.gitlab.com/ee/development/cicd/templates.html
+# This specific template is located at:
+# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
+
+image: node:20 #konkrete version
+
+stages:          # List of stages for jobs, and their order of execution
+  - test
+  - build
+  - deploy
+
+
+.setupNpm:
+  image: node:20
+  before_script:
+    - cd $(pwd)/frontend && npm install
+
+#TESTING STAGE
+#Testing Framework scheint cyprus zu werden https://docs.cypress.io/guides/guides/command-line
+unit-test-job:   # This job runs in the test stage.
+  image: node:20 #konkrete version
+  stage: test    # It only starts when the job in the build stage completes successfully.
+  script:
+    - echo "Running unit tests... This will take about 60 seconds."
+    - echo "Code coverage is 90%"
+
+integration-test-job:
+  image: node:20 #konkrete version
+  stage: test
+  script:
+    - echo "Starting Integration Test...."
+    - echo "Integration Test coverage is 100 %"
+
+lint-test-job:   # This job also runs in the test stage.
+  image: node:20 #konkrete version
+  stage: test    # It can run at the same time as unit-test-job (in parallel).
+  script:
+    - echo "Linting code... This will take about 10 seconds."
+    - echo "No lint issues found."
+
+#BUILD STAGE
+frontend-build-job:       # This job runs in the build stage, which runs first.
+  image: node:20 #konkrete version
+  stage: build
+  environment: production
+  extends: 
+    - .setupNpm
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
+  script:
+    - echo "Building the application..."
+    - npm run build
+    - echo "Building complete."
+
+docker-deploy-job:
+  image: docker:20.10.16
+  stage: build
+  #rules:
+  #  - if: $CI_COMMIT_REF_NAME == "main"
+  script:
+    - echo "Building & Deploying Docker Image..."
+    #- echo "$CI_DEPLOY_PASSWORD" | docker login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin #Authenticate against the gitlab container registry
+    #- docker build --pull #pulling the latest image
+    #- docker build -t gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend . #creating an image
+    #- docker push gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend    #deploying an image
+    - echo "Image Build & Deployment was executed!"
+
+
+frontend-deploy-job:      # This job runs in the deploy stage.
+  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+  environment: 
+    name: production
+    url: http://141.57.8.208
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
+  script:
+    - echo "Deploying application..."
+    - echo "Application successfully deployed."
+    # wir erstellen auf dem server einen docker runner, der aus der gitlab ci durch den projektnamen tag getriggert
+
