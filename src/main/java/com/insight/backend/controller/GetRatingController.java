@@ -13,9 +13,18 @@ import com.insight.backend.model.Category;
 import com.insight.backend.model.Rating;
 import com.insight.backend.model.RatingList;
 
+/**
+ * Controller for handling rating-related requests.
+ */
 @RestController
 public class GetRatingController {
 
+    /**
+     * Handles GET requests for retrieving ratings for a specific audit.
+     *
+     * @param auditId the ID of the audit
+     * @return a ResponseEntity containing the ratings in JSON format or an error message if the audit ID does not exist
+     */
     @GetMapping("/api/v1/audits/{auditId}/ratings")
     public ResponseEntity<String> get(@PathVariable("auditId") Integer auditId) {
         final Gson gson = new GsonBuilder().setPrettyPrinting().create();
