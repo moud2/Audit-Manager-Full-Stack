@@ -13,6 +13,7 @@ import java.util.HashMap;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+
 public class GetRatingControllerTest {
 
     @Autowired

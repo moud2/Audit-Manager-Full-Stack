@@ -2,8 +2,6 @@ package com.insight.backend.controller;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,8 +24,7 @@ public class GetRatingController {
      * @return a ResponseEntity containing the ratings in JSON format or an error message if the audit ID does not exist
      */
     @GetMapping("/api/v1/audits/{auditId}/ratings")
-    public ResponseEntity<String> get(@PathVariable("auditId") Integer auditId) {
-        final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    public ResponseEntity<RatingList> get(@PathVariable("auditId") Integer auditId) {
 
         // Generate Test-Categories
         Category category1 = new Category(0, "categorytest1");
@@ -58,10 +55,9 @@ public class GetRatingController {
 
         // Error Handling 404 - Non-existing Audit
         if (ratingsAssigned.containsKey(auditId)) {
-            RatingList ratingListSend = ratingsAssigned.get(auditId);
-            return ResponseEntity.ok(gson.toJson(ratingListSend));
+            return ResponseEntity.ok(ratingsAssigned.get(auditId));
         } else {
-            return ResponseEntity.status(404).body("auditID not existing");
+            return ResponseEntity.notFound().build();
         }
     }
 }
