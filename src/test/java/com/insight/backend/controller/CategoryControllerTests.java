@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.insight.backend.model.Category;
@@ -30,9 +31,9 @@ public class CategoryControllerTests {
     @Test
 	public void testGetCategroies() throws Exception {
 		List<Category> response = new ArrayList<>();
-        response.add(new Category(0, "a"));
-        response.add(new Category(1, "b"));
-        response.add(new Category(2, "c"));
+        response.add(new Category("a", Set.of()));
+        response.add(new Category("b", Set.of()));
+        response.add(new Category("c", Set.of()));
 
 		String expectedJson = objectMapper.writeValueAsString(response);
 

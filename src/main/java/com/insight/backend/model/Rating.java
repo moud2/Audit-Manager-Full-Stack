@@ -1,5 +1,7 @@
 package com.insight.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
@@ -22,6 +24,19 @@ public class Rating {
     @JoinColumn(name="question_id", nullable=false)
     private Question question;
 
+
+    public Rating(String name, Boolean isNa, String comment, Integer points, Audit audit, Question question) {
+        this.name = name;
+        this.isNa = isNa;
+        this.comment = comment;
+        this.points = points;
+        this.audit = audit;
+        this.question = question;
+    }
+
+    public Rating() {
+
+    }
 
     public void setId(Long id) {
         this.id = id;

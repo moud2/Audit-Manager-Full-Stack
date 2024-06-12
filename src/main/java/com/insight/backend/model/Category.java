@@ -1,5 +1,7 @@
 package com.insight.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -12,8 +14,18 @@ public class Category {
     private Long id;
     @Column(nullable = false)
     private String name;
+    @JsonIgnore
     @OneToMany(mappedBy = "category")
     private Set<Question> questions;
+
+    public Category(String name, Set<Question> questions) {
+        this.name = name;
+        this.questions = questions;
+    }
+
+    public Category() {
+
+    }
 
     public Set<Question> getQuestions() {
         return questions;

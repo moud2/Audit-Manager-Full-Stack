@@ -1,5 +1,7 @@
 package com.insight.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -11,11 +13,22 @@ public class Question {
     private Long id;
     @Column(nullable = false)
     private String name;
+    @JsonIgnore
     @OneToMany(mappedBy = "question")
     private Set<Rating> rating;
     @ManyToOne
     @JoinColumn(name="category_id", nullable=false)
     private Category category;
+
+    public Question(String name, Set<Rating> rating, Category category) {
+        this.name = name;
+        this.rating = rating;
+        this.category = category;
+    }
+
+    public Question() {
+
+    }
 
     public Category getCategory() {
         return category;
