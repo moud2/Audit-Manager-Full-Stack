@@ -19,14 +19,14 @@ public class DatabaseSeederApplication {
         System.out.println("Seeding the database...");
         
         // CSV-Daten einlesen
-        List<Object[]> categories = readCSV("fixtures/cat.csv");
+        List<Object[]> categories = readCSV("fixtures/dummy-categories.csv");
 
         // Ausgabe der eingelesenen Daten
         for (Object[] entry : categories) {
             System.out.println(entry[0] + ", Value: " + entry[1]);
         }
 		
-        List<Object[]> questions = readCSV("fixtures/questions.csv");
+        List<Object[]> questions = readCSV("fixtures/dummy-questions.csv");
         for (Object[] entry : questions) {
             System.out.println("ID: " + entry[0] + ", Value: " + entry[1]);
         }
