@@ -44,8 +44,8 @@ e2e-test-job:   # This job runs in the test stage.
     - .setupCypress
   script:
     - echo "Running unit tests... This will take about 60 seconds."
-    - #npm start &     # start the server in the background
-    - #npm run e2e     # run Cypress tests
+    #- npm start &     # start the server in the background
+    #- npm run e2e     # run Cypress tests
     - echo "Code coverage is 90%"
 
 integration-test-job:
