@@ -1,27 +1,41 @@
 package com.insight.backend.model;
 
-public class Category {
-    private int id;
-    private String name;
+import jakarta.persistence.*;
 
-    public Category(int id, String name) {
-        setCategoryId(id);
-        setCategoryName(name);
+import java.util.Set;
+
+@Entity
+public class Category {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    @Column(nullable = false)
+    private String name;
+    @OneToMany(mappedBy = "category")
+    private Set<Question> questions;
+
+    public Set<Question> getQuestions() {
+        return questions;
     }
 
-    public void setCategoryId(int id) {
+    public void setQuestions(Set<Question> questions) {
+        this.questions = questions;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public int getCategoryId() {
-        return this.id;
+    public String getName() {
+        return name;
     }
 
-    public void setCategoryName(String name) {
+    public void setName(String name) {
         this.name = name;
-    }
-
-    public String getCategoryName() {
-        return this.name;
     }
 }
