@@ -15,7 +15,7 @@ repositories {
 	mavenCentral()
 }
 
-dependencies { 
+dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.hibernate.validator:hibernate-validator'
@@ -30,6 +30,13 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+tasks.register('seedDatabase', JavaExec) {
+	group = 'Database Tasks'
+	description = 'Seeds the database with initial data.'
+	mainClass = 'com.insight.backend.DatabaseSeederApplication'
+	classpath = sourceSets.main.runtimeClasspath
 }
 
 tasks.withType(JavaCompile) {
