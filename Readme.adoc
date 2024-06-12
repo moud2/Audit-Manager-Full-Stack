@@ -20,7 +20,7 @@ cp ./src/main/resources/application.properties.example ./src/main/resources/appl
 
 [source,bash]
 ----
-docker-compose up -d
+docker compose up -d
 ----
 
 == Create the database
@@ -31,6 +31,17 @@ docker-compose up -d
 docker compose exec -it mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'YourStrong@Passw0rd' -Q 'CREATE DATABASE insight;'
 ----
 
+== Seeding the database (optional)
+
+- run the following command to seed the database
+
+
+(Linux)
+
+[source,bash]
+----
+./gradlew seedDatabase
+----
 == Running the application
 
 (Linux)
