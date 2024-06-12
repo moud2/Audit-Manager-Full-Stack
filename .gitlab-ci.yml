@@ -94,7 +94,7 @@ docker-deploy-job:
     - echo -n "${CI_DEPLOY_PASSWORD}" | docker login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin #Authenticate against the gitlab container registry
     - cd $(pwd)/frontend
     - docker build -t $CI_REGISTRY . #creating an image
-    - docker tag insight ${CI_REGISTRY}/insight
+    - docker tag insight ${CI_REGISTRY}:insight
     - docker push ${CI_REGISTRY}/insight  #deploying an image
     - echo "[*] Image Build & Deployment was executed.."
 
