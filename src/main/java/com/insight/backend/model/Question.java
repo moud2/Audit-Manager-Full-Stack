@@ -17,6 +17,16 @@ public class Question {
     @JoinColumn(name="category_id", nullable=false)
     private Category category;
 
+    public Question(String name, Set<Rating> rating, Category category) {
+        this.name = name;
+        this.rating = rating;
+        this.category = category;
+    }
+
+    public Question() {
+
+    }
+
     public Category getCategory() {
         return category;
     }

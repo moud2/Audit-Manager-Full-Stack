@@ -2,6 +2,7 @@ package com.insight.backend.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +32,9 @@ class AuditControllerTest {
 	public void testEndpointGetAudits() throws Exception {
         List<Audit> auditList = new ArrayList<>();
 
-        Audit audit1 = new Audit(0, "ISO-2123");
-        Audit audit2 = new Audit(1, "ISO-2124");
-        Audit audit3 = new Audit(2, "ISO-2125");
+        Audit audit1 = new Audit("ISO-2123", Set.of());
+        Audit audit2 = new Audit("ISO-2124", Set.of());
+        Audit audit3 = new Audit("ISO-2125", Set.of());
         auditList.add(audit1);
         auditList.add(audit2);
         auditList.add(audit3);

@@ -15,6 +15,15 @@ public class Category {
     @OneToMany(mappedBy = "category")
     private Set<Question> questions;
 
+    public Category(String name, Set<Question> questions) {
+        this.name = name;
+        this.questions = questions;
+    }
+
+    public Category() {
+
+    }
+
     public Set<Question> getQuestions() {
         return questions;
     }

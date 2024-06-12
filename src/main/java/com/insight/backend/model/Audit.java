@@ -14,6 +14,15 @@ public class Audit {
     @OneToMany(mappedBy = "audit")
     private Set<Rating> ratings;
 
+    public Audit(String name, Set<Rating> ratings) {
+        this.name = name;
+        this.ratings = ratings;
+    }
+
+    public Audit() {
+
+    }
+
     public Set<Rating> getRatings() {
         return ratings;
     }
