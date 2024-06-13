@@ -1,29 +1,67 @@
-// eslint-disable-next-line no-unused-vars
 import React from 'react';
-import {CircularProgressWithLabel, LinearProgressWithLabel} from '@mui/material';
+import LinearProgress from '@mui/material/LinearProgress';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
+import {BarChart} from '@mui/x-charts/BarChart';
+
 
 function Evaluation() {
 
     let progress = 70;
-    let amountQuestions = 25;
-    let amountCategories = 5;
-
-    let categorie1 = [3, 5, 2, 1, 0, 0, 4, 5, 3];
 
 
-    let categorie2 = [2, 5, 5, 1, 1, 3, 4, 5, 3];
-    let categorie3 = [0, 1, 2, 1, 0, 0, 2, 5, 3];
-    let categorie4 = [5, 5, 2, 1, 5, 0, 2, 5, 4];
-    let categorie5 = [3, 5, 2, 4, 0, 2, 4, 5, 3];
+    // Setup function progress bar
+    function LinearProgressWithLabel(props) {
+        return (
+            <Box sx={{display: 'flex', alignItems: 'center'}}>
+                <Box sx={{width: '100%', mr: 1}}>
+                    <LinearProgress variant="determinate" {...props} />
+                </Box>
+                <Box sx={{minWidth: 35}}>
+                    <Typography variant="body2" color="text.secondary">{`${Math.round(
+                        props.value,
+                    )}%`}</Typography>
+                </Box>
+            </Box>
+        );
+    }
+
+    // Setup progress circle
+    function CircularProgressWithLabel(props) {
+        return (
+            <Box sx={{position: 'relative', display: 'inline-flex'}}>
+                <CircularProgress variant="determinate" {...props} />
+                <Box
+                    sx={{
+                        top: 0,
+                        left: 0,
+                        bottom: 0,
+                        right: 0,
+                        position: 'absolute',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                >
+                    <Typography variant="caption" component="div" color="text.secondary">
+                        {`${Math.round(props.value)}%`}
+                    </Typography>
+                </Box>
+            </Box>
+        );
+    }
 
     return (
         <div>
             <div id="title">
-                <h1 className="text-center text-4xl m-10">Dashboard</h1>
+                <h1 className="text-center text-4xl m-10">Evaluation</h1>
             </div>
 
             <div id="result">
-                <LinearProgressWithLabel value={progress}/>
+                <Box sx={{width: '100%'}}>
+                    <LinearProgressWithLabel value={progress}/>
+                </Box>
             </div>
 
             <div id="categories">
@@ -31,7 +69,21 @@ function Evaluation() {
             </div>
 
             <div id="result_per_question">
-
+                <BarChart
+                    series={[
+                        {data: [4, 2, 5, 4, 1], stack: 'A', label: 'Series A1'},
+                        {data: [2, 8, 1, 3, 1], stack: 'A', label: 'Series A2'},
+                        {data: [14, 6, 5, 8, 9], label: 'Series B1'},
+                    ]}
+                    barLabel={(item, context) => {
+                        if ((item.value ?? 0) > 10) {
+                            return 'High';
+                        }
+                        return context.bar.height < 60 ? null : item.value?.toString();
+                    }}
+                    width={600}
+                    height={350}
+                />
             </div>
         </div>
 
