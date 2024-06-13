@@ -1,9 +1,9 @@
 import React from 'react';
-import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import {BarChart} from '@mui/x-charts/BarChart';
+import LinearProgress from '@mui/material/LinearProgress';
 
 
 function Evaluation() {
@@ -31,7 +31,7 @@ function Evaluation() {
     function CircularProgressWithLabel(props) {
         return (
             <Box sx={{position: 'relative', display: 'inline-flex'}}>
-                <CircularProgress variant="determinate" {...props} />
+                <CircularProgress variant="determinate" {...props} sx={{width: '200px', height: '200px'}}/>
                 <Box
                     sx={{
                         top: 0,
@@ -58,23 +58,44 @@ function Evaluation() {
                 <h1 className="text-center text-4xl m-20">Evaluation</h1>
             </div>
 
-            <div id="result" className={"flex justify-center h-20"}>
-                <Box sx={{width: '80%'}}>
+            <div id="result" className={"flex flex-col justify-center items-center h-20"}>
+                <Box className={"text-center"} sx={{width: '80%'}}>
                     <LinearProgressWithLabel value={progress}/>
-                    <p className={"justify-center"}>Gesamtfortschritt</p>
                 </Box>
+                <p className={"text-center"}>Gesamtfortschritt</p>
             </div>
 
-            <div id="categories">
-                <CircularProgressWithLabel value={progress}/>
+            <div id="categories" className={"flex flex-row justify-center items-center"}>
+                <div className={"ml-6 m-8 text-center"}>
+                    <CircularProgressWithLabel value={progress} className={"size-60"}/>
+                    <p className={"text-center"}>Kategorie 1</p>
+                </div>
+                <div className={"ml-6 m-8 text-center"}>
+                    <CircularProgressWithLabel value={progress} className={"size-60"}/>
+                    <p className={"text-center"}>Kategorie 2</p>
+                </div>
+                <div className={"ml-6 m-8 text-center"}>
+                    <CircularProgressWithLabel value={progress} className={"size-60"}/>
+                    <p className={"text-center"}>Kategorie 3</p>
+                </div>
+                <div className={"ml-6 m-8 text-center"}>
+                    <CircularProgressWithLabel value={progress} className={"size-60"}/>
+                    <p className={"text-center"}>Kategorie 4</p>
+                </div>
+                <div className={"ml-6 m-8 text-center"}>
+                    <CircularProgressWithLabel value={progress} className={"size-60"}/>
+                    <p className={"text-center"}>Kategorie 5</p>
+                </div>
+                <div className={"ml-6 m-8 text-center"}>
+                    <CircularProgressWithLabel value={progress} className={"size-60"}/>
+                    <p className={"text-center"}>Kategorie 6</p>
+                </div>
             </div>
 
-            <div id="result_per_question">
+            <div id="result_per_question" className={"flex flex-row justify-center items-center"}>
                 <BarChart
                     series={[
-                        {data: [4, 2, 5, 4, 1], stack: 'A', label: 'Series A1'},
-                        {data: [2, 8, 1, 3, 1], stack: 'A', label: 'Series A2'},
-                        {data: [14, 6, 5, 8, 9], label: 'Series B1'},
+                        {data: [4, 2, 8, 4, 1, 3], stack: 'A', label: 'Anzahl Fragen nach Punktzahl'},
                     ]}
                     barLabel={(item, context) => {
                         if ((item.value ?? 0) > 10) {
@@ -82,10 +103,11 @@ function Evaluation() {
                         }
                         return context.bar.height < 60 ? null : item.value?.toString();
                     }}
-                    width={600}
+                    width={1200}
                     height={350}
                 />
             </div>
+
         </div>
 
     )
