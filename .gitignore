@@ -28,3 +28,7 @@ out/
 
 # VS Code
 .vscode/
+
+# DB stuff
+.env
+src/main/resources/application.properties

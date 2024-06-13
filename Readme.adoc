@@ -1,0 +1,41 @@
+= InSight Backend
+
+== Setup
+
+- copy `.env.example` to `.env` and fill in the values (if needed)
+
+[source,bash]
+----
+cp .env.example .env
+----
+
+- copy `application.properties.example` to `application.properties` and fill in the values (if needed)
+
+[source,bash]
+----
+cp ./src/main/resources/application.properties.example ./src/main/resources/application.properties
+----
+
+== Running MSSQL Server
+
+[source,bash]
+----
+docker-compose up -d
+----
+
+== Create the database
+
+- create a database called `insight`
+
+----
+docker compose exec -it mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'YourStrong@Passw0rd' -Q 'CREATE DATABASE insight;'
+----
+
+== Running the application
+
+(Linux)
+
+[source,bash]
+----
+./gradlew bootRun
+----

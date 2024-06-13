@@ -1,140 +1,80 @@
 package com.insight.backend.model;
 
-/**
- * Represents a rating in the system.
- */
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+
+@Entity
 public class Rating {
-    private int id;
-    private Category category;
-    private String question;
-    private String comment;
-    private int points;
-    private Boolean nA;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    @Column(nullable = false)
+    private String name;
+    private Boolean isNa = false;
+    private String comment = "";
+    @Min(0)
+    @Max(5)
+    private Integer points;
+    @ManyToOne
+    @JoinColumn(name="audit_id", nullable=false)
+    private Audit audit;
+    @ManyToOne
+    @JoinColumn(name="question_id", nullable=false)
+    private Question question;
 
-    /**
-     * Constructs a new Rating with the specified parameters.
-     *
-     * @param id        the ID of the rating
-     * @param category  the category associated with the rating
-     * @param question  the question for the rating
-     * @param points    the points awarded for the rating
-     * @param comment   the comment associated with the rating
-     * @param nA        indicates if the rating is not applicable
-     */
-    public Rating(int id, Category category, String question, int points, String comment, Boolean nA) {
-        setRatingId(id);
-        setCategory(category);
-        setQuestion(question);
-        setComment(comment);
-        setPoints(points);
-        setNA(nA);
-    }
 
-    /**
-     * Sets the ID of the rating.
-     *
-     * @param id the ID to set
-     */
-    public void setRatingId(int id) {
-        this.id = id;
-    }
-
-    /**
-     * Returns the ID of the rating.
-     *
-     * @return the ID of the rating
-     */
-    public int getRatingId() {
-        return this.id;
-    }
-
-    /**
-     * Sets the category of the rating.
-     *
-     * @param category the category to set
-     */
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    /**
-     * Returns the category of the rating.
-     *
-     * @return the category of the rating
-     */
-    public Category getCategory() {
-        return this.category;
-    }
-
-    /**
-     * Sets the question of the rating.
-     *
-     * @param question the question to set
-     */
-    public void setQuestion(String question) {
+    public Rating(String name, Boolean isNa, String comment, Integer points, Audit audit, Question question) {
+        this.name = name;
+        this.isNa = isNa;
+        this.comment = comment;
+        this.points = points;
+        this.audit = audit;
         this.question = question;
     }
 
-    /**
-     * Returns the question of the rating.
-     *
-     * @return the question of the rating
-     */
-    public String getQuestion() {
-        return this.question;
+    public Rating() {
+
     }
 
-    /**
-     * Sets the comment of the rating.
-     *
-     * @param comment the comment to set
-     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setNa(Boolean na) {
+        isNa = na;
+    }
+
     public void setComment(String comment) {
         this.comment = comment;
     }
 
-    /**
-     * Returns the comment of the rating.
-     *
-     * @return the comment of the rating
-     */
-    public String getComment() {
-        return this.comment;
-    }
-
-    /**
-     * Sets the points of the rating.
-     *
-     * @param points the points to set
-     */
-    public void setPoints(int points) {
+    public void setPoints(@Min(0) @Max(5) Integer points) {
         this.points = points;
     }
 
-    /**
-     * Returns the points of the rating.
-     *
-     * @return the points of the rating
-     */
-    public int getPoints() {
-        return this.points;
+    public Long getId() {
+        return id;
     }
 
-    /**
-     * Sets the not applicable status of the rating.
-     *
-     * @param nA the not applicable status to set
-     */
-    public void setNA(Boolean nA) {
-        this.nA = nA;
+    public String getName() {
+        return name;
     }
 
-    /**
-     * Returns the not applicable status of the rating.
-     *
-     * @return the not applicable status of the rating
-     */
-    public Boolean getNA() {
-        return this.nA;
+    public Boolean getNa() {
+        return isNa;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public @Min(0) @Max(5) Integer getPoints() {
+        return points;
     }
 }

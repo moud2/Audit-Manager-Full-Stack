@@ -7,32 +7,32 @@ import jakarta.persistence.*;
 import java.util.Set;
 
 @Entity
-public class Category {
-
+public class Audit {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column(nullable = false)
     private String name;
+
     @JsonIgnore
-    @OneToMany(mappedBy = "category")
-    private Set<Question> questions;
+    @OneToMany(mappedBy = "audit")
+    private Set<Rating> ratings;
 
-    public Category(String name, Set<Question> questions) {
+    public Audit(String name, Set<Rating> ratings) {
         this.name = name;
-        this.questions = questions;
+        this.ratings = ratings;
     }
 
-    public Category() {
+    public Audit() {
 
     }
 
-    public Set<Question> getQuestions() {
-        return questions;
+    public Set<Rating> getRatings() {
+        return ratings;
     }
 
-    public void setQuestions(Set<Question> questions) {
-        this.questions = questions;
+    public void setRatings(Set<Rating> ratings) {
+        this.ratings = ratings;
     }
 
     public Long getId() {
