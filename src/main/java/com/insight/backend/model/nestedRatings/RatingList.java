@@ -1,6 +1,8 @@
-package com.insight.backend.model;
+package com.insight.backend.model.nestedRatings;
 
 import java.util.List;
+
+import com.insight.backend.model.Rating;
 
 /**
  * Represents a list of ratings.

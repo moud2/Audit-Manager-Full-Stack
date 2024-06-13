@@ -9,7 +9,7 @@ import java.util.List;
 
 import com.insight.backend.model.Category;
 import com.insight.backend.model.Rating;
-import com.insight.backend.model.RatingList;
+import com.insight.backend.model.nestedRatings.RatingList;
 
 /**
  * Controller for handling rating-related requests.

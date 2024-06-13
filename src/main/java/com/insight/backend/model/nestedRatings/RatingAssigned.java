@@ -1,4 +1,4 @@
-package com.insight.backend.model;
+package com.insight.backend.model.nestedRatings;
 
 import java.util.HashMap;
 
