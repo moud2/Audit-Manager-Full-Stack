@@ -55,12 +55,13 @@ function Evaluation() {
     return (
         <div>
             <div id="title">
-                <h1 className="text-center text-4xl m-10">Evaluation</h1>
+                <h1 className="text-center text-4xl m-20">Evaluation</h1>
             </div>
 
-            <div id="result">
-                <Box sx={{width: '100%'}}>
+            <div id="result" className={"flex justify-center h-20"}>
+                <Box sx={{width: '80%'}}>
                     <LinearProgressWithLabel value={progress}/>
+                    <p className={"justify-center"}>Gesamtfortschritt</p>
                 </Box>
             </div>
 
