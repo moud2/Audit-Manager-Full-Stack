@@ -9,6 +9,7 @@ ReactDOM.render(
   <React.StrictMode>
     <App />
     <Footer />
+    <Header/>
   </React.StrictMode>,
   document.getElementById('root')
 );
