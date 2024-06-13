@@ -9,6 +9,10 @@ import Dashboard from './components/Dashboard.jsx';
 import NewAudit from './components/NewAudit.jsx';
 import PerformAudit from './components/PerformAudit.jsx';
 import Evaluation from './components/Evaluation.jsx';
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
 
 function App() {
   return (
