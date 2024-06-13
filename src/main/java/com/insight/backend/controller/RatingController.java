@@ -1,7 +1,5 @@
 package com.insight.backend.controller;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.insight.backend.model.Rating;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,21 +45,12 @@ public class RatingController {
     /**
      * Updates an existing rating based on the provided id and JSON request body.
      *
-     * @param id          the id of the rating to update
-     * @param requestBody the JSON representation of the updated rating
+     * @param id            the id of the rating to update
+     * @param updatedRating the updated rating object from the JSON request body
      * @return a ResponseEntity indicating the result of the update operation
      */
     @PatchMapping("/api/v1/ratings/{id}")
-    public ResponseEntity<String> updateRating(@PathVariable("id") int id, @RequestBody String requestBody) {
-        Gson gson = new Gson();
-        Rating updatedRating;
-
-        try {
-            updatedRating = gson.fromJson(requestBody, Rating.class);
-        } catch (JsonSyntaxException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid JSON");
-        }
-
+    public ResponseEntity<String> updateRating(@PathVariable("id") int id, @RequestBody Rating updatedRating) {
         for (Rating rating : ratings) {
             if (rating.getId() == id) {
                 if (updatedRating.getComment() != null) {
@@ -76,7 +65,7 @@ public class RatingController {
                 if (updatedRating.getNA() != null) {
                     rating.setNA(updatedRating.getNA());
                 }
-                return ResponseEntity.ok("Successfull operation");
+                return ResponseEntity.ok("Successful operation");
             }
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("RatingID not found");
