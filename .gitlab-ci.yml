@@ -74,7 +74,7 @@ frontend-build-job:       # This job runs in the build stage, which runs first.
   script:
     - echo "Building the application..."
     - npm run build
-    - echo "Building complete."
+    - echo "Building complete!"
 
 docker-deploy-job:
   image: docker:20
