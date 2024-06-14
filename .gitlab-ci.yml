@@ -44,7 +44,7 @@ backend-build-job:       # This job runs in the build stage, which runs first.
   stage: build
   environment: production
   extends: 
-    - .setupNpm
+    - .setupJava
   rules:
     - if: $CI_COMMIT_REF_NAME == "main"
   script:
