@@ -1,11 +1,12 @@
 package com.insight.backend.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.insight.backend.model.Audit;
@@ -29,7 +30,7 @@ public class AuditsController {
     }
 
     @PostMapping("/api/v1/audits/new")
-    public ResponseEntity<Map<String, Object>> postWithRequestBody(@RequestBody AuditRequest request) {
+    public ResponseEntity<Map<String, Object>> postWithRequestBody(@RequestBody com.insight.backend.controller.AuditRequest request) {
         Integer ID; 
         // Check if both keys are correctly given
         if (request.getName() == null || request.getCategories() == null) {
@@ -39,8 +40,7 @@ public class AuditsController {
         }
 
         // Create an instance of Create_audit and call the get_input method
-        Create_audit createAudit = new Create_audit();
-        ID = createAudit.get_input(request.getName(), request.getCategories());
+        ID = 5;
         if (ID == 0) {
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("error", "failed_to_create");
