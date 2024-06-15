@@ -28,3 +28,10 @@ out/
 
 # VS Code
 .vscode/
+
+# DB stuff
+.env
+src/main/resources/application.properties
+
+# Mac stuff
+**/.DS_Store
