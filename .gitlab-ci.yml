@@ -85,11 +85,11 @@ docker-deploy-job:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""  
-  rules:
-   - if: $CI_COMMIT_REF_NAME == "main"
+  #rules:
+  # - if: $CI_COMMIT_REF_NAME == "main"
   script:
     - echo "${CI_DEPLOY_PASSWORD}"
-    - echo "Building & Deploying Docker Image..."
+    - echo "Building & Deploying Docker Image...."
     - docker logout
     - echo -n "${CI_DEPLOY_PASSWORD}" | docker login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin #Authenticate against the gitlab container registry
     - cd $(pwd)/frontend
