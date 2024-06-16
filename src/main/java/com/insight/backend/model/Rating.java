@@ -1,53 +1,80 @@
 package com.insight.backend.model;
 
-/**
- * The Rating class represents a rating with an id, name, comment, points, and a flag indicating if it is not applicable.
- */
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+
+@Entity
 public class Rating {
-
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    @Column(nullable = false)
     private String name;
-    private String comment;
-    private int points;
-    private Boolean nA;
+    private Boolean isNa = false;
+    private String comment = "";
+    @Min(0)
+    @Max(5)
+    private Integer points;
+    @ManyToOne
+    @JoinColumn(name="audit_id", nullable=false)
+    private Audit audit;
+    @ManyToOne
+    @JoinColumn(name="question_id", nullable=false)
+    private Question question;
 
-    public void setId(int id) {
-        this.id = id;
+
+    public Rating(String name, Boolean isNa, String comment, Integer points, Audit audit, Question question) {
+        this.name = name;
+        this.isNa = isNa;
+        this.comment = comment;
+        this.points = points;
+        this.audit = audit;
+        this.question = question;
     }
 
-    public int getId() {
-        return this.id;
+    public Rating() {
+
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getName() {
-        return this.name;
+    public void setNa(Boolean na) {
+        isNa = na;
     }
 
     public void setComment(String comment) {
         this.comment = comment;
     }
 
-    public String getComment() {
-        return this.comment;
-    }
-
-    public void setPoints(int points) {
+    public void setPoints(@Min(0) @Max(5) Integer points) {
         this.points = points;
     }
 
-    public int getPoints() {
-        return this.points;
+    public Long getId() {
+        return id;
     }
 
-    public void setNA(Boolean nA) {
-        this.nA = nA;
+    public String getName() {
+        return name;
     }
 
-    public Boolean getNA() {
-        return this.nA;
+    public Boolean getNa() {
+        return isNa;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public @Min(0) @Max(5) Integer getPoints() {
+        return points;
     }
 }

@@ -29,9 +29,9 @@ out/
 # VS Code
 .vscode/
 
-# Mac
-**/.DS_Store
-
 # DB stuff
 .env
 src/main/resources/application.properties
+
+# Mac stuff
+**/.DS_Store
