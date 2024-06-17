@@ -1,12 +1,13 @@
 package com.insight.backend.controller;
 
-
-import com.insight.backend.model.Category;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.http.ResponseEntity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import com.insight.backend.model.Category;
+
+import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 
 @RestController
 public class CategoryController {
