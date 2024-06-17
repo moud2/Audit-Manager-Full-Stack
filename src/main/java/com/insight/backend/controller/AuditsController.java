@@ -3,7 +3,9 @@ package com.insight.backend.controller;
 import java.util.*;
 
 import com.insight.backend.model.Audit;
+import com.insight.backend.service.AuditService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,18 +16,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AuditsController {
 
+    private final AuditService auditService;
+
+    @Autowired
+    public AuditsController(AuditService auditService) {
+        this.auditService = auditService;
+    }
+
     @GetMapping("api/v1/audits")
     public ResponseEntity<List<Audit>> getAudits() {
-        List<Audit> auditList = new ArrayList<>();
-
-        // TODO: Temporary code for basic functionality | remove and reimplement properly later
-        Audit audit1 = new Audit("ISO-2123", Set.of());
-        Audit audit2 = new Audit("ISO-2124", Set.of());
-        Audit audit3 = new Audit("ISO-2125", Set.of());
-        auditList.add(audit1);
-        auditList.add(audit2);
-        auditList.add(audit3);
-
+        List<Audit> auditList = auditService.getAllAudits();
         return ResponseEntity.ok(auditList);
     }
 
