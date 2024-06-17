@@ -144,3 +144,5 @@ out/
 
 #custom deploy script
 deploy.sh
+
+./cypress/screenshots/
