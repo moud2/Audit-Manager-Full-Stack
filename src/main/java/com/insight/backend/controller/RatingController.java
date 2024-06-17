@@ -1,22 +1,83 @@
 package com.insight.backend.controller;
 
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
-
+import org.springframework.web.bind.annotation.*;
+import java.util.*;
 import com.insight.backend.model.Category;
 import com.insight.backend.model.Rating;
 import com.insight.backend.model.nestedRatings.RatingList;
 
+
+
+@RestController
+public class RatingController {
+
+    private List<Rating> ratings;
+
+    /**
+     * Initializes the RatingController with a list of sample ratings.
+     */
+    public RatingController() {
+        ratings = new ArrayList<>();
+
+        Rating rating1 = new Rating();
+        rating1.setId((long)1);
+        rating1.setName("Mahamoud");
+        rating1.setComment("This is the first comment");
+        rating1.setPoints(5);
+
+        Rating rating2 = new Rating();
+        rating2.setId((long)2);
+        rating2.setName("Ahmed");
+        rating2.setComment("This is the second comment");
+        rating2.setPoints(4);
+
+        Rating rating3 = new Rating();
+        rating3.setId((long)3);
+        rating3.setName("John");
+        rating3.setComment("This is the third comment");
+        rating3.setPoints(3);
+
+        ratings.add(rating1);
+        ratings.add(rating2);
+        ratings.add(rating3);
+    }
+
+    /**
+     * Updates an existing rating based on the provided id and JSON request body.
+     *
+     * @param id            the id of the rating to update
+     * @param updatedRating the updated rating object from the JSON request body
+     * @return a ResponseEntity indicating the result of the update operation
+     */
+    @PatchMapping("/api/v1/ratings/{id}")
+    public ResponseEntity<String> updateRating(@PathVariable("id") int id, @RequestBody Rating updatedRating) {
+        for (Rating rating : ratings) {
+            if (rating.getId() == id) {
+                if (updatedRating.getComment() != null) {
+                    rating.setComment(updatedRating.getComment());
+                }
+                if (updatedRating.getPoints() <= 5) {
+                    rating.setPoints(updatedRating.getPoints());
+                }
+                if (updatedRating.getName() != null) {
+                    rating.setName(updatedRating.getName());
+                }
+                if (updatedRating.getNa() != null) {
+                    rating.setNa(updatedRating.getNa());
+                }
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body("");
+                
+            }
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("RatingID not found");
+    }
+
+
 /**
  * Controller for handling rating-related requests.
  */
-@RestController
-public class RatingController {
 
     /**
      * Handles GET requests for retrieving ratings for a specific audit.
@@ -90,4 +151,5 @@ public class RatingController {
         //     return ResponseEntity.notFound().build();
         // }
     }
+
 }
