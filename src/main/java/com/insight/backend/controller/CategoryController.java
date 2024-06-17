@@ -2,7 +2,6 @@ package com.insight.backend.controller;
 
 
 import com.insight.backend.model.Category;
-import com.insight.backend.service.RatingService;
 import com.insight.backend.service.CategoryService;
 
 import org.springframework.web.bind.annotation.*;
