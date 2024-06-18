@@ -103,7 +103,7 @@ docker-release-job:
     - docker push gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend    
     - echo "[*] Image Build & Deployment was executed.."
 
-#Deployment with SSH RCE
+# Deployment with SSH RCE
 publish-job:      # This job runs in the deploy stage.
   image: ubuntu:24
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
@@ -113,17 +113,14 @@ publish-job:      # This job runs in the deploy stage.
     REMOTE_DOMAIN: https://sp08.imn-htwk.leipzig.de
     REMOTE_USERNAME: stud-fim  
   tags: 
-    - softwareDeployment # -> this tags needs to be set with the shell runner deployed on the server
+    - softwareDeployment # -> this tag needs to be set with the shell runner deployed on the server
   environment: 
     name: production
-  #rules:
-  #  - if: $CI_COMMIT_REF_NAME == "main"
+  # rules:
+  #   - if: $CI_COMMIT_REF_NAME == "main"
   script:
-    - #ssh-keygen -t rsa -q -f "$HOME/.ssh/id_rsa" -N ""
-    - #chmod 600 ~/.ssh/id_rsa
-    - #ssh-keyscan -H "$REMOTE_HOST" >> ~/.ssh/known_hosts
     - apt update && apt upgrade -y
-    - apt install sshkey -y && apt install ssh -y
+    - apt install sshpass -y && apt install ssh -y
     - sshpass -p $JUMP_PASSWORD ssh -o StrictHostKeyChecking=no -J eschybol@kain.imn.htwk-leipzig.de $REMOTE_USERNAME@$REMOTE_HOST << 'EOF'
         echo "$CI_REGISTRY_PASSWORD" | podman login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
         podman pull $DOCKER_IMAGE
