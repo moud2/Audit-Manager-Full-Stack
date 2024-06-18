@@ -27,18 +27,19 @@ stages:          # List of stages for jobs, and their order of execution
 .setupNpm:
   image: node:20
   before_script:
-    - cd $(pwd)/frontend && npm install
+    - cd $(pwd)/frontend
+    - npm install
 
 .setupCypress:
-  image: node:20
+  image: cypress
   before_script:
-    - cd $(pwd)/frontend && npm install
+    - cd $(pwd)/frontend
     - npm ci
 
 #TESTING STAGE
 #Testing Framework scheint cyprus zu werden https://docs.cypress.io/guides/guides/command-line
 e2e-test-job:   # This job runs in the test stage.
-  image: node:20 #konkrete version
+  image: cypress #konkrete version
   stage: test    # It only starts when the job in the build stage completes successfully.
   extends: 
     - .setupCypress
@@ -49,7 +50,7 @@ e2e-test-job:   # This job runs in the test stage.
     - echo "Code coverage is 90%"
 
 integration-test-job:
-  image: node:20 #konkrete version
+  image: cypress #konkrete version
   stage: test
   script:
     - echo "[*] Starting Integration Test...."
