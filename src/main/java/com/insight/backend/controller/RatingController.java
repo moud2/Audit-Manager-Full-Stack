@@ -2,7 +2,7 @@ package com.insight.backend.controller;
 
 import java.util.*;
 
-import com.insight.backend.model.Category;
+//import com.insight.backend.model.Category;
 import com.insight.backend.model.Rating;
 import com.insight.backend.model.nestedRatings.RatingList;
 
@@ -89,9 +89,9 @@ public class RatingController {
     public ResponseEntity<List<Map<String, Object>>> get(@PathVariable("auditId") Integer auditId) {
 
         // Generate Test-Categories
-        Category category1 = new Category("categorytest1", null);
+        /*Category category1 = new Category("categorytest1", null);
         Category category2 = new Category("categorytest2", null);
-        Category category3 = new Category("categorytest3", null);
+        Category category3 = new Category("categorytest3", null);*/
 
         // Generate Test-Ratings
         Rating rating1 = new Rating("Bob", false, "KOmmentar", 0, null, null);
