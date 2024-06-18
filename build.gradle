@@ -42,3 +42,17 @@ jar {
         )
     }
 }
+
+bootJar {
+    archiveFileName = 'insight-spring.jar'
+}
+
+task buildDocker(type: Exec) {
+    dependsOn build
+    commandLine 'docker', 'build', '-t', 'insight-spring', '.'
+}
+
+task runDocker(type: Exec) {
+    dependsOn buildDocker
+    commandLine 'docker', 'run', '-p', '80:80', 'insight-spring'
+}
