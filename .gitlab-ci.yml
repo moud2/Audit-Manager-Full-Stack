@@ -111,7 +111,8 @@ docker-release-job:
 publish-job:      # This job runs in the deploy stage.
   image: docker:20
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
-  tags: softwareDeployment # -> this tags needs to be set with the shell runner deployed on the server
+  tags: 
+    - softwareDeployment # -> this tags needs to be set with the shell runner deployed on the server
   environment: 
     name: production
   #rules:
