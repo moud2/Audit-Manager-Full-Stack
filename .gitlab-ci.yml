@@ -23,11 +23,6 @@ stages:          # List of stages for jobs, and their order of execution
   - build
   - deploy
 
-variables:
-  DOCKER_IMAGE: registry.gitlab.com/$CI_PROJECT_PATH/insight:latest
-  REMOTE_HOST: http://141.57.8.208
-  REMOTE_DOMAIN: https://sp08.imn-htwk.leipzig.de
-  REMOTE_USERNAME: stud-fim
 
 .setupNpm:
   image: node:20
@@ -36,7 +31,7 @@ variables:
     - npm install
 
 .setupCypress:
-  image: cypress
+  image: node:20 #in cypress image umaendern
   before_script:
     - cd $(pwd)/frontend
     - npm ci
@@ -44,7 +39,7 @@ variables:
 #TESTING STAGE
 #Testing Framework scheint cyprus zu werden https://docs.cypress.io/guides/guides/command-line
 e2e-test-job:   # This job runs in the test stage.
-  image: cypress #konkrete version
+  image: node:20 #in cypress image umaendern
   stage: test    # It only starts when the job in the build stage completes successfully.
   extends: 
     - .setupCypress
@@ -55,7 +50,7 @@ e2e-test-job:   # This job runs in the test stage.
     - echo "Code coverage is 90%"
 
 integration-test-job:
-  image: cypress #konkrete version
+  image: node:20 #konkrete version
   stage: test
   script:
     - echo "[*] Starting Integration Test...."
@@ -108,9 +103,15 @@ docker-release-job:
     - docker push gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend    
     - echo "[*] Image Build & Deployment was executed.."
 
+#Deployment with SSH RCE
 publish-job:      # This job runs in the deploy stage.
-  image: docker:20
+  image: ubuntu:24
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+  variables:
+    DOCKER_IMAGE: registry.gitlab.com/$CI_PROJECT_PATH/insight:latest
+    REMOTE_HOST: http://141.57.8.208
+    REMOTE_DOMAIN: https://sp08.imn-htwk.leipzig.de
+    REMOTE_USERNAME: stud-fim  
   tags: 
     - softwareDeployment # -> this tags needs to be set with the shell runner deployed on the server
   environment: 
@@ -118,10 +119,15 @@ publish-job:      # This job runs in the deploy stage.
   #rules:
   #  - if: $CI_COMMIT_REF_NAME == "main"
   script:
-    - echo "Deploying application..."
-    #Deployment with SSH RCE -> check out the notion notes on pipelines
-    - docker logout    
-    - echo -n "${CI_DEPLOY_PASSWORD}" | docker login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin #Authenticate against the gitlab container registry
-    - cd $(pwd)/frontend
-    #- docker compose up
-    - echo "Application successfully deployed :)"
+    - #ssh-keygen -t rsa -q -f "$HOME/.ssh/id_rsa" -N ""
+    - #chmod 600 ~/.ssh/id_rsa
+    - #ssh-keyscan -H "$REMOTE_HOST" >> ~/.ssh/known_hosts
+    - apt update && apt upgrade -y
+    - apt install sshkey -y && apt install ssh -y
+    - sshpass -p $JUMP_PASSWORD ssh -o StrictHostKeyChecking=no -J eschybol@kain.imn.htwk-leipzig.de $REMOTE_USERNAME@$REMOTE_HOST << 'EOF'
+        echo "$CI_REGISTRY_PASSWORD" | podman login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
+        podman pull $DOCKER_IMAGE
+        podman stop insight || true
+        podman rm insight || true
+        podman run -d --name insight -p 80:80 $DOCKER_IMAGE
+      EOF
