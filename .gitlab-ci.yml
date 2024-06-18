@@ -21,8 +21,17 @@ image: node:20 #konkrete version
 stages:          # List of stages for jobs, and their order of execution
   - test
   - build
+  - release
   - deploy
 
+.setupHost:
+  before_script:
+    - apt update && apt upgrade -y 
+    - apt install npm -y && apt install docker -y
+    - cd $(pwd)/frontend
+    - npm update
+    - npm install
+    - npm install autoprefixer
 
 .setupNpm:
   image: node:20
@@ -70,30 +79,32 @@ frontend-build-job:       # This job runs in the build stage, which runs first.
   image: node:20 #konkrete version
   stage: build
   environment: production
-  extends: 
-  #  - .setupNpm
   #rules:
   #  - if: $CI_COMMIT_REF_NAME == "main"
   script:
     - echo "Building the application..."
+    - cd $(pwd)/frontend
+    - npm ci    
     - npm run build
     - echo "Building complete! :)"
+  artifacts:
+    paths:
+      - dist/ 
 
 docker-release-job:
   image: docker:20
-  stage: build
-  extends:
-    - .setupNpm
+  stage: release
   services:
     - docker:dind
   variables:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_DRIVER: overlay2
-    DOCKER_TLS_CERTDIR: ""  
+    DOCKER_TLS_CERTDIR: ""
+  dependencies:
+    - frontend-build-job 
   #rules:
   # - if: $CI_COMMIT_REF_NAME == "main"
   script:
-    - echo "${CI_DEPLOY_PASSWORD}"
     - echo "Building & Deploying Docker Image...."
     - docker logout
     - echo -n "${CI_DEPLOY_PASSWORD}" | docker login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin #Authenticate against the gitlab container registry
