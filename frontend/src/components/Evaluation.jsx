@@ -101,7 +101,11 @@ function Evaluation() {
                         if ((item.value ?? 0) > 10) {
                             return 'High';
                         }
-                        return context.bar.height < 60 ? null : item.value?.toString();
+                        //  return context.bar.height < 60 ? null : item.value?.toString();
+                        // type: 'continuous';
+                        //min: 0;
+                        //max: 100;
+                        //color: [string, string] | ((t: number) => string);
                     }}
                     width={1200}
                     height={350}
