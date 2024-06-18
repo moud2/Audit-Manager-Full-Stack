@@ -28,7 +28,9 @@ stages:          # List of stages for jobs, and their order of execution
   image: node:20
   before_script:
     - cd $(pwd)/frontend
+    - npm update
     - npm install
+    - npm install autoprefixer
 
 .setupCypress:
   image: node:20 #in cypress image umaendern
@@ -68,22 +70,20 @@ frontend-build-job:       # This job runs in the build stage, which runs first.
   image: node:20 #konkrete version
   stage: build
   environment: production
-  #extends: 
+  extends: 
   #  - .setupNpm
   #rules:
   #  - if: $CI_COMMIT_REF_NAME == "main"
   script:
     - echo "Building the application..."
-    - cd $(pwd)/frontend
-    - npm update
-    - npm install
-    - npm install autoprefixer
     - npm run build
     - echo "Building complete! :)"
 
 docker-release-job:
-  image: node:20
+  image: docker:20
   stage: build
+  extends:
+    - .setupNpm
   services:
     - docker:dind
   variables:
