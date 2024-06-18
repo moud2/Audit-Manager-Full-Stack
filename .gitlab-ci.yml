@@ -82,8 +82,8 @@ frontend-build-job:       # This job runs in the build stage, which runs first.
 docker-release-job:
   image: docker:20
   stage: build
-  #extends: 
-  #  - .setupNpm
+  extends: 
+    - .setupNpm
   services:
     - docker:dind
   variables:
@@ -97,8 +97,6 @@ docker-release-job:
     - echo "Building & Deploying Docker Image...."
     - docker logout
     - echo -n "${CI_DEPLOY_PASSWORD}" | docker login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin #Authenticate against the gitlab container registry
-    - cd $(pwd)/frontend
-    - npm install
     - docker build -t gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend .
     - docker push gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend    
     - echo "[*] Image Build & Deployment was executed.."
