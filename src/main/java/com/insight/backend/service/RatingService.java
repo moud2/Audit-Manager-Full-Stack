@@ -1,32 +1,24 @@
 package com.insight.backend.service;
 
-import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 import com.insight.backend.model.Rating;
 import com.insight.backend.repository.RatingRepository;
 
 @Service
 public class RatingService {
+
+    private final RatingRepository ratingRepository;
+
     @Autowired
-    private RatingRepository ratingRepository;
+    public RatingService(RatingRepository ratingRepository) {
+        this.ratingRepository = ratingRepository;
+    }
 
-    public List<Rating> getAll() {
+    public List<Rating> getAllRatings() {
         return ratingRepository.findAll();
-    }
-
-    public Optional<Rating> get(Long id) {
-        return ratingRepository.findById(id);
-    }
-
-    public Rating create(Rating rating) {
-        return ratingRepository.save(rating);
-    }
-
-    public void delete(Long id) {
-        ratingRepository.deleteById(id);
     }
 }
