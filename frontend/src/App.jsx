@@ -9,6 +9,36 @@ import './index.css';
 
 
 function App() {
+    return (
+        <Router>
+            <div>
+                <nav>
+                    <ul>
+                        <li>
+                            <Link to="/">Dashboard</Link>
+                        </li>
+                        <li>
+                            <Link to="/newAudit">NewAudit</Link>
+                        </li>
+                        <li>
+                            <Link to="/performAudit">PerformAudit</Link>
+                        </li>
+                        <li>
+                            <Link to="/evaluation">Evaluation</Link>
+                        </li>
+                    </ul>
+                </nav>
+
+                <Routes>
+                    <Route path="/" element={<Dashboard/>}/>
+                    <Route path="/newAudit" element={<NewAudit/>}/>
+                    <Route path="/performAudit" element={<PerformAudit/>}/>
+                    <Route path="/evaluation" element={<Evaluation/>}/>
+                    <Route path="/audit/:id" component={PerformAudit}/>
+                </Routes>
+            </div>
+        </Router>
+    );
   return (
     <Router>
       <div className="flex">
