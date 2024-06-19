@@ -6,23 +6,6 @@ stages:          # List of stages for jobs, and their order of execution
   - release
   - deploy
 
-.setupHost:
-  before_script:
-    - apt update && apt upgrade -y 
-    - apt install npm -y && apt install docker -y
-    - cd $(pwd)/frontend
-    - npm update
-    - npm install
-    - npm install autoprefixer
-
-.setupNpm:
-  image: node:20
-  before_script:
-    - cd $(pwd)/frontend
-    - npm update
-    - npm install
-    - npm install autoprefixer
-
 .setupCypress:
   image: node:20 #in cypress image umaendern
   before_script:
@@ -65,13 +48,13 @@ frontend-build-job:       # This job runs in the build stage, which runs first.
   #  - if: $CI_COMMIT_REF_NAME == "main"
   script:
     - echo "Building the application..."
-    - cd $(pwd)/frontend
+    - cd frontend
     - npm ci    
     - npm run build
     - echo "Building complete! :)"
   artifacts:
     paths:
-      - dist/ 
+      - frontend/dist/
 
 docker-release-job:
   image: docker:20
@@ -83,13 +66,14 @@ docker-release-job:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""
   dependencies:
-    - frontend-build-job 
+    - frontend-build-job
   #rules:
   # - if: $CI_COMMIT_REF_NAME == "main"
   script:
     - echo "Building & Deploying Docker Image...."
     - docker logout
     - echo -n "${CI_DEPLOY_PASSWORD}" | docker login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin #Authenticate against the gitlab container registry
+    - cd frontend
     - docker build -t gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend .
     - docker push gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend    
     - echo "[*] Image Build & Deployment was executed.."
@@ -99,23 +83,22 @@ publish-job:      # This job runs in the deploy stage.
   image: ubuntu:24
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
   variables:
-    DOCKER_IMAGE: registry.gitlab.com/$CI_PROJECT_PATH/insight:latest
+    DOCKER_IMAGE: gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend:latest
     REMOTE_HOST: http://141.57.8.208
-    REMOTE_DOMAIN: https://sp08.imn-htwk.leipzig.de
+    REMOTE_DOMAIN: https://sp08.imn.htwk-leipzig.de
     REMOTE_USERNAME: stud-fim  
-  tags: 
-    - softwareDeployment # -> this tag needs to be set with the shell runner deployed on the server
   environment: 
     name: production
   # rules:
   #   - if: $CI_COMMIT_REF_NAME == "main"
   script:
-    - apt update && apt upgrade -y
-    - apt install sshpass -y && apt install ssh -y
-    - sshpass -p $JUMP_PASSWORD ssh -o StrictHostKeyChecking=no -J eschybol@kain.imn.htwk-leipzig.de $REMOTE_USERNAME@$REMOTE_HOST << 'EOF'
-        echo "$CI_REGISTRY_PASSWORD" | podman login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
-        podman pull $DOCKER_IMAGE
+    - env
+    - ssh $REMOTE_USERNAME@$REMOTE_HOST << 'EOF'
+        echo -n "${CI_DEPLOY_PASSWORD}" | podman login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin #Authenticate against the gitlab container registry
+        podman pull gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend:latest
         podman stop insight || true
         podman rm insight || true
-        podman run -d --name insight -p 80:80 $DOCKER_IMAGE
+        podman run -d --name insight -p 80:80 gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend:latest
       EOF
+
+#access credentials ? as env on remote server ?
