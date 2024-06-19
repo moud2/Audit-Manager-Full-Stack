@@ -78,11 +78,11 @@ publish-job:      # This job runs in the deploy stage.
   # rules:
   #   - if: $CI_COMMIT_REF_NAME == "main"
   script:
-    - ssh $REMOTE_USERNAME@$REMOTE_HOST << 'EOF'
-        echo -n "${CI_DEPLOY_PASSWORD}" | docker login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin #Authenticate against the gitlab container registry
-        podman pull $DOCKER_IMAGE
-        podman stop insight-backend || true
-        podman rm insight-backend || true
-        podman run -d --name insight-backend -p 8080:8080 $DOCKER_IMAGE
-      EOF
-  # lokal (bei mir) einen ssh key erzeugen, den privatekey als variable festlegen und den public key 
+    - echo "hello world"
+    #- ssh $REMOTE_USERNAME@$REMOTE_HOST << 'EOF'
+    #    echo -n "${CI_DEPLOY_PASSWORD}" | docker login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin #Authenticate against the gitlab container registry
+    #    podman pull $DOCKER_IMAGE
+    #    podman stop insight-backend || true
+    #    podman rm insight-backend || true
+    #    podman run -d --name insight-backend -p 8080:8080 $DOCKER_IMAGE
+    #  EOF
