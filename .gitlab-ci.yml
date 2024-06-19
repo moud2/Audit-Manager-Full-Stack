@@ -84,15 +84,15 @@ publish-job:
   # - if: $CI_COMMIT_REF_NAME == "main"
   script:
     - apt update && apt upgrade -y
-    - apt install docker ssh -y
+    - apt install ssh podman -y
     - mkdir -p ~/.ssh
     - echo "$PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
     - ssh -i .ssh/id_rsa $REMOTE_USERNAME@$REMOTE_HOST << EOF
-        echo -n "${CI_DEPLOY_PASSWORD}" | docker login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin
-        docker pull $DOCKER_IMAGE
-        docker stop insight-backend || true
-        docker rm insight-backend || true
-        docker run -d --name insight-backend -p 8080:8080 $DOCKER_IMAGE
+        echo -n "${CI_DEPLOY_PASSWORD}" | podman login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin
+        podman pull $DOCKER_IMAGE
+        podman stop insight-backend || true
+        podman rm insight-backend || true
+        podman run -d --name insight-backend -p 8080:8080 $DOCKER_IMAGE
       EOF
     #- ssh $REMOTE_USERNAME@$REMOTE_HOST ; echo -n "${CI_DEPLOY_PASSWORD}" | podman login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin; podman pull $DOCKER_IMAGE; podman stop insight || true; podman rm insight || true; podman run -d --name insight -p 80:80 $DOCKER_IMAGE
