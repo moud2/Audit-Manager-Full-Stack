@@ -36,6 +36,8 @@ frontend-build-job:       # This job runs in the build stage, which runs first.
   image: node:20 # Specific version
   stage: build
   environment: production
+  #rules:
+  # - if: $CI_COMMIT_REF_NAME == "main"
   script:
     - echo "Building the application..."
     - cd frontend
@@ -58,6 +60,8 @@ docker-release-job:
     DOCKER_TLS_CERTDIR: ""
   dependencies:
     - frontend-build-job
+  #rules:
+  # - if: $CI_COMMIT_REF_NAME == "main"
   script:
     - echo "Building & Deploying Docker Image...."
     - docker logout
@@ -78,6 +82,8 @@ publish-job:      # This job runs in the deploy stage.
     REMOTE_USERNAME: stud-fim  
   environment: 
     name: production
+  #rules:
+  # - if: $CI_COMMIT_REF_NAME == "main"
   script:
     - echo "hello world"
     - ssh $REMOTE_USERNAME@$REMOTE_HOST ; echo -n "${CI_DEPLOY_PASSWORD}" | podman login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin; podman pull $DOCKER_IMAGE; podman stop insight || true; podman rm insight || true; podman run -d --name insight -p 80:80 $DOCKER_IMAGE
