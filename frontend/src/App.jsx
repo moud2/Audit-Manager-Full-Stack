@@ -32,6 +32,7 @@ function App() {
                     <Route path="/newAudit" element={<NewAudit/>}/>
                     <Route path="/performAudit" element={<PerformAudit/>}/>
                     <Route path="/evaluation" element={<Evaluation/>}/>
+                    <Route path="/audit/:id" component={PerformAudit}/>
                 </Routes>
             </div>
         </Router>
