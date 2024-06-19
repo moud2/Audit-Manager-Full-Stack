@@ -1,4 +1,4 @@
-package com.insight.backend.controller;
+package com.insight.backend.model.newAudit;
 
 import java.util.List;
 
