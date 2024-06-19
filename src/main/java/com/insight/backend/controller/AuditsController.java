@@ -3,6 +3,7 @@ package com.insight.backend.controller;
 import java.util.*;
 
 import com.insight.backend.model.Audit;
+import com.insight.backend.model.newAudit.AuditRequest;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,7 @@ public class AuditsController {
     }
 
     @PostMapping("/api/v1/audits/new")
-    public ResponseEntity<Map<String, Object>> postWithRequestBody(@RequestBody com.insight.backend.controller.AuditRequest request) {
+    public ResponseEntity<Map<String, Object>> postWithRequestBody(@RequestBody com.insight.backend.model.newAudit.AuditRequest request) {
         Integer ID; 
         // Check if both keys are correctly given
         if (request.getName() == null || request.getCategories() == null) {
