@@ -1,6 +1,6 @@
-image: node:20 # Specific version
+image: node:20 
 
-stages:          # List of stages for jobs, and their order of execution
+stages:          
   - test
   - build
   - release
@@ -8,32 +8,29 @@ stages:          # List of stages for jobs, and their order of execution
 
 
 # TESTING STAGE
-# Testing Framework is Cypress https://docs.cypress.io/guides/guides/command-line
-e2e-test-job:   # This job runs in the test stage.
-  stage: test    # It only starts when the job in the build stage completes successfully.
+e2e-test-job:   
+  stage: test    
   script:
     - echo "Running unit tests... This will take about 60 seconds."
-    #- npm start &     # Start the server in the background
-    #- npm run e2e     # Run Cypress tests
     - echo "Code coverage is 90%"
 
 integration-test-job:
-  image: node:20 # Specific version
+  image: node:20 
   stage: test
   script:
     - echo "[*] Starting Integration Test...."
     - echo "[*] Integration Test coverage is 100%"
 
-lint-test-job:   # This job also runs in the test stage.
-  image: node:20 # Specific version
-  stage: test    # It can run at the same time as unit-test-job (in parallel).
+lint-test-job:  
+  image: node:20 
+  stage: test    
   script:
     - echo "Linting code... This will take about 10 seconds."
     - echo "No lint issues found."
 
 # BUILD STAGE
-frontend-build-job:       # This job runs in the build stage, which runs first.
-  image: node:20 # Specific version
+frontend-build-job:       
+  image: node:20 
   stage: build
   environment: production
   #rules:
@@ -49,6 +46,7 @@ frontend-build-job:       # This job runs in the build stage, which runs first.
     paths:
       - frontend/dist/
 
+#RELEASE STAGE
 docker-release-job:
   image: docker:20
   stage: release
@@ -71,10 +69,10 @@ docker-release-job:
     - docker push gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend    
     - echo "[*] Image Build & Deployment was executed."
 
-# Deployment with SSH RCE
-publish-job:      # This job runs in the deploy stage.
+#DEPLOYMENT STAGE 
+publish-job:      
   image: ubuntu:24
-  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+  stage: deploy
   variables:
     DOCKER_IMAGE: gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend:latest
     REMOTE_HOST: 141.57.8.208
