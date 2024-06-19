@@ -1,12 +1,12 @@
 package com.insight.backend.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import java.util.List;
 
 import com.insight.backend.repository.CategoryRepository;
 import com.insight.backend.model.Category;
 
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class CategoryService {
