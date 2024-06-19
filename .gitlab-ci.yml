@@ -86,7 +86,6 @@ publish-job:
     - mkdir -p ~/.ssh
     - echo "$PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
-    - ssh-keyscan -H $REMOTE_HOST >> ~/.ssh/known_hosts
     - ssh $REMOTE_USERNAME@$REMOTE_HOST << EOF
         echo -n "${CI_DEPLOY_PASSWORD}" | docker login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin
         docker pull $DOCKER_IMAGE
