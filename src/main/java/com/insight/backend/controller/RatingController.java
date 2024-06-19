@@ -117,15 +117,15 @@ public class RatingController {
 
         Map<String, Object> category = new HashMap<>();
         category.put("id", 0);
-        category.put("name", "string");
+        category.put("name", "8021x");
 
         // Erstellen des Items
         Map<String, Object> item = new HashMap<>();
         item.put("id", 0);
         item.put("category", category);
-        item.put("question", "string");
+        item.put("question", "Email Encryption");
         item.put("points", 0);
-        item.put("comment", "string");
+        item.put("comment", "nicht vorhanden");
         item.put("na", false);
 
         Map<String, Object> item2 = new HashMap<>();
