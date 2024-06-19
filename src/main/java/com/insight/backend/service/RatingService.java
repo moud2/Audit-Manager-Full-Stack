@@ -10,12 +10,11 @@ import com.insight.backend.repository.RatingRepository;
 
 @Service
 public class RatingService {
-/*
- 
+
     @Autowired
     private RatingRepository ratingRepository;
 
     public List<Rating> getAllRatings() {
         return ratingRepository.findAll();
-    }*/
+    }
 }
