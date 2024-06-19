@@ -5,8 +5,8 @@ WORKDIR /app
 
 COPY build/libs/insight-spring.jar /app/insight-spring.jar
 
-EXPOSE 80
+EXPOSE 81
 
 ENTRYPOINT ["java", "-jar", "insight-spring.jar"]
 
-ENV SERVER_PORT 80
+ENV SERVER_PORT 81

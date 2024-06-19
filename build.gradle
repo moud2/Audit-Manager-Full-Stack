@@ -54,5 +54,5 @@ task buildDocker(type: Exec) {
 
 task runDocker(type: Exec) {
     dependsOn buildDocker
-    commandLine 'docker', 'run', '-p', '80:80', 'insight-spring'
+    commandLine 'docker', 'run', '-p', '81:81', 'insight-spring'
 }
