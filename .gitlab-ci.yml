@@ -84,4 +84,7 @@ publish-job:
   # - if: $CI_COMMIT_REF_NAME == "main"
   script:
     - echo "hello world"
+    - mkdir ./.ssh && touch ./.ssh/id_rsa 
+    - echo $PRIVATE_KEY > ./.ssh/id_rsa
+    - chmod 600 ./.ssh/id_rsa
     - ssh $REMOTE_USERNAME@$REMOTE_HOST ; echo -n "${CI_DEPLOY_PASSWORD}" | podman login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin; podman pull $DOCKER_IMAGE; podman stop insight || true; podman rm insight || true; podman run -d --name insight -p 80:80 $DOCKER_IMAGE
