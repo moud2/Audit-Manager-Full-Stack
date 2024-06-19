@@ -2,7 +2,7 @@ package com.insight.backend.controller;
 
 import java.util.*;
 
-import com.insight.backend.model.Category;
+//import com.insight.backend.model.Category;
 import com.insight.backend.model.Rating;
 import com.insight.backend.model.nestedRatings.RatingList;
 
@@ -89,9 +89,9 @@ public class RatingController {
     public ResponseEntity<List<Map<String, Object>>> get(@PathVariable("auditId") Integer auditId) {
 
         // Generate Test-Categories
-        Category category1 = new Category("categorytest1", null);
+        /*Category category1 = new Category("categorytest1", null);
         Category category2 = new Category("categorytest2", null);
-        Category category3 = new Category("categorytest3", null);
+        Category category3 = new Category("categorytest3", null);*/
 
         // Generate Test-Ratings
         Rating rating1 = new Rating("Bob", false, "KOmmentar", 0, null, null);
@@ -117,15 +117,15 @@ public class RatingController {
 
         Map<String, Object> category = new HashMap<>();
         category.put("id", 0);
-        category.put("name", "string");
+        category.put("name", "8021x");
 
         // Erstellen des Items
         Map<String, Object> item = new HashMap<>();
         item.put("id", 0);
         item.put("category", category);
-        item.put("question", "string");
+        item.put("question", "Email Encryption");
         item.put("points", 0);
-        item.put("comment", "string");
+        item.put("comment", "nicht vorhanden");
         item.put("na", false);
 
         Map<String, Object> item2 = new HashMap<>();
