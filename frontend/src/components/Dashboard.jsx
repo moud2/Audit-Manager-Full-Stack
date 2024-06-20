@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Paper from '@mui/material/Paper';
 import AddIcon from '@mui/icons-material/Add';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import axios from 'axios';
 
 function Dashboard() {
@@ -39,11 +39,14 @@ function Dashboard() {
                 <h1 className="text-center text-4xl m-10">Dashboard</h1>
             </div>
 
-            {/* First box including plus icon */}
-            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-center">
+
+            <div
+                className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-center">
+
+                {/* First box including plus icon */}
                 <Link to="/newAudit" className="flex justify-center items-center h-full mx-10">
                     <Paper elevation={8} className="w-full aspect-square flex justify-center items-center">
-                        <AddIcon sx={{ fontSize: '40vw', maxWidth: 140, maxHeight: 140 }} />
+                        <AddIcon sx={{fontSize: '40vw', maxWidth: 140, maxHeight: 140}}/>
                     </Paper>
                 </Link>
 
@@ -51,7 +54,8 @@ function Dashboard() {
                 {data.map(audit => (
                     <Link key={audit.id} to={`/audit/${audit.id}`}
                           className="flex justify-center items-center h-full mx-10">
-                        <Paper elevation={8} className="w-full aspect-square flex justify-center items-center">
+                        <Paper elevation={8}
+                               className="w-full aspect-square flex justify-center items-center">
                             <p className="text-center">{audit.name}</p>
                         </Paper>
                     </Link>
