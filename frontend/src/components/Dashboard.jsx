@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Paper from '@mui/material/Paper';
 import AddIcon from '@mui/icons-material/Add';
 import {Link} from 'react-router-dom';
-import axios from 'axios';
+import api from "../api.js";
 
 function Dashboard() {
     const [data, setData] = useState([]);
@@ -12,7 +12,7 @@ function Dashboard() {
 
     /* fetching data from backend */
     useEffect(() => {
-        axios.get('http://localhost:8080/api/v1/audits')
+        api.get('/v1/audits') /*relative path, editable in .env files & api.js*/
             .then(response => {
                 console.log(response);
                 setData(response.data);
@@ -33,17 +33,22 @@ function Dashboard() {
         return <p>Fehler: {error.message}</p>;
     }
 
-
+    /* Styling for the boxes, other styling in theme in App.jsx */
     const paperStyle = {
         width: '100%',
         aspectRatio: '1',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        transition: 'transform 0.2s',
+        transition: 'transform 0.7s',
         '&:hover': {
-            transform: 'scale(1.05)',
+            transform: 'scale(1.12)'
         },
+        '& p': {
+            fontSize: '1.5rem', // Adjust the font size here
+            textAlign: 'center',
+            margin: 0
+        }
     };
 
     return (
