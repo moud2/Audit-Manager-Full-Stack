@@ -9,6 +9,8 @@ function Dashboard() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+
+    /* fetching data from backend */
     useEffect(() => {
         axios.get('http://localhost:8080/api/v1/audits')
             .then(response => {
@@ -37,6 +39,7 @@ function Dashboard() {
                 <h1 className="text-center text-4xl m-10">Dashboard</h1>
             </div>
 
+            {/* First box including plus icon */}
             <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-center">
                 <Link to="/newAudit" className="flex justify-center items-center h-full mx-10">
                     <Paper elevation={8} className="w-full aspect-square flex justify-center items-center">
@@ -44,6 +47,7 @@ function Dashboard() {
                     </Paper>
                 </Link>
 
+                {/* boxes to perform audit, TODO get the right url */}
                 {data.map(audit => (
                     <Link key={audit.id} to={`/audit/${audit.id}`}
                           className="flex justify-center items-center h-full mx-10">
@@ -53,6 +57,7 @@ function Dashboard() {
                     </Link>
                 ))}
 
+                {/* example boxes, TODO delete later */}
                 {[...Array(6)].map((_, index) => (
                     <Link key={`example-${index}`} to="/"
                           className="flex justify-center items-center h-full mx-10">
