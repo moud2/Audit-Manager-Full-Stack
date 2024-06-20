@@ -58,8 +58,8 @@ docker-deploy-job:
     - echo "Building & Deploying Docker Image..."
     - docker logout
     - echo -n "${CI_REGISTRY_PASSWORD}" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin    
-    - docker build --build-arg JAR_FILE=build/libs/*.jar -t gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/backend:latest .    
-    - docker push gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/backend:latest
+    - docker build --build-arg JAR_FILE=build/libs/*.jar -t gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/backend .    
+    - docker push gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/backend
     - echo "[*] Image Build & Deployment was executed."
 
 #DEPLOYMENT STAGE
