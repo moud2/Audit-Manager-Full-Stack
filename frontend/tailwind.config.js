@@ -6,7 +6,7 @@ export default {
     ],
     theme: {
         extend: {
-            colors: {'softline': '#c4171f'}
+            colors: {'softline-rot': '#c4171f'}
         },
     },
     plugins: [],
