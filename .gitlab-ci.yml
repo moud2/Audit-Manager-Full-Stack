@@ -5,7 +5,7 @@ stages:
   - build
   - release
   - deploy
-
+frontend
 
 # TESTING STAGE
 e2e-test-job:   
@@ -93,7 +93,7 @@ publish-job:
       ssh -i ~/.ssh/id_rsa $REMOTE_USERNAME@$REMOTE_HOST << EOF
       echo -n "${CI_DEPLOY_PASSWORD}" | podman login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin
       podman pull $DOCKER_IMAGE
-      podman stop insight-frontend || true
-      podman rm insight-frontend || true
+      podman stop insight-frontend
+      podman rm insight-frontend
       podman run -d --name insight-frontend -p 80:80 $DOCKER_IMAGE
       EOF
