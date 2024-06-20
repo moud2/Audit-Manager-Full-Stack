@@ -19,6 +19,39 @@ const theme = createTheme({
                 },
             },
         },
+        MuiLinearProgress: {
+            styleOverrides: {
+                root: {
+                    height: '10px',
+                    borderRadius: '5px',
+                },
+                bar: {
+                    backgroundColor: '#c4171f',
+                },
+            },
+        },
+        MuiCircularProgress: {
+            styleOverrides: {
+                circle: {
+                    strokeLinecap: 'round',
+                },
+                svg: {
+                    color: '#c4171f',
+                },
+            },
+        },
+        MuiXBarChart: {
+            styleOverrides: {
+                bar: {
+                    fill: {
+                        type: 'continuous',
+                        min: 0,
+                        max: 100,
+                        color: [['#c4171f'], ['#c4171f']], // Beispiel: Min (grün) und Max (rot)
+                    },
+                },
+            },
+        },
     },
 });
 
