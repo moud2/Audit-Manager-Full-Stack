@@ -80,7 +80,7 @@ publish-job:
     - apt install ssh podman -y
     - mkdir -p ~/.ssh
     - echo "${PRIVATE_KEY}" | tr -d '\r' > ~/.ssh/id_rsa
-    - echo "${PUBLIC_KEY}" | tr -d '\r' > ~/.ssh/id_rsa
+    - echo "${PUBLIC_KEY}" | tr -d '\r' > ~/.ssh/id_rsa.pub
     - chmod 600 ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa.pub
     - scp -i ~/.ssh/id_rsa.pub $DOCKER_COMPOSE_PRODUCTION $REMOTE_USERNAME@$REMOTE_HOST:/home/$REMOTE_USERNAME/docker-compose.production.yml
