@@ -37,19 +37,27 @@ function Dashboard() {
                 <h1 className="text-center text-4xl m-10">Dashboard</h1>
             </div>
 
-            <div className="grid grid-cols-4 gap-4 justify-center">
-                <Link to="/newAudit" className="testbox flex justify-center items-center h-full"> {/* probably insert later: /api/v1/audits/new einzufügen */}
-                    <Paper elevation={8} className="w-60 h-60 flex justify-center items-center">
-                        <AddIcon sx={{ fontSize: 140 }} />
+            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-center">
+                <Link to="/newAudit" className="flex justify-center items-center h-full mx-10">
+                    <Paper elevation={8} className="w-full aspect-square flex justify-center items-center">
+                        <AddIcon sx={{ fontSize: '40vw', maxWidth: 140, maxHeight: 140 }} />
                     </Paper>
                 </Link>
 
-                {/*  */}
                 {data.map(audit => (
                     <Link key={audit.id} to={`/audit/${audit.id}`}
-                          className="testbox flex justify-center items-center h-full">
-                        <Paper elevation={8} className="w-60 h-60 flex justify-center items-center m-10">
-                            <p>{audit.name}</p>
+                          className="flex justify-center items-center h-full mx-10">
+                        <Paper elevation={8} className="w-full aspect-square flex justify-center items-center">
+                            <p className="text-center">{audit.name}</p>
+                        </Paper>
+                    </Link>
+                ))}
+
+                {[...Array(6)].map((_, index) => (
+                    <Link key={`example-${index}`} to="/"
+                          className="flex justify-center items-center h-full mx-10">
+                        <Paper elevation={8} className="w-full aspect-square flex justify-center items-center">
+                            <p className="text-center">Beispiel</p>
                         </Paper>
                     </Link>
                 ))}
