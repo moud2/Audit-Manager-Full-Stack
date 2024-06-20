@@ -86,7 +86,7 @@ publish-job:
     - ssh-keyscan -H $REMOTE_HOST >> ~/.ssh/known_hosts
     - |
       ssh -i ~/.ssh/id_rsa $REMOTE_USERNAME@$REMOTE_HOST << EOF
-      echo -n "${CI_REGISTRY_PASSWORD}" | podman login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin #Authenticate against the gitlab container registry
-      podman compose pull $DOCKER_IMAGE
+      echo -n "${CI_REGISTRY_PASSWORD}" | podman login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin
+      podman compose -f docker-compose.production.yml pull
       podman compose -f docker-compose.production.yml up -d 
       EOF
