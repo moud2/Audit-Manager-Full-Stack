@@ -1,0 +1,18 @@
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - SA_PASSWORD
+      - ACCEPT_EULA="Y"
+    volumes:
+      - mssql_data:/var/opt/mssql
+    restart: unless-stopped
+  backend:
+    image: gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/backend:latest
+    volumes:
+      - ./application.properties:/app/application.properties
+    entrypoint: ["java", "-jar","/app.jar", "--spring.config.location=/app/application.properties"]
+    restart: unless-stopped
+
+volumes:
+  mssql_data:
