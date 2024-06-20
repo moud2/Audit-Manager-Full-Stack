@@ -1,22 +1,23 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Paper from '@mui/material/Paper';
 import AddIcon from '@mui/icons-material/Add';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 function Dashboard() {
-
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        axios.get('api/v1/audits')
+        axios.get('http://localhost:8080/api/v1/audits')
             .then(response => {
+                console.log(response);
                 setData(response.data);
                 setLoading(false);
             })
             .catch(err => {
+                console.error('Error fetching data:', err);
                 setError(err);
                 setLoading(false);
             });
@@ -37,12 +38,13 @@ function Dashboard() {
             </div>
 
             <div className="grid grid-cols-4 gap-4 justify-center">
-                <Link to="/newAudit" className="testbox flex justify-center items-center h-full">
+                <Link to="/newAudit" className="testbox flex justify-center items-center h-full"> {/* probably insert later: /api/v1/audits/new einzufügen */}
                     <Paper elevation={8} className="w-60 h-60 flex justify-center items-center">
-                        <AddIcon sx={{fontSize: 140}}/>
+                        <AddIcon sx={{ fontSize: 140 }} />
                     </Paper>
                 </Link>
 
+                {/*  */}
                 {data.map(audit => (
                     <Link key={audit.id} to={`/audit/${audit.id}`}
                           className="testbox flex justify-center items-center h-full">
