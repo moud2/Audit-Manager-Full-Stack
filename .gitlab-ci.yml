@@ -88,6 +88,6 @@ publish-job:
     - |
       ssh -i ~/.ssh/id_rsa $REMOTE_USERNAME@$REMOTE_HOST << EOF
       echo -n "${CI_REGISTRY_PASSWORD}" | podman login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin
-      podman compose -f docker-compose.production.yml pull
-      podman compose -f docker-compose.production.yml up -d 
+      podman-compose -f docker-compose.production.yml pull
+      podman-compose -f docker-compose.production.yml up -d 
       EOF
