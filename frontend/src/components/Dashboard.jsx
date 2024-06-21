@@ -12,7 +12,7 @@ function Dashboard() {
 
     /* fetching data from backend */
     useEffect(() => {
-        api.get('/v1/audits') /*relative path, editable in .env files & api.js*/
+        api.get('/v1/audits') /*relative path, editable in .env files & api.js -*/
             .then(response => {
                 console.log(response);
                 setData(response.data);
