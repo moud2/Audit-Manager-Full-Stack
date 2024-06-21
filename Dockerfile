@@ -1,5 +1,12 @@
-FROM openjdk:8-jdk-alpine
+# Dockerfile for java spring server
+FROM bellsoft/liberica-openjdk-alpine:21
+
 WORKDIR /app
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+
+COPY build/libs/insight-spring.jar /app/insight-spring.jar
+
+EXPOSE 81
+
+ENTRYPOINT ["java", "-jar", "insight-spring.jar"]
+
+ENV SERVER_PORT 81

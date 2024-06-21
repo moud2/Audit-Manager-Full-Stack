@@ -1,10 +1,11 @@
 package com.insight.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Set;
 
 import jakarta.persistence.*;
 
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
 public class Category {
