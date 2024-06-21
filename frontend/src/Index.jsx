@@ -5,11 +5,10 @@ import Header from './components/Header.jsx'
 import Footer from './components/Footer.jsx'
 import './index.css'
 
-ReactDOM.render(
+ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    {/* <Header/> */}
+    <Header/>
     <App />
     <Footer />
-  </React.StrictMode>,
-  document.getElementById('root')
+  </React.StrictMode>
 );
