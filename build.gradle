@@ -15,16 +15,44 @@ repositories {
 	mavenCentral()
 }
 
-dependencies {
+dependencies { 
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.hibernate.validator:hibernate-validator'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+
 	runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs << "-parameters"
+}
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'com.insight.backend.BackendApplication'
+        )
+    }
+}
+
+bootJar {
+    archiveFileName = 'insight-spring.jar'
+}
+
+task buildDocker(type: Exec) {
+    dependsOn build
+    commandLine 'docker', 'build', '-t', 'insight-spring', '.'
+}
+
+task runDocker(type: Exec) {
+    dependsOn buildDocker
+    commandLine 'docker', 'run', '-p', '81:81', 'insight-spring'
 }
