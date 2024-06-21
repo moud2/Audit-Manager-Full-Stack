@@ -7,9 +7,9 @@ import './index.css'
 
 ReactDOM.render(
   <React.StrictMode>
+    <Header/>
     <App />
     <Footer />
-    <Header/>
   </React.StrictMode>,
   document.getElementById('root')
 );
