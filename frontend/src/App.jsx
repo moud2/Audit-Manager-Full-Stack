@@ -9,6 +9,8 @@ import Evaluation from './components/Evaluation.jsx';
 import Sidebar from './components/Sidebar.jsx';
 import './index.css';
 
+
+function App() {
 const theme = createTheme({
     components: {
         MuiPaper: {
