@@ -46,14 +46,18 @@ function App() {
                             </li>
                         </ul>
                     </nav>
-
-                    <Routes>
-                        <Route path="/" element={<Dashboard/>}/>
-                        <Route path="/newAudit" element={<NewAudit/>}/>
-                        <Route path="/performAudit" element={<PerformAudit/>}/>
-                        <Route path="/evaluation" element={<Evaluation/>}/>
-                        <Route path="/audit/:id" element={<PerformAudit/>}/>
-                    </Routes>
+                    <div className="flex">
+                        {/*<Sidebar/>*/}
+                        <div className="ml-64 p-4 w-full">
+                            <Routes>
+                                <Route path="/" element={<Dashboard/>}/>
+                                <Route path="/newAudit" element={<NewAudit/>}/>
+                                <Route path="/performAudit" element={<PerformAudit/>}/>
+                                <Route path="/evaluation" element={<Evaluation/>}/>
+                                <Route path="/audit/:id" element={<PerformAudit/>}/>
+                            </Routes>
+                        </div>
+                    </div>
                 </div>
             </Router>
         </ThemeProvider>
