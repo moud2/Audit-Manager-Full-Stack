@@ -10,8 +10,6 @@ public class Rating {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column(nullable = false)
-    private String name;
     private Boolean isNa = false;
     private String comment = "";
     @Min(0)
