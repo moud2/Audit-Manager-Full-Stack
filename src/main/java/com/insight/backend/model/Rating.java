@@ -24,7 +24,7 @@ public class Rating {
 
 
     public Rating(String name, Boolean isNa, String comment, Integer points, Audit audit, Question question) {
-        this.name = name;
+        //this.name = name;
         this.isNa = isNa;
         this.comment = comment;
         this.points = points;
@@ -38,10 +38,6 @@ public class Rating {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public void setNa(Boolean na) {
@@ -58,10 +54,6 @@ public class Rating {
 
     public Long getId() {
         return id;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public Boolean getNa() {
