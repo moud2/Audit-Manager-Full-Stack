@@ -147,3 +147,5 @@ deploy.sh
 
 /cypress/screenshots/
 /cypress/videos/
+
+*.local
