@@ -36,34 +36,9 @@ docker compose exec -it mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 
 
 == Seeding the database (optional)
 
-- run the following command to seed the database
+- GET request to http://localhost:8080/api/v1/database/seed
+- this will **add** dummy data to the database
 
-
-(Linux/MacOS)
-
-[source,bash]
-----
-./gradlew seedDatabase
-----
-
-(Windows)
-
-[source,bash]
-----
-gradlew.bat seedDatabase
-----
-
-== Seeding the database (optional)
-
-- run the following command to seed the database
-
-
-(Linux)
-
-[source,bash]
-----
-./gradlew seedDatabase
-----
 == Running the application
 
 Entweder über IDE Integration oder im Terminal:

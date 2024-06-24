@@ -32,13 +32,6 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-tasks.register('seedDatabase', JavaExec) {
-	group = 'Database Tasks'
-	description = 'Seeds the database with initial data.'
-	mainClass = 'com.insight.backend.DatabaseSeederApplication'
-	classpath = sourceSets.main.runtimeClasspath
-}
-
 tasks.withType(JavaCompile) {
     options.compilerArgs << "-parameters"
 }
