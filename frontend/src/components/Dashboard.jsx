@@ -57,6 +57,13 @@ function Dashboard() {
                 <h1 className="text-center text-4xl m-10">Dashboard</h1>
             </div>
 
+            <div className="grid grid-cols-4 gap-4 justify-center">
+                <Link to="/newAudit" className="testbox flex justify-center items-center h-full">
+                    <Paper elevation={8} className="w-60 h-60 flex justify-center items-center">
+                        <AddIcon sx={{fontSize: 140}}/>
+                    </Paper>
+                </Link>
+
 
             <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-center">
 
