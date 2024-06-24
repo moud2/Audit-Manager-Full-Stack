@@ -87,6 +87,7 @@ publish-job:
     - |
       ssh -i ~/.ssh/id_rsa $REMOTE_USERNAME@$REMOTE_HOST << 'EOF'
       echo -n "${CI_DEPLOY_PASSWORD}" | podman login  -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
+      podman stop stud-fim_backend_1
       podman-compose -f docker-compose.production.yml pull
       podman-compose -f docker-compose.production.yml up -d
       EOF
