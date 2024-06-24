@@ -58,6 +58,7 @@ function Dashboard() {
             </div>
 
             <div className="grid grid-cols-4 gap-4 justify-center">
+
                 <Link to="/newAudit" className="testbox flex justify-center items-center h-full">
                     <Paper elevation={8} className="w-60 h-60 flex justify-center items-center">
                         <AddIcon sx={{fontSize: 140}}/>
@@ -65,37 +66,39 @@ function Dashboard() {
                 </Link>
 
 
-            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-center">
+                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-center">
 
-                {/* First box including plus icon */}
-                <Link to="/newAudit" className="flex justify-center items-center h-full mx-16 my-6">
-                    <Paper elevation={20} sx={paperStyle}>
-                        <AddIcon sx={{fontSize: '40vw', maxWidth: 110, maxHeight: 110}}/>
-                    </Paper>
-                </Link>
-
-                {/* boxes to perform audit, TODO get the right url */}
-                {data.map(audit => (
-                    <Link key={audit.id} to={`/audit/${audit.id}`}
-                          className="flex justify-center items-center h-full mx-16 my-6">
+                    {/* First box including plus icon */}
+                    <Link to="/newAudit" className="flex justify-center items-center h-full mx-16 my-6">
                         <Paper elevation={20} sx={paperStyle}>
-                            <p className="text-center">{audit.name}</p>
+                            <AddIcon sx={{fontSize: '40vw', maxWidth: 110, maxHeight: 110}}/>
                         </Paper>
                     </Link>
-                ))}
 
-                {/* example boxes, TODO delete later */}
-                {[...Array(6)].map((_, index) => (
-                    <Link key={`example-${index}`} to="/"
-                          className="flex justify-center items-center h-full mx-16 my-6">
-                        <Paper elevation={20} sx={paperStyle}>
-                            <p className="text-center">Beispiel</p>
-                        </Paper>
-                    </Link>
-                ))}
+                    {/* boxes to perform audit, TODO get the right url */}
+                    {data.map(audit => (
+                        <Link key={audit.id} to={`/audit/${audit.id}`}
+                              className="flex justify-center items-center h-full mx-16 my-6">
+                            <Paper elevation={20} sx={paperStyle}>
+                                <p className="text-center">{audit.name}</p>
+                            </Paper>
+                        </Link>
+                    ))}
+
+                    {/* example boxes, TODO delete later */}
+                    {[...Array(6)].map((_, index) => (
+                        <Link key={`example-${index}`} to="/"
+                              className="flex justify-center items-center h-full mx-16 my-6">
+                            <Paper elevation={20} sx={paperStyle}>
+                                <p className="text-center">Beispiel</p>
+                            </Paper>
+                        </Link>
+                    ))}
+                </div>
             </div>
         </div>
     );
 }
+
 
 export default Dashboard;
