@@ -99,11 +99,11 @@ function PerformAudit() {
             value={question.comment}
             onChange={(event) => handleCommentInput(event, question.id)}
           />
-          <Button 
-            //ToDo: Add onClick Eventlistener
-          >Speichern</Button>
         </div>
       ))}
+      <Button 
+        //ToDo: Add onClick Eventlistener
+      >Speichern</Button>
     </>
   );
 }
