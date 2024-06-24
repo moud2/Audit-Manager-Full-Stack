@@ -32,6 +32,13 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
+tasks.register('seedDatabase', JavaExec) {
+	group = 'Database Tasks'
+	description = 'Seeds the database with initial data.'
+	mainClass = 'com.insight.backend.DatabaseSeederApplication'
+	classpath = sourceSets.main.runtimeClasspath
+}
+
 tasks.withType(JavaCompile) {
     options.compilerArgs << "-parameters"
 }
@@ -42,22 +49,4 @@ jar {
                 'Main-Class': 'com.insight.backend.BackendApplication'
         )
     }
-}
-
-public class DatabaseSeederTask extends DefaultTask {
-
-	@TaskAction
-	void seedDatabase() {
-		println 'Seeding the database...'
-
-		// Seed the database here
-
-		println 'Database seeded.'
-	}
-
-}
-
-tasks.register('seedDatabase', DatabaseSeederTask) {
-	group = 'Database Tasks'
-	description = 'Seeds the database with initial data.'
 }
