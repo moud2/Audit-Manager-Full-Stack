@@ -3,65 +3,9 @@ import { FormGroup, FormControlLabel, Checkbox, Button } from '@mui/material';
 import { TextareaAutosize as BaseTextareaAutosize } from '@mui/base/TextareaAutosize';
 import { styled } from '@mui/system';
 
-
-
-const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
-
-
-function PerformAudit() {
-  const [checkedState, setCheckedState] = useState({
-    0: false,
-    1: false,
-    2: false,
-    3: false,
-    4: false,
-    5: false,
-    'N.A.': false,
-  });
-
-  const handleReset = () => {
-    setCheckedState({
-      0: false,
-      1: false,
-      2: false,
-      3: false,
-      4: false,
-      5: false,
-      'N.A.': false,
-    });
-  };
-
-  const handleChange = (event) => {
-    setCheckedState({
-      ...checkedState,
-      [event.target.name]: event.target.checked,
-    });
-  };
-  
-  const blue = {
-    100: '#DAECFF',
-    200: '#b6daff',
-    400: '#3399FF',
-    500: '#007FFF',
-    600: '#0072E5',
-    900: '#003A75',
-  };
-
-  const grey = {
-    50: '#F3F6F9',
-    100: '#E5EAF2',
-    200: '#DAE2ED',
-    300: '#C7D0DD',
-    400: '#B0B8C4',
-    500: '#9DA8B7',
-    600: '#6B7A90',
-    700: '#434D5B',
-    800: '#303740',
-    900: '#1C2025',
-  };
-
-  const Textarea = styled(BaseTextareaAutosize)(
-    ({ theme }) => `
+//Styling for the Comment Sections
+const Textarea = styled(BaseTextareaAutosize)(
+  ({ theme }) => `
     box-sizing: border-box;
     width: 95%;
     margin: 2.5%;
@@ -71,55 +15,97 @@ function PerformAudit() {
     line-height: 1.5;
     padding: 12px;
     border-radius: 12px 12px 0 12px;
-    color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
-    background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
-    border: 1px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
-    box-shadow: 0px 2px 2px ${theme.palette.mode === 'dark' ? grey[900] : grey[50]};
-
+    color: ${theme.palette.mode === 'dark' ? '#fff' : '#000'};
+    background: ${theme.palette.mode === 'dark' ? '#000' : '#fff'};
+    border: 1px solid ${theme.palette.mode === 'dark' ? '#555' : '#ddd'};
     &:hover {
-      border-color: ${blue[400]};
+      border-color: #3399FF;
     }
-
     &:focus {
       outline: 0;
-      border-color: ${blue[400]};
-      box-shadow: 0 0 0 3px ${theme.palette.mode === 'dark' ? blue[600] : blue[200]};
+      border-color: #3399FF;
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
     }
-
-    // firefox
     &:focus-visible {
       outline: 0;
     }
-  `,
-  );
+  `
+);
 
-  
+/**
+ * Creates the perform audits site with basic functionality
+ * 
+ * @author [Anna Liepelt] https://gitlab.dit.htwk-leipzig.de/anna.liepelt
+ */
+function PerformAudit() {
+
+  const [questions, setQuestions] = useState([
+    { id: 1, question_text: "Frage 1", points: 0, comment: '', na: false},
+    { id: 2, question_text: "Frage 2", points: 1, comment: '', na: true},
+    { id: 3, question_text: "Frage 3", points: 2, comment: '', na: false}
+  ]);
+
+  const updateQuestionById = (id, newPartialQuestion) => {
+    const q = questions.map(question => id === question.id? {...question, ...newPartialQuestion} : question );
+    setQuestions(q);
+  }
+
+  const handleCommentInput = (event, id) => {
+    const newComment = event.target.value;
+    updateQuestionById(id, {comment: newComment})
+  };
+
+  const handleCheckboxChange = (event, label, question) => {
+    switch (label) {
+      case 'N/A':
+        updateQuestionById(question.id, {na: !question.na, points: null});
+        break;
+      default:
+        updateQuestionById(question.id, {points: label == question.points? null : label, na: false});
+    }
+  };
+
+  const getChecked = (label, question) => {
+    switch (label) {
+      case 'N/A':
+        return question.na;
+      default:
+        return question.points === label;
+    }
+  }
 
   return (
     <>
-      <h1 class="px-10 py-5 font-bold">Audit durchführen</h1>
-      <h2 class="px-10 py-5">Frage 1</h2>
-      <p class="px-10 py-5">Fragentext</p>
-      <FormGroup class="px-5 flex justify-center" name="Rating" row> 
-        {Object.keys(checkedState).map((key) => (
-          <FormControlLabel
-            key={key}
-            control={
-              <Checkbox
-                checked={checkedState[key]}
-                onChange={handleChange}
-                name={key}
+      <h1 className="px-10 py-5 font-bold">Audit durchführen</h1>
+      {questions.map((question) => (
+        <div key={question.id}>
+          <h2 className="px-10 py-5">{question.question_text}</h2>
+          <FormGroup className="px-5 flex justify-center" row>
+            {[0, 1, 2, 3, 4, 5, 'N/A'].map((label) => (
+              <FormControlLabel
+                key={label}
+                control={
+                  <Checkbox
+                    checked={getChecked(label, question)} 
+                    onChange={(event) => handleCheckboxChange(event, label, question)}
+                  />
+                }
+                label={label.toString()}
               />
-            }
-            label={key}
-            labelPlacement="top"
+            ))}
+          </FormGroup>
+          <Textarea
+            placeholder='Kommentar eingeben'
+            value={question.comment}
+            onChange={(event) => handleCommentInput(event, question.id)}
           />
-        ))}
-        <Button onClick={handleReset}>Zurücksetzen</Button>
-      </FormGroup>
-      <Textarea placeholder="Kommentar" />
+          <Button 
+            //ToDo: Add onClick Eventlistener
+          >Speichern</Button>
+        </div>
+      ))}
     </>
-  ) 
+  );
 }
 
 export default PerformAudit;
