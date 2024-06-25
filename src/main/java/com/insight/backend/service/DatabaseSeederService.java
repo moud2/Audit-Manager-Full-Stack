@@ -1,5 +1,10 @@
 package com.insight.backend.service;
 
+import com.insight.backend.model.Category;
+import com.insight.backend.model.Question;
+import com.insight.backend.repository.CategoryRepository;
+import com.insight.backend.repository.QuestionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -10,23 +15,40 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Service
 public class DatabaseSeederService {
+
+    @Autowired
+    private CategoryRepository categoryRepository;
+    @Autowired
+    private QuestionRepository questionRepository;
 
     public boolean seedDatabaseFromFiles() {
         System.out.println("Seeding database from files...");
 
         List<Object[]> categories = readCSV("fixtures/dummy-categories.csv");
 
+        Map<Integer,Category> categoryMap = new java.util.HashMap<>(Map.of());
+
         // Ausgabe der eingelesenen Daten
         for (Object[] entry : categories) {
             System.out.println(entry[0] + ", Value: " + entry[1]);
+            Category category = new Category();
+            category.setName((String) entry[1]);
+            categoryMap.put((Integer) entry[0], category);
+            categoryRepository.save(category);
         }
 
         List<Object[]> questions = readCSV("fixtures/dummy-questions.csv");
         for (Object[] entry : questions) {
             System.out.println("ID: " + entry[0] + ", Value: " + entry[1]);
+            Question question = new Question();
+            question.setName((String) entry[1]);
+            question.setCategory(categoryMap.get(entry[0]));
+            questionRepository.save(question);
         }
 
         return true;
