@@ -23,19 +23,19 @@ public class RatingController {
 
         Rating rating1 = new Rating();
         rating1.setId((long)1);
-        rating1.setName("Mahamoud");
+        //rating1.setName("Mahamoud");
         rating1.setComment("This is the first comment");
         rating1.setPoints(5);
 
         Rating rating2 = new Rating();
         rating2.setId((long)2);
-        rating2.setName("Ahmed");
+        //rating2.setName("Ahmed");
         rating2.setComment("This is the second comment");
         rating2.setPoints(4);
 
         Rating rating3 = new Rating();
         rating3.setId((long)3);
-        rating3.setName("John");
+        //rating3.setName("John");
         rating3.setComment("This is the third comment");
         rating3.setPoints(3);
 
@@ -61,9 +61,9 @@ public class RatingController {
                 if (updatedRating.getPoints() <= 5) {
                     rating.setPoints(updatedRating.getPoints());
                 }
-                if (updatedRating.getName() != null) {
-                    rating.setName(updatedRating.getName());
-                }
+                // if (updatedRating.getName() != null) {
+                //     rating.setName(updatedRating.getName());
+                // }
                 if (updatedRating.getNa() != null) {
                     rating.setNa(updatedRating.getNa());
                 }
