@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class DatabaseSeederController {
     DatabaseSeederService databaseSeederService;
 
-    @Autowired
     public DatabaseSeederController(DatabaseSeederService databaseSeederService) {
         this.databaseSeederService = databaseSeederService;
     }

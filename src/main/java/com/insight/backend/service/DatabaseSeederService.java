@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.insight.backend.service.Category.SaveCategoryService;
+import com.insight.backend.service.Question.SaveQuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -15,16 +17,17 @@ import org.springframework.stereotype.Service;
 
 import com.insight.backend.model.Category;
 import com.insight.backend.model.Question;
-import com.insight.backend.repository.CategoryRepository;
-import com.insight.backend.repository.QuestionRepository;
 
 @Service
 public class DatabaseSeederService {
 
-    @Autowired
-    private CategoryRepository categoryRepository;
-    @Autowired
-    private QuestionRepository questionRepository;
+    private final SaveCategoryService saveCategoryService;
+    private final SaveQuestionService saveQuestionService;
+
+    public DatabaseSeederService(SaveCategoryService saveCategoryService, SaveQuestionService saveQuestionService) {
+        this.saveCategoryService = saveCategoryService;
+        this.saveQuestionService = saveQuestionService;
+    }
 
     public boolean seedDatabaseFromFiles() {
         System.out.println("Seeding database from files...");
@@ -38,8 +41,7 @@ public class DatabaseSeederService {
             System.out.println(entry[0] + ", Value: " + entry[1]);
             Category category = new Category();
             category.setName((String) entry[1]);
-            categoryMap.put((Integer) entry[0], category);
-            categoryRepository.save(category);
+            categoryMap.put((Integer) entry[0], saveCategoryService.saveCategory(category));
         }
 
         List<Object[]> questions = readCSV("fixtures/dummy-questions.csv");
@@ -48,7 +50,7 @@ public class DatabaseSeederService {
             Question question = new Question();
             question.setName((String) entry[1]);
             question.setCategory(categoryMap.get(entry[0]));
-            questionRepository.save(question);
+            saveQuestionService.saveQuestion(question);
         }
 
         return true;
