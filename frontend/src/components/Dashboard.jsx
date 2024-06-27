@@ -45,7 +45,7 @@ function Dashboard() {
             transform: 'scale(1.12)'
         },
         '& p': {
-            fontSize: '1.5rem', // Adjust the font size here
+            fontSize: '1.25rem', // Adjust the font size here
             textAlign: 'center',
             margin: 0
         }
@@ -63,7 +63,7 @@ function Dashboard() {
                 {/* First box including plus icon */}
                 <Link to="/newAudit" className="flex justify-center items-center h-full mx-16 my-6">
                     <Paper elevation={20} sx={paperStyle}>
-                        <AddIcon sx={{fontSize: '40vw', maxWidth: 110, maxHeight: 110}}/>
+                        <AddIcon sx={{fontSize: '40vw', maxWidth: 80, maxHeight: 80}}/>
                     </Paper>
                 </Link>
 
