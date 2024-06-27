@@ -3,7 +3,7 @@ package com.insight.backend.dto;
 import jakarta.validation.constraints.*;
 
 /**
- * DTO class to represent error responses
+ * Data Transfer Object to represent error responses
  */
 public class ErrorDTO {
 
@@ -12,6 +12,7 @@ public class ErrorDTO {
      * Must not be blank.
      */
     @NotBlank(message = "Error message cannot be blank")
+    @Size(max = 255, message = "Name should be up to 255 characters")
     private String error;
 
     /**
