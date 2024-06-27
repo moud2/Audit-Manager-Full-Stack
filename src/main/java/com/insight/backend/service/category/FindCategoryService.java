@@ -17,7 +17,6 @@ public class FindCategoryService {
      * returns all categories
      * @return list of all categories
      */
-     
     public List<Category> findAllCategories() {
         return categoryRepository.findAll();
     }
