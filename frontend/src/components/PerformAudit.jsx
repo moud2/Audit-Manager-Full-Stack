@@ -40,9 +40,9 @@ const Textarea = styled(BaseTextareaAutosize)(
 function PerformAudit() {
 
   const [questions, setQuestions] = useState([
-    { id: 1, question_text: "Frage 1", points: 0, comment: '', na: false},
-    { id: 2, question_text: "Frage 2", points: 1, comment: '', na: true},
-    { id: 3, question_text: "Frage 3", points: 2, comment: '', na: false}
+    { id: 1, question_text: "Frage 1", points: null, comment: '', na: null},
+    { id: 2, question_text: "Frage 2", points: null, comment: '', na: null},
+    { id: 3, question_text: "Frage 3", points: null, comment: '', na: null}
   ]);
 
   const updateQuestionById = (id, newPartialQuestion) => {
@@ -95,6 +95,7 @@ function PerformAudit() {
             ))}
           </FormGroup>
           <Textarea
+            data-cy="commentTextarea"
             placeholder='Kommentar eingeben'
             value={question.comment}
             onChange={(event) => handleCommentInput(event, question.id)}
