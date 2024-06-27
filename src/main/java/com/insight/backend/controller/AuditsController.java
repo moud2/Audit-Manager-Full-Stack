@@ -3,7 +3,6 @@ package com.insight.backend.controller;
 import java.util.*;
 
 import com.insight.backend.model.Audit;
-import com.insight.backend.model.newAudit.AuditRequest;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +18,10 @@ public class AuditsController {
     public ResponseEntity<List<Audit>> getAudits() {
         List<Audit> auditList = new ArrayList<>();
 
-        // TODO: Temporary code for basic functionality | remove and reimplement properly later
-        Audit audit1 = new Audit("ISO-2123", Set.of());
-        Audit audit2 = new Audit("ISO-2124", Set.of());
-        Audit audit3 = new Audit("ISO-2125", Set.of());
+        // Temporary code for basic functionality | remove and reimplement properly later
+        Audit audit1 = new Audit();
+        Audit audit2 = new Audit();
+        Audit audit3 = new Audit();
         audit1.setId((long) 1);
         audit2.setId((long) 2);
         audit3.setId((long) 3);
