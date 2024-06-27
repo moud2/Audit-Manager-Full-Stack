@@ -1,5 +1,7 @@
 package com.insight.backend.service.Rating;
 
+import java.util.*;
+
 import com.insight.backend.repository.RatingRepository;
 import com.insight.backend.model.Rating;
 
@@ -17,7 +19,7 @@ public class SaveRatingService {
     }
 
     public List<Rating> saveAllRatings(List<Rating> ratingList) {
-        RatingRepository.saveAll(ratingList);
+        ratingRepository.saveAll(ratingList);
         return ratingList;
     }
 }
