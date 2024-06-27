@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
  * Service class for finding audits.
  */
 @Service
-public class findAuditService {
+public class FindAuditService {
 
     private AuditRepository auditRepository;
 
@@ -20,7 +20,7 @@ public class findAuditService {
      *
      * @param auditRepository the repository to use for audit operations
      */
-    public findAuditService(AuditRepository auditRepository) {
+    public FindAuditService(AuditRepository auditRepository) {
         this.auditRepository = auditRepository;
     }
 
