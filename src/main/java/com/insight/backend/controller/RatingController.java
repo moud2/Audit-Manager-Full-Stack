@@ -3,9 +3,18 @@ package com.insight.backend.controller;
 import java.util.*;
 
 //import com.insight.backend.model.Category;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import com.insight.backend.model.Rating;
 import com.insight.backend.model.nestedRatings.RatingList;
 
+import com.insight.backend.service.Rating.FindRatingService;
+import com.insight.backend.service.Rating.SaveRatingService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,65 +22,60 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class RatingController {
 
-    private List<Rating> ratings;
+    private ObjectMapper objectMapper;
+    private FindRatingService findRatingService;
+    private SaveRatingService saveRatingService;
 
     /**
      * Initializes the RatingController with a list of sample ratings.
      */
-    public RatingController() {
-        ratings = new ArrayList<>();
-
-        Rating rating1 = new Rating();
-        rating1.setId((long)1);
-        //rating1.setName("Mahamoud");
-        rating1.setComment("This is the first comment");
-        rating1.setPoints(5);
-
-        Rating rating2 = new Rating();
-        rating2.setId((long)2);
-        //rating2.setName("Ahmed");
-        rating2.setComment("This is the second comment");
-        rating2.setPoints(4);
-
-        Rating rating3 = new Rating();
-        rating3.setId((long)3);
-        //rating3.setName("John");
-        rating3.setComment("This is the third comment");
-        rating3.setPoints(3);
-
-        ratings.add(rating1);
-        ratings.add(rating2);
-        ratings.add(rating3);
+    @Autowired
+    public RatingController(ObjectMapper objectMapper, FindRatingService findRatingService, SaveRatingService saveRatingService) {
+        this.objectMapper = objectMapper;
+        this.findRatingService = findRatingService;
+        this.saveRatingService = saveRatingService;
+//        ratings = new ArrayList<>();
+//
+//        Rating rating1 = new Rating();
+//        rating1.setId((long) 1);
+//        //rating1.setName("Mahamoud");
+//        rating1.setComment("This is the first comment");
+//        rating1.setPoints(5);
+//
+//        Rating rating2 = new Rating();
+//        rating2.setId((long) 2);
+//        //rating2.setName("Ahmed");
+//        rating2.setComment("This is the second comment");
+//        rating2.setPoints(4);
+//
+//        Rating rating3 = new Rating();
+//        rating3.setId((long) 3);
+//        //rating3.setName("John");
+//        rating3.setComment("This is the third comment");
+//        rating3.setPoints(3);
+//
+//        ratings.add(rating1);
+//        ratings.add(rating2);
+//        ratings.add(rating3);
     }
 
-    /**
-     * Updates an existing rating based on the provided id and JSON request body.
-     *
-     * @param id            the id of the rating to update
-     * @param updatedRating the updated rating object from the JSON request body
-     * @return a ResponseEntity indicating the result of the update operation
-     */
+    private Rating applyPatchToRating(JsonPatch patch, Rating targetRating) throws JsonPatchException, JsonProcessingException {
+        JsonNode patched = patch.apply(objectMapper.convertValue(targetRating, JsonNode.class));
+        return objectMapper.treeToValue(patched, Rating.class);
+    }
+
     @PatchMapping("/api/v1/ratings/{id}")
-    public ResponseEntity<String> updateRating(@PathVariable("id") int id, @RequestBody Rating updatedRating) {
-        for (Rating rating : ratings) {
-            if (rating.getId() == id) {
-                if (updatedRating.getComment() != null) {
-                    rating.setComment(updatedRating.getComment());
-                }
-                if (updatedRating.getPoints() <= 5) {
-                    rating.setPoints(updatedRating.getPoints());
-                }
-                // if (updatedRating.getName() != null) {
-                //     rating.setName(updatedRating.getName());
-                // }
-                if (updatedRating.getNa() != null) {
-                    rating.setNa(updatedRating.getNa());
-                }
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).body("");
-                
-            }
+    public ResponseEntity<Rating> updateRating(@PathVariable("id") long id, @RequestBody JsonPatch patch) {
+        try {
+            Rating rating = findRatingService.findRatingById(id).orElseThrow(ChangeSetPersister.NotFoundException::new);
+            Rating ratingPatched = applyPatchToRating(patch, rating);
+            saveRatingService.saveRating(ratingPatched);
+            return ResponseEntity.ok(ratingPatched);
+        } catch (JsonPatchException | JsonProcessingException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        } catch (ChangeSetPersister.NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("RatingID not found");
     }
 
 
