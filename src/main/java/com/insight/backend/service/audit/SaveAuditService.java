@@ -1,4 +1,4 @@
-package com.insight.backend.service.audit;
+package com.insight.backend.service.Audit;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,6 +15,11 @@ public class SaveAuditService {
     @Autowired
     private AuditRepository auditRepository;
 
+    /*
+     * create new audit using name
+     * @param name of audit
+     * @return newly created audit
+     */
     public Audit saveAudit(String name){
         Audit newAudit = new Audit();
         newAudit.setName(name);

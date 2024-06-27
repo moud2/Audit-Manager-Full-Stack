@@ -1,4 +1,4 @@
-package com.insight.backend.service.category;
+package com.insight.backend.service.Category;
 
 import java.util.List;
 
@@ -13,6 +13,11 @@ public class FindCategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    /*
+     * returns all categories
+     * @return list of all categories
+     */
+     
     public List<Category> findAllCategories() {
         return categoryRepository.findAll();
     }
