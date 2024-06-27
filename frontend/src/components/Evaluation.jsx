@@ -31,7 +31,7 @@ function Evaluation() {
     function CircularProgressWithLabel(props) {
         return (
             <Box sx={{position: 'relative', display: 'inline-flex'}}>
-                <CircularProgress variant="determinate" {...props} sx={{width: '200px', height: '200px'}}/>
+                <CircularProgress variant="determinate" {...props} size={80}/>
                 <Box
                     sx={{
                         top: 0,
@@ -52,17 +52,19 @@ function Evaluation() {
         );
     }
 
+    const colors = ['#a50026', '#d73027', '#fdae61', '#d9ef8b', '#66bd63', '#006837'];
+
     return (
         <div>
             <div id="title">
-                <h1 className="text-center text-4xl m-20">Evaluation</h1>
+                <h1 className="text-center text-4xl m-6">Evaluation</h1>
             </div>
 
             <div id="result" className={"flex flex-col justify-center items-center h-20"}>
                 <Box className={"text-center"} sx={{width: '80%'}}>
                     <LinearProgressWithLabel value={progress}/>
                 </Box>
-                <p className={"text-center"}>Gesamtfortschritt</p>
+                <p className={"text-center text-xl"}>Gesamtfortschritt</p>
             </div>
 
             <div id="categories" className={"flex flex-row justify-center items-center"}>
@@ -95,24 +97,32 @@ function Evaluation() {
             <div id="result_per_question" className={"flex flex-row justify-center items-center"}>
                 <BarChart
                     series={[
-                        {data: [4, 2, 8, 4, 1, 3], stack: 'A', label: 'Anzahl Fragen nach Punktzahl'},
+                        {data: [4, 2, 8, 4, 1, 3]},
                     ]}
-                    barLabel={(item, context) => {
-                        if ((item.value ?? 0) > 10) {
-                            return 'High';
-                        }
-                        //  return context.bar.height < 60 ? null : item.value?.toString();
-                        // type: 'continuous';
-                        //min: 0;
-                        //max: 100;
-                        //color: [string, string] | ((t: number) => string);
-                    }}
                     width={1200}
                     height={350}
+                    xAxis={[
+                        {
+                            scaleType: 'band',
+                            data: [0, 1, 2, 3, 4, 5],
+                            colorMap: {
+                                type: 'ordinal',
+                                values: [0, 1, 2, 3, 4, 5],
+                                colors: colors,
+                                unknownColor: "#050505",
+                            },
+                            label: 'erreichte Punkte',
+                        },
+                    ]}
+                    yAxis={[
+                        {
+                            label: 'Anzahl Fragen',
+                        },
+                    ]}
                 />
             </div>
-
         </div>
+
 
     )
 }

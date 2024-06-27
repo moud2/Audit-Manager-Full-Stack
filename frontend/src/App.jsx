@@ -1,7 +1,6 @@
 import React from 'react';
-import {BrowserRouter as Router, Link, Route, Routes} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
 import Dashboard from './components/Dashboard.jsx';
 import NewAudit from './components/NewAudit.jsx';
 import PerformAudit from './components/PerformAudit.jsx';
@@ -23,7 +22,7 @@ const theme = createTheme({
         MuiLinearProgress: {
             styleOverrides: {
                 root: {
-                    height: '10px',
+                    height: "2rem",
                     borderRadius: '5px',
                 },
                 bar: {
@@ -35,21 +34,20 @@ const theme = createTheme({
             styleOverrides: {
                 circle: {
                     strokeLinecap: 'round',
+                    borderRadius: 30,
                 },
                 svg: {
                     color: '#c4171f',
                 },
             },
         },
-        MuiXBarChart: {
+        MuiTypography: {
             styleOverrides: {
-                bar: {
-                    fill: {
-                        type: 'continuous',
-                        min: 0,
-                        max: 100,
-                        color: [['#c4171f'], ['#c4171f']], // Beispiel: Min (grün) und Max (rot)
-                    },
+                caption: {
+                    fontSize: '1.25rem', // Increase font size here
+                },
+                body2: {
+                    fontSize: '1.25rem', // Increase font size for LinearProgress percentage
                 },
             },
         },
@@ -57,21 +55,23 @@ const theme = createTheme({
 });
 
 function App() {
-  return (
-    <Router>
-      <div className="flex">
-      <Sidebar />
-      <div className="ml-64 p-4 w-full">
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/newAudit" element={<NewAudit />} />
-          <Route path="/performAudit" element={<PerformAudit />} />
-          <Route path="/evaluation" element={<Evaluation />} />
-        </Routes>
-      </div>
-      </div>
-    </Router>
-  );
+    return (
+        <Router>
+            <div className="flex mb-16">
+                <Sidebar/>
+                <div className="ml-64 p-4 w-full">
+                    <ThemeProvider theme={theme}>
+                        <Routes>
+                            <Route path="/" element={<Dashboard/>}/>
+                            <Route path="/newAudit" element={<NewAudit/>}/>
+                            <Route path="/performAudit" element={<PerformAudit/>}/>
+                            <Route path="/evaluation" element={<Evaluation/>}/>
+                        </Routes>
+                    </ThemeProvider>
+                </div>
+            </div>
+        </Router>
+    );
 }
 
 export default App;
