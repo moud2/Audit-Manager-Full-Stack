@@ -72,19 +72,9 @@ publish-job:
     REMOTE_DOMAIN: https://sp08.imn.htwk-leipzig.de
     REMOTE_USERNAME: stud-fim
   environment: 
-    name: production
+    name: prod
   #rules:
   # - if: $CI_COMMIT_REF_NAME == "main"
   script:
-    - apt update && apt upgrade -y
-    - apt install ssh -y
-    - mkdir -p ~/.ssh
-    - echo "${PRIVATE_KEY}" | tr -d '\r' > ~/.ssh/id_rsa
-    - chmod 600 ~/.ssh/id_rsa
-    - ssh-keyscan -H $REMOTE_HOST >> ~/.ssh/known_hosts
-    - |
-      CI_DEPLOY_PASSWORD=$CI_DEPLOY_PASSWORD CI_REGISTRY=$CI_REGISTRY CI_REGISTRY_USER=$CI_REGISTRY_USER ssh -t -i ~/.ssh/id_rsa $REMOTE_USERNAME@$REMOTE_HOST AAA=42 << 'EOF'
-      env
-      echo $CI_REGISTRY
-      echo $AAA
-      EOF
+    - env
+    - pwd
