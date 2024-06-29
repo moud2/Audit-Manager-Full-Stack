@@ -82,8 +82,6 @@ publish-job:
     - echo "${PRIVATE_KEY}" | tr -d '\r' > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
     - ssh-keyscan -H $REMOTE_HOST >> ~/.ssh/known_hosts
-    - scp -i ~/.ssh/id_rsa $DOCKER_COMPOSE_PRODUCTION $REMOTE_USERNAME@$REMOTE_HOST:/home/$REMOTE_USERNAME/docker-compose.production.yml
-    - scp -i ~/.ssh/id_rsa $APPLICATION_PROPERTIES $REMOTE_USERNAME@$REMOTE_HOST:/home/$REMOTE_USERNAME/application.properties
     - |
       ssh -i ~/.ssh/id_rsa $REMOTE_USERNAME@$REMOTE_HOST << 'EOF'
       podman logout gitlab.dit.htwk-leipzig.de:5050
