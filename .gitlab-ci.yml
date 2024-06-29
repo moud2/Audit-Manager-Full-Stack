@@ -64,7 +64,6 @@ stages:
 
 #DEPLOYMENT STAGE lolo
 publish-job:      
-  image: ubuntu:24.04
   stage: deploy  
   variables:
     DOCKER_IMAGE: gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/backend:latest
