@@ -10,7 +10,7 @@ services:
   backend:
     image: gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/backend:latest
     volumes:
-      - ./application.properties:/app/application.properties
+      - $APPLICATION_PROPERIES:/app/application.properties
     entrypoint: ["java", "-jar","/app/insight-spring.jar", "--spring.config.location=/app/application.properties"]
     restart: unless-stopped
 
