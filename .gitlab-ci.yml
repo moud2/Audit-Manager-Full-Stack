@@ -76,5 +76,5 @@ publish-job:
   #rules:
   # - if: $CI_COMMIT_REF_NAME == "main"
   script:
-    - env
-    - pwd
+    - podman ps
+
