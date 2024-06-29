@@ -70,8 +70,8 @@ publish-job:
     REMOTE_HOST: 141.57.8.208
     REMOTE_DOMAIN: https://sp08.imn.htwk-leipzig.de
     REMOTE_USERNAME: stud-fim
-  environment: 
-    name: prod
+  tags:
+    - prod
   #rules:
   # - if: $CI_COMMIT_REF_NAME == "main"
   script:
