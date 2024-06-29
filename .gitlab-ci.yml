@@ -76,7 +76,7 @@ publish-job:
   #rules:
   # - if: $CI_COMMIT_REF_NAME == "main"
   script:
-    . whoami
+    - whoami
     - id -u
     - id -g
 
