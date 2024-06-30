@@ -110,6 +110,7 @@ function PerformAudit() {
             ))}
           </FormGroup>
           <Textarea
+            data-cy="commentTextarea"
             placeholder='Kommentar eingeben'
             value={question.comment}
             onChange={(event) => handleCommentInput(event, question.id)}
