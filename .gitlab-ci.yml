@@ -62,18 +62,18 @@ stages:
 #     - docker push gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/backend
 #     - echo "[*] Image Build & Deployment was executed."
 
-#DEPLOYMENT STAGE lolo
+#DEPLOYMENT STAGE
 publish-job:      
   stage: deploy  
   variables:
     DOCKER_IMAGE: gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/backend:latest
-    REMOTE_HOST: 141.57.8.208
-    REMOTE_DOMAIN: https://sp08.imn.htwk-leipzig.de
-    REMOTE_USERNAME: stud-fim
   tags:
     - prod
   #rules:
   # - if: $CI_COMMIT_REF_NAME == "main"
+  before_script:
+    - podman logout
+    - echo -n "${CI_REGISTRY_PASSWORD}" | podman login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
   script:
     - podman-compose -f docker-compose.production.yml pull 
     - podman-compose -f docker-compose.production.yml up -d
