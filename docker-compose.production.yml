@@ -9,8 +9,15 @@ services:
     restart: unless-stopped
   backend:
     image: gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/backend:latest
-    volumes:
-      - $APPLICATION_PROPERIES:/app/application.properties
+    environment:
+      - SPRING_APPLICATION_NAME
+      - SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL
+      - SPRING_DATASOURCE_URL
+      - SPRING_DATASOURCE_USERNAME
+      - SPRING_DATASOURCE_PASSWORD
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT
+      - SPRING_JPA_HIBERNATE_DDL_AUTO
+      - CORS_URLS
     entrypoint: ["java", "-jar","/app/insight-spring.jar", "--spring.config.location=/app/application.properties"]
     restart: unless-stopped
 
