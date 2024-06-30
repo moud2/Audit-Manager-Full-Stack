@@ -18,6 +18,8 @@ services:
       - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT
       - SPRING_JPA_HIBERNATE_DDL_AUTO
       - CORS_URLS
+    ports:
+      - "8081:81"
     entrypoint: ["java", "-jar","/app/insight-spring.jar"]
     restart: unless-stopped
 
