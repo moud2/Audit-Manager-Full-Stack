@@ -1,6 +1,12 @@
 describe('PerformAudit Component', () => {
   beforeEach(() => {
     cy.visit('http://localhost:5173/performAudit');
+    cy.intercept('GET', 'http://localhost:8080/api/v1/audits/1/ratings', {
+      statusCode: 200,
+      body: [{ id: 1, question: "Frage 1", points: null, comment: '', na: null},
+        { id: 2, question: "Frage 2", points: null, comment: '', na: null},
+        { id: 3, question: "Frage 3", points: null, comment: '', na: null}]
+  }).as('questions');
   });
 
   it('should allow typing in all textareas', () => {
@@ -28,5 +34,25 @@ describe('PerformAudit Component', () => {
     cy.get('input[type="checkbox"]').eq(3).should('not.be.checked');
     cy.get('input[type="checkbox"]').eq(4).should('not.be.checked');
     cy.get('input[type="checkbox"]').eq(5).should('not.be.checked');
+  });
+});
+
+describe('PerformAudit Component with fetched data', () => {
+  it('presents requested data as expected', () => {
+    cy.visit('http://localhost:5173/performAudit');
+    cy.intercept('GET', 'http://localhost:8080/api/v1/audits/1/ratings', {
+        statusCode: 200,
+        body: [{ id: 1, question: "Frage 1", points: 2, comment: 'okay', na: false},
+          { id: 2, question: "Frage 2", points: null, comment: 'nachholen', na: null},
+          { id: 3, question: "Frage 3", points: null, comment: '', na: true}]
+    });
+    cy.get('input[type="checkbox"]').eq(0).should('not.be.checked');
+    cy.get('input[type="checkbox"]').eq(1).should('not.be.checked');
+    cy.get('input[type="checkbox"]').eq(2).should('be.checked');
+    cy.get('input[type="checkbox"]').eq(3).should('not.be.checked');
+    cy.get('input[type="checkbox"]').eq(4).should('not.be.checked');
+    cy.get('input[type="checkbox"]').eq(5).should('not.be.checked');
+    cy.get('input[type="checkbox"]').eq(6).should('not.be.checked');
+    cy.get('[data-cy=commentTextarea]').should('have.value', 'okay');
   });
 });
