@@ -5,7 +5,7 @@ import com.insight.backend.model.Category;
 import com.insight.backend.repository.CategoryRepository;
 
 /**
- * Service-class to find categpries in the database.
+ * Service-class to find categories in the database.
  */
 @Service
 public class FindCategoryService {
