@@ -23,10 +23,10 @@ public class FindCategoryService {
     }
 
     /**
-     * finds a category based on the given id.
+     * Finds a category based on the given id.
      *
      * @param id the id of category to be found.
-     * @return an Optional-Objekt, that includes the category, if finded or empty if not funded.
+     * @return an Optional object that includes the category if found, or empty if not found.
      */
     public Category findCategoryById(Long id) {
         return categoryRepository.findById(id).orElse(null);
