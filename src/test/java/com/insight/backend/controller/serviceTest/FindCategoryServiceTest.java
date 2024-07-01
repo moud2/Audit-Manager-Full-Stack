@@ -1,3 +1,5 @@
+package com.insight.backend.controller.serviceTest;
+
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,7 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.insight.backend.model.Category;
 import com.insight.backend.repository.CategoryRepository;
 import com.insight.backend.service.Category.FindCategoryService;
-
 
 /**
  * Test class for FindCategoryService.
