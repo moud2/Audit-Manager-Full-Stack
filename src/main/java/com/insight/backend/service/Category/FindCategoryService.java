@@ -14,9 +14,9 @@ public class FindCategoryService {
 
     
     /**
-     * construktor to injekt the CategoryRepository.
+     * Constructor to inject the CategoryRepository.
      *
-     * @param categoryRepository the repository  for accessing auf category data.
+     * @param categoryRepository the repository for accessing category data.
      */
     public FindCategoryService(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
