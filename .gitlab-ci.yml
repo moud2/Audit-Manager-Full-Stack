@@ -1,0 +1,81 @@
+stages:          
+  - test
+  - build
+  - release
+  - deploy
+
+# # TESTING STAGE
+# e2e-test-job:
+#   image: gradle:8-jdk21
+#   stage: test    
+#   script:
+#     - echo "Running unit tests... This will take about 60 seconds."
+#     - echo "Code coverage is 90%"
+
+# integration-test-job:
+#   image: gradle:8-jdk21
+#   stage: test
+#   script:
+#     - echo "[*] Starting Integration Test...."
+#     - echo "[*] Integration Test coverage is 100%"
+
+# lint-test-job:   
+#   image: gradle:8-jdk21
+#   stage: test    
+#   script:
+#     - echo "Linting code... This will take about 10 seconds."
+#     - echo "No lint issues found."
+
+# BUILD STAGE
+backend-build-job:      
+  image: gradle:8-jdk21
+  stage: build
+  environment: production
+  rules:
+   - if: $CI_COMMIT_REF_NAME == "main"
+  script:
+    - echo "Building the application..."
+    - ./gradlew bootJar
+    - echo "Building complete! :)"
+  artifacts:
+    paths:
+      - build/libs/*.jar 
+
+docker-deploy-job:
+  image: docker:20
+  stage: release
+  services:
+    - docker:dind
+  variables:
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
+  dependencies:
+    - backend-build-job
+  rules:
+   - if: $CI_COMMIT_REF_NAME == "main"
+  script:
+    - echo "Building & Deploying Docker Image..."
+    - docker logout
+    - echo -n "${CI_REGISTRY_PASSWORD}" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin    
+    - docker build --build-arg JAR_FILE=build/libs/*.jar -t gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/backend .    
+    - docker push gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/backend
+    - echo "[*] Image Build & Deployment was executed."
+
+#DEPLOYMENT STAGE
+publish-job:      
+  stage: deploy  
+  variables:
+    DOCKER_IMAGE: gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/backend:latest
+  tags:
+    - prod
+  rules:
+   - if: $CI_COMMIT_REF_NAME == "main"
+  before_script:
+    - podman logout --all || true
+    - echo -n "${CI_REGISTRY_PASSWORD}" | podman login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
+  script:
+    - podman-compose -f docker-compose.production.yml pull 
+    - podman-compose -f docker-compose.production.yml up -d
+
+
