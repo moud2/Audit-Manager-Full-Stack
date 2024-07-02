@@ -1,4 +1,6 @@
 package com.insight.backend.service.Category;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import com.insight.backend.model.Category;
@@ -28,7 +30,7 @@ public class FindCategoryService {
      * @param id the id of category to be found.
      * @return an Optional object that includes the category if found, or empty if not found.
      */
-    public Category findCategoryById(Long id) {
-        return categoryRepository.findById(id).orElse(null);
+    public Optional <Category> findCategoryById(Long id) {
+        return categoryRepository.findById(id);
     }
 }

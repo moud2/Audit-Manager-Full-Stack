@@ -3,7 +3,7 @@ package com.insight.backend.controller.serviceTest;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,8 +48,8 @@ public class FindCategoryServiceTest {
     void testFindCategoryById_found() {
         // Arrange: Set up mock behavior for categoryRepository
         when(categoryRepository.findById(1L)).thenReturn(Optional.of(category1));
-        Category foundCategory = findCategoryService.findCategoryById(1L);
-        assertEquals(category1, foundCategory);
+        Optional<Category> foundCategory = findCategoryService.findCategoryById(1L);
+        assertEquals(category1, foundCategory.get());
     }
 
     /**
@@ -59,7 +59,7 @@ public class FindCategoryServiceTest {
     void testFindCategoryById_notFound() {
         // Arrange: Set up mock behavior for categoryRepository
         when(categoryRepository.findById(anyLong())).thenReturn(Optional.empty());
-        Category foundCategory = findCategoryService.findCategoryById(1L);
-        assertNull(foundCategory);
+        Optional<Category> foundCategory = findCategoryService.findCategoryById(1L);
+        assertTrue(foundCategory.isEmpty());
     }
 }
