@@ -2,7 +2,7 @@ package com.insight.backend.controller;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -51,18 +51,18 @@ public class FindAuditServiceTest {
     void testFindAuditById_found() {
         when(auditRepository.findById(1L)).thenReturn(Optional.of(audit1));
 
-        Audit foundAudit = findAuditService.findAuditById(1L);
+        Optional<Audit> foundAudit = findAuditService.findAuditById(1L);
 
-        assertEquals(audit1, foundAudit);
+        assertEquals(audit1, foundAudit.get());
     }
 
     @Test
     void testFindAuditById_notFound() {
         when(auditRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        Audit foundAudit = findAuditService.findAuditById(1L);
+        Optional<Audit> foundAudit = findAuditService.findAuditById(1L);
 
-        assertNull(foundAudit);
+        assertTrue(foundAudit.isEmpty());
     }
 
     @Test

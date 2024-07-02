@@ -30,8 +30,8 @@ public class FindAuditService {
      * @param id the ID of the audit
      * @return the audit with the specified ID, or null if not found
      */
-    public Audit findAuditById(Long id) {
-        return auditRepository.findById(id).orElse(null);
+    public Optional<Audit> findAuditById(Long id) {
+        return auditRepository.findById(id);
     }
 
     /**
