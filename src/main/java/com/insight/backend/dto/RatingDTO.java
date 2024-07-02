@@ -12,7 +12,7 @@ public class RatingDTO {
     /**
      * Unique identifier for the rating.
      */
-    private int id;
+    private long id;
 
     /**
      * Category the rating is in.
@@ -68,7 +68,7 @@ public class RatingDTO {
     /**
      * Getter method for category.
      *
-     * @return the category associated with the rating
+     * @return the category of the rating
      */
     public Category getCategory() {
         return category;
@@ -77,7 +77,7 @@ public class RatingDTO {
     /**
      * Setter method for category.
      *
-     * @param category the category associated with the rating
+     * @param category the category of the rating
      */
     public void setCategory(Category category) {
         this.category = category;
@@ -104,7 +104,7 @@ public class RatingDTO {
     /**
      * Getter method for points.
      *
-     * @return the points assigned to the rating
+     * @return the points given to the rating
      */
     public int getPoints() {
         return points;
@@ -113,7 +113,7 @@ public class RatingDTO {
     /**
      * Setter method for points.
      *
-     * @param points the points assigned to the rating
+     * @param points the points given to the rating
      */
     public void setPoints(int points) {
         this.points = points;
@@ -122,7 +122,7 @@ public class RatingDTO {
     /**
      * Getter method for comment.
      *
-     * @return the additional comment for the rating
+     * @return the comment on the rating
      */
     public String getComment() {
         return comment;
@@ -131,7 +131,7 @@ public class RatingDTO {
     /**
      * Setter method for comment.
      *
-     * @param comment the additional comment for the rating
+     * @param comment the  comment on the rating
      */
     public void setComment(String comment) {
         this.comment = comment;
@@ -140,7 +140,7 @@ public class RatingDTO {
     /**
      * Getter method for not-applicable-flag.
      *
-     * @return the flag indicating whether the rating is not applicable
+     * @return the not-applicable-flag
      */
     public Boolean getnA() {
         return nA;
@@ -149,7 +149,7 @@ public class RatingDTO {
     /**
      * Setter method for not-applicable-flag.
      * 
-     * @param nA the flag indicating whether the rating is not applicable
+     * @param nA the not-applicable-flag
      */
     public void setnA(Boolean nA) {
         this.nA = nA;
