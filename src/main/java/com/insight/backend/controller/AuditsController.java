@@ -18,16 +18,9 @@ public class AuditsController {
     public ResponseEntity<List<Audit>> getAudits() {
         List<Audit> auditList = new ArrayList<>();
 
-<<<<<<< HEAD
-        // Temporary code for basic functionality | remove and reimplement properly later
-        Audit audit1 = new Audit();
-        Audit audit2 = new Audit();
-        Audit audit3 = new Audit();
-=======
         // TODO: Temporary code for basic functionality | remove and reimplement properly later
         Audit audit1 = new Audit("Security Assessment; Kunde: Google LTD", Set.of());
         Audit audit2 = new Audit("Pentest; Kunde: Amazon LTD", Set.of());
->>>>>>> main
         audit1.setId((long) 1);
         audit2.setId((long) 2);
         auditList.add(audit1);
