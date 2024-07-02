@@ -20,8 +20,8 @@ public class SaveAuditService {
     }
 
     /*
-     * create new audit using name
-     * @param name of audit
+     * save Audit and return it afterwards
+     * @param audit to be saved
      * @return newly created audit
      */
     public Audit saveAudit(Audit audit){
