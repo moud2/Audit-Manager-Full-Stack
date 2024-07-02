@@ -1,7 +1,8 @@
 package com.insight.backend.dto;
 
-import jakarta.validation.constraints.*;
 import java.util.List;
+
+import jakarta.validation.constraints.*;
 
 /**
  * Data Transfer Object equivalent to JSON object of GET /api/v1/audits/new.
