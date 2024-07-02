@@ -17,13 +17,14 @@ public class RatingDTO {
     /**
      * Category the rating is in.
      */
+    @NotNull(message = "Category can not be null")
     private Category category;
 
     /**
      * The question being rated.
      * Must not be blank and should not exceed 255 characters.
      */
-    @NotBlank(message = "Question cannot be blank")
+    @NotBlank(message = "Question can not be blank")
     @Size(max = 255, message = "Question should be up to 255 characters")
     private String question;
 
@@ -31,9 +32,9 @@ public class RatingDTO {
      * Evaluation of  Rating.
      * Range from 0 to 5.
      */
-    @Min(value = 0, message = "Points can't be less than 0")
-    @Max(value = 5, message = "Points can't be more than 5")
-    private int points;
+    @Min(value = 0, message = "Points can not be less than 0")
+    @Max(value = 5, message = "Points can not be more than 5")
+    private Integer points;
 
     /**
      * Comment on rating.
@@ -52,7 +53,7 @@ public class RatingDTO {
      *
      * @return the unique identifier for the rating
      */
-    public int getId() {
+    public long getId() {
         return id;
     }
 
