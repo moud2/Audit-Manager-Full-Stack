@@ -25,7 +25,7 @@ public class AuditResponseDTO {
      *
      * @return the unique identifier for the Audit.
      */
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -34,7 +34,7 @@ public class AuditResponseDTO {
      *
      * @param id the unique identifier for the Audit.
      */
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
