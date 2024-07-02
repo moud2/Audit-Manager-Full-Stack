@@ -28,7 +28,7 @@ public class FindAuditService {
      * Finds an audit by its ID.
      * 
      * @param id the ID of the audit
-     * @return the audit with the specified ID, or null if not found
+     * @return an optional object with the audit with the specified ID, or an optional with no audit if not found
      */
     public Optional<Audit> findAuditById(Long id) {
         return auditRepository.findById(id);
