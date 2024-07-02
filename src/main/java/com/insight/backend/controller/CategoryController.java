@@ -36,7 +36,7 @@ public class CategoryController {
         response.add(createCategory(18L, "Nutzung von Clouddiensten"));
         response.add(createCategory(19L, "Konzepte und Richtlinien"));
         response.add(createCategory(20L, "IAM"));
-        response.add(createCategory(21L, "Digitale Signatur"));
+        //response.add(createCategory(21L, "Digitale Signatur"));
 
         return ResponseEntity.ok(response);
     }
