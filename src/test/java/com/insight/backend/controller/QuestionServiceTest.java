@@ -3,6 +3,7 @@ package com.insight.backend.controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -21,8 +22,11 @@ public class QuestionServiceTest {
 
     @Mock
     private QuestionRepository questionRepository;
+    
 
-    private Question question;
+    @InjectMocks
+    private SaveQuestionService saveQuestionService;
+    private Question question; 
 
     @BeforeEach
     public void setUp() {
@@ -33,14 +37,15 @@ public class QuestionServiceTest {
 
     @Test
     public void saveQuestionTest() {
-        SaveQuestionService sv = new SaveQuestionService(questionRepository);
-        when(sv.saveQuestion(question)).thenReturn(question);
+        
+        when(questionRepository.saveAndFlush(question)).thenReturn(question);
 
-        Question savedQuestion = questionRepository.save(question);
+        Question savedQuestion = saveQuestionService.saveQuestion(question);
 
+        verify(questionRepository, times(1)).saveAndFlush(question);
+        
         assertNotNull(savedQuestion);
         assertEquals(question.getName(), savedQuestion.getName());
-        verify(questionRepository, times(1)).saveAndFlush(question);
     }
 
 
