@@ -64,7 +64,7 @@ test {
         exceptionFormat "full"
 
         afterSuite { descriptor, result ->
-            if (!descriptor.parent) { // Will match the outermost suite
+            if (!descriptor.parent) { 
                 println "Results: ${result.resultType}"
                 println "Tests run: ${result.testCount}, Failures: ${result.failedTestCount}, Skipped: ${result.skippedTestCount}"
             }
