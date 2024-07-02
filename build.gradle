@@ -15,7 +15,7 @@ repositories {
 	mavenCentral()
 }
 
-dependencies {
+dependencies { 
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.hibernate.validator:hibernate-validator'
@@ -35,7 +35,6 @@ tasks.named('test') {
 tasks.withType(JavaCompile) {
     options.compilerArgs << "-parameters"
 }
-
 jar {
     manifest {
         attributes(
@@ -56,4 +55,19 @@ task buildDocker(type: Exec) {
 task runDocker(type: Exec) {
     dependsOn buildDocker
     commandLine 'docker', 'run', '-p', '81:81', 'insight-spring'
+}
+
+test {
+    testLogging {
+        showStandardStreams = true
+        events "PASSED", "SKIPPED", "FAILED", "STANDARD_OUT", "STANDARD_ERROR"
+        exceptionFormat "full"
+
+        afterSuite { descriptor, result ->
+            if (!descriptor.parent) { 
+                println "Results: ${result.resultType}"
+                println "Tests run: ${result.testCount}, Failures: ${result.failedTestCount}, Skipped: ${result.skippedTestCount}"
+            }
+        }
+    }
 }
