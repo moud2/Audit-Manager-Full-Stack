@@ -2,7 +2,6 @@ package com.insight.backend.controller;
 
 import java.util.*;
 
-//import com.insight.backend.model.Category;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,11 +9,11 @@ import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import com.insight.backend.model.Rating;
 import com.insight.backend.model.nestedRatings.RatingList;
+import com.insight.backend.exception.RatingNotFoundException;
 
 import com.insight.backend.service.Rating.FindRatingService;
 import com.insight.backend.service.Rating.SaveRatingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,9 +21,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class RatingController {
 
-    private ObjectMapper objectMapper;
-    private FindRatingService findRatingService;
-    private SaveRatingService saveRatingService;
+    private final ObjectMapper objectMapper;
+    private final FindRatingService findRatingService;
+    private final SaveRatingService saveRatingService;
 
     /**
      * Initializes the RatingController with a list of sample ratings.
@@ -59,22 +58,25 @@ public class RatingController {
 //        ratings.add(rating3);
     }
 
-    private Rating applyPatchToRating(JsonPatch patch, Rating targetRating) throws JsonPatchException, JsonProcessingException {
-        JsonNode patched = patch.apply(objectMapper.convertValue(targetRating, JsonNode.class));
-        return objectMapper.treeToValue(patched, Rating.class);
-    }
-
+    /**
+     * Handles PATCH requests for updating a rating.
+     *
+     *
+     * @param id the ID of the rating to update
+     * @param patch the JSON patch containing the changes to apply
+     * @return a ResponseEntity containing the updated rating in JSON format or an error message if the rating ID does not exist
+     */
     @PatchMapping("/api/v1/ratings/{id}")
-    public ResponseEntity<Rating> updateRating(@PathVariable("id") long id, @RequestBody JsonPatch patch) {
+    public ResponseEntity<Rating> updateRating(@PathVariable("id") long id, @RequestBody JsonPatch patch){
         try {
-            Rating rating = findRatingService.findRatingById(id).orElseThrow(ChangeSetPersister.NotFoundException::new);
-            Rating ratingPatched = applyPatchToRating(patch, rating);
-            saveRatingService.saveRating(ratingPatched);
-            return ResponseEntity.ok(ratingPatched);
+            Rating entity = findRatingService.findRatingById(id).orElseThrow(RatingNotFoundException::new);
+            JsonNode entityJsonNode = objectMapper.convertValue(entity, JsonNode.class);
+            JsonNode patchedEntityJsonNode = patch.apply(entityJsonNode);
+            Rating patchedEntity = objectMapper.treeToValue(patchedEntityJsonNode, Rating.class);
+            Rating updatedEntity = saveRatingService.saveRating(patchedEntity);
+            return ResponseEntity.ok(updatedEntity);
         } catch (JsonPatchException | JsonProcessingException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        } catch (ChangeSetPersister.NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 

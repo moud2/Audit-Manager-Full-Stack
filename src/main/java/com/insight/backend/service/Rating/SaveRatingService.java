@@ -7,13 +7,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class SaveRatingService {
 
-    private RatingRepository ratingRepository;
+    private final RatingRepository ratingRepository;
 
     public SaveRatingService(RatingRepository ratingRepository) {
         this.ratingRepository = ratingRepository;
     }
 
-    public void saveRating(Rating rating) {
-        ratingRepository.saveAndFlush(rating);
+    public Rating saveRating(Rating rating) {
+        return ratingRepository.saveAndFlush(rating);
     }
 }

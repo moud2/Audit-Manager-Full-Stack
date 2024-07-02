@@ -8,7 +8,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 
 /**
  * Configuration class for setting up CORS (Cross-Origin Resource Sharing) settings.
@@ -41,11 +40,4 @@ public class WebConfig {
             }
         };
     }
-
-//    @Bean
-//    public ObjectMapper objectMapper() {
-//        ObjectMapper mapper = new ObjectMapper();
-//        mapper.registerModule(new Hibernate5Module());
-//        return mapper;
-//    }
 }

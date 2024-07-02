@@ -67,4 +67,20 @@ public class Rating {
     public @Min(0) @Max(5) Integer getPoints() {
         return points;
     }
+
+    public Question getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
+
+    public Audit getAudit() {
+        return audit;
+    }
+
+    public void setAudit(Audit audit) {
+        this.audit = audit;
+    }
 }
