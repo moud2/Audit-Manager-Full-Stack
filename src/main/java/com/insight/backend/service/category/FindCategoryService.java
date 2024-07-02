@@ -10,8 +10,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class FindCategoryService {
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+    
+    private final CategoryRepository categoryRepository;
+
+    public FindCategoryService(CategoryRepository c) {
+        this.categoryRepository = c;
+    }
 
     /*
      * returns all categories

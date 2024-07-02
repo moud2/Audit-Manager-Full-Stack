@@ -12,18 +12,21 @@ import org.springframework.stereotype.Service;
 @Service
 public class SaveAuditService {
     
-    @Autowired
-    private AuditRepository auditRepository;
+    
+    private final AuditRepository auditRepository;
+
+    public SaveAuditService(AuditRepository c) {
+        this.auditRepository = c;
+    }
 
     /*
      * create new audit using name
      * @param name of audit
      * @return newly created audit
      */
-    public Audit saveAudit(String name){
-        Audit newAudit = new Audit();
-        newAudit.setName(name);
-        auditRepository.saveAndFlush(newAudit);
-        return newAudit;
+    public Audit saveAudit(Audit audit){
+        if(audit == null) return null;
+        auditRepository.saveAndFlush(audit);
+        return audit;
     }
 }
