@@ -15,10 +15,10 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.hibernate.validator:hibernate-validator'
+dependencies { 
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.hibernate.validator:hibernate-validator'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.9.3' // Aktualisierte Version
@@ -57,4 +57,19 @@ task buildDocker(type: Exec) {
 task runDocker(type: Exec) {
     dependsOn buildDocker
     commandLine 'docker', 'run', '-p', '81:81', 'insight-spring'
+}
+
+test {
+    testLogging {
+        showStandardStreams = true
+        events "PASSED", "SKIPPED", "FAILED", "STANDARD_OUT", "STANDARD_ERROR"
+        exceptionFormat "full"
+
+        afterSuite { descriptor, result ->
+            if (!descriptor.parent) { 
+                println "Results: ${result.resultType}"
+                println "Tests run: ${result.testCount}, Failures: ${result.failedTestCount}, Skipped: ${result.skippedTestCount}"
+            }
+        }
+    }
 }
