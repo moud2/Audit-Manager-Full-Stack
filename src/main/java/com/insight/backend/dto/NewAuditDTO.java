@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Data Transfer Object equivalent to JSON object of GET /api/v1/audits/new.
  */
-public class AuditResponseDTO {
+public class NewAuditDTO {
 
     /**
      * The supplied name of the audit during creation.

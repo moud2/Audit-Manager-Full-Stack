@@ -3,6 +3,7 @@ package com.insight.backend.controller;
 import java.util.*;
 
 import com.insight.backend.model.Audit;
+import com.insight.backend.model.newAudit.AuditRequest;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

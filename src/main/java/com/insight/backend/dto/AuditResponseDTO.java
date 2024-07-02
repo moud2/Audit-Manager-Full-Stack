@@ -10,7 +10,7 @@ public class AuditResponseDTO {
     /**
      * Unique identifier for the Audit.
      */
-    private long id;
+    private Long id;
 
     /**
      * The name of the Audit.
@@ -55,5 +55,4 @@ public class AuditResponseDTO {
     public void setName(String name) {
         this.name = name;
     }
-
 }
