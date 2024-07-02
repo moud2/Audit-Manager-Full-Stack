@@ -2,14 +2,15 @@
 
 == Setup
 
-- copy `.env.example` to `.env` and fill in the values (if needed)
-
+- copy `.env.example` to `.env` and fill in the values (if needed). Entweder über IDE/Filesystem oder im Terminal:
 [source,bash]
 ----
 cp .env.example .env
 ----
 
-- copy `application.properties.example` to `application.properties` and fill in the values (if needed)
+- copy `application.properties.example` to `application.properties` and fill in the values (if needed). Entweder über IDE/Filesystem oder im Terminal:
+
+(Linux/MacOS)
 
 [source,bash]
 ----
@@ -18,9 +19,11 @@ cp ./src/main/resources/application.properties.example ./src/main/resources/appl
 
 == Running MSSQL Server
 
+(Linux/MacOS)
+
 [source,bash]
 ----
-docker-compose up -d
+docker compose up -d
 ----
 
 == Create the database
@@ -31,11 +34,25 @@ docker-compose up -d
 docker compose exec -it mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'YourStrong@Passw0rd' -Q 'CREATE DATABASE insight;'
 ----
 
+== Seeding the database (optional)
+
+- GET request to http://localhost:8080/api/v1/database/seed
+- this will **add** dummy data to the database
+
 == Running the application
+
+Entweder über IDE Integration oder im Terminal:
 
 (Linux)
 
 [source,bash]
 ----
 ./gradlew bootRun
+----
+
+(Windows)
+
+[source,bash]
+----
+gradlew.bat bootRun
 ----
