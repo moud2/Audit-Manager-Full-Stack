@@ -40,7 +40,7 @@ frontend-build-job:
     - npm cache clean --force
     - npm install  
     - npm run build -- --mode=production
-    - echo "Building complete! :)"
+    - echo "Building complete!"
   artifacts:
     paths:
       - frontend/dist/
