@@ -1,22 +1,23 @@
 package com.insight.backend.controller;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.insight.backend.model.Question;
 import com.insight.backend.repository.QuestionRepository;
 import com.insight.backend.service.Question.SaveQuestionService;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 @ExtendWith(MockitoExtension.class)
-public class QuestionRepositoryTest {
+public class QuestionServiceTest {
 
     @Mock
     private QuestionRepository questionRepository;
@@ -38,8 +39,8 @@ public class QuestionRepositoryTest {
         Question savedQuestion = questionRepository.save(question);
 
         assertNotNull(savedQuestion);
-        assertEquals("Feuerwand", savedQuestion.getName());
-        verify(questionRepository, times(1)).save(question);
+        assertEquals(question.getName(), savedQuestion.getName());
+        verify(questionRepository, times(1)).saveAndFlush(question);
     }
 
 
