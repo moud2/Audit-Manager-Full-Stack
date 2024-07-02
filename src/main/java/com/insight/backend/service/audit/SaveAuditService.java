@@ -22,7 +22,7 @@ public class SaveAuditService {
     /*
      * save Audit and return it afterwards
      * @param audit to be saved
-     * @return newly created audit
+     * @return saved audit
      */
     public Audit saveAudit(Audit audit){
         if(audit == null) return null;
