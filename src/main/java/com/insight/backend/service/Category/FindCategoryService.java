@@ -1,4 +1,5 @@
 package com.insight.backend.service.Category;
+
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -13,7 +14,6 @@ import com.insight.backend.repository.CategoryRepository;
 public class FindCategoryService {
 
     private final  CategoryRepository categoryRepository;
-
     
     /**
      * Constructor to inject the CategoryRepository.
