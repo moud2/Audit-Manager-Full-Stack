@@ -38,7 +38,7 @@ frontend-build-job:
     - echo "Building the application..."
     - cd frontend
     - npm cache clean --force
-    - npm ci    
+    - npm install  
     - npm run build
     - echo "Building complete! :)"
   artifacts:
