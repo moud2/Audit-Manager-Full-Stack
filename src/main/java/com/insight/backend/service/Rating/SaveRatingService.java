@@ -31,6 +31,7 @@ public class SaveRatingService {
      * @return the saved rating object.
      */
     public Rating saveRating(Rating rating) {
+        if (rating == null) return null;
         return ratingRepository.save(rating);
     }
 
@@ -41,7 +42,7 @@ public class SaveRatingService {
     * @return the saved list of rating objects.
     */
     public List<Rating> saveAllRatings(List<Rating> ratingList) {
-        ratingRepository.saveAll(ratingList);
-        return ratingList;
+        if (ratingList == null) return null;
+        return ratingRepository.saveAllAndFlush(ratingList);
     }
 }
