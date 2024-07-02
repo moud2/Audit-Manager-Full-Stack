@@ -12,13 +12,13 @@ public class RatingDTO {
     /**
      * Unique identifier for the rating.
      */
-    private long id;
+    private Long id;
 
     /**
      * Category the rating is in.
      */
     @NotNull(message = "Category can not be null")
-    private Category category;
+    private Category category; 
 
     /**
      * The question being rated.
@@ -53,7 +53,7 @@ public class RatingDTO {
      *
      * @return the unique identifier for the rating
      */
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -62,7 +62,7 @@ public class RatingDTO {
      *
      * @param id the unique identifier for the rating
      */
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
