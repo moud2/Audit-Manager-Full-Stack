@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import {BarChart} from '@mui/x-charts/BarChart';
 import LinearProgress from '@mui/material/LinearProgress';
+import PropTypes from 'prop-types';
 
 
 function Evaluation() {
