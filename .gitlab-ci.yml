@@ -75,7 +75,7 @@ publish-job:
     - podman logout --all || true
     - echo -n "${CI_REGISTRY_PASSWORD}" | podman login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
   script:
-    - podman-compose -f docker-compose.production.yml pull 
-    - podman-compose -f docker-compose.production.yml up -d
+    - podman-compose -p backend -f docker-compose.production.yml pull 
+    - podman-compose -p backend -f docker-compose.production.yml up -d
 
 
