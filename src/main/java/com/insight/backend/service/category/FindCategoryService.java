@@ -1,6 +1,7 @@
 package com.insight.backend.service.Category;
 
 import java.util.Optional;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -33,4 +34,13 @@ public class FindCategoryService {
     public Optional <Category> findCategoryById(Long id) {
         return categoryRepository.findById(id);
     }
+
+        /*
+     * returns all categories
+     * @return list of all categories
+     */
+    public List<Category> findAllCategories() {
+        return categoryRepository.findAll();
+    }
+
 }
