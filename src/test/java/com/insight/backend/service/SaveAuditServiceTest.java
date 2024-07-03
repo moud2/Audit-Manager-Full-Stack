@@ -9,7 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.insight.backend.model.Audit;
 import com.insight.backend.repository.AuditRepository;
-import com.insight.backend.service.Audit.SaveAuditService;
+import com.insight.backend.service.audit.SaveAuditService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
