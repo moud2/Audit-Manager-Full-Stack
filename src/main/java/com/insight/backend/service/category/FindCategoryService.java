@@ -14,7 +14,7 @@ import com.insight.backend.repository.CategoryRepository;
 @Service
 public class FindCategoryService {
 
-    private final  CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
     
     /**
      * Constructor to inject the CategoryRepository.
@@ -42,5 +42,4 @@ public class FindCategoryService {
     public List<Category> findAllCategories() {
         return categoryRepository.findAll();
     }
-
 }
