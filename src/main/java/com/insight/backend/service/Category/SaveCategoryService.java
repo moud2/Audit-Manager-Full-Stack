@@ -6,13 +6,19 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SaveCategoryService {
-    final CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
     public SaveCategoryService(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
 
+    /**
+     * Saves a given category to the db
+     *
+     * @param category the category to be saved
+     * @return the saved category, or null if the input category is null
+     */
     public Category saveCategory(Category category) {
-        return categoryRepository.save(category);
+        return categoryRepository.saveAndFlush(category);
     }
 }
