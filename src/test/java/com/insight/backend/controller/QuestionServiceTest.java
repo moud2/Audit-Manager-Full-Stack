@@ -23,7 +23,6 @@ public class QuestionServiceTest {
     @Mock
     private QuestionRepository questionRepository;
     
-
     @InjectMocks
     private SaveQuestionService saveQuestionService;
     private Question question; 
@@ -47,8 +46,4 @@ public class QuestionServiceTest {
         assertNotNull(savedQuestion);
         assertEquals(question.getName(), savedQuestion.getName());
     }
-
-
-
-   
 }
