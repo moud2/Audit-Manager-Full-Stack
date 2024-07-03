@@ -43,8 +43,8 @@ sonarqube-data-manager:
     - cd services/data-manager
     - sonar-scanner
   allow_failure: true
-  only:
-    - main
+  #only:
+    #- main
 
 
 # BUILD STAGE
