@@ -20,7 +20,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class saveRatingServiceTest {
+public class SaveRatingServiceTest {
 
     @Mock
     private RatingRepository ratingRepository;
