@@ -9,7 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.insight.backend.model.Category;
 import com.insight.backend.repository.CategoryRepository;
-import com.insight.backend.service.Category.SaveCategoryService;
+import com.insight.backend.service.category.SaveCategoryService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

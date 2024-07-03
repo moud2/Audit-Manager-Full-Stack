@@ -1,4 +1,4 @@
-package com.insight.backend.service.Category;
+package com.insight.backend.service.category;
 
 import com.insight.backend.repository.CategoryRepository;
 import com.insight.backend.model.Category;

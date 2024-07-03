@@ -1,4 +1,4 @@
-package com.insight.backend.service.Question;
+package com.insight.backend.service.question;
 
 import com.insight.backend.repository.QuestionRepository;
 import com.insight.backend.model.Question;

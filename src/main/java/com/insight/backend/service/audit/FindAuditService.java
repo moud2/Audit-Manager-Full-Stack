@@ -1,4 +1,4 @@
-package com.insight.backend.service.Audit;
+package com.insight.backend.service.audit;
 
 import java.util.*;
 
