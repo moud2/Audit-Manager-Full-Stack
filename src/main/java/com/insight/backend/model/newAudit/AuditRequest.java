@@ -4,7 +4,7 @@ import java.util.List;
 
 public class AuditRequest {
     private String name;
-    private List<Integer> categories;
+    private List<Long> categories;
 
     // Getter und Setter
     public String getName() {
@@ -15,11 +15,11 @@ public class AuditRequest {
         this.name = name;
     }
 
-    public List<Integer> getCategories() {
+    public List<Long> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<Integer> categories) {
+    public void setCategories(List<Long> categories) {
         this.categories = categories;
     }
 }
