@@ -46,7 +46,7 @@ function PerformAudit() {
 
   /*fetching data from the backend*/
   useEffect(() => {
-    api.get('http://localhost:8080/api/v1/audits/1/ratings') /*relative path, editable in .env files & api.js -*/
+    api.get('/v1/audits/1/ratings') /*relative path, editable in .env files & api.js -*/
         .then(response => {
             console.log(response);
             setQuestions(response.data);
