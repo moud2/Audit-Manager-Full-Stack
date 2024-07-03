@@ -1,6 +1,8 @@
-package com.insight.backend.controller.serviceTest;
+package com.insight.backend.service;
 
 import java.util.Optional;
+import java.util.List;
+import java.util.Arrays;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,6 +32,7 @@ public class FindCategoryServiceTest {
     private FindCategoryService findCategoryService;
 
     private Category category1;
+    private Category category2;
 
     /**
      * Set up method to initialize test data.
@@ -39,6 +42,10 @@ public class FindCategoryServiceTest {
         category1 = new Category();
         category1.setId(1L);
         category1.setName("Category1");
+
+        category2 = new Category();
+        category2.setId(2L);
+        category2.setName("Category2");
     }
 
     /**
@@ -61,5 +68,13 @@ public class FindCategoryServiceTest {
         when(categoryRepository.findById(anyLong())).thenReturn(Optional.empty());
         Optional<Category> foundCategory = findCategoryService.findCategoryById(1L);
         assertTrue(foundCategory.isEmpty());
+    }
+
+    @Test
+    void testFindAllCategories() {
+        List<Category> categories = Arrays.asList(category1, category2);
+        when(categoryRepository.findAll()).thenReturn(categories);
+        List<Category> foundCategories = findCategoryService.findAllCategories();
+        assertEquals(categories, foundCategories);
     }
 }

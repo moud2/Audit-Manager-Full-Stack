@@ -1,4 +1,4 @@
-package com.insight.backend.controller;
+package com.insight.backend.service;
 
 import java.util.Arrays;
 import java.util.List;

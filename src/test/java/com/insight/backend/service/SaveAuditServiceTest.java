@@ -1,4 +1,4 @@
-package com.insight.backend.service.Audit;
+package com.insight.backend.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
