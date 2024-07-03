@@ -1,4 +1,4 @@
-package com.insight.backend.service.Category;
+package com.insight.backend.service.category;
 
 import java.util.Optional;
 import java.util.List;

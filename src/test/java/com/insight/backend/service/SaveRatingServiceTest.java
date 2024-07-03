@@ -11,7 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.insight.backend.model.Rating;
 import com.insight.backend.repository.RatingRepository;
-import com.insight.backend.service.Rating.SaveRatingService;
+import com.insight.backend.service.rating.SaveRatingService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

@@ -1,4 +1,4 @@
-package com.insight.backend.service.Rating;
+package com.insight.backend.service.rating;
 
 import java.util.*;
 
