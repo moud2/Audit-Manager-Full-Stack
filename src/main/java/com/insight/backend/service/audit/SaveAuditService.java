@@ -26,7 +26,6 @@ public class SaveAuditService {
      */
     public Audit saveAudit(Audit audit){
         if(audit == null) return null;
-        auditRepository.saveAndFlush(audit);
-        return audit;
+        return auditRepository.saveAndFlush(audit);
     }
 }

@@ -13,6 +13,7 @@ import com.insight.backend.service.Audit.SaveAuditService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
@@ -44,6 +45,11 @@ public class SaveAuditServiceTest {
         verify(auditRepository, times(1)).saveAndFlush(audit);
         assertNotNull(savedAudit);
         assertEquals(savedAudit.getName(), audit.getName());
+    }
+
+    @Test
+    public void saveNullAuditTest() {
+        assertNull(saveAuditService.saveAudit(null));
     }
     
 }
