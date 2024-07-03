@@ -15,8 +15,8 @@ public class SaveAuditService {
     
     private final AuditRepository auditRepository;
 
-    public SaveAuditService(AuditRepository c) {
-        this.auditRepository = c;
+    public SaveAuditService(AuditRepository auditRepository) {
+        this.auditRepository = auditRepository;
     }
 
     /*
