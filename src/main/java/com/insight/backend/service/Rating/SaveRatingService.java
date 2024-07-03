@@ -32,7 +32,7 @@ public class SaveRatingService {
      */
     public Rating saveRating(Rating rating) {
         if (rating == null) return null;
-        return ratingRepository.save(rating);
+        return ratingRepository.saveAndFlush(rating);
     }
 
     /**

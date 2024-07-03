@@ -56,7 +56,7 @@ public class saveRatingServiceTest {
     }
 
     @Test
-    void testsaveRating() {
+    void testSaveRating() {
         when(ratingRepository.saveAndFlush(rating1)).thenReturn(rating1);
 
         Rating savedRating = saveRatingService.saveRating(rating1);
@@ -68,7 +68,7 @@ public class saveRatingServiceTest {
     }
 
     @Test
-    void testsaveAllRatings() {
+    void testSaveAllRatings() {
         when(ratingRepository.saveAllAndFlush(ratingList)).thenReturn(ratingList);
 
         List<Rating> savedRatings = saveRatingService.saveAllRatings(ratingList);
