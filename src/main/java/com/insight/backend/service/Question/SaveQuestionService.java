@@ -12,8 +12,14 @@ public class SaveQuestionService {
         this.questionRepository = questionRepository;
     }
 
+    /**
+     * Saves a given question to the db
+     *
+     * @param question the question to be saved
+     * @return the saved question, or null if the input question is null
+     */
     public Question saveQuestion(Question question) {
         if (question == null) return null;
-        return questionRepository.save(question);
+        return questionRepository.saveAndFlush(question);
     }
 }
