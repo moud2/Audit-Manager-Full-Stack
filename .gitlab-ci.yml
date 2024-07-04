@@ -33,8 +33,8 @@ test-e2e:
     - echo "Cypress e2e tests completed"
   artifacts:
     paths:
-      - cypress/screenshots/
-      - cypress/videos/
+      - frontend/cypress/screenshots/
+      - frontend/cypress/videos/
     expire_in: 1 week
 
 # TESTING STAGE
