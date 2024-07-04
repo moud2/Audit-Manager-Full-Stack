@@ -40,10 +40,12 @@ function Dashboard() {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        transition: 'transform 0.7s',
+        transition: 'transform 0.3s',
         backgroundColor: '#f0f0f0',
+        borderRadius: '10px', // Rounded corners
+        margin: '10px', // Space between tiles
         '&:hover': {
-            transform: 'scale(1.12)',
+            transform: 'scale(1.04)',
             backgroundColor: '#d0d0d0'
         },
         '& p': {
