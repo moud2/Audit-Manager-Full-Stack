@@ -23,8 +23,7 @@ public class Rating {
     private Question question;
 
 
-    public Rating(String name, Boolean isNa, String comment, Integer points, Audit audit, Question question) {
-        //this.name = name;
+    public Rating(Boolean isNa, String comment, Integer points, Audit audit, Question question) {
         this.isNa = isNa;
         this.comment = comment;
         this.points = points;
@@ -66,5 +65,21 @@ public class Rating {
 
     public @Min(0) @Max(5) Integer getPoints() {
         return points;
+    }
+
+    public Question getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
+
+    public Audit getAudit() {
+        return audit;
+    }
+
+    public void setAudit(Audit audit) {
+        this.audit = audit;
     }
 }

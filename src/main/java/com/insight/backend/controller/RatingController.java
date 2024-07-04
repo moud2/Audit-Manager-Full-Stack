@@ -1,83 +1,64 @@
 package com.insight.backend.controller;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-//import com.insight.backend.model.Category;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
+import com.insight.backend.exception.RatingNotFoundException;
 import com.insight.backend.model.Rating;
 import com.insight.backend.model.nestedRatings.RatingList;
+import com.insight.backend.service.rating.FindRatingService;
+import com.insight.backend.service.rating.SaveRatingService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 @RestController
 public class RatingController {
 
-    private List<Rating> ratings;
+    private final ObjectMapper objectMapper;
+    private final FindRatingService findRatingService;
+    private final SaveRatingService saveRatingService;
 
     /**
      * Initializes the RatingController with a list of sample ratings.
      */
-    public RatingController() {
-        ratings = new ArrayList<>();
-
-        Rating rating1 = new Rating();
-        rating1.setId((long)1);
-        //rating1.setName("Mahamoud");
-        rating1.setComment("This is the first comment");
-        rating1.setPoints(5);
-
-        Rating rating2 = new Rating();
-        rating2.setId((long)2);
-        //rating2.setName("Ahmed");
-        rating2.setComment("This is the second comment");
-        rating2.setPoints(4);
-
-        Rating rating3 = new Rating();
-        rating3.setId((long)3);
-        //rating3.setName("John");
-        rating3.setComment("This is the third comment");
-        rating3.setPoints(3);
-
-        ratings.add(rating1);
-        ratings.add(rating2);
-        ratings.add(rating3);
+    @Autowired
+    public RatingController(ObjectMapper objectMapper, FindRatingService findRatingService, SaveRatingService saveRatingService) {
+        this.objectMapper = objectMapper;
+        this.findRatingService = findRatingService;
+        this.saveRatingService = saveRatingService;
     }
 
     /**
-     * Updates an existing rating based on the provided id and JSON request body.
+     * Handles PATCH requests for updating a rating.
      *
-     * @param id            the id of the rating to update
-     * @param updatedRating the updated rating object from the JSON request body
-     * @return a ResponseEntity indicating the result of the update operation
+     * @param id    the ID of the rating to update
+     * @param patch the JSON patch containing the changes to apply
+     * @return a ResponseEntity containing the updated rating in JSON format or an error message if the rating ID does not exist
      */
     @PatchMapping("/api/v1/ratings/{id}")
-    public ResponseEntity<String> updateRating(@PathVariable("id") int id, @RequestBody Rating updatedRating) {
-        for (Rating rating : ratings) {
-            if (rating.getId() == id) {
-                if (updatedRating.getComment() != null) {
-                    rating.setComment(updatedRating.getComment());
-                }
-                if (updatedRating.getPoints() <= 5) {
-                    rating.setPoints(updatedRating.getPoints());
-                }
-                // if (updatedRating.getName() != null) {
-                //     rating.setName(updatedRating.getName());
-                // }
-                if (updatedRating.getNa() != null) {
-                    rating.setNa(updatedRating.getNa());
-                }
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).body("");
-                
-            }
+    public ResponseEntity<Rating> updateRating(@PathVariable("id") long id, @RequestBody JsonPatch patch) {
+        try {
+            Rating entity = findRatingService.findRatingById(id).orElseThrow(RatingNotFoundException::new);
+            JsonNode entityJsonNode = objectMapper.convertValue(entity, JsonNode.class);
+            JsonNode patchedEntityJsonNode = patch.apply(entityJsonNode);
+            Rating patchedEntity = objectMapper.treeToValue(patchedEntityJsonNode, Rating.class);
+            Rating updatedEntity = saveRatingService.saveRating(patchedEntity);
+            return ResponseEntity.ok(updatedEntity);
+        } catch (JsonPatchException | JsonProcessingException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("RatingID not found");
     }
-
-
-/**
- * Controller for handling rating-related requests.
- */
 
     /**
      * Handles GET requests for retrieving ratings for a specific audit.
@@ -88,16 +69,11 @@ public class RatingController {
     @GetMapping("/api/v1/audits/{auditId}/ratings")
     public ResponseEntity<List<Map<String, Object>>> get(@PathVariable("auditId") Integer auditId) {
 
-        // Generate Test-Categories
-        /*Category category1 = new Category("categorytest1", null);
-        Category category2 = new Category("categorytest2", null);
-        Category category3 = new Category("categorytest3", null);*/
-
         // Generate Test-Ratings
-        Rating rating1 = new Rating("Bob", false, "KOmmentar", 0, null, null);
-        Rating rating2 = new Rating("Ben", false, "Kommentar2", null, null, null);
-        Rating rating3 = new Rating("Boris", false, "Kommentar3", 1, null, null);
-        Rating rating4 = new Rating("Berthold", false, "Kommentar4", 4, null, null);
+        Rating rating1 = new Rating(false, "KOmmentar", 0, null, null);
+        Rating rating2 = new Rating(false, "Kommentar2", null, null, null);
+        Rating rating3 = new Rating(false, "Kommentar3", 1, null, null);
+        Rating rating4 = new Rating(false, "Kommentar4", 4, null, null);
 
         // Generate Test-Lists containing Test-Ratings
         List<Rating> ratings1 = new ArrayList<>();
@@ -231,7 +207,7 @@ public class RatingController {
         item4.put("question", "Existiert eine fein granulare Berechtigungs- und Kommunikatiosmatrix für die VPN-Appliance?");
         item4.put("points", null);
         item4.put("comment", "");
-        item4.put("na", true);  
+        item4.put("na", true);
 
         Map<String, Object> item5 = new HashMap<>();
         item5.put("id", 4);
@@ -239,7 +215,7 @@ public class RatingController {
         item5.put("question", "Wird eine SSL Inspection durchgeführt?");
         item5.put("points", 2);
         item5.put("comment", "ja aber veraltete cipher suites verwendet. Bitte verbessern");
-        item5.put("na", false);  
+        item5.put("na", false);
 
         Map<String, Object> item6 = new HashMap<>();
         item6.put("id", 5);
@@ -247,7 +223,7 @@ public class RatingController {
         item6.put("question", "Wird ein Web-Proxy eingesetzt, über den alle HTTP(S)-Verbindungen gehen müssen?");
         item6.put("points", 0);
         item6.put("comment", "Dringendes Verbesserungspotenzial");
-        item6.put("na", false);  
+        item6.put("na", false);
 
         Map<String, Object> item7 = new HashMap<>();
         item7.put("id", 6);
@@ -255,7 +231,7 @@ public class RatingController {
         item7.put("question", "Werden HTTP(S)-Verbindungen abseits des Web-Proxies blockiert? (Ausnahmeregeln vermeiden)");
         item7.put("points", null);
         item7.put("comment", "Dringendes Verbesserungspotenzial");
-        item7.put("na", true);  
+        item7.put("na", true);
 
         // Hinzufügen des Items zur Liste
         List<Map<String, Object>> items1 = new ArrayList<>();
@@ -266,14 +242,6 @@ public class RatingController {
         items1.add(item5);
         items1.add(item6);
         items1.add(item7);
-
-
-
-
-
-
-
-
 
 
         Map<String, Object> item8 = new HashMap<>();
@@ -290,7 +258,7 @@ public class RatingController {
         item9.put("question", "Besteht eine Übersicht über alle in der Infrastruktur installierten Software-Anwendungen?");
         item9.put("points", 3);
         item9.put("comment", "Könnte noch etwas verbessert werden. Wurde letztes mal schon mehr oder weniger ignoriert.");
-        item9.put("na", false);  
+        item9.put("na", false);
 
         Map<String, Object> item10 = new HashMap<>();
         item10.put("id", 9);
@@ -298,7 +266,7 @@ public class RatingController {
         item10.put("question", "Ist ein Patch-Management Prozess etabliert?");
         item10.put("points", 2);
         item10.put("comment", "ja aber das kann auch noch ein wenig verbessern");
-        item10.put("na", false);  
+        item10.put("na", false);
 
         Map<String, Object> item11 = new HashMap<>();
         item11.put("id", 10);
@@ -306,7 +274,7 @@ public class RatingController {
         item11.put("question", "Gibt es eine Übersicht über alle Richtlinien, Dokumentationen, etc. ?");
         item11.put("points", 5);
         item11.put("comment", "alles top!");
-        item11.put("na", false);  
+        item11.put("na", false);
 
         Map<String, Object> item12 = new HashMap<>();
         item12.put("id", 11);
@@ -314,8 +282,7 @@ public class RatingController {
         item12.put("question", "Sind Verantwortlichkeiten in Bezug auf die Informationssicherheit verteilt? Gibt es eine Sicherheitsorganisation?");
         item12.put("points", null);
         item12.put("comment", "Trifft leider nicht zu dieser Punkt");
-        item12.put("na", true); 
-
+        item12.put("na", true);
 
 
         List<Map<String, Object>> items2 = new ArrayList<>();
@@ -332,7 +299,6 @@ public class RatingController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ArrayList<>());
         }
-
 
 
         // // Error Handling 404 - Non-existing Audit

@@ -15,10 +15,11 @@ repositories {
     mavenCentral()
 }
 
-dependencies { 
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.hibernate.validator:hibernate-validator'
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.hibernate.validator:hibernate-validator'
+    implementation 'com.github.java-json-tools:json-patch:1.13'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.9.3' // Aktualisierte Version
@@ -27,6 +28,7 @@ dependencies {
 
     runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
 }
 
 tasks.named('test') {
@@ -66,7 +68,7 @@ test {
         exceptionFormat "full"
 
         afterSuite { descriptor, result ->
-            if (!descriptor.parent) { 
+            if (!descriptor.parent) {
                 println "Results: ${result.resultType}"
                 println "Tests run: ${result.testCount}, Failures: ${result.failedTestCount}, Skipped: ${result.skippedTestCount}"
             }
