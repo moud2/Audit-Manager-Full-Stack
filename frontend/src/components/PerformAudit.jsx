@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FormGroup, FormControlLabel, Checkbox, Button } from '@mui/material';
+import { FormGroup, FormControlLabel, Checkbox, Button, Alert } from '@mui/material';
 import { TextareaAutosize as BaseTextareaAutosize } from '@mui/base/TextareaAutosize';
 import { styled } from '@mui/system';
 import api from "../api.js";
@@ -63,14 +63,6 @@ function PerformAudit() {
             });
     }, []);
 
-  // if (loading) {
-  //   return <p>Laden...</p>;
-  // }
-
-  // if (error) {
-  //   return <p>Fehler: {error.message}</p>;
-  // }
-
   const updateQuestionById = (id, newPartialQuestion) => {
     const q = questions.map(question => id === question.id? {...question, ...newPartialQuestion} : question );
     setQuestions(q);
@@ -133,6 +125,11 @@ function PerformAudit() {
     }
   }
 
+  const handleAlert = () => {
+    setError(null); 
+    window.location.reload();
+  }
+
   return (
     <>
       <h1 className="px-10 py-5 font-bold">Audit durchführen</h1>
@@ -161,6 +158,24 @@ function PerformAudit() {
           />
         </div>
       ))}
+      {error && (
+        <div className="sticky fixed bottom-20 left-0 w-full z-50">
+          <Alert
+            severity="error"
+            onClose={handleAlert}
+          >
+            Fehler: {error.message} | Bitte erneut versuchen.
+          </Alert>
+        </div>
+      )}
+      {loading && (
+        <div className="sticky fixed bottom-20 left-0 w-full z-50">
+          <Alert
+            severity="info"
+            onClose={() => setLoading(false)}
+          >Laden... Bitte warten.</Alert>
+        </div>
+      )}
     </>
   );
 }
