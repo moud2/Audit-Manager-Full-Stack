@@ -21,6 +21,8 @@ stages:
 test-e2e:
   stage: test
   image: cypress/base:latest
+  extends:
+    - ".setup:npm"
   script:
     - cd frontend
     - npx cypress install
