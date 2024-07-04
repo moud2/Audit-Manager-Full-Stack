@@ -25,7 +25,8 @@ module.exports = {
     describe: 'readonly',
     it: 'readonly',
     expect: 'readonly',
-    beforeEach: 'readonly'
+    beforeEach: 'readonly',
+    context: "readonly"
   },
 
 }
