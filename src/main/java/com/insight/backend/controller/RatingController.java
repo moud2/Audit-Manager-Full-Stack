@@ -13,7 +13,7 @@ import com.github.fge.jsonpatch.JsonPatchException;
 import com.insight.backend.exception.RatingNotFoundException;
 import com.insight.backend.model.Rating;
 import com.insight.backend.model.nestedRatings.RatingList;
-import com.insight.backend.service.Rating.FindRatingService;
+import com.insight.backend.service.rating.FindRatingService;
 import com.insight.backend.service.Rating.SaveRatingService;
 
 import org.springframework.beans.factory.annotation.Autowired;
