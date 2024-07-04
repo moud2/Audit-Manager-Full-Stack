@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
-import { BarChart } from '@mui/x-charts/BarChart';
+import {BarChart} from '@mui/x-charts/BarChart';
 import LinearProgress from '@mui/material/LinearProgress';
 import api from "../api.js";
 import {useParams} from "react-router-dom";
@@ -15,7 +15,7 @@ function Evaluation() {
     const {auditId} = useParams();
 
     console.log(auditId);
-    
+
     const [mainProgress, setMainProgress] = useState(0);
     const [pointsDistribution, setPointsDistribution] = useState(new Array(6).fill(0));
 
@@ -109,22 +109,18 @@ function Evaluation() {
                 <Box sx={{width: '100%', mr: 1}}>
                     <LinearProgress variant="determinate" value={mainProgress} {...props} />
                 </Box>
-                <Box sx={{ minWidth: 35 }}>
+                <Box sx={{minWidth: 35}}>
                     <Typography variant="body2" color="text.secondary">{`${Math.round(props.value)}%`}</Typography>
                 </Box>
             </Box>
         );
     }
 
-    LinearProgressWithLabel.propTypes = {
-        value: PropTypes.number.isRequired,
-    };
-
     // Setup progress circle
     function CircularProgressWithLabel(props) {
         return (
-            <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-                <CircularProgress variant="determinate" {...props} size={80} />
+            <Box sx={{position: 'relative', display: 'inline-flex'}}>
+                <CircularProgress variant="determinate" {...props} size={80}/>
                 <Box
                     sx={{
                         top: 0,
@@ -145,9 +141,6 @@ function Evaluation() {
         );
     }
 
-    CircularProgressWithLabel.propTypes = {
-        value: PropTypes.number.isRequired,
-    };
 
     const colors = ['#a50026', '#d73027', '#fdae61', '#d9ef8b', '#66bd63', '#006837'];
 
