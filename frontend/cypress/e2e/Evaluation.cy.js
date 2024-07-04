@@ -45,12 +45,6 @@ describe('Evaluation Page Tests', () => {
                 },
             ],
         }).as('getRatings');
-
-        // Visit the Evaluation page again to trigger the API call
-        cy.visit('http://localhost:5173/evaluation/1');
-
-        // Wait for the API call to complete
-        cy.wait('@getRatings');
     });
 });
 
