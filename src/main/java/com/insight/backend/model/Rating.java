@@ -23,8 +23,7 @@ public class Rating {
     private Question question;
 
 
-    public Rating(String name, Boolean isNa, String comment, Integer points, Audit audit, Question question) {
-        //this.name = name;
+    public Rating(Boolean isNa, String comment, Integer points, Audit audit, Question question) {
         this.isNa = isNa;
         this.comment = comment;
         this.points = points;

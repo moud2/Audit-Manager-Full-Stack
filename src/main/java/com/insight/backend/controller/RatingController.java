@@ -1,22 +1,27 @@
 package com.insight.backend.controller;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
+import com.insight.backend.exception.RatingNotFoundException;
 import com.insight.backend.model.Rating;
 import com.insight.backend.model.nestedRatings.RatingList;
-import com.insight.backend.exception.RatingNotFoundException;
-
 import com.insight.backend.service.Rating.FindRatingService;
 import com.insight.backend.service.Rating.SaveRatingService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+
 
 @RestController
 public class RatingController {
@@ -61,13 +66,12 @@ public class RatingController {
     /**
      * Handles PATCH requests for updating a rating.
      *
-     *
-     * @param id the ID of the rating to update
+     * @param id    the ID of the rating to update
      * @param patch the JSON patch containing the changes to apply
      * @return a ResponseEntity containing the updated rating in JSON format or an error message if the rating ID does not exist
      */
     @PatchMapping("/api/v1/ratings/{id}")
-    public ResponseEntity<Rating> updateRating(@PathVariable("id") long id, @RequestBody JsonPatch patch){
+    public ResponseEntity<Rating> updateRating(@PathVariable("id") long id, @RequestBody JsonPatch patch) {
         try {
             Rating entity = findRatingService.findRatingById(id).orElseThrow(RatingNotFoundException::new);
             JsonNode entityJsonNode = objectMapper.convertValue(entity, JsonNode.class);
@@ -100,10 +104,10 @@ public class RatingController {
         Category category3 = new Category("categorytest3", null);*/
 
         // Generate Test-Ratings
-        Rating rating1 = new Rating("Bob", false, "KOmmentar", 0, null, null);
-        Rating rating2 = new Rating("Ben", false, "Kommentar2", 3, null, null);
-        Rating rating3 = new Rating("Boris", false, "Kommentar3", 1, null, null);
-        Rating rating4 = new Rating("Berthold", false, "Kommentar4", 4, null, null);
+        Rating rating1 = new Rating(false, "KOmmentar", 0, null, null);
+        Rating rating2 = new Rating(false, "Kommentar2", 3, null, null);
+        Rating rating3 = new Rating(false, "Kommentar3", 1, null, null);
+        Rating rating4 = new Rating(false, "Kommentar4", 4, null, null);
 
         // Generate Test-Lists containing Test-Ratings
         List<Rating> ratings1 = new ArrayList<>();
