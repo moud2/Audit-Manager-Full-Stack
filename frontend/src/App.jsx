@@ -64,7 +64,7 @@ function App() {
                         <Routes>
                             <Route path="/" element={<Dashboard/>}/>
                             <Route path="/newAudit" element={<NewAudit/>}/>
-                            <Route path="/performAudit" element={<PerformAudit/>}/>
+                            <Route path="/performAudit/:auditId" element={<PerformAudit/>}/>
                             <Route path="/evaluation" element={<Evaluation/>}/>
                         </Routes>
                     </ThemeProvider>

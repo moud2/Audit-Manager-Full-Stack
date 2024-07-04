@@ -35,7 +35,8 @@ const Textarea = styled(BaseTextareaAutosize)(
 );
 
 /**
- * Creates the perform audits site, which shows the questions, checkboxes for the rating and a comment section. 
+ * Creates the perform audits site, which shows the questions, checkboxes for the rating and a comment section.
+ * Error handling for the GET and PATCH requests with alerts. 
  * 
  * @author [Anna Liepelt] https://gitlab.dit.htwk-leipzig.de/anna.liepelt
  */
@@ -45,9 +46,8 @@ function PerformAudit() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // const { auditId } = useParams();
-  const auditId = 1;
-
+  const { auditId } = useParams();
+  
   /*fetching data from the backend*/
   useEffect(() => {
     api.get(`/v1/audits/${auditId}/ratings`)

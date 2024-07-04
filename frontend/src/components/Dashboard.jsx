@@ -66,7 +66,7 @@ function Dashboard() {
 
                 {/* boxes to perform audit, TODO get the right url */}
                 {data.map(audit => (
-                    <Link data-cy="data-buttons" key={audit.id} to={`/audit/${audit.id}`}
+                    <Link data-cy="data-buttons" key={audit.id} to={`/performAudit/${audit.id}`}
                         className="flex justify-center items-center h-full mx-16 my-6">
                         <Paper elevation={20} sx={paperStyle}>
                             <p className="text-center">{audit.name}</p>
