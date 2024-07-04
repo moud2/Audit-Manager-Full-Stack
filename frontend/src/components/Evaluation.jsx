@@ -154,7 +154,7 @@ function Evaluation() {
 
             <div id="result" className={"flex flex-col justify-center items-center h-20"}>
                 <Box className={"text-center"} sx={{width: '80%'}}>
-                    <LinearProgressWithLabel data-cy="data-linear-progress" value={mainProgress}/>
+                    <LinearProgressWithLabel value={mainProgress}/>
                 </Box>
                 <p className={"text-center text-xl"}>Gesamtfortschritt</p>
             </div>
@@ -162,16 +162,16 @@ function Evaluation() {
             <div id="categories" className={"flex flex-row justify-center items-center"}>
                 {Object.keys(categoryProgress).map(categoryId => (
                     <div key={categoryId} className={"ml-6 m-8 text-center"}>
-                        <CircularProgressWithLabel data-cy="data-circular-progress"
-                                                   value={categoryProgress[categoryId].progress} className={"size-60"}/>
+                        <CircularProgressWithLabel
+                            value={categoryProgress[categoryId].progress} className={"size-60"}/>
                         <p className={"text-center"}>{categoryProgress[categoryId].name}</p>
                     </div>
                 ))}
             </div>
 
-            <div id="result_per_question" className={"flex flex-row justify-center items-center"}>
+            <div id="result_per_question"
+                 className={"flex flex-row justify-center items-center"}>
                 <BarChart
-                    data-cy="data-bar-chart"
                     series={[
                         {data: pointsDistribution},
                     ]}

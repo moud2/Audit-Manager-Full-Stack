@@ -51,17 +51,6 @@ describe('Evaluation Page Tests', () => {
 
         // Wait for the API call to complete
         cy.wait('@getRatings');
-
-        //TODO more complex testing
-
-        // //Check that the circular progress components are rendered
-        // cy.get('[data-cy="data-circular-progress"]').should('exist');
-
-        // // Check that the bar chart component is rendered
-        // cy.get('[data-cy="data-bar-chart"]').should('exist');
-
-        // // Check that the linear progress component is rendered
-        // cy.get('[data-cy="data-linear-progress"]').should('exist');
     });
 });
 
