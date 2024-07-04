@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import SearchIcon from "@mui/icons-material/Search";
 
 // Initial card data
@@ -176,6 +177,20 @@ const Column = ({ title, headingColor, column, cards, setCards }) => {
   );
 };
 
+Column.propTypes = {
+  title: PropTypes.string.isRequired,
+  headingColor: PropTypes.string.isRequired,
+  column: PropTypes.string.isRequired,
+  cards: PropTypes.arrayOf(
+    PropTypes.shape({
+      title: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired,
+      column: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  setCards: PropTypes.func.isRequired,
+};
+
 // The Card component represents a draggable card in the column
 const Card = ({ title, id, column, handleDragStart }) => {
   return (
@@ -192,6 +207,13 @@ const Card = ({ title, id, column, handleDragStart }) => {
   );
 };
 
+Card.propTypes = {
+  title: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  column: PropTypes.string.isRequired,
+  handleDragStart: PropTypes.func.isRequired,
+};
+
 // The DropIndicator component represents the drop target indicator
 const DropIndicator = ({ beforeId, column }) => {
   return (
@@ -201,6 +223,11 @@ const DropIndicator = ({ beforeId, column }) => {
       className="my-0.5 h-0.5 w-full bg-red-400 opacity-0"
     />
   );
+};
+
+DropIndicator.propTypes = {
+  beforeId: PropTypes.string,
+  column: PropTypes.string.isRequired,
 };
 
 export default NewAudit;
