@@ -1,5 +1,6 @@
 package com.insight.backend.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -65,5 +66,16 @@ public class CategoryControllerTest {
                 .andExpect(jsonPath("$[0].name").value("TestCategory1"))
                 .andExpect(jsonPath("$[1].id").value(2))
                 .andExpect(jsonPath("$[1].name").value("TestCategory2"));
+    }
+
+    @Test
+    public void testGetEmpties() throws Exception {
+        List<Category> categories = new ArrayList<>();
+        when(findCategoryService.findAllCategories()).thenReturn(categories);
+
+        // Perform the GET request and verify the response
+        mockMvc.perform(get("/api/v1/categories"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
     }
 }
