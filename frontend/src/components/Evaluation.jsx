@@ -15,7 +15,7 @@ function Evaluation() {
     const {auditId} = useParams();
 
     console.log(auditId);
-
+    
     const [mainProgress, setMainProgress] = useState(0);
     const [pointsDistribution, setPointsDistribution] = useState(new Array(6).fill(0));
 
