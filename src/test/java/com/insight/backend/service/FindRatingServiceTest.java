@@ -20,7 +20,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 /**
- * Test class for FindCategoryService.
+ * Test class for FindRatingService.
  */
 @ExtendWith(MockitoExtension.class)
 public class FindRatingServiceTest {
@@ -51,27 +51,28 @@ public class FindRatingServiceTest {
     }
 
     /**
-     * Test case for finding a category by ID when the category is found.
+     * Test case for finding a Rating by ID when the category is found.
      */
     @Test
     void testFindRatingsById_found() {
-        // Arrange: Set up mock behavior for categoryRepository
         when(ratingRepository.findById(1L)).thenReturn(Optional.of(rating1));
         Optional<Rating> foundRating = findRatingService.findRatingById(1L);
         assertEquals(rating1, foundRating.get());
     }
 
     /**
-     * Test case for finding a category by ID when the category is not found.
+     * Test case for finding a rating by ID when the category is not found.
      */
     @Test
     void testFindRatingById_notFound() {
-        // Arrange: Set up mock behavior for categoryRepository
         when(ratingRepository.findById(anyLong())).thenReturn(Optional.empty());
         Optional<Rating> foundRating = findRatingService.findRatingById(1L);
         assertTrue(foundRating.isEmpty());
     }
 
+    /**
+     * Test case for finding all ratings.
+     */
     @Test
     void testFindAllCRatings() {
         List<Rating> ratings = Arrays.asList(rating1, rating2);
