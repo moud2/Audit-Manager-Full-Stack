@@ -19,22 +19,22 @@ stages:
     - cd -
 
 # TESTING STAGE
-# e2e-test-job:   
-#   stage: test    
+# e2e-test-job:
+#   stage: test
 #   script:
 #     - echo "Running unit tests... This will take about 60 seconds."
 #     - echo "Code coverage is 90%"
 
 # integration-test-job:
-#   image: node:20 
+#   image: node:20
 #   stage: test
 #   script:
 #     - echo "[*] Starting Integration Test...."
 #     - echo "[*] Integration Test coverage is 100%"
 
-# lint-test-job:  
-#   image: node:20 
-#   stage: test    
+# lint-test-job:
+#   image: node:20
+#   stage: test
 #   script:
 #     - echo "Linting code... This will take about 10 seconds."
 #     - echo "No lint issues found."
@@ -76,12 +76,12 @@ docker-release-job:
     - docker logout
     - echo -n "${CI_REGISTRY_PASSWORD}" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin # Authenticate against the GitLab container registry
     - cd frontend
-    - docker build -t gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend .
-    - docker push gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend    
+    - docker build -t gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend:latest .
+    - docker push gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend:latest
     - echo "[*] Image Build & Deployment was executed."
 
 #DEPLOYMENT STAGE 
-publish-job:      
+publish-job:
   stage: deploy
   environment: 
     name: production

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FormGroup, FormControlLabel, Checkbox, Button } from '@mui/material';
 import { TextareaAutosize as BaseTextareaAutosize } from '@mui/base/TextareaAutosize';
 import { styled } from '@mui/system';
+import api from "../api.js";
 
 //Styling for the Comment Sections
 const Textarea = styled(BaseTextareaAutosize)(
@@ -39,11 +40,25 @@ const Textarea = styled(BaseTextareaAutosize)(
  */
 function PerformAudit() {
 
-  const [questions, setQuestions] = useState([
-    { id: 1, question_text: "Frage 1", points: null, comment: '', na: null},
-    { id: 2, question_text: "Frage 2", points: null, comment: '', na: null},
-    { id: 3, question_text: "Frage 3", points: null, comment: '', na: null}
-  ]);
+  const [questions, setQuestions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  /*fetching data from the backend*/
+  useEffect(() => {
+    api.get('/v1/audits/1/ratings') /*relative path, editable in .env files & api.js -*/
+        .then(response => {
+            console.log(response);
+            setQuestions(response.data);
+            setLoading(false);
+            })
+            .catch(err => {
+                console.error('Error fetching data:', err);
+                setError(err);
+                setLoading(false);
+            });
+    }, []);
+
 
   const updateQuestionById = (id, newPartialQuestion) => {
     const q = questions.map(question => id === question.id? {...question, ...newPartialQuestion} : question );
@@ -79,7 +94,7 @@ function PerformAudit() {
       <h1 className="px-10 py-5 font-bold">Audit durchführen</h1>
       {questions.map((question) => (
         <div key={question.id}>
-          <h2 className="px-10 py-5">{question.question_text}</h2>
+          <h2 className="px-10 py-5">{question.question}</h2>
           <FormGroup className="px-5 flex justify-center" row>
             {[0, 1, 2, 3, 4, 5, 'N/A'].map((label) => (
               <FormControlLabel
