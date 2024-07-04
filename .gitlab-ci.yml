@@ -32,18 +32,36 @@ frontend-build-job:
   image: node:20 
   stage: build
   environment: production
-  #rules:
-  #  - if: $CI_COMMIT_REF_NAME == "main"
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
   script:
     - echo "Building the application..."
     - cd frontend
     - npm cache clean --force
     - npm install  
-    - npm run build -- --mode=both
+    - npm run build -- --mode=production
     - echo "Building complete!"
   artifacts:
     paths:
       - frontend/dist/
+
+# BUILD STAGE
+frontend-build-job-fullstack:       
+  image: node:20 
+  stage: build
+  environment: production
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
+  script:
+    - echo "Building the application..."
+    - cd frontend
+    - npm cache clean --force
+    - npm install  
+    - npm run build -- --mode=fullstack
+    - echo "Building complete!"
+  artifacts:
+    paths:
+      - frontend/dist-fullstack/
 
 #RELEASE STAGE
 docker-release-job:
@@ -57,8 +75,8 @@ docker-release-job:
     DOCKER_TLS_CERTDIR: ""
   dependencies:
     - frontend-build-job
-  #rules:
-  #  - if: $CI_COMMIT_REF_NAME == "main"
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
   script:
     - echo "Building & Deploying Docker Image...."
     - docker logout
@@ -69,7 +87,7 @@ docker-release-job:
     - echo "[*] Image Build & Deployment was executed."
 
 #RELEASE STAGE
-docker-release-job-both:
+docker-release-job-fullstack:
   image: docker:20
   stage: release
   services:
@@ -79,16 +97,16 @@ docker-release-job-both:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""
   dependencies:
-    - frontend-build-job
-  #rules:
-  #  - if: $CI_COMMIT_REF_NAME == "main"
+    - frontend-build-job-fullstack
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
   script:
     - echo "Building & Deploying Docker Image...."
     - docker logout
     - echo -n "${CI_DEPLOY_PASSWORD}" | docker login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin # Authenticate against the GitLab container registry
     - cd frontend
-    - docker build -t gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend:both .
-    - docker push gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend:both    
+    - docker build -t gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend:fullstack .
+    - docker push gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend:fullstack    
     - echo "[*] Image Build & Deployment was executed."
 
 #DEPLOYMENT STAGE ...
