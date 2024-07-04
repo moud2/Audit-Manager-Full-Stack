@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.2.6'
     id 'io.spring.dependency-management' version '1.1.5'
+    id "org.sonarqube" version "4.4.1.3373"
 }
 
 group = 'com.insight'
@@ -74,4 +75,12 @@ test {
             }
         }
     }
+}
+
+sonar {
+  properties {
+    property "sonar.projectKey", "Insight__Backend"
+    property "sonar.projectName", "Insight__Backend"
+    property "sonar.qualitygate.wait", true 
+  }
 }
