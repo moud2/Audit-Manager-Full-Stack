@@ -18,6 +18,23 @@ stages:
     - npm ci --cache .npm --prefer-offline
     - cd -
 
+test-e2e:
+  stage: test
+  image: cypress/base:latest
+  script:
+    - cd frontend
+    - npx cypress install
+    - echo "Running Cypress e2e tests..."
+    - npm run dev &                             # Start the server in the background
+    - sleep 20                                  # Wait for the server to start (adjust time as needed)
+    - npx cypress run                           # Run Cypress end-to-end tests
+    - echo "Cypress e2e tests completed"
+  artifacts:
+    paths:
+      - cypress/screenshots/
+      - cypress/videos/
+    expire_in: 1 week
+
 # TESTING STAGE
 # e2e-test-job:
 #   stage: test
@@ -51,7 +68,7 @@ frontend-build-job:
   script:
     - echo "Building the application..."
     - cd frontend
-    - npm run build
+    - npm run build -- --mode=production
     - echo "Building complete! :)"
   artifacts:
     paths:

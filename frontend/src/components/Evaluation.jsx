@@ -2,36 +2,36 @@ import React from 'react';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
-import {BarChart} from '@mui/x-charts/BarChart';
+import { BarChart } from '@mui/x-charts/BarChart';
 import LinearProgress from '@mui/material/LinearProgress';
-
+import PropTypes from 'prop-types';
 
 function Evaluation() {
-
     let progress = 70;
-
 
     // Setup function progress bar
     function LinearProgressWithLabel(props) {
         return (
-            <Box sx={{display: 'flex', alignItems: 'center'}}>
-                <Box sx={{width: '100%', mr: 1}}>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Box sx={{ width: '100%', mr: 1 }}>
                     <LinearProgress variant="determinate" {...props} />
                 </Box>
-                <Box sx={{minWidth: 35}}>
-                    <Typography variant="body2" color="text.secondary">{`${Math.round(
-                        props.value,
-                    )}%`}</Typography>
+                <Box sx={{ minWidth: 35 }}>
+                    <Typography variant="body2" color="text.secondary">{`${Math.round(props.value)}%`}</Typography>
                 </Box>
             </Box>
         );
     }
 
+    LinearProgressWithLabel.propTypes = {
+        value: PropTypes.number.isRequired,
+    };
+
     // Setup progress circle
     function CircularProgressWithLabel(props) {
         return (
-            <Box sx={{position: 'relative', display: 'inline-flex'}}>
-                <CircularProgress variant="determinate" {...props} size={80}/>
+            <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+                <CircularProgress variant="determinate" {...props} size={80} />
                 <Box
                     sx={{
                         top: 0,
@@ -52,6 +52,10 @@ function Evaluation() {
         );
     }
 
+    CircularProgressWithLabel.propTypes = {
+        value: PropTypes.number.isRequired,
+    };
+
     const colors = ['#a50026', '#d73027', '#fdae61', '#d9ef8b', '#66bd63', '#006837'];
 
     return (
@@ -61,35 +65,35 @@ function Evaluation() {
             </div>
 
             <div id="result" className={"flex flex-col justify-center items-center h-20"}>
-                <Box className={"text-center"} sx={{width: '80%'}}>
-                    <LinearProgressWithLabel value={progress}/>
+                <Box className={"text-center"} sx={{ width: '80%' }}>
+                    <LinearProgressWithLabel value={progress} />
                 </Box>
                 <p className={"text-center text-xl"}>Gesamtfortschritt</p>
             </div>
 
             <div id="categories" className={"flex flex-row justify-center items-center"}>
                 <div className={"ml-6 m-8 text-center"}>
-                    <CircularProgressWithLabel value={progress} className={"size-60"}/>
+                    <CircularProgressWithLabel value={progress} className={"size-60"} />
                     <p className={"text-center"}>Kategorie 1</p>
                 </div>
                 <div className={"ml-6 m-8 text-center"}>
-                    <CircularProgressWithLabel value={progress} className={"size-60"}/>
+                    <CircularProgressWithLabel value={progress} className={"size-60"} />
                     <p className={"text-center"}>Kategorie 2</p>
                 </div>
                 <div className={"ml-6 m-8 text-center"}>
-                    <CircularProgressWithLabel value={progress} className={"size-60"}/>
+                    <CircularProgressWithLabel value={progress} className={"size-60"} />
                     <p className={"text-center"}>Kategorie 3</p>
                 </div>
                 <div className={"ml-6 m-8 text-center"}>
-                    <CircularProgressWithLabel value={progress} className={"size-60"}/>
+                    <CircularProgressWithLabel value={progress} className={"size-60"} />
                     <p className={"text-center"}>Kategorie 4</p>
                 </div>
                 <div className={"ml-6 m-8 text-center"}>
-                    <CircularProgressWithLabel value={progress} className={"size-60"}/>
+                    <CircularProgressWithLabel value={progress} className={"size-60"} />
                     <p className={"text-center"}>Kategorie 5</p>
                 </div>
                 <div className={"ml-6 m-8 text-center"}>
-                    <CircularProgressWithLabel value={progress} className={"size-60"}/>
+                    <CircularProgressWithLabel value={progress} className={"size-60"} />
                     <p className={"text-center"}>Kategorie 6</p>
                 </div>
             </div>
@@ -97,7 +101,7 @@ function Evaluation() {
             <div id="result_per_question" className={"flex flex-row justify-center items-center"}>
                 <BarChart
                     series={[
-                        {data: [4, 2, 8, 4, 1, 3]},
+                        { data: [4, 2, 8, 4, 1, 3] },
                     ]}
                     width={1200}
                     height={350}
@@ -122,9 +126,7 @@ function Evaluation() {
                 />
             </div>
         </div>
-
-
-    )
+    );
 }
 
 export default Evaluation;
