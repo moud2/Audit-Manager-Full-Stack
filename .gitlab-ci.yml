@@ -6,26 +6,69 @@ stages:
   - release
   - deploy
 
-# TESTING STAGE
-e2e-test-job:   
-  stage: test    
-  script:
-    - echo "Running unit tests... This will take about 60 seconds."
-    - echo "Code coverage is 90%"
 
-integration-test-job:
-  image: node:20 
+.setupNpm:
+  image: node:20
+  before_script:
+    - cd $(pwd)/frontend
+    - npm i
+
+    
+
+.setupCypress:
+  image: cypress/base:latest
+  before_script:
+    - cd $(pwd)/frontend
+    - npx cypress install
+    - npm i
+
+
+#TESTING STAGE
+test-e2e:
   stage: test
+  extends:
+    - .setupCypress
   script:
-    - echo "[*] Starting Integration Test....."
-    - echo "[*] Integration Test coverage is 100%"
+    - echo "Running Cypress e2e tests..."
+    - npm run dev &                             # Start the server in the background
+    - sleep 20                                  # Wait for the server to start (adjust time as needed)
+    - npx cypress run                           # Run Cypress end-to-end tests
+    - echo "Cypress e2e tests completed"
+  artifacts:
+    paths:
+      - cypress/screenshots/
+      - cypress/videos/
+    expire_in: 1 week
 
-lint-test-job:  
-  image: node:20 
-  stage: test    
+
+#test-integration:
+ # stage: test
+  #extends:
+    #- .setupCypress
+ # script:
+   # - echo "Running integration tests..."
+   # - npm run dev &                          # Start the server in the background
+   # - sleep 20                               # Wait for the server to start (adjust time as needed)
+   # - npm run integration-test               # Run integration tests
+   # - echo "Integration tests completed"
+  #artifacts:
+  #  paths:
+      #- cypress/screenshots/
+      #- cypress/videos/
+    #expire_in: 1 week
+
+test-lint:
+  stage: test
+  extends:
+    - .setupNpm
   script:
-    - echo "Linting code... This will take about 10 seconds."
-    - echo "No lint issues found."
+    - echo "Running linting..."
+    #- pwd                                        # use for debugging
+    #- ls                                         # use for debugging
+    - npm run lint                                # Run ESLint for linting
+    - echo "Linting completed"
+
+
 
 # BUILD STAGE
 frontend-build-job:       
