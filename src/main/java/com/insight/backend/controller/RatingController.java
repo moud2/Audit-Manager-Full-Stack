@@ -14,13 +14,12 @@ import com.insight.backend.exception.RatingNotFoundException;
 import com.insight.backend.model.Rating;
 import com.insight.backend.model.nestedRatings.RatingList;
 import com.insight.backend.service.rating.FindRatingService;
-import com.insight.backend.service.Rating.SaveRatingService;
+import com.insight.backend.service.rating.SaveRatingService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 
 
 @RestController
@@ -38,29 +37,6 @@ public class RatingController {
         this.objectMapper = objectMapper;
         this.findRatingService = findRatingService;
         this.saveRatingService = saveRatingService;
-//        ratings = new ArrayList<>();
-//
-//        Rating rating1 = new Rating();
-//        rating1.setId((long) 1);
-//        //rating1.setName("Mahamoud");
-//        rating1.setComment("This is the first comment");
-//        rating1.setPoints(5);
-//
-//        Rating rating2 = new Rating();
-//        rating2.setId((long) 2);
-//        //rating2.setName("Ahmed");
-//        rating2.setComment("This is the second comment");
-//        rating2.setPoints(4);
-//
-//        Rating rating3 = new Rating();
-//        rating3.setId((long) 3);
-//        //rating3.setName("John");
-//        rating3.setComment("This is the third comment");
-//        rating3.setPoints(3);
-//
-//        ratings.add(rating1);
-//        ratings.add(rating2);
-//        ratings.add(rating3);
     }
 
     /**
@@ -84,11 +60,6 @@ public class RatingController {
         }
     }
 
-
-/**
- * Controller for handling rating-related requests.
- */
-
     /**
      * Handles GET requests for retrieving ratings for a specific audit.
      *
@@ -97,11 +68,6 @@ public class RatingController {
      */
     @GetMapping("/api/v1/audits/{auditId}/ratings")
     public ResponseEntity<List<Map<String, Object>>> get(@PathVariable("auditId") Integer auditId) {
-
-        // Generate Test-Categories
-        /*Category category1 = new Category("categorytest1", null);
-        Category category2 = new Category("categorytest2", null);
-        Category category3 = new Category("categorytest3", null);*/
 
         // Generate Test-Ratings
         Rating rating1 = new Rating(false, "KOmmentar", 0, null, null);
@@ -278,14 +244,6 @@ public class RatingController {
         items1.add(item7);
 
 
-
-
-
-
-
-
-
-
         Map<String, Object> item8 = new HashMap<>();
         item8.put("id", 7);
         item8.put("category", category10);
@@ -327,7 +285,6 @@ public class RatingController {
         item12.put("na", true);
 
 
-
         List<Map<String, Object>> items2 = new ArrayList<>();
         items2.add(item8);
         items2.add(item9);
@@ -342,7 +299,6 @@ public class RatingController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ArrayList<>());
         }
-
 
 
         // // Error Handling 404 - Non-existing Audit
