@@ -12,7 +12,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.insight.backend.model.Category;
 import com.insight.backend.service.category.FindCategoryService;
-import com.insight.backend.service.category.SaveCategoryService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,15 +27,12 @@ import org.springframework.test.web.servlet.MockMvc;
 @ExtendWith(SpringExtension.class)
 public class CategoryControllerTest {
 
-    /* Mocked Controller and Service objects for testing */
+    /* Mocked Controller and Service object for testing */
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
     private FindCategoryService findCategoryService;
-
-    @MockBean
-    private SaveCategoryService saveCategoryService;
 
     private Category category1;
     private Category category2;
@@ -52,8 +48,6 @@ public class CategoryControllerTest {
         category2.setId(2L);
         category2.setName("TestCategory2");
 
-        when(saveCategoryService.saveCategory(category1)).thenReturn(category1);
-        when(saveCategoryService.saveCategory(category2)).thenReturn(category2);
     }
 
     @Test
