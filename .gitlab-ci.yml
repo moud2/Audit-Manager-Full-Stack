@@ -17,7 +17,7 @@ integration-test-job:
   image: node:20 
   stage: test
   script:
-    - echo "[*] Starting Integration Test...."
+    - echo "[*] Starting Integration Test....."
     - echo "[*] Integration Test coverage is 100%"
 
 lint-test-job:  
@@ -40,7 +40,7 @@ frontend-build-job:
     - npm cache clean --force
     - npm install  
     - npm run build -- --mode=production
-    - echo "Building complete! :)"
+    - echo "Building complete!"
   artifacts:
     paths:
       - frontend/dist/
