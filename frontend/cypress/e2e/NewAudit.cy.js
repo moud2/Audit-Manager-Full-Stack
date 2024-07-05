@@ -3,10 +3,10 @@ describe('NewAudit Component', () => {
       cy.visit('http://localhost:5173/newAudit');
     });
   
-    it('should render the search input and button', () => {
-      cy.get('input[type="search"]').should('be.visible');
+    it('should render the text input and button', () => {
+      cy.get('input[type="text"]').should('be.visible');
       cy.get('button').should('be.visible');
-      cy.get('button').find('svg').should('exist');
+      
     });
   
     it('should render the cards in the correct columns', () => {
@@ -32,5 +32,9 @@ describe('NewAudit Component', () => {
         .trigger('drop', { dataTransfer: new DataTransfer() });
   
         cy.wait(1000); // Wait for the drop event to be processed 
+    });
+    it('should navigate to /performAudit when Audit erstellen button is clicked', () => {
+      cy.get('button').contains('Audit erstellen').click();
+      cy.url().should('include', '/performAudit');
     });
   });
