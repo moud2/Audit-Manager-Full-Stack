@@ -59,6 +59,7 @@ test-lint:
   extends:
     - ".setup:npm"
   script:
+    - cd frontend
     - echo "Running linting..."
     #- pwd                                        # use for debugging
     #- ls                                         # use for debugging
