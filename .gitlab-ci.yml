@@ -57,7 +57,7 @@ test-e2e:
 test-lint:
   stage: test
   extends:
-    - .setupNpm
+    - ".setup:npm"
   script:
     - echo "Running linting..."
     #- pwd                                        # use for debugging
