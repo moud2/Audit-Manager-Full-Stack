@@ -3,10 +3,13 @@ describe('PerformAudit Component', () => {
     cy.visit('http://localhost:5173/performAudit');
     cy.intercept('GET', '/api/v1/audits/1/ratings', {
       statusCode: 200,
-      body: [{ id: 1, question: "Frage 1", points: null, comment: '', na: null},
-        { id: 2, question: "Frage 2", points: null, comment: '', na: null},
-        { id: 3, question: "Frage 3", points: null, comment: '', na: null}]
-  }).as('questions');
+      body: [
+        { id: 1, question: "Frage 1", points: null, comment: '', na: null },
+        { id: 2, question: "Frage 2", points: null, comment: '', na: null },
+        { id: 3, question: "Frage 3", points: null, comment: '', na: null }
+      ]
+    }).as('questions');
+    cy.visit('http://localhost:5173/performAudit');
   });
 
   it('should allow typing in all textareas', () => {
@@ -43,6 +46,14 @@ describe('PerformAudit Component', () => {
 
 describe('PerformAudit Component with fetched data', () => {
   it('presents requested data as expected', () => {
+    cy.intercept('GET', '/api/v1/audits/1/ratings', {
+      statusCode: 200,
+      body: [
+        { id: 1, question: "Frage 1", points: 2, comment: 'okay', na: false },
+        { id: 2, question: "Frage 2", points: null, comment: 'nachholen', na: null },
+        { id: 3, question: "Frage 3", points: null, comment: '', na: true }
+      ]
+    }).as('questions');
     cy.visit('http://localhost:5173/performAudit');
     cy.intercept('GET', '/api/v1/audits/1/ratings', {
         statusCode: 200,
