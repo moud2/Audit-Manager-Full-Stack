@@ -65,7 +65,7 @@ function App() {
                             <Route path="/" element={<Dashboard/>}/>
                             <Route path="/newAudit" element={<NewAudit/>}/>
                             <Route path="/performAudit/:auditId" element={<PerformAudit/>}/>
-                            <Route path="/evaluation" element={<Evaluation/>}/>
+                            <Route path="/evaluation/:auditId" element={<Evaluation/>}/>
                         </Routes>
                     </ThemeProvider>
                 </div>

@@ -6,26 +6,69 @@ stages:
   - release
   - deploy
 
-# TESTING STAGE
-e2e-test-job:   
-  stage: test    
-  script:
-    - echo "Running unit tests... This will take about 60 seconds."
-    - echo "Code coverage is 90%"
 
-integration-test-job:
-  image: node:20 
+.setupNpm:
+  image: node:20
+  before_script:
+    - cd $(pwd)/frontend
+    - npm i
+
+    
+
+.setupCypress:
+  image: cypress/base:latest
+  before_script:
+    - cd $(pwd)/frontend
+    - npx cypress install
+    - npm i
+
+
+#TESTING STAGE
+test-e2e:
   stage: test
+  extends:
+    - .setupCypress
   script:
-    - echo "[*] Starting Integration Test....."
-    - echo "[*] Integration Test coverage is 100%"
+    - echo "Running Cypress e2e tests..."
+    - npm run dev &                             # Start the server in the background
+    - sleep 20                                  # Wait for the server to start (adjust time as needed)
+    - npx cypress run                           # Run Cypress end-to-end tests
+    - echo "Cypress e2e tests completed"
+  artifacts:
+    paths:
+      - cypress/screenshots/
+      - cypress/videos/
+    expire_in: 1 week
 
-lint-test-job:  
-  image: node:20 
-  stage: test    
+
+#test-integration:
+ # stage: test
+  #extends:
+    #- .setupCypress
+ # script:
+   # - echo "Running integration tests..."
+   # - npm run dev &                          # Start the server in the background
+   # - sleep 20                               # Wait for the server to start (adjust time as needed)
+   # - npm run integration-test               # Run integration tests
+   # - echo "Integration tests completed"
+  #artifacts:
+  #  paths:
+      #- cypress/screenshots/
+      #- cypress/videos/
+    #expire_in: 1 week
+
+test-lint:
+  stage: test
+  extends:
+    - .setupNpm
   script:
-    - echo "Linting code... This will take about 10 seconds."
-    - echo "No lint issues found."
+    - echo "Running linting..."
+    #- pwd                                        # use for debugging
+    #- ls                                         # use for debugging
+    - npm run lint                                # Run ESLint for linting
+    - echo "Linting completed"
+
+
 
 # BUILD STAGE
 frontend-build-job:       
@@ -44,6 +87,24 @@ frontend-build-job:
   artifacts:
     paths:
       - frontend/dist/
+
+# BUILD STAGE
+frontend-build-job-fullstack:       
+  image: node:20 
+  stage: build
+  environment: production
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
+  script:
+    - echo "Building the application..."
+    - cd frontend
+    - npm cache clean --force
+    - npm install  
+    - npm run build -- --mode=fullstack
+    - echo "Building complete!"
+  artifacts:
+    paths:
+      - frontend/dist-fullstack/
 
 #RELEASE STAGE
 docker-release-job:
@@ -68,7 +129,30 @@ docker-release-job:
     - docker push gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend:latest    
     - echo "[*] Image Build & Deployment was executed."
 
-#DEPLOYMENT STAGE 
+#RELEASE STAGE
+docker-release-job-fullstack:
+  image: docker:20
+  stage: release
+  services:
+    - docker:dind
+  variables:
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
+  dependencies:
+    - frontend-build-job-fullstack
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
+  script:
+    - echo "Building & Deploying Docker Image...."
+    - docker logout
+    - echo -n "${CI_DEPLOY_PASSWORD}" | docker login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin # Authenticate against the GitLab container registry
+    - cd frontend
+    - docker build -t gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend:fullstack .
+    - docker push gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend:fullstack    
+    - echo "[*] Image Build & Deployment was executed."
+
+#DEPLOYMENT STAGE ...
 publish-job:      
   image: ubuntu:24.04
   stage: deploy
