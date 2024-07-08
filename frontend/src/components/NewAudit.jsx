@@ -17,7 +17,7 @@ export const NewAudit = () => {
   return (
     <>
       <form className="w-[240px] flex justify-center items-center mx-auto m-8">
-        <div className="absolute">
+        <div className="relative w-full">
           <input
             type="search"
             placeholder="Name"
@@ -38,7 +38,7 @@ const Board = () => {
   const [cards, setCards] = useState(DEFAULT_CARDS);
 
   return (
-    <div className="flex justify-center gap-10 h-full w-full overflow-scroll p-12">
+    <div className="flex justify-center gap-10 h-[calc(80vh-192px)] w-full overflow-hidden p-4">
       <Column
         title="Verfügbar kategorien"
         column="Verfügbar kategorien"
@@ -155,7 +155,7 @@ const Column = ({ title, headingColor, column, cards, setCards }) => {
   };
 
   return (
-    <div className="w-1/3 shrink-0 bg-white rounded-lg shadow-md">
+    <div className="w-1/3 shrink-0 bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
       <div className="mb-3 flex items-center justify-between p-4 border-b border-neutral-200">
         <h3 className={`font-medium ${headingColor}`}>{title}</h3>
         <span className="rounded text-sm text-neutral-500">
@@ -166,7 +166,7 @@ const Column = ({ title, headingColor, column, cards, setCards }) => {
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        className="h-[400px] w-full p-4 transition-colors"
+        className="flex-grow p-4 transition-colors overflow-auto"
       >
         {filteredCards.map((c) => (
           <Card key={c.id} {...c} handleDragStart={handleDragStart} />
