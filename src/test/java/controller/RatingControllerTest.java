@@ -106,4 +106,19 @@ public class RatingControllerTest {
         // save should be called once
         verify(saveRatingService, times(1)).saveRating(any());
     }
+
+    @Test
+    public void testPatchNotExistingRating() throws Exception {
+        // Mock the service to return the Rating
+        when(findCategoryService.findRatingById(1L)).thenReturn(Optional.empty());
+
+        // Perform the Patch Request with java spring boot patch body
+        mockMvc.perform(patch("/api/v1/ratings/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("[{\"op\":\"replace\",\"path\":\"/comment\",\"value\":\"This is not the first comment\"}]"))
+                .andExpect(status().isNotFound());
+
+        // save should not be called
+        verify(saveRatingService, never()).saveRating(any());
+    }
 }
