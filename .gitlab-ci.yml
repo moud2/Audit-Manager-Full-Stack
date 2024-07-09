@@ -75,8 +75,8 @@ frontend-build-job:
   image: node:20 
   stage: build
   environment: production
-  rules:
-    - if: $CI_COMMIT_REF_NAME == "main"
+  #rules:
+  #  - if: $CI_COMMIT_REF_NAME == "main"
   script:
     - echo "Building the application..."
     - cd frontend
@@ -93,8 +93,9 @@ frontend-build-job-fullstack:
   image: node:20 
   stage: build
   environment: production
-  rules:
-    - if: $CI_COMMIT_REF_NAME == "main"
+  #rules:
+  #  - if: $CI_COMMIT_REF_NAME == "main"
+  allow-failure: true
   script:
     - echo "Building the application..."
     - cd frontend
@@ -104,7 +105,7 @@ frontend-build-job-fullstack:
     - echo "Building complete!"
   artifacts:
     paths:
-      - frontend/dist-fullstack/
+      - frontend/dist/
 
 #RELEASE STAGE
 docker-release-job:
@@ -141,8 +142,9 @@ docker-release-job-fullstack:
     DOCKER_TLS_CERTDIR: ""
   dependencies:
     - frontend-build-job-fullstack
-  rules:
-    - if: $CI_COMMIT_REF_NAME == "main"
+  #rules:
+  #  - if: $CI_COMMIT_REF_NAME == "main"
+  allow-failure: true
   script:
     - echo "Building & Deploying Docker Image...."
     - docker logout
