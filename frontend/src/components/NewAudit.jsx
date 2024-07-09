@@ -36,16 +36,13 @@ const NewAudit = () => {
 
   return (
     <>
-      <form className="w-[300px] flex justify-center items-center mx-auto m-8">
-        <div className="flex w-full items-center gap-2">
+      <form className="w-[240px] flex justify-center items-center mx-auto m-8">
+        <div className="relative flex w-full items-center gap-2">
           <input
-            type="search"
+            type="text"
             placeholder="Name"
             className="w-full p-4 h-[45px] rounded-t-lg rounded-b-lg bg-neutral-200 shadow-inner"
           />
-          <Button variant="outlined" className="h-[45px]">
-            Next
-          </Button>
         </div>
       </form>
       <Board cards={cards} setCards={setCards} />{" "}
@@ -57,7 +54,7 @@ const NewAudit = () => {
 // The Board component renders two columns and manages the state of the cards
 const Board = ({ cards, setCards }) => {
   return (
-    <div className="flex justify-center gap-10 h-full w-full overflow-y-hidden p-12">
+    <div className="flex justify-center gap-10 h-[calc(80vh-192px)] w-full overflow-hidden p-4">
       <Column
         title="Verfügbare Kategorien"
         column="Verfügbare Kategorien"
@@ -166,18 +163,8 @@ const Column = ({ title, headingColor, column, cards, setCards }) => {
     }
   };
 
-  // Calculate dynamic height based on the number of cards
-  const cardHeight = 0; // Adjust this value as needed
-  const cardMargin = 8; // Margin between cards
-  const columnPadding = 10; // Padding of the column
-  const columnHeight =
-    filteredCards.length * (cardHeight + cardMargin) + columnPadding;
-
   return (
-    <div
-      className="w-1/3 shrink-0 bg-white rounded-lg shadow-md mb-10"
-      style={{ minHeight: `${columnHeight}px` }}
-    >
+    <div className="w-1/3 shrink-0 bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
       <div className="mb-3 flex items-center justify-between p-4 border-b border-neutral-200">
         <h3 className={`font-medium ${headingColor}`}>{title}</h3>
         <span className="rounded text-sm text-neutral-500">
@@ -188,7 +175,7 @@ const Column = ({ title, headingColor, column, cards, setCards }) => {
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        className="w-full p-4 transition-colors overflow-y-auto"
+        className="flex-grow p-4 transition-colors overflow-auto"
       >
         {filteredCards.map((c) => (
           <Card key={c.id} {...c} handleDragStart={handleDragStart} />
