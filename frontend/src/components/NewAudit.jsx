@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
 import api from "../api.js";
-import Button from "@mui/material/Button";
+import { useNavigate } from "react-router-dom";
 
 const NewAudit = () => {
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const navigate = useNavigate();
+  const handleCreateAuditClick = () => {
+    navigate("/performAudit");
+  };
 
   useEffect(() => {
     api
@@ -35,7 +40,7 @@ const NewAudit = () => {
   }
 
   return (
-    <>
+    <div>
       <form className="w-[240px] flex justify-center items-center mx-auto m-8">
         <div className="relative flex w-full items-center gap-2">
           <input
@@ -47,7 +52,14 @@ const NewAudit = () => {
       </form>
       <Board cards={cards} setCards={setCards} />{" "}
       {/* Pass cards and setCards to Board */}
-    </>
+      <div className="flex p-10">
+        <button
+          onClick={handleCreateAuditClick}
+          className="absolute bottom-20 right-16 p-2 bg-blue-500 text-white rounded">
+            Audit erstellen
+        </button>
+      </div>
+    </div>
   );
 };
 
