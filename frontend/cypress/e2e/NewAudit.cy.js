@@ -40,7 +40,6 @@ describe("NewAudit Component Tests", () => {
     }).as("getCategories");
 
     cy.contains("Loading...").should("be.visible");
-    
     cy.contains("Loading...").should("not.exist");
   });
 
@@ -50,13 +49,11 @@ describe("NewAudit Component Tests", () => {
     );
 
     cy.contains("Loading...").should("be.visible");
-    
     cy.contains("Fehler:").should("be.visible");
   });
 
   it("should render the cards in the correct columns", () => {
     cy.contains("Verfügbare Kategorien").parent().should("be.visible");
-
     cy.contains("Ausgewählte Kategorien").parent().should("be.visible");
   });
 
