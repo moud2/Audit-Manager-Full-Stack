@@ -4,7 +4,9 @@ import java.util.*;
 
 import com.insight.backend.model.Audit;
 import com.insight.backend.model.newAudit.AuditRequest;
+import com.insight.backend.service.audit.FindAuditService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,22 +14,37 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * AuditsController is a REST controller that handles HTTP requests related to audits.
+ */
 @RestController
 public class AuditsController {
 
+    /** 
+     * The FindAuditService to use the service methods.
+     */
+    private final FindAuditService findAuditService;
+
+    /**
+     * Constructs a new AuditsController with the specified FindAuditService.
+     * 
+     * @param findAuditService the service to find audits
+     */
+    @Autowired
+    public AuditsController(FindAuditService findAuditService) {
+        this.findAuditService = findAuditService; 
+    }
+
+    /**
+     * GET requests for retrieving all audits.
+     * 
+     * @return a ResponseEntity containing a list of Audit objects
+     */
     @GetMapping("api/v1/audits")
     public ResponseEntity<List<Audit>> getAudits() {
-        List<Audit> auditList = new ArrayList<>();
+        List<Audit> response = findAuditService.findAllAudits();
 
-        // TODO: Temporary code for basic functionality | remove and reimplement properly later
-        Audit audit1 = new Audit("Security Assessment; Kunde: Google LTD", Set.of());
-        Audit audit2 = new Audit("Pentest; Kunde: Amazon LTD", Set.of());
-        audit1.setId((long) 1);
-        audit2.setId((long) 2);
-        auditList.add(audit1);
-        auditList.add(audit2);
-
-        return ResponseEntity.ok(auditList);
+        return ResponseEntity.ok(response);
     }
 
     Integer ID = 1; 
