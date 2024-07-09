@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 
 // Initial card data
@@ -14,22 +15,29 @@ const DEFAULT_CARDS = [
 ];
 
 export const NewAudit = () => {
+  const navigate = useNavigate();
+  const handleCreateAuditClick = () => {
+    navigate("/performAudit");
+  };
   return (
-    <>
-      <form className="w-[240px] flex justify-center items-center mx-auto m-8">
-        <div className="relative w-full">
-          <input
-            type="search"
-            placeholder="Name"
-            className="w-full p-4 rounded-t-lg rounded-b-lg bg-neutral-200 shadow-inner"
-          />
-          <button className="absolute right-1 top-1/2 -translate-y-1/2 p-3 bg-neutral-400 rounded-t-lg rounded-b-lg shadow-md">
-            <SearchIcon />
-          </button>
-        </div>
-      </form>
+    <div className="min-h-screen overflow-hidden p-4">
+      <div className="flex flex-col items-start mb-3"> 
+        <input
+          type="text"
+          placeholder="Auditname"
+          className="p-2 rounded-t-lg rounded-b-lg bg-neutral-200 shadow-inner w-1/3"
+        />
+      </div>
       <Board />
-    </>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '10px' }}>
+        <button
+          onClick={handleCreateAuditClick}
+          className="mt-1 p-2 bg-blue-500 text-white rounded"
+        >
+          Audit erstellen
+        </button>
+      </div>
+    </div>
   );
 };
 
@@ -38,21 +46,23 @@ const Board = () => {
   const [cards, setCards] = useState(DEFAULT_CARDS);
 
   return (
-    <div className="flex justify-center gap-10 h-[calc(80vh-192px)] w-full overflow-hidden p-4">
-      <Column
-        title="Verfügbar kategorien"
-        column="Verfügbar kategorien"
-        headingColor="text-neutral-700"
-        cards={cards}
-        setCards={setCards}
-      />
-      <Column
-        title="Ausgewählte kategorien"
-        column="Ausgewählte kategorien"
-        headingColor="text-neutral-700"
-        cards={cards}
-        setCards={setCards}
-      />
+    <div className="flex flex-col items-start gap-4 w-full p-1"> 
+      <div className="flex gap-4 w-full">
+        <Column
+          title="Verfügbar kategorien"
+          column="Verfügbar kategorien"
+          headingColor="text-neutral-700"
+          cards={cards}
+          setCards={setCards}
+        />
+        <Column
+          title="Ausgewählte kategorien"
+          column="Ausgewählte kategorien"
+          headingColor="text-neutral-700"
+          cards={cards}
+          setCards={setCards}
+        />
+      </div>
     </div>
   );
 };
