@@ -14,19 +14,34 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * AuditsController is a REST controller that handles HTTP requests related to audits.
+ */
+
 @RestController
 public class AuditsController {
 
-    /* */
+    /** 
+     * The FindAuditService to use the service methods.
+     */
     private final FindAuditService findAuditService;
 
-    /* */
+    /* GET request for audits with placeholder data */
+    /**
+     * Constructs a new AuditsController with the specified FindAuditService.
+     * 
+     * @param findAuditService the service to find audits
+     */
     @Autowired
     public AuditsController(FindAuditService findAuditService) {
         this.findAuditService = findAuditService; 
     }
 
-    /* */
+    /**
+     * GET requests for retrieving all audits.
+     * 
+     * @return a ResponseEntity containing a list of Audit objects
+     */
     @GetMapping("api/v1/audits")
     public ResponseEntity<List<Audit>> getAudits() {
         List<Audit> response = findAuditService.findAllAudits();

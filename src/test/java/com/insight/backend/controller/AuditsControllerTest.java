@@ -2,13 +2,6 @@ package com.insight.backend.controller;
 
 import java.util.*;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.insight.backend.model.Audit;
 import com.insight.backend.service.audit.FindAuditService;
 
@@ -22,31 +15,53 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+/**
+ * test class for testing AuditsController
+ */
 @WebMvcTest(AuditsController.class)
 @ExtendWith(SpringExtension.class)
 public class AuditsControllerTest {
 
-    /* Mocked Audit and Service objects for testing */
+    /**
+     * MockMvc instance for HTTP request mocking
+     */
     @Autowired
     private MockMvc mockMvc;
 
+    /**
+     * MockBean for FindAutitService
+     */
     @MockBean
     private FindAuditService findAuditService;
 
     private Audit audit1;
     private Audit audit2;
 
-    /* Audit objects as testdata, save in database */
+    /**
+     * Set up test data before each test method execution.
+     */
     @BeforeEach
     public void setup() {
         audit1 = new Audit();
         audit2 = new Audit();
         audit1.setName("TestAudit1");
         audit2.setName("TestAudit2");
-        audit1.setId((long) 1);
-        audit2.setId((long) 2);
+        audit1.setId(1L);
+        audit2.setId(2L);
     }
 
+    /**
+     * Tests getting all available audits.
+     * 
+     * @throws Exception if an error occurs during the request
+     */
     @Test
     public void testGetAllAudits() throws Exception {
         // Mock the service to return the Audits
@@ -63,4 +78,21 @@ public class AuditsControllerTest {
                 .andExpect(jsonPath("$[1].id").value(2))
                 .andExpect(jsonPath("$[1].name").value("TestAudit2"));
     }
+
+    /**
+     * Test gettin an empty list of audits.
+     * 
+     * @throws Exception if an error occurs during the request
+     */
+    @Test
+    public void testGetEmpties() throws Exception {
+        List<Audit> audits = new ArrayList<>();
+        when(findAuditService.findAllAudits()).thenReturn(audits);
+
+        // Perform the GET request and verify the response
+        mockMvc.perform(get("/api/v1/audits"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
+    }
+
 }
