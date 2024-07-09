@@ -34,7 +34,6 @@ describe("NewAudit Page Tests", () => {
     });
 
     it("Categories are fetched and displayed correctly", () => {
-      cy.wait("@getCategories");
       cy.get(".cursor-grab").should("have.length", 2);
       cy.get(".cursor-grab").first().should("contain", "Category 1");
       cy.get(".cursor-grab").last().should("contain", "Category 2");
