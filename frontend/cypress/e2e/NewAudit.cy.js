@@ -12,7 +12,7 @@ describe("NewAudit Component Tests", () => {
   });
 
   it("Displays loading state, fetches, and renders categories", () => {
-    cy.intercept("GET", "http://localhost:8080/api/v1/categories", {
+    cy.intercept("GET", "/v1/categories", {
       statusCode: 200,
       body: [
         { id: 1, name: "Server Administration" },
