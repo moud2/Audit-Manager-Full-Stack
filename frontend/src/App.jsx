@@ -57,7 +57,7 @@ const theme = createTheme({
 function App() {
     return (
         <Router>
-            <div className="flex mb-16">
+            <div className="flex mt-16">
                 <Sidebar/>
                 <div className="ml-64 p-4 w-full">
                     <ThemeProvider theme={theme}>
