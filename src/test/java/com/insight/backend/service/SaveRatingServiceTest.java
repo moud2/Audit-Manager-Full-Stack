@@ -65,8 +65,6 @@ public class SaveRatingServiceTest {
     /**
      * Test saving a single rating.
      * @deprecated
-     * 
-     * @throws Exception if an error occurs during the request
      */
     @Test
     void testSaveRating() {
