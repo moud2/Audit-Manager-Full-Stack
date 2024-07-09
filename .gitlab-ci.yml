@@ -95,7 +95,7 @@ frontend-build-job-fullstack:
   environment: production
   #rules:
   #  - if: $CI_COMMIT_REF_NAME == "main"
-  allow-failure: true
+  allow_failure: true
   script:
     - echo "Building the application..."
     - cd frontend
@@ -144,7 +144,7 @@ docker-release-job-fullstack:
     - frontend-build-job-fullstack
   #rules:
   #  - if: $CI_COMMIT_REF_NAME == "main"
-  allow-failure: true
+  allow_failure: true
   script:
     - echo "Building & Deploying Docker Image...."
     - docker logout
