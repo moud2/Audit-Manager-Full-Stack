@@ -120,8 +120,8 @@ docker-release-job:
     DOCKER_TLS_CERTDIR: ""
   dependencies:
     - frontend-build-job
-  #rules:
-  #  - if: $CI_COMMIT_REF_NAME == "main"
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
   script:
     - echo "Building & Deploying Docker Image...."
     - docker logout
@@ -143,8 +143,8 @@ publish-job:
     REMOTE_USERNAME: stud-fim  
   environment: 
     name: production
-  rules:
-    - if: $CI_COMMIT_REF_NAME == "main"
+  #rules:
+  #  - if: $CI_COMMIT_REF_NAME == "main"
   script:
     - apt update && apt upgrade -y
     - apt install ssh podman -y
