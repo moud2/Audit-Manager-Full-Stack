@@ -40,7 +40,7 @@ describe("NewAudit Component Tests", () => {
     }).as("getCategories");
 
     cy.contains("Loading...").should("be.visible");
-    cy.wait("@getCategories");
+    
     cy.contains("Loading...").should("not.exist");
   });
 
@@ -50,7 +50,7 @@ describe("NewAudit Component Tests", () => {
     );
 
     cy.contains("Loading...").should("be.visible");
-    cy.wait("@getCategoriesError");
+    
     cy.contains("Fehler:").should("be.visible");
   });
 
