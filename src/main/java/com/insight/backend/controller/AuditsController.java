@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * AuditsController is a REST controller that handles HTTP requests related to audits.
  */
-
 @RestController
 public class AuditsController {
 
@@ -26,7 +25,6 @@ public class AuditsController {
      */
     private final FindAuditService findAuditService;
 
-    /* GET request for audits with placeholder data */
     /**
      * Constructs a new AuditsController with the specified FindAuditService.
      * 
