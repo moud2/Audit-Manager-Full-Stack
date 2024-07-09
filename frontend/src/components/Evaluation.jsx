@@ -147,35 +147,35 @@ function Evaluation() {
     const colors = ['#a50026', '#d73027', '#fdae61', '#d9ef8b', '#66bd63', '#006837'];
 
     return (
-        <div>
+        <div className="p-4 flex flex-col items-center">
             <div id="title">
                 <h1 className="text-center text-4xl m-6">Evaluation</h1>
             </div>
 
-            <div id="result" className={"flex flex-col justify-center items-center h-20"}>
+            <div id="result" className={"w-full flex flex-col justify-center items-center h-20 mb-6"}>
                 <Box className={"text-center"} sx={{width: '80%'}}>
                     <LinearProgressWithLabel value={mainProgress}/>
                 </Box>
                 <p className={"text-center text-xl"}>Gesamtfortschritt</p>
             </div>
 
-            <div id="categories" className={"flex flex-row justify-center items-center"}>
+            <div id="categories" className={"w-full flex flex-wrap justify-center items-center mb-6 lg:flex-nowrap"}>
                 {Object.keys(categoryProgress).map(categoryId => (
-                    <div key={categoryId} className={"ml-6 m-8 text-center"}>
+                    <div key={categoryId} className={"flex flex-col items-center"}>
                         <CircularProgressWithLabel
-                            value={categoryProgress[categoryId].progress} className={"size-60"}/>
-                        <p className={"text-center"}>{categoryProgress[categoryId].name}</p>
+                            value={categoryProgress[categoryId].progress} className={"size-60 mb-2"}/>
+                        <p className={"text-center mt-2"}>{categoryProgress[categoryId].name}</p>
                     </div>
                 ))}
             </div>
 
             <div id="result_per_question"
-                 className={"flex flex-row justify-center items-center"}>
+                 className={"max-w-full overflow-x-auto"}>
                 <BarChart
                     series={[
                         {data: pointsDistribution},
                     ]}
-                    width={1200}
+                    width="100%"
                     height={350}
                     xAxis={[
                         {

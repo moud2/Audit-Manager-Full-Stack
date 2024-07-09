@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom';
 
 const Sidebar = () => {
     return (
-        <div className="w-64 h-[calc(100vh-4rem-4.5rem)] bg-gray-200 p-4 shadow-md fixed">
+        <div className="w-64 h-[calc(100vh-4rem-4.5rem)] bg-gray-200 p-4 shadow-md fixed z-20">
             <h2 className="text-2xl font-semibold mb-4">Übersicht</h2>
             <ul>
                 <li className="mb-2">
