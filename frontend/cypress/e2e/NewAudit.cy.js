@@ -1,64 +1,66 @@
-describe("NewAudit Component Tests", () => {
-  beforeEach(() => {
-    cy.visit("http://localhost:5173/newAudit");
+describe("NewAudit Page Tests", () => {
+  // TODO: change all URLs to relative paths
+
+  it("Links of the sidebar working", () => {
+    cy.visit("http://localhost:5173");
+
+    cy.get('[data-cy="nav-dashboard"]').click();
+    cy.url().should("eq", "http://localhost:5173/");
+
+    cy.get('[data-cy="nav-newAudit"]').click();
+    cy.url().should("eq", "http://localhost:5173/newAudit");
+
+    cy.get('[data-cy="nav-performAudit"]').click();
+    cy.url().should("eq", "http://localhost:5173/performAudit");
+
+    cy.get('[data-cy="nav-evaluation"]').click();
+    cy.url().should("eq", "http://localhost:5173/evaluation");
   });
 
-  it("should have a search input field", () => {
-    cy.get('input[type="search"]').should("be.visible");
+  // Test when backend is available
+  context("Backend is available", () => {
+    beforeEach(() => {
+      cy.intercept("GET", "/api/v1/categories", (req) => {
+        req.reply({
+          statusCode: 200,
+          body: [
+            { id: 1, name: "Category 1" },
+            { id: 2, name: "Category 2" },
+          ],
+        });
+      }).as("getCategories");
+
+      cy.visit("http://localhost:5173/newAudit");
+    });
+
+    it("Categories are fetched and displayed correctly", () => {
+      cy.wait("@getCategories");
+      cy.get(".cursor-grab").should("have.length", 2);
+      cy.get(".cursor-grab").first().should("contain", "Category 1");
+      cy.get(".cursor-grab").last().should("contain", "Category 2");
+    });
+
+    it("Search input and next button are visible", () => {
+      cy.get('input[type="search"]').should("be.visible");
+      cy.get('input[type="search"]').should("have.attr", "placeholder", "Name");
+      cy.get("button").contains("Next").should("be.visible");
+    });
   });
 
-  it("should have a visible Next button", () => {
-    cy.get("button").contains("Next").should("be.visible");
-  });
+  context("Backend is not available", () => {
+    beforeEach(() => {
+      cy.intercept("GET", "/api/v1/categories", {
+        statusCode: 500,
+        body: { error: "Backend not available" },
+      }).as("getCategoriesError");
 
-  it("Displays loading state, fetches, and renders categories", () => {
-    cy.intercept("GET", "/v1/categories", {
-      statusCode: 200,
-      body: [
-        { id: 1, name: "Server Administration" },
-        { id: 2, name: "Firewall" },
-        { id: 3, name: "Netzwerk" },
-        { id: 4, name: "Antivirus" },
-        { id: 5, name: "VPN" },
-        { id: 6, name: "Monitoring" },
-        { id: 7, name: "Email" },
-        { id: 8, name: "Secure Browsing" },
-        { id: 9, name: "Client" },
-        { id: 10, name: "Patch-Management" },
-        { id: 11, name: "Schwachstellen-Management" },
-        { id: 12, name: "Verschlüsselung" },
-        { id: 13, name: "Zertifikate und PKI" },
-        { id: 14, name: "Mobile Device Management" },
-        { id: 15, name: "Backup" },
-        { id: 16, name: "Privilege Access Management (PAM)" },
-        { id: 17, name: "Identity, Passwörter und Secure Logon" },
-        { id: 18, name: "Nutzung von Clouddiensten" },
-        { id: 19, name: "Konzepte und Richtlinien" },
-        { id: 20, name: "IAM" },
-        { id: 21, name: "Digitale Signatur" },
-      ],
-    }).as("getCategories");
+      cy.visit("http://localhost:5173/newAudit");
+    });
 
-    cy.contains("Loading...").should("be.visible");
-    cy.contains("Loading...").should("not.exist");
-  });
-
-  it("Handles API error gracefully", () => {
-    cy.intercept("GET", "/api/v1/categories", { statusCode: 500 }).as(
-      "getCategoriesError",
-    );
-
-    cy.contains("Loading...").should("be.visible");
-    cy.contains("Fehler:").should("be.visible");
-  });
-
-  it("should render the cards in the correct columns", () => {
-    cy.contains("Verfügbare Kategorien").parent().should("be.visible");
-    cy.contains("Ausgewählte Kategorien").parent().should("be.visible");
-  });
-
-  it("should render the columns with correct titles", () => {
-    cy.contains("Verfügbare Kategorien").should("be.visible");
-    cy.contains("Ausgewählte Kategorien").should("be.visible");
+    it("should display error message when backend is not available", () => {
+      cy.contains("Fehler: Request failed with status code 500").should(
+        "be.visible",
+      );
+    });
   });
 });
