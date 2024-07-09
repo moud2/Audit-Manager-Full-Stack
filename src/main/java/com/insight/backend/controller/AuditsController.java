@@ -2,9 +2,12 @@ package com.insight.backend.controller;
 
 import java.util.*;
 
+import com.insight.backend.dto.AuditResponseDTO;
+import com.insight.backend.dto.NewAuditDTO;
 import com.insight.backend.model.Audit;
 import com.insight.backend.model.newAudit.AuditRequest;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,30 +36,23 @@ public class AuditsController {
     Integer ID = 1; 
 
     @PostMapping("/api/v1/audits/new")
-    public ResponseEntity<Map<String, Object>> postWithRequestBody(@RequestBody com.insight.backend.model.newAudit.AuditRequest request) {
+    public ResponseEntity<Map<String, Object>> postWithRequestBody(@Valid @RequestBody NewAuditDTO newAuditDTO) {
 
-        // Check if both keys are correctly given
-        if (request.getName() == null || request.getCategories() == null) {
+        AuditResponseDTO responseDTO = CreateAuditService(newAuditDTO);
+
+        if (responseDTO == null) {
             Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("error", "missing input objects");
+            errorResponse.put("error", "failed_to_create");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
 
-        // Create an instance of Create_audit and call the get_input method
-        ID++;
-        if (ID == 0) {
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("error", "failed_to_create");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse); 
-        } 
-
-
-        // Create return message and return if everything is correct
+         // Create return message and return if everything is correct
         Map<String, Object> responseMap = new HashMap<>();
-        responseMap.put("id", ID); 
-        responseMap.put("name", request.getName());
-
+        responseMap.put("id", responseDTO.getId());
+        responseMap.put("name", responseDTO.getName());
         return ResponseEntity.status(HttpStatus.CREATED).body(responseMap);
+
+
     }
 
 
