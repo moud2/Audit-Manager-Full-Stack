@@ -49,7 +49,7 @@ function Dashboard() {
             backgroundColor: '#d0d0d0'
         },
         '& p': {
-            fontSize: '1.25rem', // Adjust the font size here
+            fontSize: '1.25rem', 
             textAlign: 'center',
             margin: 0
         }
@@ -97,3 +97,4 @@ function Dashboard() {
 }
 
 export default Dashboard;
+‚
