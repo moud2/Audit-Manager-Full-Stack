@@ -79,6 +79,15 @@ public class SaveRatingServiceTest {
     }
 
     /**
+     * Test saving a single empty rating.
+     * @deprecated
+     */
+    @Test
+    public void testSaveNullRating() {
+        assertNull(saveRatingService.saveRating(null));
+    }
+
+    /**
      * Tests saving a list of ratings.
      */
     @Test
