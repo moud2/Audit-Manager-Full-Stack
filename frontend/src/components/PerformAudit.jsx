@@ -135,7 +135,7 @@ function PerformAudit() {
       <h1 className="px-10 py-5 font-bold">Audit durchführen</h1>
       {questions.map((question) => (
         <div key={question.id}>
-          <h2 className="px-10 py-5">{question.question}</h2>
+          <h2 className="px-10 py-5" data-cy="question_text">{question.question}</h2>
           <FormGroup className="px-5 flex justify-center" row>
             {[0, 1, 2, 3, 4, 5, 'N/A'].map((label) => (
               <FormControlLabel
