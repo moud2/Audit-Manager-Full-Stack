@@ -1,5 +1,6 @@
 describe('PerformAudit Component', () => {
   beforeEach(() => {
+    cy.visit('http://localhost:5173/performAudit');
     cy.intercept('GET', '/api/v1/audits/1/ratings', {
       statusCode: 200,
       body: [
@@ -78,7 +79,7 @@ describe('PATCH request', () => {
   
   it('Rating: null/null -> 3/false -> null/null', () => {
     cy.get('input[type="checkbox"]').eq(3).check().should('be.checked');
-    cy.intercept('PATCH', 'http://localhost:8080/api/v1/audits/1/ratings', {
+    cy.intercept('PATCH', '/api/v1/audits/1/ratings', {
       statusCode: 200,
       body: [{ id: 1, question: "Frage 1", points: 3, comment: '', na: null}]
     });
@@ -92,7 +93,7 @@ describe('PATCH request', () => {
     cy.get('input[type="checkbox"]').eq(6).should('not.be.checked');
 
     cy.get('input[type="checkbox"]').eq(3).uncheck().should('not.be.checked');
-    cy.intercept('PATCH', 'http://localhost:8080/api/v1/audits/1/ratings', {
+    cy.intercept('PATCH', '/api/v1/audits/1/ratings', {
       statusCode: 200,
       body: [{ id: 1, question: "Frage 1", points: null, comment: '', na: null}]
     });
@@ -102,7 +103,7 @@ describe('PATCH request', () => {
 
   it('Rating: null/null -> null/true -> null/null', () => {
     cy.get('input[type="checkbox"]').eq(6).check().should('be.checked');
-    cy.intercept('PATCH', 'http://localhost:8080/api/v1/audits/1/ratings', {
+    cy.intercept('PATCH', '/api/v1/audits/1/ratings', {
       statusCode: 200,
       body: [{ id: 1, question: "Frage 1", points: null, comment: '', na: true}]
     });
@@ -116,7 +117,7 @@ describe('PATCH request', () => {
     cy.get('input[type="checkbox"]').eq(6).should('be.checked');
 
     cy.get('input[type="checkbox"]').eq(6).uncheck().should('not.be.checked');
-    cy.intercept('PATCH', 'http://localhost:8080/api/v1/audits/1/ratings', {
+    cy.intercept('PATCH', '/api/v1/audits/1/ratings', {
       statusCode: 200,
       body: [{ id: 1, question: "Frage 1", points: null, comment: '', na: null}]
     });
@@ -125,13 +126,13 @@ describe('PATCH request', () => {
 
   it('Rating: 3/false -> null/true -> 3/false', () => {
     cy.get('input[type="checkbox"]').eq(3).check().should('be.checked');
-    cy.intercept('PATCH', 'http://localhost:8080/api/v1/audits/1/ratings', {
+    cy.intercept('PATCH', '/api/v1/audits/1/ratings', {
       statusCode: 200,
       body: [{ id: 1, question: "Frage 1", points: 3, comment: '', na: false}]
     });
 
     cy.get('input[type="checkbox"]').eq(6).check().should('be.checked');
-    cy.intercept('PATCH', 'http://localhost:8080/api/v1/audits/1/ratings', {
+    cy.intercept('PATCH', '/api/v1/audits/1/ratings', {
       statusCode: 200,
       body: [{ id: 1, question: "Frage 1", points: null, comment: '', na: true}]
     });
@@ -144,7 +145,7 @@ describe('PATCH request', () => {
     cy.get('input[type="checkbox"]').eq(6).should('be.checked');
 
     cy.get('input[type="checkbox"]').eq(3).check().should('be.checked');
-    cy.intercept('PATCH', 'http://localhost:8080/api/v1/audits/1/ratings', {
+    cy.intercept('PATCH', '/api/v1/audits/1/ratings', {
       statusCode: 200,
       body: [{ id: 1, question: "Frage 1", points: 3, comment: '', na: false}]
     });
