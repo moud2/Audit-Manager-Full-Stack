@@ -22,17 +22,14 @@ dependencies {
     implementation 'org.hibernate.validator:hibernate-validator'
     implementation 'com.github.java-json-tools:json-patch:1.13'
 
-    // Test dependencies
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.3'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.3'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.9.3' // Aktualisierte Version
     testImplementation 'org.mockito:mockito-core:4.6.1'
     testImplementation 'org.mockito:mockito-junit-jupiter:4.6.1'
-    testImplementation 'org.springframework.boot:spring-boot-test-autoconfigure:3.2.6'
-    testImplementation 'org.springframework.boot:spring-boot-test:3.2.6'
 
     runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
 }
 
 tasks.named('test') {
