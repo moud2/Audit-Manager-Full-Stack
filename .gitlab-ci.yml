@@ -125,6 +125,7 @@ docker-release-job:
   script:
     - echo "Building & Deploying Docker Image...."
     - docker logout
+    - echo -n $DOCKER_LOGIN | docker login --username eschybol1 --password-stdin
     - echo -n "${CI_DEPLOY_PASSWORD}" | docker login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin # Authenticate against the GitLab container registry
     - cd frontend
     - docker build -t gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend:latest .
@@ -150,6 +151,7 @@ docker-release-job-fullstack:
   script:
     - echo "Building & Deploying Docker Image...."
     - docker logout
+    - echo -n $DOCKER_LOGIN | docker login --username eschybol1 --password-stdin 
     - echo -n "${CI_DEPLOY_PASSWORD}" | docker login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin # Authenticate against the GitLab container registry
     - cd frontend
     - docker build -t gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend:fullstack .
