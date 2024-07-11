@@ -55,8 +55,8 @@ public class AuditsController {
 
     @PostMapping("/api/v1/audits/new")
     public ResponseEntity<Object> postWithRequestBody(@Valid @RequestBody com.insight.backend.dto.NewAuditDTO newAuditDTO) {
-
-        AuditResponseDTO responseDTO = CreateAuditService(newAuditDTO);
+        CreateAuditService createAuditService = new CreateAuditService;
+        AuditResponseDTO responseDTO = createAuditService.(newAuditDTO);
 
         if (responseDTO == null) {
             ErrorDTO errorDTO = new ErrorDTO("Internal Server Error");
