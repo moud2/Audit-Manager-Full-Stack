@@ -57,14 +57,14 @@ const theme = createTheme({
 function App() {
     return (
         <Router>
-            <div className="flex mb-16">
+            <div className="flex mt-16">
                 <Sidebar/>
                 <div className="ml-64 p-4 w-full">
                     <ThemeProvider theme={theme}>
                         <Routes>
                             <Route path="/" element={<Dashboard/>}/>
                             <Route path="/newAudit" element={<NewAudit/>}/>
-                            <Route path="/performAudit" element={<PerformAudit/>}/>
+                            <Route path="/performAudit/:auditId" element={<PerformAudit/>}/>
                             <Route path="/evaluation/:auditId" element={<Evaluation/>}/>
                         </Routes>
                     </ThemeProvider>

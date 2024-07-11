@@ -1,36 +1,65 @@
-describe('NewAudit Component', () => {
+describe("NewAudit Page Tests", () => {
+  // TODO: change all URLs to relative paths
+
+  it("Links of the sidebar working", () => {
+    cy.visit("http://localhost:5173");
+
+    cy.get('[data-cy="nav-dashboard"]').click();
+    cy.url().should("eq", "http://localhost:5173/");
+
+    cy.get('[data-cy="nav-newAudit"]').click();
+    cy.url().should("eq", "http://localhost:5173/newAudit");
+
+    cy.get('[data-cy="nav-performAudit"]').click();
+    cy.url().should("eq", "http://localhost:5173/performAudit");
+
+    cy.get('[data-cy="nav-evaluation"]').click();
+    cy.url().should("eq", "http://localhost:5173/evaluation");
+  });
+
+  // Test when backend is available
+  context("Backend is available", () => {
     beforeEach(() => {
-      cy.visit('http://localhost:5173/newAudit');
+      cy.intercept("GET", "/api/v1/categories", (req) => {
+        req.reply({
+          statusCode: 200,
+          body: [
+            { id: 1, name: "Category 1" },
+            { id: 2, name: "Category 2" },
+          ],
+        });
+      }).as("getCategories");
+
+      cy.visit("http://localhost:5173/newAudit");
     });
-  
-    it('should render the search input and button', () => {
-      cy.get('input[type="search"]').should('be.visible');
-      cy.get('button').should('be.visible');
-      cy.get('button').find('svg').should('exist');
+
+    it("Categories are fetched and displayed correctly", () => {
+      cy.get(".cursor-grab").should("have.length", 2);
+      cy.get(".cursor-grab").first().should("contain", "Category 1");
+      cy.get(".cursor-grab").last().should("contain", "Category 2");
     });
-  
-    it('should render the cards in the correct columns', () => {
-      cy.contains('Verfügbar kategorien')
-        .parent()
-        .should('be.visible');
-  
-      cy.contains('Ausgewählte kategorien')
-        .parent()
-        .should('be.visible');
-    });
-  
-    it('should render the columns with correct titles', () => {
-      cy.contains('Verfügbar kategorien').should('be.visible');
-      cy.contains('Ausgewählte kategorien').should('be.visible');
-    });
-  
-    it('should drag and drop a card from Verfügbar kategorien to Ausgewählte kategorien', () => {
-     
-        cy.contains('Ausgewählte kategorien')
-        .should('be.visible')
-        .trigger('dragover')
-        .trigger('drop', { dataTransfer: new DataTransfer() });
-  
-        cy.wait(1000); // Wait for the drop event to be processed 
+
+    it("Search input and next button are visible", () => {
+      cy.get('input[type="text"]').should("be.visible");
+      cy.get('input[type="text"]').should("have.attr", "placeholder", "Name");
+      cy.get("button").contains("Audit erstellen").should("be.visible");
     });
   });
+
+  context("Backend is not available", () => {
+    beforeEach(() => {
+      cy.intercept("GET", "/api/v1/categories", {
+        statusCode: 500,
+        body: { error: "Backend not available" },
+      }).as("getCategoriesError");
+
+      cy.visit("http://localhost:5173/newAudit");
+    });
+
+    it("should display error message when backend is not available", () => {
+      cy.contains("Fehler: Request failed with status code 500").should(
+        "be.visible",
+      );
+    });
+  });
+});

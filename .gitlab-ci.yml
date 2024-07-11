@@ -4,6 +4,7 @@ stages:
   - test
   - build
   - release
+  - release-fullstack
   - deploy
 
 
@@ -117,6 +118,7 @@ frontend-build-job-fullstack:
   environment: production
   rules:
     - if: $CI_COMMIT_REF_NAME == "main"
+  allow_failure: true
   script:
     - echo "Building the application..."
     - cd frontend
@@ -126,7 +128,7 @@ frontend-build-job-fullstack:
     - echo "Building complete!"
   artifacts:
     paths:
-      - frontend/dist-fullstack/
+      - frontend/dist/
 
 #RELEASE STAGE
 docker-release-job:
@@ -145,11 +147,13 @@ docker-release-job:
   script:
     - echo "Building & Deploying Docker Image...."
     - docker logout
+    - echo -n $DOCKER_LOGIN | docker login --username eschybol1 --password-stdin
     - echo -n "${CI_DEPLOY_PASSWORD}" | docker login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin # Authenticate against the GitLab container registry
     - cd frontend
     - docker build -t gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend:latest .
     - docker push gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend:latest    
     - echo "[*] Image Build & Deployment was executed."
+
 
 #RELEASE STAGE
 docker-release-job-fullstack:
@@ -165,9 +169,11 @@ docker-release-job-fullstack:
     - frontend-build-job-fullstack
   rules:
     - if: $CI_COMMIT_REF_NAME == "main"
+  allow_failure: true
   script:
     - echo "Building & Deploying Docker Image...."
     - docker logout
+    - echo -n $DOCKER_LOGIN | docker login --username eschybol1 --password-stdin 
     - echo -n "${CI_DEPLOY_PASSWORD}" | docker login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin # Authenticate against the GitLab container registry
     - cd frontend
     - docker build -t gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend:fullstack .
@@ -202,3 +208,4 @@ publish-job:
       podman rm insight-frontend
       podman run -d --name insight-frontend -p 80:80 $DOCKER_IMAGE
       EOF
+
