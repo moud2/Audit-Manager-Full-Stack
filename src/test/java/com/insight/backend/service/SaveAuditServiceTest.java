@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -31,6 +32,9 @@ public class SaveAuditServiceTest {
 
     private Audit audit;
 
+    /*
+    * Test data to create before execution of and be used in single test method
+     */
     @BeforeEach
     public void setUp() {
         audit = new Audit();
@@ -38,18 +42,30 @@ public class SaveAuditServiceTest {
         audit.setName("AuditTest");
     }
 
+    /*
+    * Test method for saving audit, compares audit to be saved with actual saved audit
+    */
     @Test
     public void saveAuditTest() {
         when(auditRepository.saveAndFlush(audit)).thenReturn(audit);
         Audit savedAudit = saveAuditService.saveAudit(audit);
         verify(auditRepository, times(1)).saveAndFlush(audit);
         assertNotNull(savedAudit);
-        assertEquals(savedAudit.getName(), audit.getName());
+        assertEquals(savedAudit, audit);
     }
 
+    /*
+     * Test method for saving with null object, tests for actual saved audit being null as well
+     */
     @Test
     public void saveNullAuditTest() {
         assertNull(saveAuditService.saveAudit(null));
     }
-    
+
+    @Test
+    public void testConstructor() {
+        SaveAuditService saveAuditServiceCons = new SaveAuditService(auditRepository);
+
+        assertNotNull(saveAuditServiceCons);
+    }
 }
