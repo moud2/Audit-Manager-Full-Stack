@@ -66,8 +66,8 @@ public class CreateAuditService {
             } else return null;
         }
 
-        saveRatingService.saveAllRatings(ratings);
         saveAuditService.saveAudit(audit);
+        saveRatingService.saveAllRatings(ratings);
 
         AuditResponseDTO auditResponseDTO = new AuditResponseDTO();
         auditResponseDTO.setId(audit.getId());
