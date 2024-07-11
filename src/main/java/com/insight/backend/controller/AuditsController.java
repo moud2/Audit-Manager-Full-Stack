@@ -6,7 +6,6 @@ import com.insight.backend.dto.AuditResponseDTO;
 import com.insight.backend.dto.ErrorDTO;
 import com.insight.backend.dto.NewAuditDTO;
 import com.insight.backend.model.Audit;
-import com.insight.backend.model.newAudit.AuditRequest;
 import com.insight.backend.service.audit.CreateAuditService;
 import com.insight.backend.service.audit.FindAuditService;
 
@@ -53,7 +52,11 @@ public class AuditsController {
         return ResponseEntity.ok(response);
     }
 
-    Integer ID = 1;
+    /**
+     * POST requests for creating new Audit.
+     *
+     * @return a ResponseEntity containing an ID and name of new Audit
+     */
 
     @PostMapping("/api/v1/audits/new")
     public ResponseEntity<Object> postWithRequestBody(@Valid @RequestBody NewAuditDTO newAuditDTO) {
