@@ -52,9 +52,6 @@ public class SaveAuditServiceTest {
         verify(auditRepository, times(1)).saveAndFlush(audit);
         assertNotNull(savedAudit);
         assertEquals(savedAudit, audit);
-        assertEquals(savedAudit.getId(), audit.getId());
-        assertEquals(savedAudit.getName(), audit.getName());
-        assertEquals(savedAudit.getRatings(), audit.getRatings());
     }
 
     /*
@@ -63,5 +60,12 @@ public class SaveAuditServiceTest {
     @Test
     public void saveNullAuditTest() {
         assertNull(saveAuditService.saveAudit(null));
+    }
+
+    @Test
+    public void testConstructor() {
+        SaveAuditService saveAuditServiceCons = new SaveAuditService(auditRepository);
+
+        assertNotNull(saveAuditServiceCons);
     }
 }

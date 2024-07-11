@@ -1,5 +1,6 @@
 package com.insight.backend.service;
 
+import com.insight.backend.service.audit.SaveAuditService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,8 +12,7 @@ import com.insight.backend.model.Question;
 import com.insight.backend.repository.QuestionRepository;
 import com.insight.backend.service.question.SaveQuestionService;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -25,8 +25,11 @@ public class QuestionServiceTest {
     
     @InjectMocks
     private SaveQuestionService saveQuestionService;
-    private Question question; 
+    private Question question;
 
+    /*
+     * Test data to create before execution of and be used in single test method
+     */
     @BeforeEach
     public void setUp() {
         question = new Question();
@@ -34,9 +37,12 @@ public class QuestionServiceTest {
         question.setName("Feuerwand");
     }
 
+    /*
+     * Test method for saving question, compares audit to be saved with actual saved audit
+     */
     @Test
     public void saveQuestionTest() {
-        
+
         when(questionRepository.saveAndFlush(question)).thenReturn(question);
 
         Question savedQuestion = saveQuestionService.saveQuestion(question);
@@ -44,6 +50,22 @@ public class QuestionServiceTest {
         verify(questionRepository, times(1)).saveAndFlush(question);
         
         assertNotNull(savedQuestion);
-        assertEquals(question.getName(), savedQuestion.getName());
+        assertEquals(question, savedQuestion);
+    }
+
+    /*
+     * Test method for saving with null object, tests for actual saved question being null as well
+     */
+    @Test
+    public void saveNullQuestionTest() {
+        assertNull(saveQuestionService.saveQuestion(null));
+    }
+
+    @Test
+    public void testConstructor() {
+
+        SaveQuestionService saveQuestionServiceCons = new SaveQuestionService(questionRepository);
+
+        assertNotNull(saveQuestionServiceCons);
     }
 }
