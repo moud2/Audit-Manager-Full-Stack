@@ -1,7 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import Paper from '@mui/material/Paper';
-import AddIcon from '@mui/icons-material/Add';
-import {Link} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Add } from '@mui/icons-material';
 import api from "../api.js";
 
 function Dashboard() {
@@ -9,10 +8,9 @@ function Dashboard() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-
     /* fetching data from backend */
     useEffect(() => {
-        api.get('/v1/audits') /*relative path, editable in .env files & api.js -*/
+        api.get('/v1/audits')
             .then(response => {
                 console.log(response);
                 setData(response.data);
@@ -29,50 +27,26 @@ function Dashboard() {
         return <p>Laden...</p>;
     }
 
-    /* Styling for the boxes, other styling in theme in App.jsx */
-    const paperStyle = {
-        width: '100%',
-        aspectRatio: '1',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        transition: 'transform 0.7s',
-        '&:hover': {
-            transform: 'scale(1.12)'
-        },
-        '& p': {
-            fontSize: '1.25rem', // Adjust the font size here
-            textAlign: 'center',
-            margin: 0
-        }
-    };
-
     return (
         <div>
             <div>
-                <h1 className="text-center text-4xl m-4">Dashboard</h1>
+                <h1 className="text-center text-4xl m-6">Dashboard</h1>
             </div>
-            
 
-            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-center">
-
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-10 justify-center">
                 {/* First box including plus icon */}
                 <Link to="/newAudit" data-cy="new-audit-button"
-                    className="flex justify-center items-center h-full mx-16 my-6">
-                    <Paper elevation={20} sx={paperStyle}>
-                    <AddIcon sx={{fontSize: '40vw', maxWidth: 80, maxHeight: 80}}/>
-                    </Paper>
+                      className="flex justify-center w-44 lg:w-52 xl:w-52 items-center aspect-square transition-transform transform hover:scale-105 bg-gray-200 rounded-xl m-4 p-4 border border-gray-400">
+                    <Add className="text-gray-600" style={{ fontSize: '10vw', maxWidth: 80, maxHeight: 80 }} />
                 </Link>
 
-                {/* boxes to perform audit */}
+                {/* boxes to perform audit */} 
                 {data.map(audit => (
-                    <Link data-cy="data-buttons" key={audit.id} to={`/audit/${audit.id}`}
-                        className="flex justify-center items-center h-full mx-16 my-6">
-                        <Paper elevation={20} sx={paperStyle}>
-                            <p className="text-center">{audit.name}</p>
-                        </Paper>
+                    <Link data-cy="data-buttons" key={audit.id} to={`/performAudit/${audit.id}`}
+                          className="flex justify-center w-44 lg:w-52 xl:w-52 items-center aspect-square transition-transform transform hover:scale-105 bg-gray-200 rounded-lg m-4 p-4">
+                        <p className="text-center">{audit.name}</p>
                     </Link>
-                ))}   
+                ))}
             </div>
         </div>
     );
