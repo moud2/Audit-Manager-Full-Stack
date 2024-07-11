@@ -35,11 +35,6 @@ test-e2e:
     - sleep 20                                  # Wait for the server to start (adjust time as needed)
     - npx cypress run                           # Run Cypress end-to-end tests
     - echo "Cypress e2e tests completed"
-  artifacts:
-    paths:
-      - cypress/screenshots/
-      - cypress/videos/
-    expire_in: 1 week
 
 
 #test-integration:
@@ -52,11 +47,7 @@ test-e2e:
    # - sleep 20                               # Wait for the server to start (adjust time as needed)
    # - npm run integration-test               # Run integration tests
    # - echo "Integration tests completed"
-  #artifacts:
-  #  paths:
-      #- cypress/screenshots/
-      #- cypress/videos/
-    #expire_in: 1 week
+
 
 test-lint:
   stage: test
