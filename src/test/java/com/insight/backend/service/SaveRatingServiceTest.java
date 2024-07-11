@@ -64,7 +64,10 @@ public class SaveRatingServiceTest {
 
     /**
      * Test saving a single rating.
+     * @deprecated 
+     * This method is ot used
      */
+    @Deprecated
     @Test
     void testSaveRating() {
         when(ratingRepository.saveAndFlush(rating1)).thenReturn(rating1);
@@ -79,7 +82,10 @@ public class SaveRatingServiceTest {
 
     /**
      * Test saving a single empty rating.
+     * @deprecated
+     * This method is ot used
      */
+    @Deprecated
     @Test
     public void testSaveNullRating() {
         assertNull(saveRatingService.saveRating(null));
