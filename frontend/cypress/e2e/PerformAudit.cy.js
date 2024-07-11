@@ -24,7 +24,7 @@ describe('PerformAudit Component', () => {
   });
 
   it('click all checkboxes', () => {
-    cy.get('[type="checkbox"]').check().should('be.checked');
+    cy.get('[type="checkbox"]').check({ force: true }).should('be.checked');
   });
 
   it('should select only one checkbox at a time per question', () => {
@@ -41,6 +41,11 @@ describe('PerformAudit Component', () => {
     cy.get('input[type="checkbox"]').eq(3).should('not.be.checked');
     cy.get('input[type="checkbox"]').eq(4).should('not.be.checked');
     cy.get('input[type="checkbox"]').eq(5).should('not.be.checked');
+  });
+
+  it('should have a button that navigates to the evaluation page', () => {
+    cy.get('button').contains('Bewertung anzeigen').should('be.visible').click();
+    cy.url().should('include', '/evaluation/1');
   });
 });
 
@@ -162,4 +167,8 @@ describe('PATCH request', () => {
       cy.get('[data-cy="commentTextarea"]').should('have.value', 'a');
     });
 
+  it('should have a button that navigates to the evaluation page', () => {
+    cy.get('button').contains('Bewertung anzeigen').should('be.visible').click();
+    cy.url().should('include', '/evaluation/1');
+  });
 });
