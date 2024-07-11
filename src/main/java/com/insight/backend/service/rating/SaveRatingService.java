@@ -30,10 +30,13 @@ public class SaveRatingService {
     /**
      * Stores a single rating object in the database.
      * @deprecated
+     * This method isn't used
+     * use method saveAllRatings instead
      * 
      * @param rating the rating objekt to be saved.
      * @return the saved rating object, or null if the input question is null
      */
+    @Deprecated
     public Rating saveRating(Rating rating) {
         if (rating == null) return null;
         return ratingRepository.saveAndFlush(rating);
