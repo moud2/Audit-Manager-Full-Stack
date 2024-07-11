@@ -7,6 +7,7 @@ import com.insight.backend.dto.ErrorDTO;
 import com.insight.backend.dto.NewAuditDTO;
 import com.insight.backend.model.Audit;
 import com.insight.backend.model.newAudit.AuditRequest;
+import com.insight.backend.service.audit.CreateAuditService;
 import com.insight.backend.service.audit.FindAuditService;
 
 import jakarta.validation.Valid;
@@ -28,15 +29,16 @@ public class AuditsController {
      * The FindAuditService to use the service methods.
      */
     private final FindAuditService findAuditService;
-
+    private final CreateAuditService createAuditService;
     /**
      * Constructs a new AuditsController with the specified FindAuditService.
      * 
      * @param findAuditService the service to find audits
      */
     @Autowired
-    public AuditsController(FindAuditService findAuditService) {
-        this.findAuditService = findAuditService; 
+    public AuditsController(FindAuditService findAuditService, CreateAuditService createAuditService) {
+        this.findAuditService = findAuditService;
+        this.createAuditService = createAuditService;
     }
 
     /**
@@ -54,9 +56,9 @@ public class AuditsController {
     Integer ID = 1;
 
     @PostMapping("/api/v1/audits/new")
-    public ResponseEntity<Object> postWithRequestBody(@Valid @RequestBody com.insight.backend.dto.NewAuditDTO newAuditDTO) {
-        CreateAuditService createAuditService = new CreateAuditService;
-        AuditResponseDTO responseDTO = createAuditService.(newAuditDTO);
+    public ResponseEntity<Object> postWithRequestBody(@Valid @RequestBody NewAuditDTO newAuditDTO) {
+
+        AuditResponseDTO responseDTO = createAuditService.createAudit(newAuditDTO);
 
         if (responseDTO == null) {
             ErrorDTO errorDTO = new ErrorDTO("Internal Server Error");
