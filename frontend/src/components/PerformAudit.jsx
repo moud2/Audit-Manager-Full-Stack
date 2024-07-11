@@ -61,7 +61,7 @@ function PerformAudit() {
                 setError(err);
                 setLoading(false);
             });
-    }, []);
+    }, [auditId]);
 
   const updateQuestionById = (id, newPartialQuestion) => {
     const q = questions.map(question => id === question.id? {...question, ...newPartialQuestion} : question );
