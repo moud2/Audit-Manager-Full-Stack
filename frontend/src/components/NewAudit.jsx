@@ -1,40 +1,62 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import React, { useState, useEffect } from "react";
+import api from "../api.js";
 import { useNavigate } from "react-router-dom";
-import SearchIcon from "@mui/icons-material/Search";
 
-// Initial card data
-const DEFAULT_CARDS = [
-  { title: "kategorie 1", id: "1", column: "Verfügbar kategorien" },
-  { title: "kategorie 2", id: "2", column: "Verfügbar kategorien" },
-  { title: "kategorie 3", id: "3", column: "Verfügbar kategorien" },
-  { title: "kategorie 4", id: "4", column: "Verfügbar kategorien" },
-  { title: "kategorie 5", id: "5", column: "Verfügbar kategorien" },
-  { title: "kategorie 6", id: "6", column: "Ausgewählte kategorien" },
-  { title: "kategorie 7", id: "7", column: "Ausgewählte kategorien" },
-];
+const NewAudit = () => {
+  const [cards, setCards] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-export const NewAudit = () => {
   const navigate = useNavigate();
   const handleCreateAuditClick = () => {
     navigate("/performAudit");
   };
+
+  useEffect(() => {
+    api
+      .get("/v1/categories") // Adjust the URL to match your endpoint
+      .then((response) => {
+        const categories = response.data.map((category) => ({
+          title: category.name,
+          id: category.id.toString(),
+          column: "Verfügbare Kategorien",
+        }));
+        setCards(categories);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching data:", err);
+        setError(err);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return <p>Loading...</p>; // Display loading message while data is being fetched
+  }
+
+  if (error) {
+    return <p>Fehler: {error.message}</p>; // Display error message if fetch fails
+  }
+
   return (
-    <div className="min-h-screen overflow-hidden p-4">
-      <div className="flex flex-col items-start mb-3"> 
-        <input
-          type="text"
-          placeholder="Auditname"
-          className="p-2 rounded-t-lg rounded-b-lg bg-neutral-200 shadow-inner w-1/3"
-        />
-      </div>
-      <Board />
-      <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '10px' }}>
+    <div>
+      <form className="w-[240px] flex justify-center items-center mx-auto m-8">
+        <div className="relative flex w-full items-center gap-2">
+          <input
+            type="text"
+            placeholder="Name"
+            className="w-full p-4 h-[45px] rounded-t-lg rounded-b-lg bg-neutral-200 shadow-inner"
+          />
+        </div>
+      </form>
+      <Board cards={cards} setCards={setCards} />{" "}
+      {/* Pass cards and setCards to Board */}
+      <div className="flex p-10">
         <button
           onClick={handleCreateAuditClick}
-          className="mt-1 p-2 bg-blue-500 text-white rounded"
-        >
-          Audit erstellen
+          className="absolute bottom-20 right-16 p-2 bg-blue-500 text-white rounded">
+            Audit erstellen
         </button>
       </div>
     </div>
@@ -42,27 +64,23 @@ export const NewAudit = () => {
 };
 
 // The Board component renders two columns and manages the state of the cards
-const Board = () => {
-  const [cards, setCards] = useState(DEFAULT_CARDS);
-
+const Board = ({ cards, setCards }) => {
   return (
-    <div className="flex flex-col items-start gap-4 w-full p-1"> 
-      <div className="flex gap-4 w-full">
-        <Column
-          title="Verfügbar kategorien"
-          column="Verfügbar kategorien"
-          headingColor="text-neutral-700"
-          cards={cards}
-          setCards={setCards}
-        />
-        <Column
-          title="Ausgewählte kategorien"
-          column="Ausgewählte kategorien"
-          headingColor="text-neutral-700"
-          cards={cards}
-          setCards={setCards}
-        />
-      </div>
+    <div className="flex justify-center gap-10 h-[calc(80vh-192px)] w-full overflow-hidden p-4">
+      <Column
+        title="Verfügbare Kategorien"
+        column="Verfügbare Kategorien"
+        headingColor="text-neutral-700"
+        cards={cards}
+        setCards={setCards}
+      />
+      <Column
+        title="Ausgewählte Kategorien"
+        column="Ausgewählte Kategorien"
+        headingColor="text-neutral-700"
+        cards={cards}
+        setCards={setCards}
+      />
     </div>
   );
 };
@@ -72,19 +90,16 @@ const Column = ({ title, headingColor, column, cards, setCards }) => {
   const [active, setActive] = useState(false);
   const filteredCards = cards.filter((c) => c.column === column);
 
-  // This function is called when a drag event starts
   const handleDragStart = (e, card) => {
     e.dataTransfer.setData("cardID", card.id);
   };
 
-  // This function is called when a card is dragged over the column
   const handleDragOver = (e) => {
     e.preventDefault();
     highlightIndicator(e);
     setActive(true);
   };
 
-  // Highlights the nearest drop indicator based on the current drag position
   const highlightIndicator = (e) => {
     const indicators = getIndicators();
     clearHighlights();
@@ -92,7 +107,6 @@ const Column = ({ title, headingColor, column, cards, setCards }) => {
     if (el) el.element.style.opacity = "1";
   };
 
-  // Clears the highlight from all drop indicators
   const clearHighlights = () => {
     const indicators = getIndicators();
     indicators.forEach((i) => {
@@ -100,7 +114,6 @@ const Column = ({ title, headingColor, column, cards, setCards }) => {
     });
   };
 
-  // Finds the nearest drop indicator based on the drag position
   const getNearestIndicator = (e, indicators) => {
     const DISTANCE_OFFSET = 50;
 
@@ -118,22 +131,19 @@ const Column = ({ title, headingColor, column, cards, setCards }) => {
       {
         offset: Number.NEGATIVE_INFINITY,
         element: indicators[indicators.length - 1],
-      }
+      },
     );
   };
 
-  // Gets all the drop indicators in the current column
   const getIndicators = () => {
     return Array.from(document.querySelectorAll(`[data-column="${column}"]`));
   };
 
-  // This function is called when the drag leaves the column
   const handleDragLeave = () => {
     setActive(false);
     clearHighlights();
   };
 
-  // This function is called when a card is dropped into the column
   const handleDrop = (e) => {
     setActive(false);
     clearHighlights();
@@ -149,6 +159,7 @@ const Column = ({ title, headingColor, column, cards, setCards }) => {
       let cardToTransfer = copy.find((c) => c.id === cardID);
       if (!cardToTransfer) return;
 
+      // Change the column of the transferred card
       cardToTransfer = { ...cardToTransfer, column };
       copy = copy.filter((c) => c.id !== cardID);
 
@@ -187,20 +198,6 @@ const Column = ({ title, headingColor, column, cards, setCards }) => {
   );
 };
 
-Column.propTypes = {
-  title: PropTypes.string.isRequired,
-  headingColor: PropTypes.string.isRequired,
-  column: PropTypes.string.isRequired,
-  cards: PropTypes.arrayOf(
-    PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      id: PropTypes.string.isRequired,
-      column: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-  setCards: PropTypes.func.isRequired,
-};
-
 // The Card component represents a draggable card in the column
 const Card = ({ title, id, column, handleDragStart }) => {
   return (
@@ -209,19 +206,13 @@ const Card = ({ title, id, column, handleDragStart }) => {
       <div
         draggable="true"
         onDragStart={(e) => handleDragStart(e, { title, id, column })}
-        className="cursor-grab rounded border border-neutral-700 bg-neutral-700 p-3 active:cursor-grabbing"
+        className="cursor-grab rounded border border-neutral-700 bg-neutral-700 p-3 active:cursor-grabbing mb-2" // Set margin-bottom for spacing
+        style={{ height: "50px" }} // Adjust card height as needed
       >
         <p className="text-sm text-neutral-100">{title}</p>
       </div>
     </>
   );
-};
-
-Card.propTypes = {
-  title: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
-  column: PropTypes.string.isRequired,
-  handleDragStart: PropTypes.func.isRequired,
 };
 
 // The DropIndicator component represents the drop target indicator
@@ -233,11 +224,6 @@ const DropIndicator = ({ beforeId, column }) => {
       className="my-0.5 h-0.5 w-full bg-red-400 opacity-0"
     />
   );
-};
-
-DropIndicator.propTypes = {
-  beforeId: PropTypes.string,
-  column: PropTypes.string.isRequired,
 };
 
 export default NewAudit;
