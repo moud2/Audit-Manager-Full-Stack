@@ -1,20 +1,18 @@
 package com.insight.backend.controller;
 
-import java.util.Collections;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.insight.backend.dto.NewAuditDTO;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.insight.backend.dto.NewAuditDTO;
-
-import org.junit.jupiter.api.Test;
+import java.util.Collections;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Unit tests for validating the behavior of {@link AuditsController}.
