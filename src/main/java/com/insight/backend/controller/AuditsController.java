@@ -3,11 +3,13 @@ package com.insight.backend.controller;
 import java.util.*;
 
 import com.insight.backend.dto.AuditResponseDTO;
+import com.insight.backend.dto.ErrorDTO;
 import com.insight.backend.dto.NewAuditDTO;
 import com.insight.backend.model.Audit;
-import com.insight.backend.model.newAudit.AuditRequest;
+import com.insight.backend.service.audit.CreateAuditService;
 import com.insight.backend.service.audit.FindAuditService;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,15 +28,16 @@ public class AuditsController {
      * The FindAuditService to use the service methods.
      */
     private final FindAuditService findAuditService;
-
+    private final CreateAuditService createAuditService;
     /**
      * Constructs a new AuditsController with the specified FindAuditService.
      * 
      * @param findAuditService the service to find audits
      */
     @Autowired
-    public AuditsController(FindAuditService findAuditService) {
-        this.findAuditService = findAuditService; 
+    public AuditsController(FindAuditService findAuditService, CreateAuditService createAuditService) {
+        this.findAuditService = findAuditService;
+        this.createAuditService = createAuditService;
     }
 
     /**
@@ -49,27 +52,22 @@ public class AuditsController {
         return ResponseEntity.ok(response);
     }
 
-    Integer ID = 1; 
+    /**
+     * POST requests for creating new Audit.
+     *
+     * @return a ResponseEntity containing an ID and name of new Audit
+     */
 
     @PostMapping("/api/v1/audits/new")
-    public ResponseEntity<Map<String, Object>> postWithRequestBody(@Valid @RequestBody NewAuditDTO newAuditDTO) {
+    public ResponseEntity<Object> postWithRequestBody(@Valid @RequestBody NewAuditDTO newAuditDTO) {
 
-        AuditResponseDTO responseDTO = CreateAuditService(newAuditDTO);
+        AuditResponseDTO responseDTO = createAuditService.createAudit(newAuditDTO);
 
         if (responseDTO == null) {
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("error", "failed_to_create");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            ErrorDTO errorDTO = new ErrorDTO("Internal Server Error");
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDTO);
         }
 
-         // Create return message and return if everything is correct
-        Map<String, Object> responseMap = new HashMap<>();
-        responseMap.put("id", responseDTO.getId());
-        responseMap.put("name", responseDTO.getName());
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseMap);
-
-
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
-
-
 }
