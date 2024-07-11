@@ -76,8 +76,8 @@ frontend-build-job:
   image: node:20 
   stage: build
   environment: production
-  #rules:
-  #  - if: $CI_COMMIT_REF_NAME == "main"
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
   script:
     - echo "Building the application..."
     - cd frontend
@@ -94,8 +94,8 @@ frontend-build-job-fullstack:
   image: node:20 
   stage: build
   environment: production
-  #rules:
-  #  - if: $CI_COMMIT_REF_NAME == "main"
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
   allow_failure: true
   script:
     - echo "Building the application..."
@@ -120,8 +120,8 @@ docker-release-job:
     DOCKER_TLS_CERTDIR: ""
   dependencies:
     - frontend-build-job
-  #rules:
-  #  - if: $CI_COMMIT_REF_NAME == "main"
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
   script:
     - echo "Building & Deploying Docker Image...."
     - docker logout
@@ -136,7 +136,7 @@ docker-release-job:
 #RELEASE STAGE
 docker-release-job-fullstack:
   image: docker:20
-  stage: release-fullstack
+  stage: release
   services:
     - docker:dind
   variables:
@@ -145,8 +145,8 @@ docker-release-job-fullstack:
     DOCKER_TLS_CERTDIR: ""
   dependencies:
     - frontend-build-job-fullstack
-  #rules:
-  #  - if: $CI_COMMIT_REF_NAME == "main"
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
   allow_failure: true
   script:
     - echo "Building & Deploying Docker Image...."
@@ -169,8 +169,8 @@ publish-job:
     REMOTE_USERNAME: stud-fim  
   environment: 
     name: production
-  #rules:
-  #  - if: $CI_COMMIT_REF_NAME == "main"
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
   script:
     - apt update && apt upgrade -y
     - apt install ssh podman -y
