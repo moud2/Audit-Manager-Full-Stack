@@ -9,7 +9,7 @@ describe('PerformAudit Component', () => {
         { id: 3, question: "Frage 3", points: null, comment: '', na: null }
       ]
     }).as('questions');
-    cy.visit('http://localhost:5173/performAudit');
+    cy.visit('http://localhost:5173/performAudit/1');
   });
 
   it('should allow typing in all textareas', () => {
@@ -54,13 +54,7 @@ describe('PerformAudit Component with fetched data', () => {
         { id: 3, question: "Frage 3", points: null, comment: '', na: true }
       ]
     }).as('questions');
-    cy.visit('http://localhost:5173/performAudit');
-    cy.intercept('GET', '/api/v1/audits/1/ratings', {
-        statusCode: 200,
-        body: [{ id: 1, question: "Frage 1", points: 2, comment: 'okay', na: false},
-          { id: 2, question: "Frage 2", points: null, comment: 'nachholen', na: null},
-          { id: 3, question: "Frage 3", points: null, comment: '', na: true}]
-    });
+    cy.visit('http://localhost:5173/performAudit/1');
     cy.get('input[type="checkbox"]').eq(0).should('not.be.checked');
     cy.get('input[type="checkbox"]').eq(1).should('not.be.checked');
     cy.get('input[type="checkbox"]').eq(2).should('be.checked');
@@ -74,8 +68,8 @@ describe('PerformAudit Component with fetched data', () => {
 
 describe('PATCH request', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:5173/performAudit');
-    cy.intercept('GET', '/api/v1/audits/1/ratings', {
+    cy.visit('http://localhost:5173/performAudit/1');
+    cy.intercept('GET', 'http://localhost:8080/api/v1/audits/1/ratings', {
       statusCode: 200,
       body: [{ id: 1, question: "Frage 1", points: null, comment: '', na: null},
         { id: 2, question: "Frage 2", points: null, comment: '', na: null},

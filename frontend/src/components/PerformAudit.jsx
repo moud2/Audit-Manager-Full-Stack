@@ -35,7 +35,8 @@ const Textarea = styled(BaseTextareaAutosize)(
 );
 
 /**
- * Creates the perform audits site, which shows the questions, checkboxes for the rating and a comment section. 
+ * Creates the perform audits site, which shows the questions, checkboxes for the rating and a comment section.
+ * Error handling for the GET and PATCH requests with alerts. 
  * 
  * @author [Anna Liepelt] https://gitlab.dit.htwk-leipzig.de/anna.liepelt
  */
@@ -45,9 +46,8 @@ function PerformAudit() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // const { auditId } = useParams();
-  const auditId = 1;
-
+  const { auditId } = useParams();
+  
   /*fetching data from the backend*/
   useEffect(() => {
     api.get(`/v1/audits/${auditId}/ratings`)
@@ -135,7 +135,7 @@ function PerformAudit() {
       <h1 className="px-10 py-5 font-bold">Audit durchführen</h1>
       {questions.map((question) => (
         <div key={question.id}>
-          <h2 className="px-10 py-5">{question.question}</h2>
+          <h2 className="px-10 py-5" data-cy="question_text">{question.question}</h2>
           <FormGroup className="px-5 flex justify-center" row>
             {[0, 1, 2, 3, 4, 5, 'N/A'].map((label) => (
               <FormControlLabel
