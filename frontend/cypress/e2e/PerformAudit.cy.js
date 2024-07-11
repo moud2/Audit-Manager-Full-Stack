@@ -14,8 +14,6 @@ export const interceptPATCH = (points, na, comment) => {
   });
 };
 
-
-
 describe('PerformAudit Component', () => {
   beforeEach(() => {
     interceptGET(null, null, '');
