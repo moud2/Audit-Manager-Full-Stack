@@ -47,12 +47,6 @@ public class CreateAuditService {
      *         or null if any of the provided category IDs are invalid
      */
     public AuditResponseDTO createAudit(NewAuditDTO newAuditDTO) {
-        for (Long categoryId : newAuditDTO.getCategories()) {
-            if (!isCategoryValid(categoryId)) {
-                return null;
-            }
-        }
-
         Audit audit = new Audit();
         audit.setName(newAuditDTO.getName());
 
@@ -69,7 +63,7 @@ public class CreateAuditService {
                     rating.setAudit(audit);
                     ratings.add(rating);
                 }
-            }
+            } else return null;
         }
 
         saveRatingService.saveAllRatings(ratings);
@@ -80,15 +74,5 @@ public class CreateAuditService {
         auditResponseDTO.setName(audit.getName());
 
         return auditResponseDTO;
-    }
-
-    /**
-     * Checks if a category with the given ID exists.
-     *
-     * @param categoryId the ID of the category to check
-     * @return true if the category exists, false otherwise
-     */
-    private boolean isCategoryValid(Long categoryId) {
-        return findCategoryService.findCategoryById(categoryId).isPresent();
     }
 }
