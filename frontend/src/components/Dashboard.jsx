@@ -43,7 +43,7 @@ function Dashboard() {
                 {/* boxes to perform audit */} 
                 {data.map(audit => (
                     <Link data-cy="data-buttons" key={audit.id} to={`/performAudit/${audit.id}`}
-                          className="flex justify-center w-44 lg:w-52 xl:w-52 items-center aspect-square transition-transform transform hover:scale-105 bg-gray-200 rounded-lg m-4 p-4">
+                          className="flex justify-center w-44 lg:w-52 xl:w-52 items-center aspect-square transition-transform transform hover:scale-105 bg-gray-200 rounded-xl m-4 p-4 border border-gray-400">
                         <p className="text-center">{audit.name}</p>
                     </Link>
                 ))}
