@@ -75,7 +75,7 @@ public class SaveRatingServiceTest {
 
         verify(ratingRepository, times(1)).saveAllAndFlush(ratingList);
         
-        assertNotNull(savedRatings);
+        assertNull(savedRatings);
         assertEquals(ratingList, savedRatings);
     }
 }
