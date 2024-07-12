@@ -107,7 +107,7 @@ public class RatingDTO {
      *
      * @return the points given to the rating
      */
-    public int getPoints() {
+    public Integer getPoints() {
         return points;
     }
 
@@ -116,7 +116,7 @@ public class RatingDTO {
      *
      * @param points the points given to the rating
      */
-    public void setPoints(int points) {
+    public void setPoints(Integer points) {
         this.points = points;
     }
 
