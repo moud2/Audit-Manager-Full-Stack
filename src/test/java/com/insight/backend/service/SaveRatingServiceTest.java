@@ -15,10 +15,14 @@ import com.insight.backend.service.rating.SaveRatingService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+/**
+ * test class for testing SaveRatingService
+ */
 @ExtendWith(MockitoExtension.class)
 public class SaveRatingServiceTest {
 
@@ -33,6 +37,9 @@ public class SaveRatingServiceTest {
     private Rating rating3;
     private List<Rating> ratingList = new ArrayList<>();
 
+    /**
+     * Set up test data before each test method execution.
+     */
     @BeforeEach
     void setUp() {
         rating1 = new Rating();
@@ -55,6 +62,12 @@ public class SaveRatingServiceTest {
         ratingList.add(rating3);
     }
 
+    /**
+     * Test saving a single rating.
+     * @deprecated 
+     * This method is ot used
+     */
+    @Deprecated
     @Test
     void testSaveRating() {
         when(ratingRepository.saveAndFlush(rating1)).thenReturn(rating1);
@@ -67,6 +80,20 @@ public class SaveRatingServiceTest {
         assertEquals(rating1, savedRating);
     }
 
+    /**
+     * Test saving a single empty rating.
+     * @deprecated
+     * This method is ot used
+     */
+    @Deprecated
+    @Test
+    public void testSaveNullRating() {
+        assertNull(saveRatingService.saveRating(null));
+    }
+
+    /**
+     * Tests saving a list of ratings.
+     */
     @Test
     void testSaveAllRatings() {
         when(ratingRepository.saveAllAndFlush(ratingList)).thenReturn(ratingList);
@@ -77,5 +104,13 @@ public class SaveRatingServiceTest {
         
         assertNotNull(savedRatings);
         assertEquals(ratingList, savedRatings);
+    }
+
+    /**
+     * Test saving an empty list of ratings.
+     */
+    @Test
+    public void testSaveNullRatings() {
+        assertNull(saveRatingService.saveAllRatings(null));
     }
 }
