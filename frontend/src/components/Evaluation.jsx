@@ -175,7 +175,7 @@ function Evaluation() {
                     series={[
                         {data: pointsDistribution},
                     ]}
-                    width="100%"
+                    width="900"
                     height={350}
                     xAxis={[
                         {
