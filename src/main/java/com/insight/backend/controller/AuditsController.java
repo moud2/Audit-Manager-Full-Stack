@@ -64,7 +64,7 @@ public class AuditsController {
         AuditResponseDTO responseDTO = createAuditService.createAudit(newAuditDTO);
 
         if (responseDTO == null) {
-            ErrorDTO errorDTO = new ErrorDTO("Internal Server Error");
+            ErrorDTO errorDTO = new ErrorDTO("non existing category provided");
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDTO);
         }
 
