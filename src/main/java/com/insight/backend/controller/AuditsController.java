@@ -2,10 +2,14 @@ package com.insight.backend.controller;
 
 import java.util.*;
 
+import com.insight.backend.dto.AuditResponseDTO;
+import com.insight.backend.dto.ErrorDTO;
+import com.insight.backend.dto.NewAuditDTO;
 import com.insight.backend.model.Audit;
-import com.insight.backend.model.newAudit.AuditRequest;
+import com.insight.backend.service.audit.CreateAuditService;
 import com.insight.backend.service.audit.FindAuditService;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,15 +28,16 @@ public class AuditsController {
      * The FindAuditService to use the service methods.
      */
     private final FindAuditService findAuditService;
-
+    private final CreateAuditService createAuditService;
     /**
      * Constructs a new AuditsController with the specified FindAuditService.
      * 
      * @param findAuditService the service to find audits
      */
     @Autowired
-    public AuditsController(FindAuditService findAuditService) {
-        this.findAuditService = findAuditService; 
+    public AuditsController(FindAuditService findAuditService, CreateAuditService createAuditService) {
+        this.findAuditService = findAuditService;
+        this.createAuditService = createAuditService;
     }
 
     /**
@@ -47,34 +52,22 @@ public class AuditsController {
         return ResponseEntity.ok(response);
     }
 
-    Integer ID = 1; 
+    /**
+     * POST requests for creating new Audit.
+     *
+     * @return a ResponseEntity containing an ID and name of new Audit
+     */
 
     @PostMapping("/api/v1/audits/new")
-    public ResponseEntity<Map<String, Object>> postWithRequestBody(@RequestBody com.insight.backend.model.newAudit.AuditRequest request) {
+    public ResponseEntity<Object> postWithRequestBody(@Valid @RequestBody NewAuditDTO newAuditDTO) {
 
-        // Check if both keys are correctly given
-        if (request.getName() == null || request.getCategories() == null) {
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("error", "missing input objects");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        AuditResponseDTO responseDTO = createAuditService.createAudit(newAuditDTO);
+
+        if (responseDTO == null) {
+            ErrorDTO errorDTO = new ErrorDTO("non existing category provided");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDTO);
         }
 
-        // Create an instance of Create_audit and call the get_input method
-        ID++;
-        if (ID == 0) {
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("error", "failed_to_create");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse); 
-        } 
-
-
-        // Create return message and return if everything is correct
-        Map<String, Object> responseMap = new HashMap<>();
-        responseMap.put("id", ID); 
-        responseMap.put("name", request.getName());
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseMap);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
-
-
 }
