@@ -1,47 +1,47 @@
-1,"Werden verschiedene Administrationsrollen mit Rechten nach dem Least-Privilege-Prinzip für unterschiedliche Administrationsaufgaben (z. B. Softwareupdates, Konfiguration, Backup) eingesetzt?"
-1,"Existiert ein geregelter Prozess zum zeitnahen Einspielen von Sicherheitsupdates der Server? 
-Werden kritische Updates unverzüglich eingespielt?"
-3,Wird 802.1X Filterung genutzt? (Port-Security)
-3,"Wird im Netzwerk eine Art von Netzwerkanomalie-Detektion durhgeführt? (IDS/IPS/…) 
-[unabhängig von Firewall]"
-5,Erfolgt der externe Zugriff auf das lokale Firmennetzwerk über getunnelte und durch Verschlüsselung gesicherte VPN-Verbindungen?
-5,"Werden auf der Firewall eigene Netzwerkzone(n) und IP-Subnetz(e) für das Unternehmens-VPN genutzt, um eine granulare Zugangskontrolle zu implementieren?"
-5,Existiert eine fein granulare Berechtigungs- und Kommunikatiosmatrix für die VPN-Appliance?
-7,Werden eingehende E-Mails mittels Anti-Malwareschutz überprüft?
-7,"Werden gefährliche E-Mail-Anhänge blockiert? (z.B. .exe, .doc, .cmd, .zip, .7z)"
-7,"Werden Links in Mails überprüft (u.ggf. blockiert), bevor sie den Nutzern angezeigt werden? (Link Protection)"
-7,Wurden Mitarbeiter hinsichtlich Phishing sensibilisiert?
-8,Wird eine SSL Inspection durchgeführt?
-8,"Wird ein Web-Proxy eingesetzt, über den alle HTTP(S)-Verbindungen gehen müssen?"
-8,"Wird gefiltert / blockiert auf Web-Kategorien? (Fielsharing, Pornographie, Gewalt, …)"
-8,Werden HTTP(S)-Verbindungen abseits des Web-Proxies blockiert? (Ausnahmeregeln vermeiden)
-9,Ist ein Schnittstellen- / Device-Management für die Clients etabliert?
-10,Gibt es geregelte Wartungszeiträume für das Einspielen von Patches?
-10,Besteht eine Übersicht über alle in der Infrastruktur installierten Software-Anwendungen?
-10,Ist ein Patch-Management Prozess etabliert? 
-11,"Gibt es Maßnahmen, um Systeme nach vorhandenen Schwachstellen zu scannen? (CVEs)"
-11,Ist ein Schwachstellen-Management Prozess etabliert?
-11,Werden dadurch bekannte kritische  Schwachstellen zeitnah behoben?
-11,Werden authentifizierte Scans durchgeführt?
-12,Wird Festplattenverschlüsselung auf externen Geräten (Laptops) eingesetzt?
-13,Existiert eine oder mehere eigene CA(s)?
-13,Nutzen Sie eine interne Zertifizierungsstelle?
-15,"Existiert ein Backup-Konzept? 
-(Wann wird welches System wie gesichert?)"
-15,Werden regelmäßig Backups erzeugt?
-15,Wird die Wiederherstellbarkeit der Backups regelmäßig überprüft & dokumentiert?
-15,Werden die Backups verschlüsselt?
-16,Werden Benutzernamen und Kennwörter zentral verwaltet?
-16,Werden Passwort-Richtlinien direkt über das AD durchgesetzt?
-18,Gibt es eine Übersicht über alle genutzten Cloud-Dienste?
-18,Ist bekannt welche Daten von Cloud-Diensten verarbeitet werden?
-19,"Gibt es eine Übersicht über alle Richtlinien, Dokumentationen, etc. ?"
-19,"Wurde ein ISMS bereits aufgebaut und implementiert?
-Wird es auch regelmäßig erhalten und verbessert?"
-19,"Sind Verantwortlichkeiten in Bezug auf die Informationssicherheit verteilt? 
-Gibt es eine Sicherheitsorganisation?"
-20,"Findet eine applikationsübergreifende Authentifizierung der Applikationen statt (Single-Sign-On)? 
-[Oder müssen Nutzer sich separat an den einzelnen Applikationen anmelden?]"
-20,Werden Zugriffsrechte für Applikationen zentral verwaltet oder müssen diese manuell in den einzelnen Applikationen zugeordnet werden? 
-21,Können Mitarbeiter mittels digitaler Zertifikate Dokumente digital unterzeichnen (elektronische Signatur)? 
-21,"Können autorisierte Mitarbeiter mittels digitaler Zertifikate Dokumente digital stempeln (elektronischer Siegel)? Z.B. Einstellungsverträge, Rechnungslegung, Vergabeunterlagen, etc."
+"""1""","""Werden verschiedene Administrationsrollen mit Rechten nac“h dem Least-Privilege-Prinzip für unterschiedliche Administrationsaufgaben (z. B. Softwareupdates, Konfiguration, Backup) eingesetzt?"""
+"""1""","""Existiert ein geregelter Prozess zum zeitnahen Einspielen „“von Sicherheitsupdates der Server? 
+Werden kritische Updates unverzüglich eingespielt?"""
+"""3""","""Wird 802.1X Filterung genutzt? (Port-Security)"""
+"""3""","""Wird im Netzwerk eine Art von Netzwerkanomalie-Detektion durhgeführt? (IDS/IPS/…) 
+[unabhängig von Firewall]"""
+"""5""","""Erfolgt der externe Zugriff auf das lokale Firmennetzwerk über getunnelte und durch Verschlüsselung gesicherte VPN-Verbindungen?"""
+"""5""","""Werden auf der Firewall eigene Netzwerkzone(n) und IP-Subnetz(e) für das Unternehmens-VPN genutzt, um eine granulare Zugangskontrolle zu implementieren?"""
+"""5""","""Existiert eine fein granulare Berechtigungs- und Kommunikatiosmatrix für die VPN-Appliance?"""
+"""7""","""Werden eingehende E-Mails mittels Anti-Malwareschutz überprüft?"""
+"""7""","""Werden gefährliche E-Mail-Anhänge blockiert? (z.B. .exe, .doc, .cmd, .zip, .7z)"""
+"""7""","""Werden Links in Mails überprüft (u.ggf. blockiert), bevor sie den Nutzern angezeigt werden? (Link Protection)"""
+"""7""","""Wurden Mitarbeiter hinsichtlich Phishing sensibilisiert?"""
+"""8""","""Wird eine SSL Inspection durchgeführt?"""
+"""8""","""Wird ein Web-Proxy eingesetzt, über den alle HTTP(S)-Verbindungen gehen müssen?"""
+"""8""","""Wird gefiltert / blockiert auf Web-Kategorien? (Fielsharing, Pornographie, Gewalt, …)"""
+"""8""","""Werden HTTP(S)-Verbindungen abseits des Web-Proxies blockiert? (Ausnahmeregeln vermeiden)"""
+"""9""","""Ist ein Schnittstellen- / Device-Management für die Clients etabliert?"""
+"""10""","""Gibt es geregelte Wartungszeiträume für das Einspielen von Patches?"""
+"""10""","""Besteht eine Übersicht über alle in der Infrastruktur installierten Software-Anwendungen?"""
+"""10""","""Ist ein Patch-Management Prozess etabliert? """
+"""11""","""Gibt es Maßnahmen, um Systeme nach vorhandenen Schwachstellen zu scannen? (CVEs)"""
+"""11""","""Ist ein Schwachstellen-Management Prozess etabliert?"""
+"""11""","""Werden dadurch bekannte kritische  Schwachstellen zeitnah behoben?"""
+"""11""","""Werden authentifizierte Scans durchgeführt?"""
+"""12""","""Wird Festplattenverschlüsselung auf externen Geräten (Laptops) eingesetzt?"""
+"""13""","""Existiert eine oder mehere eigene CA(s)?"""
+"""13""","""Nutzen Sie eine interne Zertifizierungsstelle?"""
+"""15""","""Existiert ein Backup-Konzept? 
+(Wann wird welches System wie gesichert?)"""
+"""15""","""Werden regelmäßig Backups erzeugt?"""
+"""15""","""Wird die Wiederherstellbarkeit der Backups regelmäßig überprüft & dokumentiert?"""
+"""15""","""Werden die Backups verschlüsselt?"""
+"""16""","""Werden Benutzernamen und Kennwörter zentral verwaltet?"""
+"""16""","""Werden Passwort-Richtlinien direkt über das AD durchgesetzt?"""
+"""18""","""Gibt es eine Übersicht über alle genutzten Cloud-Dienste?"""
+"""18""","""Ist bekannt welche Daten von Cloud-Diensten verarbeitet werden?"""
+"""19""","""Gibt es eine Übersicht über alle Richtlinien, Dokumentationen, etc. ?"""
+"""19""","""Wurde ein ISMS bereits aufgebaut und implementiert?
+Wird es auch regelmäßig erhalten und verbessert?"""
+"""19""","""Sind Verantwortlichkeiten in Bezug auf die Informationssicherheit verteilt? 
+Gibt es eine Sicherheitsorganisation?"""
+"""20""","""Findet eine applikationsübergreifende Authentifizierung der Applikationen statt (Single-Sign-On)? 
+[Oder müssen Nutzer sich separat an den einzelnen Applikationen anmelden?]"""
+"""20""","""Werden Zugriffsrechte für Applikationen zentral verwaltet oder müssen diese manuell in den einzelnen Applikationen zugeordnet werden? """
+"""21""","""Können Mitarbeiter mittels digitaler Zertifikate Dokumente digital unterzeichnen (elektronische Signatur)? """
+"""21""","""Können autorisierte Mitarbeiter mittels digitaler Zertifikate Dokumente digital stempeln (elektronischer Siegel)? Z.B. Einstellungsverträge, Rechnungslegung, Vergabeunterlagen, etc."""
