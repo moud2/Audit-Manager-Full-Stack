@@ -93,7 +93,6 @@ function PerformAudit() {
   const handleCommentInput = (event, id) => {
     const newComment = event.target.value;
     updateQuestionById(id, { comment: newComment });
-    patchQuestion(id, [{ path: "/comment", value: newComment }]);
   };
 
   const handleCheckboxChange = (event, label, question) => {
@@ -156,6 +155,7 @@ function PerformAudit() {
             placeholder='Kommentar eingeben'
             value={question.comment}
             onChange={(event) => handleCommentInput(event, question.id)}
+            onBlur={(event) => patchQuestion(question.id, [{ path: "/comment", value: event.target.value }])}
           />
         </div>
       ))}
