@@ -4,15 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,6 +18,11 @@ import com.insight.backend.model.Rating;
 import com.insight.backend.service.audit.FindAuditService;
 import com.insight.backend.service.rating.FindRatingService;
 import com.insight.backend.service.rating.SaveRatingService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class RatingController {
@@ -58,14 +54,14 @@ public class RatingController {
     /**
      * Handles PATCH requests for updating a rating.
      *
-     * @param id    the ID of the rating to update
+     * @param ratingId    the ID of the rating to update
      * @param patch the JSON patch containing the changes to apply
      * @return a ResponseEntity containing the updated rating in JSON format or an error message if the rating ID does not exist
      */
-    @PatchMapping("/api/v1/ratings/{id}")
-    public ResponseEntity<Rating> updateRating(@PathVariable("id") long id, @RequestBody JsonPatch patch) {
+    @PatchMapping("/api/v1/ratings/{ratingId}")
+    public ResponseEntity<Rating> updateRating(@PathVariable("ratingId") long ratingId, @RequestBody JsonPatch patch) {
         try {
-            Rating entity = findRatingService.findRatingById(id).orElseThrow(RatingNotFoundException::new);
+            Rating entity = findRatingService.findRatingById(ratingId).orElseThrow(RatingNotFoundException::new);
             JsonNode entityJsonNode;
             entityJsonNode = objectMapper.convertValue(entity, JsonNode.class);
             JsonNode patchedEntityJsonNode = patch.apply(entityJsonNode);
