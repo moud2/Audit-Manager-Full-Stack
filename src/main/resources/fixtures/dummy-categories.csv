@@ -1,21 +1,21 @@
-1,Server Administration
-2,Firewall
-3,Netzwerk
-4,Antivirus
-5,VPN
-6,Monitoring
-7,Email
-8,Secure Browsing
-9,Client
-10,Patch-Management
-11,Schwachstellen-Management
-12,Verschlüsselung
-13,Zertifikate und PKI
-14,Mobile Device Management
-15,Backup
-16,Privilege Access Management (PAM)
-17,"Identity, Passwörter und Secure Logon"
-18,Nutzung von Clouddiensten
-19,Konzepte und Richtlinien
-20,IAM
-21,Digitale Signatur
+"1","Server Administration"
+"2","Firewall"
+"3","Netzwerk"
+"4","Antivirus"
+"5","VPN"
+"6","Monitoring"
+"7","Email"
+"8","Secure Browsing"
+"9","Client"
+"10","Patch-Management"
+"11","Schwachstellen-Management"
+"12","Verschlüsselung"
+"13","Zertifikate und PKI"
+"14","Mobile Device Management"
+"15","Backup"
+"16","Privilege Access Management (PAM)"
+"17","Identity, Passwörter und Secure Logon"
+"18","Nutzung von Clouddiensten"
+"19","Konzepte und Richtlinien"
+"20","IAM"
+"21","Digitale Signatur"
