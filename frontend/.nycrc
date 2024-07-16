@@ -1,4 +1,0 @@
-{
-"include": ["cypress/e2e/instrumented/*.js"],
-"exclude": ["cypress/e2e/*.js"]
-}

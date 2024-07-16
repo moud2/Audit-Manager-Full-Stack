@@ -2,6 +2,7 @@ image: node:20
 
 stages:          
   - test
+  - coverage
   - sonar
   - build
   - release
@@ -60,22 +61,40 @@ test-lint:
     - echo "Linting completed"
 
 
-test-coverage:
+test-instrumenting:
   stage: test
   image: cypress/base:latest
   extends:
     - ".setup:npm"
   script:
     - cd frontend
-    - echo "Analaysing the coverage of e2e tests ...."
-    - npm run dev &
+    - echo "Generating instrumented tests..."
     - npx nyc instrument --compact=false cypress/e2e cypress/e2e/instrumented
+    - echo "Generated!"
+  artifacts:
+    paths:
+      - frontend/cypress/e2e/instrumented
+    expire_in: 1 days 
+
+
+test-coverage:
+  stage: coverage
+  image: cypress/base:latest
+  extends:
+    - ".setup:npm"
+  dependencies:
+   - test-instrumenting
+  script:
+    - cd frontend
+    - echo "Analaysing the coverage of e2e tests ...."
+    - node create-nycrc.cjs
+    - npm run dev &
     - npx nyc cypress run
     - echo "Analyse completed and report created!"
   artifacts:
     paths:
-      - frontend/coverage
-    expire_in: 2 days 
+      - frontend/coverage/
+    expire_in: 1 days
 
 
 

@@ -1,4 +1,5 @@
 const { defineConfig } = require('cypress')
+const codeCoverageTask = require('@cypress/code-coverage/task');
 
 module.exports = defineConfig({
   // setupNodeEvents can be defined in either
