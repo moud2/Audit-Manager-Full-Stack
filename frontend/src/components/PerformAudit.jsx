@@ -99,19 +99,19 @@ function PerformAudit() {
     const isChecked = event.target.checked
 
     if (!isChecked) {
-      const newQuestion = { na: null, points: null }
+      const newQuestion = { nA: null, points: null }
       updateQuestionById(question.id, newQuestion);
-      patchQuestion(question.id, [{ path: "/na", value: newQuestion.na }, { path: "/points", value: newQuestion.points }]);
+      patchQuestion(question.id, [{ path: "/na", value: newQuestion.nA }, { path: "/points", value: newQuestion.points }]);
       return
     }
 
     switch (label) {
       case 'N/A':
-        updateQuestionById(question.id, { na: true, points: null });
+        updateQuestionById(question.id, { nA: true, points: null });
         patchQuestion(question.id, [{ path: "/na", value: true }, { path: "/points", value: null }]);
         break;
       default:
-        updateQuestionById(question.id, { points: label, na: false });
+        updateQuestionById(question.id, { points: label, nA: false });
         patchQuestion(question.id, [{ path: "/na", value: false }, { path: "/points", value: label }]);
     }
   };
@@ -119,7 +119,7 @@ function PerformAudit() {
   const getChecked = (label, question) => {
     switch (label) {
       case 'N/A':
-        return question.na;
+        return question.nA;
       default:
         return question.points === label;
     }
