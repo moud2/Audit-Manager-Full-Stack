@@ -19,6 +19,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+/**
+ * Test class for DatabaseSeederService.
+ */
 @ExtendWith(MockitoExtension.class)
 public class DatabaseSeederServiceTest {
 
@@ -33,12 +36,18 @@ public class DatabaseSeederServiceTest {
     @InjectMocks
     private DatabaseSeederService databaseSeederService;
 
+    /**
+     * Sets up the test environment before each test.
+     */
     @BeforeEach
     public void setUp() throws Exception {
         readAllLinesFromCsv = DatabaseSeederService.class.getDeclaredMethod("readAllLinesFromCsv", Path.class);
         readAllLinesFromCsv.setAccessible(true);
     }
 
+    /**
+     * Tests the seedDatabaseFromFiles method.
+     */
     @Test
     public void testSeedDatabaseFromFiles() throws Exception {
         // Arrange
@@ -70,7 +79,9 @@ public class DatabaseSeederServiceTest {
         verify(saveQuestionService, times(questions.size())).saveQuestion(any(Question.class));
     }
 
-
+    /**
+     * Tests the readAllLinesFromCsv method.
+     */
     @Test
     public void testReadAllLinesFromCsv() throws Exception {
         // Arrange
