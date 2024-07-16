@@ -7,7 +7,7 @@ const NewAudit = () => {
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [name, setName] = useState("asdf");
+  const [name, setName] = useState(null);
 
   
   const navigate = useNavigate();
@@ -60,7 +60,7 @@ const NewAudit = () => {
     <div>
       <form className="w-[240px] flex justify-center items-center mx-auto m-8">
         <div className="relative flex w-full items-center gap-2">
-          <TextField label="Outlined" variant="outlined" value={name} onChange={handleNameChange}/>
+          <TextField label="Audit Name" variant="outlined" value={name} onChange={handleNameChange}/>
         </div>
       </form>
       <Board cards={cards} setCards={setCards} />{" "}

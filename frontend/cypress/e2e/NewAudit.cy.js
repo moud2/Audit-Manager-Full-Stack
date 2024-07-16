@@ -24,7 +24,7 @@ describe("NewAudit Page Tests", () => {
 
     it("Search input and next button are visible", () => {
       cy.get('input[type="text"]').should("be.visible");
-      cy.get('input[type="text"]').should("have.attr", "placeholder", "Name");
+      cy.get('label').contains('Audit Name').should('exist').and('be.visible');
       cy.get("button").contains("Audit erstellen").should("be.visible");
     });
   });
