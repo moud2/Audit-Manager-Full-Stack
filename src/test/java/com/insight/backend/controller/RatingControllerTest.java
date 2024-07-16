@@ -1,7 +1,8 @@
 package com.insight.backend.controller;
 
-import java.util.Optional;
+import java.util.*;
 
+import com.insight.backend.dto.RatingDTO;
 import com.insight.backend.mapper.RatingMapper;
 import com.insight.backend.model.Audit;
 import com.insight.backend.model.Category;
@@ -60,6 +61,7 @@ class RatingControllerTest {
         audit1 = new Audit();
         audit1.setId(1L);
         audit1.setName("TestAudit1");
+        audit1.setRatings(new HashSet<>());
 
         rating1 = new Rating();
         rating1.setId(1L);
@@ -74,6 +76,9 @@ class RatingControllerTest {
         rating2.setPoints(4);
         rating2.setQuestion(question2);
         rating2.setAudit(audit1);
+
+        audit1.getRatings().add(rating1);
+        audit1.getRatings().add(rating2);
     }
 
     private Rating rating1;
@@ -83,63 +88,51 @@ class RatingControllerTest {
     private Category category1;
     private Audit audit1;
 
-    // TODO: test only working periodically
-
-    /*@Test
+    @Test
     public void testGetRatingsAuditFound() throws Exception {
-        Audit audit = new Audit();
-
-        Question question = new Question();
-        question.setName("test");
-
-        Rating rating1 = new Rating(false, "Comment1", 3, audit, question);
-        Rating rating2 = new Rating(true, "Comment2", 5, audit, question);
-
-        audit.setRatings(Set.of(rating1, rating2));
-        when(findAuditService.findAuditById(1L)).thenReturn(Optional.of(audit));
+        List<RatingDTO> ratingDTOs = new ArrayList<>();
 
         RatingDTO ratingDTO1 = new RatingDTO();
         ratingDTO1.setId(rating1.getId());
-        ratingDTO1.setnA(rating1.getNa());
-        ratingDTO1.setComment(rating1.getComment());
-        ratingDTO1.setPoints(rating1.getPoints());
         ratingDTO1.setQuestion(rating1.getQuestion().getName());
+        ratingDTO1.setPoints(rating1.getPoints());
+        ratingDTO1.setComment(rating1.getComment());
+        ratingDTO1.setnA(rating1.getNa());
         ratingDTO1.setCategory(rating1.getQuestion().getCategory());
+        ratingDTOs.add(ratingDTO1);
 
         RatingDTO ratingDTO2 = new RatingDTO();
         ratingDTO2.setId(rating2.getId());
-        ratingDTO2.setnA(rating2.getNa());
-        ratingDTO2.setComment(rating2.getComment());
-        ratingDTO2.setPoints(rating2.getPoints());
         ratingDTO2.setQuestion(rating2.getQuestion().getName());
+        ratingDTO2.setPoints(rating2.getPoints());
+        ratingDTO2.setComment(rating2.getComment());
+        ratingDTO2.setnA(rating2.getNa());
         ratingDTO2.setCategory(rating2.getQuestion().getCategory());
+        ratingDTOs.add(ratingDTO2);
 
-        when(ratingMapper.convertToRatingDTOs(Arrays.asList(rating1, rating2)))
-            .thenReturn(Arrays.asList(ratingDTO1, ratingDTO2));
+        when(findAuditService.findAuditById(1L)).thenReturn(Optional.of(audit1));
+        when(ratingMapper.convertToRatingDTOs(anyList())).thenReturn(ratingDTOs);
 
-        String expectedJson = "["
-                + "{\"id\":null,\"category\":null,\"question\":\"test\",\"points\":3,\"comment\":\"Comment1\",\"nA\":false},"
-                + "{\"id\":null,\"category\":null,\"question\":\"test\",\"points\":5,\"comment\":\"Comment2\",\"nA\":true}"
-                + "]";
-
-        String actualJson = mockMvc.perform(get("/api/v1/audits/1/ratings"))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andReturn()
-            .getResponse()
-            .getContentAsString();
-
-        System.out.println("Expected JSON: " + expectedJson);
-        System.out.println("Actual JSON: " + actualJson);
-
-        if (!expectedJson.equals(actualJson)) {
-            System.err.println("Expected JSON: " + expectedJson + " but got: " + actualJson);
-            throw new AssertionError("Expected JSON: " + expectedJson + " but got: " + actualJson);
-        }
+        mockMvc.perform(get("/api/v1/audits/1/ratings"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[0].id").value(rating1.getId()))
+                .andExpect(jsonPath("$[0].question").value(rating1.getQuestion().getName()))
+                .andExpect(jsonPath("$[0].points").value(rating1.getPoints()))
+                .andExpect(jsonPath("$[0].comment").value(rating1.getComment()))
+                .andExpect(jsonPath("$[0].nA").value(rating1.getNa()))
+                .andExpect(jsonPath("$[0].category.id").value(rating1.getQuestion().getCategory().getId()))
+                .andExpect(jsonPath("$[1].id").value(rating2.getId()))
+                .andExpect(jsonPath("$[1].question").value(rating2.getQuestion().getName()))
+                .andExpect(jsonPath("$[1].points").value(rating2.getPoints()))
+                .andExpect(jsonPath("$[1].comment").value(rating2.getComment()))
+                .andExpect(jsonPath("$[1].nA").value(rating2.getNa()))
+                .andExpect(jsonPath("$[1].category.id").value(rating2.getQuestion().getCategory().getId()));
 
         verify(findAuditService, times(1)).findAuditById(1L);
         verify(ratingMapper, times(1)).convertToRatingDTOs(anyList());
-    }*/
+    }
+
 
     @Test
     public void testGetRatingsAuditNotFound() throws Exception {
