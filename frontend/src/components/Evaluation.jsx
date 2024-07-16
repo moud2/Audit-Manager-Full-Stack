@@ -110,7 +110,6 @@ function Evaluation() {
                     <LinearProgress variant="determinate" value={mainProgress} {...props} />
                 </Box>
                 <Box sx={{minWidth: 35}}>
-                    {/* eslint-disable-next-line react/prop-types */}
                     <Typography variant="body2" color="text.secondary">{`${Math.round(props.value)}%`}</Typography>
                 </Box>
             </Box>
@@ -135,7 +134,6 @@ function Evaluation() {
                     }}
                 >
                     <Typography variant="caption" component="div" color="text.secondary">
-                        {/* eslint-disable-next-line react/prop-types */}
                         {`${Math.round(props.value)}%`}
                     </Typography>
                 </Box>
@@ -175,7 +173,7 @@ function Evaluation() {
                     series={[
                         {data: pointsDistribution},
                     ]}
-                    width="100%"
+                    width="900"
                     height={350}
                     xAxis={[
                         {
