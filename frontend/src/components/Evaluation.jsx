@@ -25,13 +25,16 @@ function Evaluation() {
                 setLoading(false);
 
                 const totalQuestions = data.length;
-                const maxScore = totalQuestions * 5;
 
-                const actualScore = data.reduce((acc, rating) => {
-                    return acc + (rating.points || 0);
-                }, 0);
+                const actualProgress = data.filter((question) => {
+                    if((question.rating != null) || (question.nA != null)) {
+                        return true;
+                    }
+                    console.log(question);
+                });
 
-                const calculatedProgress = Math.round((actualScore / maxScore) * 100);
+                console.log(actualProgress);
+                const calculatedProgress = Math.round((actualProgress.length / totalQuestions) * 100);
 
                 setMainProgress(calculatedProgress);
 
@@ -66,8 +69,8 @@ function Evaluation() {
                 setCategoryProgress(calculatedCategoryProgress);
 
                 const distribution = data.reduce((acc, rating) => {
-                    const points = rating.points || 0;
-                    acc[points] = (acc[points] || 0) + 1;
+                    const points = rating.points;
+                    acc[points] = (acc[points]) + 1;
                     return acc;
                 }, new Array(6).fill(0));
 
