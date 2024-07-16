@@ -72,9 +72,10 @@ test-coverage:
     - npx nyc instrument --compact=false cypress/e2e cypress/e2e/instrumented
     - npx nyc cypress run
     - echo "Analyse completed and report created!"
-   artifacts:
+  artifacts:
     path:
-      - frontend/coverage 
+      - frontend/coverage
+    expire_in: 2 days 
 
 
 
