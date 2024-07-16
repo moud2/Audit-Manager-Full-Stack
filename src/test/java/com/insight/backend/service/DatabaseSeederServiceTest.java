@@ -1,6 +1,7 @@
 package com.insight.backend.service;
 
 import java.lang.reflect.Method;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -88,13 +89,23 @@ public class DatabaseSeederServiceTest {
         Path csvPath = Path.of(ClassLoader.getSystemResource("fixtures/dummy-categories.csv").toURI());
 
         // Act
-        @SuppressWarnings("unchecked")
-        List<String[]> lines = (List<String[]>) readAllLinesFromCsv.invoke(null, csvPath);
+        List<String[]> lines = (List<String[]>) readAllLinesFromCsv.invoke(databaseSeederService, csvPath);
+
+        // Get the expected number of lines using the private helper method
+        int expectedNumberOfLines = getExpectedNumberOfLines(csvPath);
 
         // Assert
         assertNotNull(lines);
         assertFalse(lines.isEmpty());
-        assertEquals(21, lines.size());
+        assertEquals(expectedNumberOfLines, lines.size());
         assertArrayEquals(new String[]{"1", "Server Administration"}, lines.getFirst());
+    }
+
+    /**
+     * Private helper method to determine the expected number of lines in the CSV file.
+     */
+    private int getExpectedNumberOfLines(Path csvPath) throws Exception {
+        List<String> lines = Files.readAllLines(csvPath);
+        return lines.size();
     }
 }
