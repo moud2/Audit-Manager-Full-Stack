@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import {HashRouter as Router, Route, Routes} from 'react-router-dom';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import Dashboard from './components/Dashboard.jsx';
 import NewAudit from './components/NewAudit.jsx';
