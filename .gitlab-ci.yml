@@ -73,7 +73,7 @@ test-coverage:
     - npx nyc cypress run
     - echo "Analyse completed and report created!"
   artifacts:
-    path:
+    paths:
       - frontend/coverage
     expire_in: 2 days 
 
