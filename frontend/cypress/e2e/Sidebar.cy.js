@@ -6,14 +6,14 @@ describe('Sidebar Navigation', () => {
                 body: [{ id: 1, name: 'Audit 1' }, { id: 2, name: 'Audit 2' }],
             });
           }).as('getAudits');
-        cy.visit('http://localhost:5173/');
+        cy.visit('http://localhost:5173/#/');
     });
 
     it('Links are working', () => {
 
         cy.get('[data-cy="nav-dashboard"]').click()
 
-        cy.url().should('eq', 'http://localhost:5173/');
+        cy.url().should('eq', 'http://localhost:5173/#/');
   
     });
 });

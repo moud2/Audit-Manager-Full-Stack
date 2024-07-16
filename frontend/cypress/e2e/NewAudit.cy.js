@@ -13,7 +13,7 @@ describe("NewAudit Page Tests", () => {
         });
       }).as("getCategories");
 
-      cy.visit("http://localhost:5173/newAudit");
+      cy.visit("http://localhost:5173/#/newAudit");
     });
 
     it("Categories are fetched and displayed correctly", () => {
@@ -36,7 +36,7 @@ describe("NewAudit Page Tests", () => {
         body: { error: "Backend not available" },
       }).as("getCategoriesError");
 
-      cy.visit("http://localhost:5173/newAudit");
+      cy.visit("http://localhost:5173/#/newAudit");
     });
 
     it("should display error message when backend is not available", () => {

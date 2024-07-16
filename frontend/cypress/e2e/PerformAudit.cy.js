@@ -17,7 +17,7 @@ export const interceptPATCH = (points, na, comment) => {
 describe('PerformAudit Component', () => {
   beforeEach(() => {
     interceptGET(null, null, '');
-    cy.visit('http://localhost:5173/performAudit/1');
+    cy.visit('http://localhost:5173/#/performAudit/1');
   });
 
   it('should allow typing in all textareas', () => {
@@ -55,7 +55,7 @@ describe('PerformAudit Component', () => {
 describe('PerformAudit Component with fetched data', () => {
   it('presents requested data as expected', () => {
     interceptGET(2, false, 'okay');
-    cy.visit('http://localhost:5173/performAudit/1');
+    cy.visit('http://localhost:5173/#/performAudit/1');
     
     cy.get('input[type="checkbox"]').eq(0).should('not.be.checked');
     cy.get('input[type="checkbox"]').eq(1).should('not.be.checked');
@@ -71,7 +71,7 @@ describe('PerformAudit Component with fetched data', () => {
 describe('PATCH request', () => {
   beforeEach(() => {
     interceptGET(null, null, '');
-    cy.visit('http://localhost:5173/performAudit/1');
+    cy.visit('http://localhost:5173/#/performAudit/1');
     });
   
   it('Rating: null/null -> 3/false -> null/null', () => {
