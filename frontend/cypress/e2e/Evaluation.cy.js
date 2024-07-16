@@ -1,7 +1,7 @@
 describe('Evaluation Page Tests', () => {
     beforeEach(() => {
         // Visit the Evaluation page
-        cy.visit('http://localhost:5173/evaluation/1');
+        cy.visit('http://localhost:5173/#/evaluation/1');
     });
 
     it('should display ratings for audit ID 1', () => {
