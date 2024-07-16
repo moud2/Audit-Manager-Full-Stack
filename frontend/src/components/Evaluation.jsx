@@ -157,7 +157,7 @@ function Evaluation() {
                 <p className={"text-center text-xl"}>Gesamtfortschritt</p>
             </div>
 
-            <div id="categories" className={"w-full flex flex-wrap justify-center items-center mb-6 lg:flex-nowrap"}>
+            <div id="categories" className="w-full grid grid-cols-1 gap-6 mb-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
                 {Object.keys(categoryProgress).map(categoryId => (
                     <div key={categoryId} className={"flex flex-col items-center"}>
                         <CircularProgressWithLabel
@@ -168,7 +168,8 @@ function Evaluation() {
             </div>
 
             <div id="result_per_question"
-                 className={"max-w-full overflow-x-auto"}>
+                 className={"max-w-full overflow-x-auto pb-10"}
+                 >
                 <BarChart
                     series={[
                         {data: pointsDistribution},
