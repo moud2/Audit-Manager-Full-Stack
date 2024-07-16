@@ -1,5 +1,12 @@
 describe("NewAudit Page Tests", () => {
 
+  it("Links of the sidebar working", () => {
+    cy.visit("http://localhost:5173/#/");
+
+    cy.get('[data-cy="nav-dashboard"]').click();
+    cy.url().should("eq", "http://localhost:5173/#/");
+  });
+
   // Test when backend is available
   context("Backend is available", () => {
     beforeEach(() => {
@@ -43,6 +50,39 @@ describe("NewAudit Page Tests", () => {
       cy.contains("Fehler: Request failed with status code 500").should(
         "be.visible",
       );
+    });
+  });
+});
+describe('New Audit Creation', () => {
+  
+  beforeEach(() => {
+    cy.intercept("GET", "/api/v1/categories", (req) => {
+      req.reply({
+        statusCode: 200,
+        body: [
+          { id: 1, name: "Category 1" },
+          { id: 2, name: "Category 2" },
+        ],
+      });
+    }).as("getCategories");
+
+    cy.visit("http://localhost:5173/#/newAudit");
+  });
+    
+
+  it('should create a new audit and navigate to perform audit page', () => {
+    cy.intercept('POST', '/api/v1/audits/new', {
+      statusCode: 201,
+      body: { id: '12345' } 
+    }).as('createAudit');
+
+    cy.get('label').contains('Audit Name').invoke('css', 'pointer-events', 'auto').type('Test Audit');
+
+    cy.get("button").contains("Audit erstellen").invoke('css', 'pointer-events', 'auto').click();
+    
+    cy.wait('@createAudit').then((interception) => {
+      expect(interception.response.statusCode).to.eq(201);
+      cy.url().should('include', '/performAudit/12345'); 
     });
   });
 });
