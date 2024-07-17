@@ -30,13 +30,11 @@ function Evaluation() {
                 const totalQuestions = data.length;
 
                 const actualProgress = data.filter((question) => {
-                    if((question.rating != null) || (question.nA != null)) {
+                    if((question.points != null) || (question.nA == true)) {
                         return true;
                     }
-                    console.log(question);
                 });
 
-                console.log(actualProgress);
                 const calculatedProgress = Math.round((actualProgress.length / totalQuestions) * 100);
 
                 setMainProgress(calculatedProgress);
