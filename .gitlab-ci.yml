@@ -115,6 +115,7 @@ sonarqube-check:
   dependencies:
     - test-coverage    
   script: 
+    - cd frontend
     - sonar-scanner -X
   allow_failure: true
   #only:

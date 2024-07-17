@@ -1,8 +1,4 @@
 {
-  "presets": ["@babel/preset-env"],
-  "env": {
-    "test": {
-      "plugins": ["istanbul"]
-    }
-  }
+  "presets": ["@babel/preset-react"],  // Fügen Sie dies hinzu, falls noch nicht vorhanden
+  "plugins": ["babel-plugin-istanbul"]
 }
