@@ -30,7 +30,6 @@ test-e2e:
     - npx cypress install
     - echo "Running Cypress e2e tests..."
     - npm run dev &                             # Start the server in the background
-    - sleep 20                                  # Wait for the server to start (adjust time as needed)
     - npx cypress run                           # Run Cypress end-to-end tests
     - echo "Cypress e2e tests completed"
 
@@ -98,7 +97,7 @@ sonarqube-check:
     - test-coverage    
   script: 
     - cd frontend
-    - sonar-scanner -X
+    - sonar-scanner               # use -X for debugging
   allow_failure: true
   #only:
     #- merge_requests
