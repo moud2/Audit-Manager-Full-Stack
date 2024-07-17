@@ -9,25 +9,24 @@ const NewAudit = () => {
   const [error, setError] = useState(null);
   const [name, setName] = useState(null);
 
-  
   const navigate = useNavigate();
-    
-  
+
   const handleCreateAuditClick = () => {
     api
-      .post("/v1/audits/new", {name: name,
-        categories: cards.filter((card)=>card.column === "Ausgewählte Kategorien").map((card)=>card.id) ,
+      .post("/v1/audits/new", {
+        name: name,
+        categories: cards
+          .filter((card) => card.column === "Ausgewählte Kategorien")
+          .map((card) => card.id),
       })
       .then((response) => {
-        navigate("/performAudit/"+response.data.id)
-      })
-     
-
+        navigate("/performAudit/" + response.data.id);
+      });
   };
 
   const handleNameChange = (event) => {
-    setName(event.target.value)
-  }
+    setName(event.target.value);
+  };
 
   useEffect(() => {
     api
@@ -58,20 +57,25 @@ const NewAudit = () => {
 
   return (
     <div>
+      <h1 className="text-center text-4xl m-6">Neues Audit anlegen</h1>
       <form className="w-[240px] flex justify-center items-center mx-auto m-8">
-        <div className="relative flex w-full items-center gap-2">
-          <TextField label="Audit Name" variant="outlined" value={name} onChange={handleNameChange}/>
+        <div className="relative flex w-full justify-center">
+          <TextField
+            label="Audit Name"
+            variant="outlined"
+            value={name}
+            onChange={handleNameChange}
+          />
         </div>
       </form>
       <Board cards={cards} setCards={setCards} />{" "}
       {/* Pass cards and setCards to Board */}
-      <div className="flex p-10">
-        <button
-          onClick={handleCreateAuditClick}
-          className="absolute bottom-20 right-16 p-2 bg-blue-500 text-white rounded">
-            Audit erstellen
-        </button>
-      </div>
+      <button
+        onClick={handleCreateAuditClick}
+        className="fixed right-16 p-2 bottom-20 mb-12 bg-blue-500 text-white rounded"
+      >
+        Audit erstellen
+      </button>
     </div>
   );
 };
@@ -144,7 +148,7 @@ const Column = ({ title, headingColor, column, cards, setCards }) => {
       {
         offset: Number.NEGATIVE_INFINITY,
         element: indicators[indicators.length - 1],
-      },
+      }
     );
   };
 

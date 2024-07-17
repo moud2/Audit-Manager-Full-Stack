@@ -6,7 +6,7 @@ describe('Router', () => {
           body: [{ id: 1, name: 'Audit 1' }, { id: 2, name: 'Audit 2' }],
       });
     }).as('getAudits');
-    cy.visit('http://localhost:5173/');
+    cy.visit('http://localhost:5173/#/');
  
     cy.intercept('GET', '/api/v1/audits/1/ratings', {
       statusCode: 200,

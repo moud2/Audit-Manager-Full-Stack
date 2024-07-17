@@ -9,7 +9,7 @@ describe('Dashboard Navigation Tests', () => {
                 });
             }).as('getAudits');
             
-            cy.visit('http://localhost:5173');
+            cy.visit('http://localhost:5173/#');
         });
 
         it('Names and links of fetched data work as expected', () => {
@@ -36,7 +36,7 @@ describe('Dashboard Navigation Tests', () => {
                 body: { error: "Backend not available" },
             }).as('getAuditsError');
             
-            cy.visit('http://localhost:5173');
+            cy.visit('http://localhost:5173/#');
         });
 
         it('Plus button is visible and navigates correctly', () => {

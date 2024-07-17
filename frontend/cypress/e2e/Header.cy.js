@@ -1,10 +1,10 @@
 describe("Header Test", () => {
   it("Visits InSight (Localhost)", () => {
-    cy.visit("http://localhost:5173");
+    cy.visit("http://localhost:5173/#");
   });
 
   it('look for the heading "InSight"', () => {
-    cy.visit("http://localhost:5173");
+    cy.visit("http://localhost:5173/#");
     cy.contains("InSight");
   });
 
