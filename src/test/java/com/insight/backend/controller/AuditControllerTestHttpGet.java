@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @WebMvcTest(AuditsController.class)
 @ExtendWith(SpringExtension.class)
-public class AuditsControllerTest {
+public class AuditControllerTestHttpGet {
 
     /**
      * MockMvc instance for HTTP request mocking
