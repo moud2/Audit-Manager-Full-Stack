@@ -1,4 +1,4 @@
 {
-  "presets": ["@babel/preset-react"],  // Fügen Sie dies hinzu, falls noch nicht vorhanden
+  "presets": ["@babel/preset-react"],  
   "plugins": ["babel-plugin-istanbul"]
 }
