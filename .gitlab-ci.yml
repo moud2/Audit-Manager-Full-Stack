@@ -113,6 +113,7 @@ sonarqube-check:
     paths:
       - .sonar/cache
   dependencies:
+    - test-instrumenting
     - test-coverage    
   script: 
     - sonar-scanner -X
