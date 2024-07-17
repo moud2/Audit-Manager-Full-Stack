@@ -69,11 +69,11 @@ test-instrumenting:
   script:
     - cd frontend
     - echo "Generating instrumented tests..."
-    - npx nyc instrument --compact=false cypress/e2e cypress/e2e/instrumented
+    - npx nyc instrument --compact=false cypress/e2e instrumented
     - echo "Generated!"
   artifacts:
     paths:
-      - frontend/cypress/e2e/instrumented
+      - frontend/instrumented
     expire_in: 1 days 
 
 
@@ -87,7 +87,7 @@ test-coverage:
   script:
     - cd frontend
     - echo "Analaysing the coverage of e2e tests ...."
-    - node create-nycrc.cjs
+    - node updateCypressConfig.cjs
     - npm run dev &
     - npx nyc cypress run
     - echo "Analyse completed and report created!"

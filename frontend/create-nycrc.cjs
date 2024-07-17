@@ -1,6 +1,6 @@
 const fs = require('fs');
 const nycrcContent = {
-  include: ["cypress/e2e/instrumented/*.js"],
+  include: ["instrumented/*.js"],
   exclude: ["cypress/e2e/*.js"],
   reporter: ["lcov", "text"]
 };
