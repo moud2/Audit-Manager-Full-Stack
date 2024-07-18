@@ -57,8 +57,6 @@ public class DatabaseSeederServiceTest {
     @Test
     public void testSeedDatabaseFromFiles() throws Exception {
         // Arrange
-        // Path categoryPath = Path.of(ClassLoader.getSystemResource("fixtures/dummy-categories.csv").toURI());
-        // Path questionPath = Path.of(ClassLoader.getSystemResource("fixtures/dummy-questions.csv").toURI());
         String categoryPath = "fixtures/dummy-categories.csv";
         String questionPath = "fixtures/dummy-questions.csv";
 
