@@ -4,11 +4,16 @@ import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.io.Reader;
+import java.io.InputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 import com.insight.backend.model.Category;
 import com.insight.backend.model.Question;
 import com.insight.backend.service.category.SaveCategoryService;
 import com.insight.backend.service.question.SaveQuestionService;
+import com.opencsv.CSVReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,7 +47,7 @@ public class DatabaseSeederServiceTest {
      */
     @BeforeEach
     public void setUp() throws Exception {
-        readAllLinesFromCsv = DatabaseSeederService.class.getDeclaredMethod("readAllLinesFromCsv", Path.class);
+        readAllLinesFromCsv = DatabaseSeederService.class.getDeclaredMethod("readAllLinesFromCsv", String.class);
         readAllLinesFromCsv.setAccessible(true);
     }
 
@@ -52,8 +57,11 @@ public class DatabaseSeederServiceTest {
     @Test
     public void testSeedDatabaseFromFiles() throws Exception {
         // Arrange
-        Path categoryPath = Path.of(ClassLoader.getSystemResource("fixtures/dummy-categories.csv").toURI());
-        Path questionPath = Path.of(ClassLoader.getSystemResource("fixtures/dummy-questions.csv").toURI());
+        // Path categoryPath = Path.of(ClassLoader.getSystemResource("fixtures/dummy-categories.csv").toURI());
+        // Path questionPath = Path.of(ClassLoader.getSystemResource("fixtures/dummy-questions.csv").toURI());
+        String categoryPath = "fixtures/dummy-categories.csv";
+        String questionPath = "fixtures/dummy-questions.csv";
+
 
         // Mocking readAllLinesFromCsv method using reflection
         List<String[]> categories = (List<String[]>) readAllLinesFromCsv.invoke(databaseSeederService, categoryPath);
@@ -86,7 +94,8 @@ public class DatabaseSeederServiceTest {
     @Test
     public void testReadAllLinesFromCsv() throws Exception {
         // Arrange
-        Path csvPath = Path.of(ClassLoader.getSystemResource("fixtures/dummy-categories.csv").toURI());
+        //Path csvPath = Path.of(ClassLoader.getSystemResource("fixtures/dummy-categories.csv").toURI());
+        String csvPath = "fixtures/dummy-categories.csv";
 
         // Act
         List<String[]> lines = (List<String[]>) readAllLinesFromCsv.invoke(databaseSeederService, csvPath);
@@ -104,8 +113,14 @@ public class DatabaseSeederServiceTest {
     /**
      * Private helper method to determine the expected number of lines in the CSV file.
      */
-    private int getExpectedNumberOfLines(Path csvPath) throws Exception {
-        List<String> lines = Files.readAllLines(csvPath);
-        return lines.size();
+    private int getExpectedNumberOfLines(String filePath) throws Exception {  
+        try (InputStream in = getClass().getClassLoader().getResourceAsStream(filePath)) {
+            Reader reader = new BufferedReader(new InputStreamReader(in));
+
+            try (CSVReader csvReader = new CSVReader(reader)) {
+                return csvReader.readAll().size();
+            }
+        }
     }
+
 }
