@@ -1,9 +1,8 @@
 package com.insight.backend.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 
 @Entity
 public class Rating {

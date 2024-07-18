@@ -3,10 +3,10 @@ package com.insight.backend.mapper;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.stereotype.Component;
-
 import com.insight.backend.dto.RatingDTO;
 import com.insight.backend.model.Rating;
+
+import org.springframework.stereotype.Component;
 
 @Component
 public class RatingMapper {

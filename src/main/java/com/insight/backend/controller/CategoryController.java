@@ -1,15 +1,14 @@
 package com.insight.backend.controller;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import com.insight.backend.model.Category;
 import com.insight.backend.service.category.FindCategoryService;
 
-import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * CategoryController is a REST controller that handles HTTP requests related to categories.

@@ -1,13 +1,11 @@
 package com.insight.backend.service;
 
-import java.lang.reflect.Method;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.List;
-import java.io.Reader;
-import java.io.InputStream;
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
+import java.lang.reflect.Method;
+import java.util.List;
 
 import com.insight.backend.model.Category;
 import com.insight.backend.model.Question;

@@ -1,12 +1,12 @@
 package com.insight.backend.service.category;
 
-import java.util.Optional;
 import java.util.List;
-
-import org.springframework.stereotype.Service;
+import java.util.Optional;
 
 import com.insight.backend.model.Category;
 import com.insight.backend.repository.CategoryRepository;
+
+import org.springframework.stereotype.Service;
 
 /**
  * Service-class to find categories in the database.

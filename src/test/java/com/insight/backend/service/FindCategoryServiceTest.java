@@ -1,19 +1,18 @@
 package com.insight.backend.service;
 
-import java.util.Optional;
-import java.util.List;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
+import com.insight.backend.model.Category;
+import com.insight.backend.repository.CategoryRepository;
+import com.insight.backend.service.category.FindCategoryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import com.insight.backend.model.Category;
-import com.insight.backend.repository.CategoryRepository;
-import com.insight.backend.service.category.FindCategoryService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

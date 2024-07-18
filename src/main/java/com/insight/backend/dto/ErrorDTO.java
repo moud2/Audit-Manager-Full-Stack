@@ -1,6 +1,7 @@
 package com.insight.backend.dto;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 /**
  * Data Transfer Object to represent error responses
