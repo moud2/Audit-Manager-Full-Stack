@@ -3,15 +3,15 @@ package com.insight.backend.mapper;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import com.insight.backend.dto.RatingDTO;
 import com.insight.backend.model.Category;
 import com.insight.backend.model.Question;
 import com.insight.backend.model.Rating;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class RatingMapperTest {
 

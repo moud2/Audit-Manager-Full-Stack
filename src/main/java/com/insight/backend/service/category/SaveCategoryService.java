@@ -1,7 +1,8 @@
 package com.insight.backend.service.category;
 
-import com.insight.backend.repository.CategoryRepository;
 import com.insight.backend.model.Category;
+import com.insight.backend.repository.CategoryRepository;
+
 import org.springframework.stereotype.Service;
 
 @Service
