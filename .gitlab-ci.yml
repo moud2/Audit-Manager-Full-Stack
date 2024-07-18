@@ -2,6 +2,7 @@ image: node:20
 
 stages:          
   - test
+  - sonar
   - build
   - release
   - release-fullstack
@@ -29,7 +30,6 @@ test-e2e:
     - npx cypress install
     - echo "Running Cypress e2e tests..."
     - npm run dev &                             # Start the server in the background
-    - sleep 20                                  # Wait for the server to start (adjust time as needed)
     - npx cypress run                           # Run Cypress end-to-end tests
     - echo "Cypress e2e tests completed"
 
@@ -60,10 +60,31 @@ test-lint:
 
 
 
-sonarqube-check:
+test-coverage:
   stage: test
+  image: cypress/base:latest
+  extends:
+    - ".setup:npm"
+  script:
+    - cd frontend
+    - echo "Generating coverage report of tests..."
+    - npx babel src --out-dir src --out-file-extension .jsx
+    - npm run dev &
+    - npx nyc cypress run
+    - echo "Report generated successfully!"
+  artifacts:
+    paths:
+      - frontend/coverage/
+    expire_in: 1 days
+
+
+
+
+# SONAR STAGE
+sonarqube-check:
+  stage: sonar
   image: 
-    name: sonarsource/sonar-scanner-cli:5.0
+    name: sonarsource/sonar-scanner-cli:latest
     entrypoint: [""]
   variables:
     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
@@ -72,8 +93,11 @@ sonarqube-check:
     key: "${CI_JOB_NAME}"
     paths:
       - .sonar/cache
+  dependencies:
+    - test-coverage    
   script: 
-    - sonar-scanner
+    - cd frontend
+    - sonar-scanner               # use -X for debugging
   allow_failure: true
   #only:
     #- merge_requests
