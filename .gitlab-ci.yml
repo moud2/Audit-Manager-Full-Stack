@@ -9,7 +9,7 @@ stages:
   - deploy
 
 .setup:npm:
-  cache: # https://docs.gitlab.com/ee/ci/caching/#cache-nodejs-dependencies
+  cache: # https://docs.gitlab.com/ee/ci/caching/#cache-nodejs-dependencies :)
     key:
       files:
         - frontend/package-lock.json
