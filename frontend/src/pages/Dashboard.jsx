@@ -1,5 +1,9 @@
+import {LayoutDefault} from "../layouts/LayoutDefault.jsx";
+
 export function Dashboard() {
     return (
-        <div className="bg-green-200">I am the dashboard Page</div>
+        <LayoutDefault>
+            <div className="bg-green-200 w-full h-full">I am the dashboard Page</div>
+        </LayoutDefault>
     )
 }

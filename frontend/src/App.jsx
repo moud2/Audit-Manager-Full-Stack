@@ -3,6 +3,7 @@ import './index.css';
 import {Route, BrowserRouter, Routes} from "react-router-dom";
 import {Index} from "./pages/Index.jsx";
 import {Dashboard} from "./pages/Dashboard.jsx";
+import {Page} from "./pages/my/example/nested/Page.jsx";
 
 function App() {
     return (
@@ -10,6 +11,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<Index />}></Route>
                 <Route path="/dashboard" element={<Dashboard />}></Route>
+                <Route path="/my/example/nested/page" element={<Page />}></Route>
             </Routes>
         </BrowserRouter>
     );
