@@ -1,4 +1,4 @@
-import {DashboardSidebar} from "../components/DashboardSidebar/DashboardSidebar.jsx";
+import {DashboardSidebar} from "../components/Layout/DashboardSidebar.jsx";
 import {Children} from "react";
 
 export function LayoutDefault({children}){
