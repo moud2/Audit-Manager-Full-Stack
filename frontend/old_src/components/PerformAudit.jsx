@@ -132,7 +132,7 @@ function PerformAudit() {
 
   return (
     <div style={{ position: 'relative', minHeight: '100vh' }}>
-      <h1 className="px-10 py-5 font-bold">Audit durchführen</h1>
+      <h1 className="text-4xl m-6 text-center">Audit durchführen</h1>
       {questions.map((question) => (
         <div key={question.id}>
           <h2 className="px-10 py-5" data-cy="question_text">{question.question}</h2>

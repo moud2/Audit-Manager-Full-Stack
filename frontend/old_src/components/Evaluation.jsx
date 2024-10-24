@@ -28,20 +28,14 @@ function Evaluation() {
                 setLoading(false);
 
                 const totalQuestions = data.length;
-                const maxScore = totalQuestions * 5;
 
-                console.log("Total Questions:", totalQuestions);
-                console.log("Max Score:", maxScore);
+                const actualProgress = data.filter((question) => {
+                    if((question.points != null) || (question.nA == true)) {
+                        return true;
+                    }
+                });
 
-                const actualScore = data.reduce((acc, rating) => {
-                    console.log("Rating Points:", rating.points);
-                    return acc + (rating.points || 0);
-                }, 0);
-
-                console.log("Actual Score:", actualScore);
-
-                const calculatedProgress = Math.round((actualScore / maxScore) * 100);
-                console.log("Calculated Progress:", calculatedProgress);
+                const calculatedProgress = Math.round((actualProgress.length / totalQuestions) * 100);
 
                 setMainProgress(calculatedProgress);
 
@@ -78,8 +72,8 @@ function Evaluation() {
 
                 // Berechnung der Punkteverteilung
                 const distribution = data.reduce((acc, rating) => {
-                    const points = rating.points || 0;
-                    acc[points] = (acc[points] || 0) + 1;
+                    const points = rating.points;
+                    acc[points] = (acc[points]) + 1;
                     return acc;
                 }, new Array(6).fill(0));
 
