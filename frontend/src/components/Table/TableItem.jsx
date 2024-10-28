@@ -1,4 +1,3 @@
-// src/components/Table/TableItem.jsx
 import React from "react";
 
 export default function TableItem({ id, title, onDragStart }) {

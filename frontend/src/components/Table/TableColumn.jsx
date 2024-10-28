@@ -1,5 +1,5 @@
 import React from "react";
-import TableItem from "./TableItem";
+import TableItem from "./TableItem.jsx";
 
 export default function TableColumn({ title, items, onDropItem }) {
     const handleDragStart = (e, id) => {

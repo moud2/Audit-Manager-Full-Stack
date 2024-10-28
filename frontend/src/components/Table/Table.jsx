@@ -1,5 +1,5 @@
 import React from "react";
-import TableColumn from "./TableColumn";
+import TableColumn from "./TableColumn.jsx";
 
 export default function Table({ value, options, onChange }) {
     const availableItems = options.filter(option => !value.includes(option.id));
