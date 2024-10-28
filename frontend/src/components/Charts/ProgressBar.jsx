@@ -1,8 +1,13 @@
-import React from 'react';
 import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
+/**
+ * A linear progress component with a label showing the percentage value.
+ * @param {Object} props - Component properties.
+ * @param {number} props.value - The progress value as a percentage (0-100).
+ * @returns {JSX.Element} A linear progress component with a percentage label.
+ */
 const LinearProgressWithLabel = ({ value }) => {
     return (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>

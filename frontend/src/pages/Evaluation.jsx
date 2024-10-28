@@ -4,14 +4,18 @@ import ProgressBar from '../components/Charts/ProgressBar.jsx';
 import CircularProgress from '../components/Charts/CircularProgress.jsx';
 import BarChart from '../components/Charts/BarChart.jsx';
 
+/**
+ * Evaluation component displaying progress bars and charts for evaluation data.
+ * @component
+ */
 export function Evaluation() {
 
     // Daten später durch Backend erhalten?
     const [mainProgress, setMainProgress] = useState(75);
-    const [categoryProgress, setCategoryProgress] = useState({
-        1: { name: 'Kategorie 1', progress: 60 },
-        2: { name: 'Kategorie 2', progress: 80 },
-    });
+    const [categoryProgress, setCategoryProgress] = useState([
+        { id: 1, name: 'Kategorie 1', progress: 60 },
+        { id: 2, name: 'Kategorie 2', progress: 80 },
+    ]);
     const [pointsDistribution, setPointsDistribution] = useState([3, 5, 2, 8, 4, 6]);
     const colors = ['#a50026', '#d73027', '#fdae61', '#d9ef8b', '#66bd63', '#006837'];
 
@@ -30,13 +34,13 @@ export function Evaluation() {
                 </div>
 
                 <div id="categories" className="w-full grid grid-cols-1 gap-6 mb-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-                    {Object.keys(categoryProgress).map(categoryId => (
-                        <div key={categoryId} className={"flex flex-col items-center"}>
+                    {categoryProgress.map(category => (
+                        <div key={category.id} className={"flex flex-col items-center"}>
                             <CircularProgress
-                                value={categoryProgress[categoryId].progress}
+                                value={category.progress}
                                 size={60}
                             />
-                            <p className={"text-center mt-2"}>{categoryProgress[categoryId].name}</p>
+                            <p className={"text-center mt-2"}>{category.name}</p>
                         </div>
                     ))}
                 </div>
