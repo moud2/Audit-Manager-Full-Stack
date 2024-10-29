@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function TableItem({ id, title, onDragStart }) {
+export function TableItem({ id, title, onDragStart }) {
     return (
         <div
             draggable="true"

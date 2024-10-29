@@ -1,15 +1,15 @@
 import React from "react";
-import TableItem from "./TableItem.jsx";
+import { TableItem } from "./TableItem.jsx";
 
-export default function TableColumn({ title, items, onDropItem }) {
+export function TableColumn({ title, items, onDropItem }) {
     const handleDragStart = (e, id) => {
-        e.dataTransfer.setData("cardID", id);
+        e.dataTransfer.setData("cardID", id); // ID speichern
     };
 
     const handleDrop = (e) => {
-        e.preventDefault();
-        const cardID = e.dataTransfer.getData("cardID");
-        onDropItem(cardID);
+        e.preventDefault(); // Drop-Standardverhalten deaktivieren
+        const cardID = e.dataTransfer.getData("cardID"); // ID abrufen
+        onDropItem(cardID); // Weitergabe an onDropItem
     };
 
     return (
@@ -19,7 +19,7 @@ export default function TableColumn({ title, items, onDropItem }) {
             onDrop={handleDrop}
         >
             <h3 className="mb-4">{title} ({items.length})</h3>
-            <div className="overflow-y-auto h-72"> 
+            <div className="overflow-y-auto h-72">
                 {items.map(item => (
                     <TableItem
                         key={item.id}

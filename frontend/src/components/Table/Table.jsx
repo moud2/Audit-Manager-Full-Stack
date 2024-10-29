@@ -1,23 +1,26 @@
 import React from "react";
-import TableColumn from "./TableColumn.jsx";
+import { TableColumn } from "./TableColumn.jsx";
 
-export default function Table({ value, options, onChange }) {
+export function Table({ value, options, onChange }) {
     const availableItems = options.filter(option => !value.includes(option.id));
     const selectedItems = options.filter(option => value.includes(option.id));
 
+    // Funktion zum Hinzufügen eines Items in die ausgewählte Liste
     const handleAdd = (id) => {
-        onChange([...value, id]);
+        onChange([...value, id]); // Zustand mit neuem Item aktualisieren
     };
 
+    // Funktion zum Entfernen eines Items aus der ausgewählten Liste
     const handleRemove = (id) => {
-        onChange(value.filter(selectedId => selectedId !== id));
+        onChange(value.filter(selectedId => selectedId !== id)); // Zustand ohne das Item aktualisieren
     };
 
+    // Funktion, die je nach Zielbereich `handleAdd` oder `handleRemove` aufruft
     const handleDropItem = (id, targetColumn) => {
         if (targetColumn === "selected") {
-            if (!value.includes(id)) handleAdd(id);
+            handleAdd(id); // Hinzufügen zur ausgewählten Liste
         } else {
-            if (value.includes(id)) handleRemove(id);
+            handleRemove(id); // Entfernen aus der ausgewählten Liste
         }
     };
 
@@ -26,7 +29,7 @@ export default function Table({ value, options, onChange }) {
             <TableColumn
                 title="Verfügbare Kategorien"
                 items={availableItems}
-                onDropItem={(id) => handleDropItem(id, "available")}
+                onDropItem={(id) => handleDropItem(id, "available")} // Übergabe an handleDropItem mit Zielbereich
             />
             <TableColumn
                 title="Ausgewählte Kategorien"

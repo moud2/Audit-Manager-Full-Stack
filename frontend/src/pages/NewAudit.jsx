@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { LayoutDefault } from "../layouts/LayoutDefault.jsx";  
-import Table from "../components/Table/Table.jsx";  
+import { Table } from "../components/Table/Table.jsx";  
 
 export function NewAudit() {
     const [cards] = useState([
