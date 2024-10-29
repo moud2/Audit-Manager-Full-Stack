@@ -63,7 +63,7 @@ public class CreateAuditService {
                     rating.setAudit(audit);
                     ratings.add(rating);
                 }
-            } else throw new CategoryNotFoundException("Category not found with id: " + categoryId);//throw exception
+            } else throw new CategoryNotFoundException("Category not found with id: " + categoryId); // Throw exception if category not found
         }
 
         saveAuditService.saveAudit(audit);
