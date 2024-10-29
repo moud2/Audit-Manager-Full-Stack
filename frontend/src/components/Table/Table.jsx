@@ -18,9 +18,9 @@ export function Table({ value, options, onChange }) {
     // Funktion, die je nach Zielbereich `handleAdd` oder `handleRemove` aufruft
     const handleDropItem = (id, targetColumn) => {
         if (targetColumn === "selected") {
-            handleAdd(id); // Hinzufügen zur ausgewählten Liste
+            handleAdd(id);
         } else {
-            handleRemove(id); // Entfernen aus der ausgewählten Liste
+            handleRemove(id); 
         }
     };
 
@@ -29,7 +29,7 @@ export function Table({ value, options, onChange }) {
             <TableColumn
                 title="Verfügbare Kategorien"
                 items={availableItems}
-                onDropItem={(id) => handleDropItem(id, "available")} // Übergabe an handleDropItem mit Zielbereich
+                onDropItem={(id) => handleDropItem(id, "available")}
             />
             <TableColumn
                 title="Ausgewählte Kategorien"
