@@ -15,7 +15,6 @@ import com.insight.backend.model.Question;
 import com.insight.backend.model.Rating;
 import com.insight.backend.service.category.FindCategoryService;
 import com.insight.backend.service.rating.SaveRatingService;
-
 /**
  * Service class for creating audits.
  */
@@ -44,8 +43,8 @@ public class CreateAuditService {
      * This method also adds questions to the audit and creates a rating for each question.
      *
      * @param newAuditDTO the DTO containing the details of the new audit
-     * @return an AuditResponseDTO containing the details of the created audit,
-     *         or null if any of the provided category IDs are invalid
+     * @return an AuditResponseDTO containing the details of the created audit
+     * @throws CategoryNotFoundException if any of the provided category IDs are invalid     
      */
     public AuditResponseDTO createAudit(NewAuditDTO newAuditDTO) {
         Audit audit = new Audit();
@@ -64,7 +63,7 @@ public class CreateAuditService {
                     rating.setAudit(audit);
                     ratings.add(rating);
                 }
-            } else throw new CategoryNotFoundException("Category not found with id: " + categoryId);
+            } else throw new CategoryNotFoundException("Category not found with id: " + categoryId);//throw exception
         }
 
         saveAuditService.saveAudit(audit);
