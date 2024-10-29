@@ -4,8 +4,23 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.MockitoAnnotations;
+
 import com.insight.backend.dto.AuditResponseDTO;
 import com.insight.backend.dto.NewAuditDTO;
+import com.insight.backend.exception.CategoryNotFoundException;
 import com.insight.backend.model.Audit;
 import com.insight.backend.model.Category;
 import com.insight.backend.model.Question;
@@ -13,16 +28,6 @@ import com.insight.backend.service.audit.CreateAuditService;
 import com.insight.backend.service.audit.SaveAuditService;
 import com.insight.backend.service.category.FindCategoryService;
 import com.insight.backend.service.rating.SaveRatingService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.Mockito.*;
 
 /**
  * Test class for CreateAuditService.
@@ -91,7 +96,7 @@ class CreateAuditServiceTest {
 
     /**
      * Tests the createAudit method when an invalid category ID is provided.
-     * Verifies that the method returns null and no audit or ratings are saved.
+     * Verifies that the method throws CategoryNotFoundException.
      */
     @Test
     public void testCreateAudit_invalidCategory() {
@@ -101,9 +106,13 @@ class CreateAuditServiceTest {
 
         when(findCategoryService.findCategoryById(1L)).thenReturn(Optional.empty());
 
-        AuditResponseDTO response = createAuditService.createAudit(newAuditDTO);
+        // Check that CategoryNotFoundException is thrown
+        Exception exception = assertThrows(CategoryNotFoundException.class, () -> {
+            createAuditService.createAudit(newAuditDTO);
+        });
+        assertEquals("Category not found with id: 1", exception.getMessage());
 
-        assertNull(response);
+        // Ensure that save methods are not called
         verify(saveRatingService, times(0)).saveAllRatings(anyList());
         verify(saveAuditService, times(0)).saveAudit(any(Audit.class));
     }
