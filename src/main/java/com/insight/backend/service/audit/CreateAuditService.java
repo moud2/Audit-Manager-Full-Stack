@@ -54,16 +54,16 @@ public class CreateAuditService {
 
         // Add questions to the audit and create ratings for each question
         for (Long categoryId : newAuditDTO.getCategories()) {
-            Optional<Category> categoryOpt = findCategoryService.findCategoryById(categoryId);
-            if (categoryOpt.isPresent()) {
-                Category category = categoryOpt.get();
-                for (Question question : category.getQuestions()) {
-                    Rating rating = new Rating();
-                    rating.setQuestion(question);
-                    rating.setAudit(audit);
-                    ratings.add(rating);
-                }
-            } else throw new CategoryNotFoundException("Category not found with id: " + categoryId);// Throw exception if category not found
+            Category category = findCategoryService.findCategoryById(categoryId).orElseThrow(()-> new CategoryNotFoundException("Category not found with id: " + categoryId));
+                 
+            for (Question question : category.getQuestions()) {
+                Rating rating = new Rating();
+                rating.setQuestion(question);
+                rating.setAudit(audit);
+                ratings.add(rating);
+            }
+            
+            
         }
 
         saveAuditService.saveAudit(audit);
