@@ -17,6 +17,8 @@ public class Audit {
     @JsonIgnore
     @OneToMany(mappedBy = "audit")
     private Set<Rating> ratings;
+    
+    private String customer;
 
     public Audit(String name, Set<Rating> ratings) {
         this.name = name;
@@ -49,5 +51,13 @@ public class Audit {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(String customer) {
+        this.customer = customer;
     }
 }
