@@ -32,12 +32,9 @@ export function CheckboxSelect({ value, options, onChange }) {
      */
     const handleCheckboxChange = (event, label) => {
         const isChecked = event.target.checked;
+        console.log(value);
 
-        if (!isChecked) {
-            onChange(null);
-        } else {
-            onChange(label);
-        }
+        onChange(label, isChecked);
     }
 
     return (
