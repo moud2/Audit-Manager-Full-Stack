@@ -106,6 +106,7 @@ public class AuditControllerTestHttpPost {
     public void testNonExistingCategories() throws Exception {
         NewAuditDTO newAuditDTO = new NewAuditDTO();
         newAuditDTO.setName("Audit Name");
+        newAuditDTO.setCustomer("TestCustomer");
         newAuditDTO.setCategories(Arrays.asList(1L, 2L));
 
         when(createAuditService.createAudit(any(NewAuditDTO.class))).thenReturn(null);

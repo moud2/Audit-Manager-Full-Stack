@@ -19,6 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -75,7 +76,7 @@ public class AuditControllerTestHttpGet {
     public void testGetAllAudits() throws Exception {
         // Mock the service to return the Audits
         List<Audit> audits = Arrays.asList(audit1, audit2);
-        when(findAuditService.findAllAudits()).thenReturn(audits);
+        when(findAuditService.findAllAudits("", "asc", "id")).thenReturn(audits);
 
         // Perform the GET request and verify the response
         mockMvc.perform(get("/api/v1/audits"))
