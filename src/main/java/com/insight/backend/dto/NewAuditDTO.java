@@ -27,9 +27,13 @@ public class NewAuditDTO {
     @NotEmpty(message = "Categories cannot be empty")
     private List<@NotNull(message = "Category ID cannot be null") Long> categories;
 
+    @NotBlank(message = "Customer cannot be blank")
+    @Size(max = 255, message = "Customer should be up to 255 characters")
+    private String customer;
+
     /**
      * Gets the name of the audit.
-     *  
+     *
      * @return the name of the audit
      */
     public String getName() {
@@ -61,6 +65,24 @@ public class NewAuditDTO {
      */
     public void setCategories(List<Long> categories) {
         this.categories = categories;
+    }
+
+    /**
+     * Gets the customer of the audit.
+     *
+     * @return the customer of the audit
+     */
+    public String getCustomer() {
+        return customer;
+    }
+
+    /**
+     * Sets the customer of the audit.
+     *
+     * @param customer the customer to set
+     */
+    public void setCustomer(String customer) {
+        this.customer = customer;
     }
 }
 

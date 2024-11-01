@@ -129,10 +129,13 @@ public class AuditControllerTestHttpPost {
         NewAuditDTO newAuditDTO = new NewAuditDTO();
         newAuditDTO.setName("Audit Name");
         newAuditDTO.setCategories(Collections.singletonList(1L));
+        newAuditDTO.setCustomer("TestCustomer");
 
         AuditResponseDTO auditResponseDTO = new AuditResponseDTO();
         auditResponseDTO.setId(1L);
         auditResponseDTO.setName("Audit Name");
+        auditResponseDTO.setCustomer("TestCustomer");
+
 
         // Mocking behavior of createAuditService
         when(createAuditService.createAudit(any(NewAuditDTO.class))).thenReturn(auditResponseDTO);
@@ -142,6 +145,7 @@ public class AuditControllerTestHttpPost {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())  // Expecting status code 201
                 .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.name").value("Audit Name"));
+                .andExpect(jsonPath("$.name").value("Audit Name"))
+                .andExpect(jsonPath("$.customer").value("TestCustomer"));
     }
 }
