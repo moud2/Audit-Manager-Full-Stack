@@ -14,6 +14,9 @@ public class Audit {
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
+    private String customer;
+
     @JsonIgnore
     @OneToMany(mappedBy = "audit")
     private Set<Rating> ratings;
@@ -49,5 +52,13 @@ public class Audit {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(String customer) {
+        this.customer = customer;
     }
 }
