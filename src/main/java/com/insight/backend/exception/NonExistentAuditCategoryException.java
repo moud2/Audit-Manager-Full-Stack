@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * This exception results in an HTTP status code of 400 (BAD REQUEST).
  */
 @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "No such Category")
-public class CategoryNotFoundException extends RuntimeException {
+public class NonExistentAuditCategoryException extends RuntimeException {
 
-    public CategoryNotFoundException(String message) {
+    public NonExistentAuditCategoryException(String message) {
         super(message); // Calls the constructor of RuntimeException to set the error message
     }
 }

@@ -21,7 +21,10 @@ import org.mockito.MockitoAnnotations;
 
 import com.insight.backend.dto.AuditResponseDTO;
 import com.insight.backend.dto.NewAuditDTO;
-import com.insight.backend.exception.CategoryNotFoundException;
+
+import com.insight.backend.dto.AuditResponseDTO;
+import com.insight.backend.dto.NewAuditDTO;
+import com.insight.backend.exception.NonExistentAuditCategoryException;
 import com.insight.backend.model.Audit;
 import com.insight.backend.model.Category;
 import com.insight.backend.model.Question;
@@ -97,7 +100,7 @@ class CreateAuditServiceTest {
 
     /**
      * Tests the createAudit method when an invalid category ID is provided.
-     * Verifies that the method throws CategoryNotFoundException.
+     * Verifies that the method throws NonExistentAuditCategoryException.
      */
     @Test
     public void testCreateAudit_invalidCategory() {
@@ -107,8 +110,8 @@ class CreateAuditServiceTest {
 
         when(findCategoryService.findCategoryById(1L)).thenReturn(Optional.empty());
 
-        // Check that CategoryNotFoundException is thrown
-        Exception exception = assertThrows(CategoryNotFoundException.class, () -> {
+        // Check that NonExistentAuditCategoryException is thrown
+        Exception exception = assertThrows(NonExistentAuditCategoryException.class, () -> {
             createAuditService.createAudit(newAuditDTO);
         });
         assertEquals("Category not found with id: 1", exception.getMessage());

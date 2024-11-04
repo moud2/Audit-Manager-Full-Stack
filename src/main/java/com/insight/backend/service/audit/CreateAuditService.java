@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.insight.backend.dto.AuditResponseDTO;
 import com.insight.backend.dto.NewAuditDTO;
-import com.insight.backend.exception.CategoryNotFoundException;
+import com.insight.backend.exception.NonExistentAuditCategoryException;
 import com.insight.backend.model.Audit;
 import com.insight.backend.model.Category;
 import com.insight.backend.model.Question;
@@ -44,7 +44,7 @@ public class CreateAuditService {
      *
      * @param newAuditDTO the DTO containing the details of the new audit
      * @return an AuditResponseDTO containing the details of the created audit
-     * @throws CategoryNotFoundException if any of the provided category IDs are invalid     
+     * @throws NonExistentAuditCategoryException if any of the provided category IDs are invalid     
      */
     public AuditResponseDTO createAudit(NewAuditDTO newAuditDTO) {
         Audit audit = new Audit();
@@ -54,7 +54,7 @@ public class CreateAuditService {
 
         // Add questions to the audit and create ratings for each question
         for (Long categoryId : newAuditDTO.getCategories()) {
-            Category category = findCategoryService.findCategoryById(categoryId).orElseThrow(()-> new CategoryNotFoundException("Category not found with id: " + categoryId));
+            Category category = findCategoryService.findCategoryById(categoryId).orElseThrow(()-> new NonExistentAuditCategoryException("Category not found with id: " + categoryId));
                  
             for (Question question : category.getQuestions()) {
                 Rating rating = new Rating();
