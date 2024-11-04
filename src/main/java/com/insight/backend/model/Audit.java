@@ -18,11 +18,13 @@ public class Audit {
     @OneToMany(mappedBy = "audit")
     private Set<Rating> ratings;
     
+    @Column(nullable = false)
     private String customer;
 
-    public Audit(String name, Set<Rating> ratings) {
+    public Audit(String name, Set<Rating> ratings, String customer) {
         this.name = name;
         this.ratings = ratings;
+        this.customer = customer;
     }
 
     public Audit() {
