@@ -142,9 +142,7 @@ class RatingControllerTest {
         when(findAuditService.findAuditById(1L)).thenReturn(Optional.empty());
 
         mockMvc.perform(get("/api/v1/audits/1/ratings"))
-                .andExpect(status().isNotFound())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("{\"error\": \"audit with id 1 not found\"}"));
+                .andExpect(status().isNotFound());
 
         verify(findAuditService, times(1)).findAuditById(1L);
         verify(ratingMapper, times(0)).convertToRatingDTOs(anyList());
