@@ -3,6 +3,8 @@ package com.insight.backend.model;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -19,6 +21,7 @@ public class Audit {
     @OneToMany(mappedBy = "audit")
     private Set<Rating> ratings;
 
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
     public Audit(String name, Set<Rating> ratings) {
