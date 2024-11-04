@@ -5,7 +5,6 @@ import java.util.List;
 import jakarta.validation.Valid;
 
 import com.insight.backend.dto.AuditResponseDTO;
-import com.insight.backend.dto.ErrorDTO;
 import com.insight.backend.dto.NewAuditDTO;
 import com.insight.backend.exception.NonExistentAuditCategoryException;
 import com.insight.backend.model.Audit;
