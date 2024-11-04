@@ -22,6 +22,7 @@ public class Audit {
     private Set<Rating> ratings;
 
     @CreationTimestamp
+    @Column(updatable = false)
     private LocalDateTime createdAt;
 
     public Audit(String name, Set<Rating> ratings) {
