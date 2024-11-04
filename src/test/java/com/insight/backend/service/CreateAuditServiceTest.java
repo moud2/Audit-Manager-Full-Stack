@@ -1,27 +1,5 @@
 package com.insight.backend.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.Set;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import com.insight.backend.dto.AuditResponseDTO;
-import com.insight.backend.dto.NewAuditDTO;
-
 import com.insight.backend.dto.AuditResponseDTO;
 import com.insight.backend.dto.NewAuditDTO;
 import com.insight.backend.exception.NonExistentAuditCategoryException;
@@ -32,10 +10,25 @@ import com.insight.backend.service.audit.CreateAuditService;
 import com.insight.backend.service.audit.SaveAuditService;
 import com.insight.backend.service.category.FindCategoryService;
 import com.insight.backend.service.rating.SaveRatingService;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.Mockito.*;
 
 /**
  * Test class for CreateAuditService.
  */
+@ExtendWith(MockitoExtension.class)
 class CreateAuditServiceTest {
 
     @Mock
@@ -49,14 +42,6 @@ class CreateAuditServiceTest {
 
     @InjectMocks
     private CreateAuditService createAuditService;
-
-    /**
-     * Sets up the test environment before each test.
-     */
-    @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     /**
      * Tests the createAudit method for a successful audit creation.
@@ -111,13 +96,15 @@ class CreateAuditServiceTest {
         when(findCategoryService.findCategoryById(1L)).thenReturn(Optional.empty());
 
         // Check that NonExistentAuditCategoryException is thrown
-        Exception exception = assertThrows(NonExistentAuditCategoryException.class, () -> {
-            createAuditService.createAudit(newAuditDTO);
-        });
-        assertEquals("Category not found with id: 1", exception.getMessage());
+        NonExistentAuditCategoryException exception = assertThrows(NonExistentAuditCategoryException.class, () -> createAuditService.createAudit(newAuditDTO));
+        assertEquals("Category with id 1 not found", exception.getMessage());
 
         // Ensure that save methods are not called
-        verify(saveRatingService, times(0)).saveAllRatings(anyList());
-        verify(saveAuditService, times(0)).saveAudit(any(Audit.class));
+        verify(saveRatingService, never()).saveAllRatings(anyList());
+        verify(saveAuditService, never()).saveAudit(any(Audit.class));
+
+        // Verify the findCategoryService is called correctly
+        verify(findCategoryService, times(1)).findCategoryById(1L);
+        verify(findCategoryService, never()).findCategoryById(2L);
     }
 }

@@ -1,9 +1,5 @@
 package com.insight.backend.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,11 +14,13 @@ import com.insight.backend.model.Rating;
 import com.insight.backend.service.audit.FindAuditService;
 import com.insight.backend.service.rating.FindRatingService;
 import com.insight.backend.service.rating.SaveRatingService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class RatingController {
@@ -61,7 +59,7 @@ public class RatingController {
     @PatchMapping("/api/v1/ratings/{ratingId}")
     public ResponseEntity<Rating> updateRating(@PathVariable("ratingId") long ratingId, @RequestBody JsonPatch patch) {
         try {
-            Rating entity = findRatingService.findRatingById(ratingId).orElseThrow(RatingNotFoundException::new);
+            Rating entity = findRatingService.findRatingById(ratingId).orElseThrow(() -> new RatingNotFoundException(ratingId));
             JsonNode entityJsonNode;
             entityJsonNode = objectMapper.convertValue(entity, JsonNode.class);
             JsonNode patchedEntityJsonNode = patch.apply(entityJsonNode);

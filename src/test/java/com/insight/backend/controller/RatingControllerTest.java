@@ -1,10 +1,5 @@
 package com.insight.backend.controller;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-
 import com.insight.backend.dto.RatingDTO;
 import com.insight.backend.mapper.RatingMapper;
 import com.insight.backend.model.Audit;
@@ -17,13 +12,17 @@ import com.insight.backend.service.rating.SaveRatingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.*;
@@ -136,13 +135,16 @@ class RatingControllerTest {
         verify(ratingMapper, times(1)).convertToRatingDTOs(anyList());
     }
 
-
     @Test
     public void testGetRatingsAuditNotFound() throws Exception {
         when(findAuditService.findAuditById(1L)).thenReturn(Optional.empty());
 
         mockMvc.perform(get("/api/v1/audits/1/ratings"))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.timestamp").exists())
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.error").value("Not Found"))
+                .andExpect(jsonPath("$.message").value("Audit with id 1 not found"));
 
         verify(findAuditService, times(1)).findAuditById(1L);
         verify(ratingMapper, times(0)).convertToRatingDTOs(anyList());
@@ -184,7 +186,11 @@ class RatingControllerTest {
         mockMvc.perform(patch("/api/v1/ratings/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("[{\"op\":\"replace\",\"path\":\"/comment\",\"value\":\"This is not the first comment\"}]"))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.timestamp").exists())
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.error").value("Not Found"))
+                .andExpect(jsonPath("$.message").value("Rating with id 1 not found"));
 
         // save should not be called
         verify(saveRatingService, never()).saveRating(any());

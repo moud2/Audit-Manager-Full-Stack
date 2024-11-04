@@ -14,4 +14,13 @@ public class NonExistentAuditCategoryException extends RuntimeException {
     public NonExistentAuditCategoryException(String message) {
         super(message); // Calls the constructor of RuntimeException to set the error message
     }
+
+    /**
+     * Constructs a new NonExistentAuditCategoryException with the specified category.
+     *
+     * @param category The category id that was not found
+     */
+    public NonExistentAuditCategoryException(Long category) {
+        super("Category with id " + category + " not found");
+    }
 }
