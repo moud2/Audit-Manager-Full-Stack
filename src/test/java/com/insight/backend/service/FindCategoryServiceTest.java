@@ -4,20 +4,20 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import com.insight.backend.model.Category;
-import com.insight.backend.repository.CategoryRepository;
-import com.insight.backend.service.category.FindCategoryService;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.anyLong;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import com.insight.backend.model.Category;
+import com.insight.backend.repository.CategoryRepository;
+import com.insight.backend.service.category.FindCategoryService;
 /**
  * Test class for FindCategoryService.
  */
@@ -35,16 +35,19 @@ public class FindCategoryServiceTest {
 
     /**
      * Set up method to initialize test data.
+     * This method is executed before each test to ensure a clean state.
      */
     @BeforeEach
     void setUp() {
         category1 = new Category();
         category1.setId(1L);
         category1.setName("Category1");
+        category1.setDeletedAt(null);
 
         category2 = new Category();
         category2.setId(2L);
         category2.setName("Category2");
+        category2.setDeletedAt(null);
     }
 
     /**
@@ -72,7 +75,7 @@ public class FindCategoryServiceTest {
     @Test
     void testFindAllCategories() {
         List<Category> categories = Arrays.asList(category1, category2);
-        when(categoryRepository.findAll()).thenReturn(categories);
+        when(categoryRepository.findByDeletedAtIsNull()).thenReturn(categories);
         List<Category> foundCategories = findCategoryService.findAllCategories();
         assertEquals(categories, foundCategories);
     }
