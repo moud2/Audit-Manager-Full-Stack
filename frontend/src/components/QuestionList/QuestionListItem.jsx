@@ -1,9 +1,22 @@
-import {Checkbox, FormControlLabel, FormGroup} from "@mui/material";
-import React, {useMemo, useState} from "react";
+import { FormGroup} from "@mui/material";
+import React, {useMemo} from "react";
 import {CheckboxSelect} from "./CheckboxSelect.jsx";
 import { TextareaAutosize as BaseTextareaAutosize } from '@mui/base/TextareaAutosize';
 import { styled } from '@mui/system';
 
+/**
+ * QuestionListItem-Komponente
+ *
+ * Diese Komponente rendert eine Checkbox-Liste und ein Kommentarfeld, die auf den übergebenen Frage- und Optionsdaten basieren.
+ * Die Komponente enthält Event-Handler, um Änderungen an den Checkboxen und dem Kommentarfeld zu erfassen und weiterzugeben.
+ *
+ * @component
+ * @param {Object} props - Die Eigenschaften der Komponente.
+ * @param {Object} props.question - Ein Objekt, das die Frage und zugehörige Daten wie Punkte und Kommentar enthält.
+ * @param {Array.<string>} props.options - Eine Liste von Labeln für die Checkbox-Optionen.
+ * @param {Function} props.onChange - Eine Callback-Funktion, die aufgerufen wird, wenn eine Änderung in der Checkbox oder im Kommentar erfolgt.
+ * @returns {JSX.Element} - Die gerenderte QuestionListItem-Komponente.
+ */
 export function QuestionListItem({ question, options, onChange }) {
     //Styling for the Comment Sections
     const Textarea = useMemo(()=>styled(BaseTextareaAutosize)(
@@ -34,6 +47,11 @@ export function QuestionListItem({ question, options, onChange }) {
   `
     ), []);
 
+    /**
+     *
+     * @param {string} value - Der Wert der ausgewählten Checkbox.
+     * @param {boolean} isChecked - Gibt an, ob die Checkbox ausgewählt wurde oder nicht (Wert kommt von der CheckboxSelect Komponente bei Änderung).
+     */
     const handleCheckboxChange = (value, isChecked) => {
         console.log("value: ", value, " isChecked: ", isChecked);
 
@@ -48,11 +66,23 @@ export function QuestionListItem({ question, options, onChange }) {
         }
     }
 
+    /**
+     * Event-Handler für Änderungen im Kommentarfeld.
+     * Aktualisiert das Frageobjekt mit dem neuen Kommentartext.
+     *
+     * @param {Object} event - Das Eingabe-Ereignis.
+     */
     const handleCommentInput = (event) => {
         const newComment = event.target.value;
         onChange({...question, comment: newComment});
     }
 
+    /**
+     * Ermittelt den Wert für die Checkbox-Auswahl.
+     * Gibt 'N/A' zurück, wenn keine Auswahl vorhanden ist.
+     *
+     * @returns {string | null} - Die aktuelle Bewertung der Frage, Punktwert, 'N/A' oder null.
+     */
     const insertValue = () => {
         if (question.nA === true) {
             return 'N/A';
