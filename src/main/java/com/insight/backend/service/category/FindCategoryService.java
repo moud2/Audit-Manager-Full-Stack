@@ -9,15 +9,15 @@ import com.insight.backend.model.Category;
 import com.insight.backend.repository.CategoryRepository;
 
 /**
- * Service-class to find categories in the database.
+ * Service class for managing and retrieving categories.
  */
 @Service
 public class FindCategoryService {
 
     private final CategoryRepository categoryRepository;
-    
+
     /**
-     * Constructor to inject the CategoryRepository.
+     * Constructs a FindCategoryService with the specified CategoryRepository.
      *
      * @param categoryRepository the repository for accessing category data.
      */
@@ -26,18 +26,19 @@ public class FindCategoryService {
     }
 
     /**
-     * Finds a category based on the given id.
+     * Retrieves a category by its ID.
      *
-     * @param id the id of category to be found.
-     * @return an Optional object that includes the category if found, or empty if not found.
+     * @param id the ID of the category to find.
+     * @return an Optional containing the category if found, or empty if not.
      */
-    public Optional <Category> findCategoryById(Long id) {
+    public Optional<Category> findCategoryById(Long id) {
         return categoryRepository.findById(id);
     }
 
-        /*
-     * returns all categories
-     * @return list of all categories
+    /**
+     * Retrieves all non-deleted categories.
+     *
+     * @return a list of categories that have not been marked as deleted.
      */
     public List<Category> findAllCategories() {
         return categoryRepository.findByDeletedAtIsNull();
