@@ -3,10 +3,10 @@ package com.insight.backend.service.category;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import com.insight.backend.model.Category;
 import com.insight.backend.repository.CategoryRepository;
-
-import org.springframework.stereotype.Service;
 
 /**
  * Service-class to find categories in the database.
@@ -40,6 +40,6 @@ public class FindCategoryService {
      * @return list of all categories
      */
     public List<Category> findAllCategories() {
-        return categoryRepository.findAll();
+        return categoryRepository.findByDeletedAtIsNull();
     }
 }

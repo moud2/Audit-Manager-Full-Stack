@@ -1,10 +1,16 @@
 package com.insight.backend.model;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
-import jakarta.persistence.*;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 
 @Entity
@@ -19,12 +25,29 @@ public class Category {
     @OneToMany(mappedBy = "category")
     private Set<Question> questions;
 
+    private LocalDateTime deletedAt;
+
+    public LocalDateTime getDeletedAt() {
+        return deletedAt;
+    }
+
+    /**
+     * @param deletedAt
+     */
+    public void setDeletedAt(LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
+    }
+
     public Category(String name, Set<Question> questions) {
         this.name = name;
         this.questions = questions;
     }
 
+    /**
+     * 
+     */
     public Category() {
+        this.deletedAt = null;
 
     }
 
