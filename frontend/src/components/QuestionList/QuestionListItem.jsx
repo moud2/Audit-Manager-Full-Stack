@@ -1,12 +1,12 @@
 import {Checkbox, FormControlLabel, FormGroup} from "@mui/material";
-import React, {useState} from "react";
+import React, {useMemo, useState} from "react";
 import {CheckboxSelect} from "./CheckboxSelect.jsx";
 import { TextareaAutosize as BaseTextareaAutosize } from '@mui/base/TextareaAutosize';
 import { styled } from '@mui/system';
 
 export function QuestionListItem({ question, options, onChange }) {
     //Styling for the Comment Sections
-    const Textarea = styled(BaseTextareaAutosize)(
+    const Textarea = useMemo(()=>styled(BaseTextareaAutosize)(
         ({ theme }) => `
     box-sizing: border-box;
     width: 95%;
@@ -32,7 +32,7 @@ export function QuestionListItem({ question, options, onChange }) {
       outline: 0;
     }
   `
-    );
+    ), []);
 
     const handleCheckboxChange = (value, isChecked) => {
         console.log("value: ", value, " isChecked: ", isChecked);
