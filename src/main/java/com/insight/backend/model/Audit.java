@@ -3,6 +3,8 @@ package com.insight.backend.model;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -20,6 +22,9 @@ public class Audit {
     private Set<Rating> ratings;
 
     private LocalDateTime deletedAt;
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
 
     public Audit(String name, Set<Rating> ratings) {
         this.name = name;
@@ -60,5 +65,11 @@ public class Audit {
 
     public void setDeletedAt(LocalDateTime deletedAt) {
         this.deletedAt = deletedAt;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }

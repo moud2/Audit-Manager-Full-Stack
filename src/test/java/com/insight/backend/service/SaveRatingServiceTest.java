@@ -1,7 +1,11 @@
 package com.insight.backend.service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.insight.backend.model.Rating;
+import com.insight.backend.repository.RatingRepository;
+import com.insight.backend.service.rating.SaveRatingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,16 +13,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.insight.backend.model.Rating;
-import com.insight.backend.repository.RatingRepository;
-import com.insight.backend.service.rating.SaveRatingService;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 /**
  * test class for testing SaveRatingService

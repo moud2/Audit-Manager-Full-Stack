@@ -1,9 +1,9 @@
 package com.insight.backend.service.rating;
 
-import java.util.*;
+import java.util.List;
 
-import com.insight.backend.repository.RatingRepository;
 import com.insight.backend.model.Rating;
+import com.insight.backend.repository.RatingRepository;
 
 import org.springframework.stereotype.Service;
 

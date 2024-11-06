@@ -1,7 +1,8 @@
 package com.insight.backend.service.question;
 
-import com.insight.backend.repository.QuestionRepository;
 import com.insight.backend.model.Question;
+import com.insight.backend.repository.QuestionRepository;
+
 import org.springframework.stereotype.Service;
 
 @Service
