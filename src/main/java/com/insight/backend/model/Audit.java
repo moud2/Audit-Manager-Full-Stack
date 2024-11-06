@@ -21,6 +21,7 @@ public class Audit {
     @OneToMany(mappedBy = "audit")
     private Set<Rating> ratings;
 
+    private LocalDateTime deletedAt;
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
@@ -56,6 +57,14 @@ public class Audit {
 
     public void setName(String name) {
         this.name = name;
+    }
+    
+    public LocalDateTime getDeletedAt() {
+        return deletedAt;
+    }
+
+    public void setDeletedAt(LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
     }
     
     public LocalDateTime getCreatedAt() {
