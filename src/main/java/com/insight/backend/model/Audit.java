@@ -65,6 +65,8 @@ public class Audit {
 
     public void setDeletedAt(LocalDateTime deletedAt) {
         this.deletedAt = deletedAt;
+    }
+    
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
