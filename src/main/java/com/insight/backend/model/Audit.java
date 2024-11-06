@@ -1,6 +1,9 @@
 package com.insight.backend.model;
 
+import java.time.LocalDateTime;
 import java.util.Set;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.*;
 
@@ -17,6 +20,10 @@ public class Audit {
     @JsonIgnore
     @OneToMany(mappedBy = "audit")
     private Set<Rating> ratings;
+
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
 
     public Audit(String name, Set<Rating> ratings) {
         this.name = name;
@@ -49,5 +56,13 @@ public class Audit {
 
     public void setName(String name) {
         this.name = name;
+    }
+    
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }
