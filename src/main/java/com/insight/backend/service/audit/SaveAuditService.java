@@ -1,12 +1,8 @@
 package com.insight.backend.service.audit;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import com.insight.backend.repository.AuditRepository;
 import com.insight.backend.model.Audit;
+import com.insight.backend.repository.AuditRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service

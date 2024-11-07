@@ -1,8 +1,9 @@
 package com.insight.backend.service;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
@@ -26,10 +27,7 @@ public class DatabaseSeederService {
     }
 
     public void seedDatabaseFromFiles() throws Exception {
-        System.out.println("Seeding database from files...");
-
-        Path categoryPath = Path.of(ClassLoader.getSystemResource("fixtures/dummy-categories.csv").toURI());
-
+        String categoryPath = "fixtures/dummy-categories.csv"; 
         List<String[]> categories = readAllLinesFromCsv(categoryPath);
 
         Map<Integer, Category> categoryMap = new java.util.HashMap<>(Map.of());
@@ -42,8 +40,7 @@ public class DatabaseSeederService {
             categoryMap.put(Integer.parseInt(entry[0]), saveCategoryService.saveCategory(category));
         }
 
-        Path questionPath = Path.of(ClassLoader.getSystemResource("fixtures/dummy-questions.csv").toURI());
-
+        String questionPath = "fixtures/dummy-questions.csv";
         List<String[]> questions = readAllLinesFromCsv(questionPath);
 
         for (String[] entry : questions) {
@@ -55,8 +52,10 @@ public class DatabaseSeederService {
         }
     }
 
-    private static List<String[]> readAllLinesFromCsv(Path filePath) throws Exception {
-        try (Reader reader = Files.newBufferedReader(filePath)) {
+    private List<String[]> readAllLinesFromCsv(String filePath) throws Exception {  
+        try (InputStream in = getClass().getClassLoader().getResourceAsStream(filePath)) {
+            Reader reader = new BufferedReader(new InputStreamReader(in));
+
             try (CSVReader csvReader = new CSVReader(reader)) {
                 return csvReader.readAll();
             }

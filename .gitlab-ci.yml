@@ -4,7 +4,7 @@ stages:
   - release
   - deploy
 
- # TESTING STAGE
+ # TESTING STAGE :)
 e2e-test-job:
   image: gradle:8-jdk21
   stage: test    
