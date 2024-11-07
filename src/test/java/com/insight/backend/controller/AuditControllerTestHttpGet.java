@@ -37,7 +37,7 @@ public class AuditControllerTestHttpGet {
     private MockMvc mockMvc;
 
     /**
-     * MockBean for FindAutitService
+     * MockBean for FindAuditService
      */
     @MockBean
     private FindAuditService findAuditService;
