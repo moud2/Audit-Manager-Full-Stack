@@ -1,6 +1,7 @@
 package com.insight.backend.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import jakarta.validation.Valid;
 
@@ -10,11 +11,14 @@ import com.insight.backend.dto.NewAuditDTO;
 import com.insight.backend.model.Audit;
 import com.insight.backend.service.audit.CreateAuditService;
 import com.insight.backend.service.audit.FindAuditService;
+import com.insight.backend.service.audit.DeleteAuditService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,15 +34,17 @@ public class AuditsController {
      */
     private final FindAuditService findAuditService;
     private final CreateAuditService createAuditService;
+    private final DeleteAuditService deleteAuditService;
     /**
      * Constructs a new AuditsController with the specified FindAuditService.
      * 
      * @param findAuditService the service to find audits
      */
     @Autowired
-    public AuditsController(FindAuditService findAuditService, CreateAuditService createAuditService) {
+    public AuditsController(FindAuditService findAuditService, CreateAuditService createAuditService, DeleteAuditService deleteAuditService) {
         this.findAuditService = findAuditService;
         this.createAuditService = createAuditService;
+        this.deleteAuditService = deleteAuditService;
     }
 
     /**
@@ -70,5 +76,31 @@ public class AuditsController {
         }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+    }
+
+    
+        /**
+     * Handles PATCH requests for updating a rating.
+     *
+     * @param auditId    the ID of the rating to update
+     * @param patch the JSON patch containing the changes to apply
+     * @return a ResponseEntity containing the updated rating in JSON format or an error message if the rating ID does not exist
+     */
+    // Soft Delete Endpoint
+    @DeleteMapping("/api/v1/audits/{auditId}")
+    public ResponseEntity<Object> softDeleteUser(@PathVariable("auditId") Long auditId) {
+        Optional<Audit> optionalAudit = findAuditService.findAuditById(auditId);
+        if (optionalAudit.isPresent()) {
+            Audit auditToDelete = optionalAudit.get();
+            try {
+                deleteAuditService.softDeleteAudit(auditToDelete);
+                return ResponseEntity.ok("Audit with ID " + auditId + " marked as deleted.");
+            } catch (IllegalArgumentException e) {
+                return ResponseEntity.badRequest().body(e.getMessage());
+            }
+        } else {
+            ErrorDTO errorResponse = new ErrorDTO("audit with id " + auditId + " not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
     }
 }
