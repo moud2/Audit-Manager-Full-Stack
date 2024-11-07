@@ -6,7 +6,6 @@ import jakarta.validation.Valid;
 
 import com.insight.backend.dto.AuditResponseDTO;
 import com.insight.backend.dto.NewAuditDTO;
-import com.insight.backend.exception.NonExistentAuditCategoryException;
 import com.insight.backend.model.Audit;
 import com.insight.backend.service.audit.CreateAuditService;
 import com.insight.backend.service.audit.FindAuditService;
@@ -61,14 +60,7 @@ public class AuditsController {
 
     @PostMapping("/api/v1/audits/new")
     public ResponseEntity<Object> postWithRequestBody(@Valid @RequestBody NewAuditDTO newAuditDTO) {
-
         AuditResponseDTO responseDTO = createAuditService.createAudit(newAuditDTO);
-
-        // If the responseDTO is null, throw the custom exception
-        if (responseDTO == null) {
-            throw new NonExistentAuditCategoryException("Non-existing category provided");
-        }
-
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
