@@ -48,6 +48,8 @@ export function QuestionListItem({ question, options, onChange }) {
     ), []);
 
     /**
+     * Event-Handler für Checkbox Änderungen.
+     * Aktualisiert das Frageobjekt mit dem neuen Value.
      *
      * @param {string} value - Der Wert der ausgewählten Checkbox.
      * @param {boolean} isChecked - Gibt an, ob die Checkbox ausgewählt wurde oder nicht (Wert kommt von der CheckboxSelect Komponente bei Änderung).
@@ -93,7 +95,7 @@ export function QuestionListItem({ question, options, onChange }) {
 
     return (
         <div key={question.id}>
-            <h2 className="px-10 py-5">{question.question}</h2>
+            <h2 className="px-10 py-5" data-cy="question-text">{question.question}</h2>
             <FormGroup className="px-5 flex justify-center" row>
                 <CheckboxSelect
                     value={insertValue()}
@@ -102,6 +104,7 @@ export function QuestionListItem({ question, options, onChange }) {
                 />
             </FormGroup>
             <Textarea
+                data-cy="question-comment"
                 placeholder='Kommentar eingeben'
                 value={question.comment}
                 onChange={(event) => handleCommentInput(event)}
