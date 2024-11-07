@@ -37,7 +37,7 @@ public class AuditControllerTestHttpGet {
     private MockMvc mockMvc;
 
     /**
-     * MockBean for FindAutitService
+     * MockBean for FindAuditService
      */
     @MockBean
     private FindAuditService findAuditService;
@@ -62,6 +62,8 @@ public class AuditControllerTestHttpGet {
         audit2.setName("TestAudit2");
         audit1.setId(1L);
         audit2.setId(2L);
+        audit1.setCreatedAt(java.time.LocalDateTime.now());
+        audit2.setCreatedAt(java.time.LocalDateTime.now());
     }
 
     /**
@@ -82,8 +84,10 @@ public class AuditControllerTestHttpGet {
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].id").value(1))
                 .andExpect(jsonPath("$[0].name").value("TestAudit1"))
+                .andExpect(jsonPath("$[0].createdAt").exists())
                 .andExpect(jsonPath("$[1].id").value(2))
-                .andExpect(jsonPath("$[1].name").value("TestAudit2"));
+                .andExpect(jsonPath("$[1].name").value("TestAudit2"))
+                .andExpect(jsonPath("$[1].createdAt").exists());
     }
 
     /**
