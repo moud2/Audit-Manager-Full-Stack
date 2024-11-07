@@ -40,6 +40,7 @@ public class SaveAuditServiceTest {
         audit = new Audit();
         audit.setId(1L);
         audit.setName("AuditTest");
+        audit.setCustomer("CustomerTest");
     }
 
     /*

@@ -62,6 +62,8 @@ public class AuditControllerTestHttpGet {
         audit2.setName("TestAudit2");
         audit1.setId(1L);
         audit2.setId(2L);
+        audit1.setCustomer("TestCustomer1");
+        audit2.setCustomer("TestCustomer2");
     }
 
     /**
@@ -83,7 +85,9 @@ public class AuditControllerTestHttpGet {
                 .andExpect(jsonPath("$[0].id").value(1))
                 .andExpect(jsonPath("$[0].name").value("TestAudit1"))
                 .andExpect(jsonPath("$[1].id").value(2))
-                .andExpect(jsonPath("$[1].name").value("TestAudit2"));
+                .andExpect(jsonPath("$[1].name").value("TestAudit2"))
+                .andExpect(jsonPath("$[0].customer").value("TestCustomer1"))
+                .andExpect(jsonPath("$[1].customer").value("TestCustomer2"));
     }
 
     /**
