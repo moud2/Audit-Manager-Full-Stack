@@ -1,25 +1,85 @@
-# MyExampleComponent
+
+# AuditGrid
 
 ## Props
 
-### title
+### data
 
-Dashboard
+- Type: `array`
+- Default: `[]`
+  
+The audit data to display in the grid format.
 
-### content
+### loading
 
-- Type: `function`
+- Type: `boolean`
+- Default: `false`
 
-Displays Audit Items
+Indicates if the data is currently loading.
 
-New Audit Button (Plus Icon)
+### error
+
+- Type: `object` or `null`
+- Default: `null`
+
+Represents an error, if any, in loading the data.
 
 ## Usage
 
-### Basic usage
+### Basic Usage
 
 ```jsx
+import AuditGrid from "./AuditGrid";
+
 <AuditGrid 
-   
-></AuditGrid>
-``` 
+    data={[{ id: 1, name: "Audit 1" }, { id: 2, name: "Audit 2" }]}
+    loading={false}
+    error={null}
+/>
+```
+
+---
+
+# AuditGridItem
+
+## Props
+
+### audit
+
+- Type: `object`
+  
+The audit object representing a single audit item in the grid.
+
+## Usage
+
+### Basic Usage
+
+```jsx
+import { AuditGridItem } from "./AuditGridItem";
+
+<AuditGridItem 
+    audit={{ id: 1, name: "Audit 1", description: "Sample audit" }}
+/>
+```
+
+---
+
+# NewAuditGridItem
+
+This component renders a button or element to create a new audit item.
+
+## Usage
+
+### Basic Usage
+
+```jsx
+import { NewAuditGridItem } from "./NewAuditGridItem";
+
+<NewAuditGridItem />
+```
+
+---
+
+# AuditGrid.cy.jsx
+
+This file seems to be a Cypress test file for `AuditGrid`. Ensure that the test checks loading, error, and rendering of audit data.

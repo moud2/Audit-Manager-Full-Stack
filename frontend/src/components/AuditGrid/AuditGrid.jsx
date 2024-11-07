@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import api from "../../api";
+import React from "react";
 import { AuditGridItem } from "./AuditGridItem";
 import { NewAuditGridItem } from "./NewAuditGridItem";
 
@@ -10,29 +9,13 @@ import { NewAuditGridItem } from "./NewAuditGridItem";
  * @returns {JSX.Element} The rendered audit grid component.
  * @constructor
  */
-export function AuditGrid() {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    api
-      .get("/v1/audits")
-      .then((response) => {
-        setData(response.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching data:", err);
-        setError(err);
-        setLoading(false);
-      });
-  }, []);
-
+export function AuditGrid({ data = [], loading = false, error = null }) {
   if (loading) {
     return <p>Laden...</p>;
   }
-
+  if (error) {
+    return <p>{error.message}</p>;
+  }
   return (
     <div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-10 justify-center">
