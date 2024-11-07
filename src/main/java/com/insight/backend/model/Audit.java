@@ -22,8 +22,9 @@ public class Audit {
     private Set<Rating> ratings;
 
     private LocalDateTime deletedAt;
+
     @CreationTimestamp
-    @Column(updatable = false)
+    @Column(updatable = false, nullable = false)
     private LocalDateTime createdAt;
 
     public Audit(String name, Set<Rating> ratings) {

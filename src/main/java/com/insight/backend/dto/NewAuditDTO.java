@@ -27,6 +27,8 @@ public class NewAuditDTO {
     @NotEmpty(message = "Categories cannot be empty")
     private List<@NotNull(message = "Category ID cannot be null") Long> categories;
 
+
+
     /**
      * Gets the name of the audit.
      *  
