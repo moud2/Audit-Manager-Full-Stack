@@ -10,11 +10,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "No such Category")
 public class NonExistentAuditCategoryException extends RuntimeException {
-
-    public NonExistentAuditCategoryException(String message) {
-        super(message); // Calls the constructor of RuntimeException to set the error message
-    }
-
     /**
      * Constructs a new NonExistentAuditCategoryException with the specified category.
      *
