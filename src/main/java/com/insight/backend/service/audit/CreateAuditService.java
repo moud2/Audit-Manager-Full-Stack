@@ -1,5 +1,8 @@
 package com.insight.backend.service.audit;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.insight.backend.dto.AuditResponseDTO;
 import com.insight.backend.dto.NewAuditDTO;
 import com.insight.backend.exception.NonExistentAuditCategoryException;
@@ -9,10 +12,8 @@ import com.insight.backend.model.Question;
 import com.insight.backend.model.Rating;
 import com.insight.backend.service.category.FindCategoryService;
 import com.insight.backend.service.rating.SaveRatingService;
-import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.stereotype.Service;
 /**
  * Service class for creating audits.
  */
