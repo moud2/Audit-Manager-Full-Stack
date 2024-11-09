@@ -137,7 +137,6 @@ public class AuditControllerTestHttpPost {
         auditResponseDTO.setName("Audit Name");
         auditResponseDTO.setCustomer("TestCustomer");
 
-
         // Mocking behavior of createAuditService
         when(createAuditService.createAudit(any(NewAuditDTO.class))).thenReturn(auditResponseDTO);
 

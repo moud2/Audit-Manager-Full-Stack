@@ -1,5 +1,6 @@
 package com.insight.backend.model;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import jakarta.persistence.*;
@@ -18,6 +19,8 @@ public class Category {
     @JsonIgnore
     @OneToMany(mappedBy = "category")
     private Set<Question> questions;
+
+    private LocalDateTime deletedAt;
 
     public Category(String name, Set<Question> questions) {
         this.name = name;
@@ -51,4 +54,14 @@ public class Category {
     public void setName(String name) {
         this.name = name;
     }
+
+    public LocalDateTime getDeletedAt() {
+        return deletedAt;
+    }
+
+    public void setDeletedAt(LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
+    }
+
+
 }

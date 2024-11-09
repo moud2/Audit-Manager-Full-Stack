@@ -41,7 +41,7 @@ public class FindAuditServiceTest {
         audit2 = new Audit();
         audit2.setId(2L);
         audit2.setName("Audit2");
-        audit2.setCustomer("Customer2");
+        audit1.setCustomer("Customer2");
     }
 
     @Test

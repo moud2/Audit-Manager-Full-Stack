@@ -27,6 +27,10 @@ public class NewAuditDTO {
     @NotEmpty(message = "Categories cannot be empty")
     private List<@NotNull(message = "Category ID cannot be null") Long> categories;
 
+    /**
+     * The supplied customer of the audit during creation.
+     * Must not be blank and should not exceed 255 characters.
+     */
     @NotBlank(message = "Customer cannot be blank")
     @Size(max = 255, message = "Customer should be up to 255 characters")
     private String customer;
