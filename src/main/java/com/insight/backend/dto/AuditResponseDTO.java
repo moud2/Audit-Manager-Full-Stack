@@ -3,7 +3,6 @@ package com.insight.backend.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 
@@ -33,14 +32,6 @@ public class AuditResponseDTO {
     @NotNull(message = "Creation timestamp cannot be null")
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
-
-    /**
-     * The timestamp when the Audit was deleted (if applicable).
-     * Format the output as ISO 8601 (e.g., "2024-11-07T12:34:56").
-     * This field is optional.
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime deletedAt;
 
     /**
      * Getter method for ID.
@@ -94,24 +85,6 @@ public class AuditResponseDTO {
      */
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
-    }
-
-    /**
-     * Getter method for the deleted timestamp.
-     *
-     * @return the deleted timestamp of the Audit.
-     */
-    public LocalDateTime getDeletedAt() {
-        return deletedAt;
-    }
-
-    /**
-     * Setter method for the deleted timestamp.
-     *
-     * @param deletedAt the deleted timestamp of the Audit.
-     */
-    public void setDeletedAt(LocalDateTime deletedAt) {
-        this.deletedAt = deletedAt;
     }
 
 }
