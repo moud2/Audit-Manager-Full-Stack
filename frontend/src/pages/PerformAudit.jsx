@@ -1,5 +1,4 @@
 import {LayoutDefault} from "../layouts/LayoutDefault.jsx";
-import {QuestionListItem} from "../components/QuestionList/QuestionListItem.jsx";
 import {useState} from "react";
 import {QuestionList} from "../components/QuestionList/QuestionList.jsx";
 
@@ -14,7 +13,7 @@ export function PerformAudit() {
         },{
             question: '2. sehr wichtige Frage',
             id: 2,
-            comment: 'wichtiger Kommentar',
+            comment: 'slay',
             points: 1,
             nA: false,
         }
