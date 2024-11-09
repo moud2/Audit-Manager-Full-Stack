@@ -55,8 +55,8 @@ export function QuestionListItem({ question, options, onChange }) {
      * @param {boolean} isChecked - Gibt an, ob die Checkbox ausgewählt wurde oder nicht (Wert kommt von der CheckboxSelect Komponente bei Änderung).
      */
     const handleCheckboxChange = (value, isChecked) => {
-        console.log("value: ", value, " isChecked: ", isChecked);
-        console.log(question.id);
+        // console.log("value: ", value, " isChecked: ", isChecked);
+        // console.log(question.id);
 
         if (isChecked) {
             if (value === 'N/A') {
