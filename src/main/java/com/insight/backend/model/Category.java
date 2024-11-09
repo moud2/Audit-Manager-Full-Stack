@@ -124,4 +124,12 @@ public class Category {
     public void setName(String name) {
         this.name = name;
     }
+    /**
+     * Checks if the category is deleted based on the deletedAt timestamp.
+     *
+     * @return true if the category is deleted, false otherwise.
+     */
+    public boolean isDeleted(){
+        return deletedAt !=null; 
+    }
 }

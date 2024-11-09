@@ -43,4 +43,24 @@ public class FindCategoryService {
     public List<Category> findAllCategories() {
         return categoryRepository.findByDeletedAtIsNull();
     }
+
+    /**
+     * @return
+     */
+    public List<Category> findAllCategoriesIncludingDeleted(){
+        return categoryRepository.findAll();
+    }
+
+    /**
+     * @param includeDeleted
+     * @return
+     */
+    public List<Category> findCategoriesByDeletedStatus(boolean includeDeleted){
+        if(includeDeleted = true){
+            return categoryRepository.findAll();
+        }else{
+            return categoryRepository.findByDeletedAtIsNull();
+        }
+
+    }
 }
