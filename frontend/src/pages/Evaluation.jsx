@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { LayoutDefault } from "../layouts/LayoutDefault.jsx";
 import ProgressBar from '../components/Charts/ProgressBar.jsx';
 import CircularProgress from '../components/Charts/CircularProgress.jsx';
@@ -9,15 +9,34 @@ import BarChart from '../components/Charts/BarChart.jsx';
  * @component
  */
 export function Evaluation() {
-
-    // Daten später durch Backend erhalten?
-    const [mainProgress, setMainProgress] = useState(75);
-    const [categoryProgress, setCategoryProgress] = useState([
-        { id: 1, name: 'Kategorie 1', progress: 60 },
-        { id: 2, name: 'Kategorie 2', progress: 80 },
-    ]);
-    const [pointsDistribution, setPointsDistribution] = useState([3, 5, 2, 8, 4, 6]);
+    // States für Daten aus dem Backend
+    const [mainProgress, setMainProgress] = useState(0);
+    const [categoryProgress, setCategoryProgress] = useState([]);
+    const [pointsDistribution, setPointsDistribution] = useState([]);
     const colors = ['#a50026', '#d73027', '#fdae61', '#d9ef8b', '#66bd63', '#006837'];
+
+    // Funktion zum Abrufen der Daten aus dem Backend
+    useEffect(() => {
+        async function fetchEvaluationData() {
+            try {
+                const response = await fetch("/api/v1/audits/{auditId}/progress");
+                if (!response.ok) {
+                    throw new Error("Failed to fetch evaluation data");
+                }
+                const data = await response.json();
+
+                // Daten setzen
+                setMainProgress(data.mainProgress);
+                setCategoryProgress(data.categoryProgress);
+                setPointsDistribution(data.pointsDistribution);
+
+            } catch (error) {
+                console.error("Error fetching evaluation data:", error);
+            }
+        }
+
+        fetchEvaluationData();
+    }, []);
 
     return (
         <LayoutDefault>
