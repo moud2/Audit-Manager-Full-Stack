@@ -18,8 +18,8 @@ public class FindQuestionService {
         this.questionRepository = questionRepository;
     }
 
-    public Optional<Question> findQuestionById(Long id) {
-        Optional<Question> question = questionRepository.findById(id);
+    public Optional <Question> findQuestionById(Long id) {
+        return questionRepository.findById(id);
     }
 
     /**
