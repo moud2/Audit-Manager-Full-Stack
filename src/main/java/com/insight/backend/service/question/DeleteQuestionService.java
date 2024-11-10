@@ -4,7 +4,6 @@ import com.insight.backend.model.Question;
 import com.insight.backend.repository.QuestionRepository;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -25,6 +24,7 @@ public class DeleteQuestionService {
     public void deleteQuestion(Long id){
         Question question = questionRepository.findById(id).get();
         question.setDeletedAt(LocalDateTime.now());
+        questionRepository.saveAndFlush(question);
     }
 
 }

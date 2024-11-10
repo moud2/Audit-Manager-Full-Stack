@@ -55,7 +55,7 @@ public class QuestionController {
         Optional<Category> optionalCategory = findCategoryService.findCategoryById(categoryID);
         if(optionalCategory.isPresent()){
             Category category = optionalCategory.get();
-            List<Question> questions = findQuestionService.findAllQuestions(category, sortDirection, sortBy);
+            List<Question> questions = findQuestionService.findQuestionsByCategory(category, sortDirection, sortBy);
             return ResponseEntity.ok(questions);
         }
         else

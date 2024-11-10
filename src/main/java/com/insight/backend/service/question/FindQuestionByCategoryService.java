@@ -24,7 +24,14 @@ public class FindQuestionByCategoryService {
         return questionRepository.findById(id);
     }
 
-    public List<Question> findAllQuestions(Category category, String sortDirection, String sortBy) {
+    /**
+     * Finds all Questions of the specified Category.
+     *
+     * @param category the name of the Category to search for
+     * @param sortDirection the direction to sort the results
+     * @return a list of all Questions of the specified Category
+     */
+    public List<Question> findQuestionsByCategory(Category category, String sortDirection, String sortBy) {
         Sort sort = Sort.by(sortDirection.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, sortBy);
         return questionRepository.findAll(QuestionSpecifications.inCategory(category), sort);
     }
