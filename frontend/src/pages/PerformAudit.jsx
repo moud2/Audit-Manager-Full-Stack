@@ -31,7 +31,7 @@ export function PerformAudit() {
     const handleQuestionUpdate = async (updatedQuestions, updatedQuestion) => {
         setQuestions(updatedQuestions);
         //ToDo: PatchQuestion mit Funktion versehen
-        await patchQuestion(patchQuestion.id, [
+        patchQuestion(updatedQuestion.id, [
             {path: "/na", value: updatedQuestion.nA},
             {path: "/points", value: updatedQuestion.points},
             {path: "/comment", value: updatedQuestion.comment}
