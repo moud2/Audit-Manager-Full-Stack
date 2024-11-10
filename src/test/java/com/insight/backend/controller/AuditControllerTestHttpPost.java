@@ -6,6 +6,7 @@ import java.util.Collections;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.insight.backend.dto.AuditResponseDTO;
 import com.insight.backend.dto.NewAuditDTO;
+import com.insight.backend.exception.NonExistentAuditCategoryException;
 import com.insight.backend.service.audit.CreateAuditService;
 import com.insight.backend.service.audit.FindAuditService;
 import org.junit.jupiter.api.BeforeEach;
@@ -108,7 +109,7 @@ public void testNonExistingCategories() throws Exception {
     newAuditDTO.setName("Audit Name");
     newAuditDTO.setCategories(Arrays.asList(1L, 2L));
 
-    when(createAuditService.createAudit(any(NewAuditDTO.class))).thenReturn(null);
+    when(createAuditService.createAudit(any(NewAuditDTO.class))).thenThrow(new NonExistentAuditCategoryException(1L));
 
     mockMvc.perform(post("/api/v1/audits/new")
                     .content(objectMapper.writeValueAsString(newAuditDTO))
