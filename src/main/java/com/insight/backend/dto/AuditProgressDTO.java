@@ -22,15 +22,15 @@ public class AuditProgressDTO {
 
     /**
      * Map containing progress for each category within the audit.
-     * The map's keys are category IDs, and the values are progress percentages.
+     * The map's keys are category names, and the values are progress percentages.
      */
-    private Map<Long, Double> categoryProgress;
+    private Map<String, Double> categoryProgress;
 
     /**
      * Map representing the count of questions by their rating.
-     * The keys represent rating values (0-5), and the values are the counts for each rating.
+     * The keys represent rating values (0-5, nA), and the values are the counts for each rating.
      */
-    private Map<Integer, Long> questionCountByRating;
+    private Map<String, Long> questionCountByRating;
 
     /**
      * Default constructor for AuditProgressDTO.
@@ -39,6 +39,7 @@ public class AuditProgressDTO {
     public AuditProgressDTO() {
         this.categoryProgress = new HashMap<>();
         this.questionCountByRating = new HashMap<>();
+        initializeDefaultRatings();
     }
 
     /**
@@ -49,11 +50,22 @@ public class AuditProgressDTO {
      * @param categoryProgress    progress for each category in the audit, represented as a map.
      * @param questionCountByRating the count of questions by their rating, represented as a map.
      */
-    public AuditProgressDTO(Long auditId, double overallProgress, Map<Long, Double> categoryProgress, Map<Integer, Long> questionCountByRating) {
+    public AuditProgressDTO(Long auditId, double overallProgress, Map<String, Double> categoryProgress, Map<String, Long> questionCountByRating) {
         this.auditId = auditId;
         this.overallProgress = overallProgress;
         this.categoryProgress = categoryProgress != null ? categoryProgress : new HashMap<>();
         this.questionCountByRating = questionCountByRating != null ? questionCountByRating : new HashMap<>();
+        initializeDefaultRatings();
+    }
+
+    /**
+     * Initializes default rating values (0-5, nA) to 0 if they are not already set.
+     */
+    private void initializeDefaultRatings() {
+        for (int i = 0; i <= 5; i++) {
+            this.questionCountByRating.putIfAbsent(String.valueOf(i), 0L);
+        }
+        this.questionCountByRating.putIfAbsent("nA", 0L);
     }
 
     /**
@@ -97,7 +109,7 @@ public class AuditProgressDTO {
      *
      * @return a map of category IDs to their respective progress percentages.
      */
-    public Map<Long, Double> getCategoryProgress() {
+    public Map<String, Double> getCategoryProgress() {
         return categoryProgress;
     }
 
@@ -107,7 +119,7 @@ public class AuditProgressDTO {
      *
      * @param categoryProgress a map of category IDs to their respective progress percentages.
      */
-    public void setCategoryProgress(Map<Long, Double> categoryProgress) {
+    public void setCategoryProgress(Map<String, Double> categoryProgress) {
         this.categoryProgress = categoryProgress != null ? categoryProgress : new HashMap<>();
     }
 
@@ -116,7 +128,7 @@ public class AuditProgressDTO {
      *
      * @return a map of rating values (0-5) to their respective question counts.
      */
-    public Map<Integer, Long> getQuestionCountByRating() {
+    public Map<String, Long> getQuestionCountByRating() {
         return questionCountByRating;
     }
 
@@ -126,7 +138,7 @@ public class AuditProgressDTO {
      *
      * @param questionCountByRating a map of rating values (0-5) to their respective question counts.
      */
-    public void setQuestionCountByRating(Map<Integer, Long> questionCountByRating) {
+    public void setQuestionCountByRating(Map<String, Long> questionCountByRating) {
         this.questionCountByRating = questionCountByRating != null ? questionCountByRating : new HashMap<>();
     }
 }
