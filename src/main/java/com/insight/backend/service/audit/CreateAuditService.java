@@ -14,7 +14,6 @@ import com.insight.backend.service.category.FindCategoryService;
 import com.insight.backend.service.rating.SaveRatingService;
 
 import org.springframework.stereotype.Service;
-import java.time.LocalDateTime;
 
 /**
  * Service class for creating audits.
@@ -51,7 +50,6 @@ public class CreateAuditService {
     public AuditResponseDTO createAudit(NewAuditDTO newAuditDTO) {
         Audit audit = new Audit();
         audit.setName(newAuditDTO.getName());
-        audit.setCreatedAt(LocalDateTime.now());
 
         List<Rating> ratings = new ArrayList<>();
 
