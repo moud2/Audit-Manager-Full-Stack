@@ -1,5 +1,6 @@
 package com.insight.backend.dto;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -33,8 +34,11 @@ public class AuditProgressDTO {
 
     /**
      * Default constructor for AuditProgressDTO.
+     * Initializes the Map fields to avoid null values.
      */
     public AuditProgressDTO() {
+        this.categoryProgress = new HashMap<>();
+        this.questionCountByRating = new HashMap<>();
     }
 
     /**
@@ -48,8 +52,8 @@ public class AuditProgressDTO {
     public AuditProgressDTO(Long auditId, double overallProgress, Map<Long, Double> categoryProgress, Map<Integer, Long> questionCountByRating) {
         this.auditId = auditId;
         this.overallProgress = overallProgress;
-        this.categoryProgress = categoryProgress;
-        this.questionCountByRating = questionCountByRating;
+        this.categoryProgress = categoryProgress != null ? categoryProgress : new HashMap<>();
+        this.questionCountByRating = questionCountByRating != null ? questionCountByRating : new HashMap<>();
     }
 
     /**
@@ -99,11 +103,12 @@ public class AuditProgressDTO {
 
     /**
      * Setter method for category progress.
+     * Ensures a non-null value by initializing an empty map if null is passed.
      *
      * @param categoryProgress a map of category IDs to their respective progress percentages.
      */
     public void setCategoryProgress(Map<Long, Double> categoryProgress) {
-        this.categoryProgress = categoryProgress;
+        this.categoryProgress = categoryProgress != null ? categoryProgress : new HashMap<>();
     }
 
     /**
@@ -117,10 +122,11 @@ public class AuditProgressDTO {
 
     /**
      * Setter method for question count by rating.
+     * Ensures a non-null value by initializing an empty map if null is passed.
      *
      * @param questionCountByRating a map of rating values (0-5) to their respective question counts.
      */
     public void setQuestionCountByRating(Map<Integer, Long> questionCountByRating) {
-        this.questionCountByRating = questionCountByRating;
+        this.questionCountByRating = questionCountByRating != null ? questionCountByRating : new HashMap<>();
     }
 }
