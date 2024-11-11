@@ -37,10 +37,10 @@ describe('QuestionListItem Component Tests', () => {
         );
 
         cy.get('input[type="checkbox"]').eq(3).click();
-        cy.get('@onChange').should('have.been.calledWith', { ...exampleQuestion, points: '3', nA: false });
+        cy.get('@onChange').should('have.been.calledWith', exampleQuestion.id, { ...exampleQuestion, points: '3', nA: false });
 
         cy.get('input[type="checkbox"]').eq(6).click();
-        cy.get('@onChange').should('have.been.calledWith', { ...exampleQuestion, points: null, nA: true });
+        cy.get('@onChange').should('have.been.calledWith', exampleQuestion.id, { ...exampleQuestion, points: null, nA: true });
 
         cy.mount(
             <QuestionListItem
@@ -51,7 +51,7 @@ describe('QuestionListItem Component Tests', () => {
         );
 
         cy.get('input[type="checkbox"]').eq(3).click();
-        cy.get('@onChange').should('have.been.calledWith', { ...exampleQuestion, points: null, nA: null });
+        cy.get('@onChange').should('have.been.calledWith', exampleQuestion.id, { ...exampleQuestion, points: null, nA: null });
 
         cy.mount(
             <QuestionListItem
@@ -62,7 +62,7 @@ describe('QuestionListItem Component Tests', () => {
         );
 
         cy.get('input[type="checkbox"]').eq(6).click();
-        cy.get('@onChange').should('have.been.calledWith', { ...exampleQuestion, points: null, nA: null });
+        cy.get('@onChange').should('have.been.calledWith', exampleQuestion.id, { ...exampleQuestion, points: null, nA: null });
     });
 
     it('updates comment in question object correctly when text is entered in the comment box', () => {
@@ -76,7 +76,7 @@ describe('QuestionListItem Component Tests', () => {
 
         const newComment = 'G';
         cy.get('[data-cy="question-comment"]').type(newComment);
-        cy.get('@onChange').should('have.been.calledWith', { ...exampleQuestion, comment: newComment });
+        cy.get('@onChange').should('have.been.calledWith', exampleQuestion.id, { ...exampleQuestion, comment: newComment });
     });
 
 });
