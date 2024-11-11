@@ -5,6 +5,7 @@ import LinearProgressWithLabel from '../components/Charts/ProgressBar.jsx';
 import CircularProgressWithLabel from '../components/Charts/CircularProgress.jsx';
 import CustomBarChart from '../components/Charts/BarChart.jsx';
 import api from '../api';
+import Box from "@mui/material/Box";
 
 /**
  * Evaluation component that fetches audit data and renders charts for overall progress, category progress, and question ratings.
@@ -19,7 +20,7 @@ export function Evaluation() {
     const [categoryProgress, setCategoryProgress] = useState([]);
     const [questionCountByRating, setQuestionCountByRating] = useState([]);
 
-    const colors = ['#a50026', '#d73027', '#fdae61', '#d9ef8b', '#66bd63', '#006837'];
+    const colors = ['#a50026', '#d73027', '#fdae61', '#d9ef8b', '#66bd63', '#006837', '#000000'];
 
     // Fetching data from the backend API
     useEffect(() => {
@@ -44,9 +45,11 @@ export function Evaluation() {
                 <h1 className="text-center text-4xl m-6">Evaluation</h1>
 
                 {/* Overall Progress Bar */}
-                <div className="w-full flex flex-col justify-center items-center h-20 mb-6">
-                    <LinearProgressWithLabel value={overallProgress} />
-                    <p className="text-center text-xl">Overall Progress</p>
+                <div id="result" className="w-full flex flex-col justify-center items-center h-20 mb-6">
+                    <Box className="text-center" sx={{ width: '80%' }}>
+                        <LinearProgressWithLabel value={overallProgress} />
+                    </Box>
+                    <p className="text-center text-xl">Gesamtfortschritt</p>
                 </div>
 
                 {/* Category Progress Circular Charts */}
