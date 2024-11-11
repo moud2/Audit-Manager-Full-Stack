@@ -16,7 +16,7 @@ export function NewAudit() {
 
   const handleCreateAuditClick = () => {
     api
-      .post("http://localhost:8080/api/v1/audits/new", {
+      .post("/v1/audits/new", {
         name: name,
         categories: selectedCategories,
       })
@@ -35,7 +35,7 @@ export function NewAudit() {
 
   useEffect(() => {
     api
-      .get("http://localhost:8080/api/v1/categories")
+      .get("/v1/categories")
       .then((response) => {
         const categories = response.data.map((category) => ({
           id: category.id.toString(),
