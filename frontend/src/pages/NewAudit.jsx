@@ -64,14 +64,16 @@ export function NewAudit() {
     <LayoutDefault>
       <div>
         <h1 className="text-center text-4xl m-6">Neues Audit anlegen</h1>
-        <div className="mb-4 flex justify-center w-1/2">
-          <TextField
-            label="Audit Name"
-            variant="outlined"
-            value={name}
-            onChange={handleNameChange}
-          />
-        </div>
+        <form className="w-[240px] flex justify-center items-center mx-auto m-8">
+          <div className="relative flex w-full justify-center">
+            <TextField
+              label="Audit Name"
+              variant="outlined"
+              value={name}
+              onChange={handleNameChange}
+            />
+          </div>
+        </form>
         <Table
           value={selectedCategories}
           options={cards}
