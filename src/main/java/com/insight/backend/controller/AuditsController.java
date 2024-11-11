@@ -78,23 +78,22 @@ public class AuditsController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
-    
         /**
-     * Handles PATCH requests for updating a rating.
+     * Handles DELETE requests for deleting an audit.
      *
-     * @param auditId    the ID of the rating to update
+     * @param auditId    the ID of the audit to softdelete
      * @param patch the JSON patch containing the changes to apply
-     * @return a ResponseEntity containing the updated rating in JSON format or an error message if the rating ID does not exist
+     * @return a ResponseEntity containing info about the delete operation in JSON format
      */
     // Soft Delete Endpoint
     @DeleteMapping("/api/v1/audits/{auditId}")
-    public ResponseEntity<Object> softDeleteUser(@PathVariable("auditId") Long auditId) {
+    public ResponseEntity<Object> softDeleteAudit(@PathVariable("auditId") Long auditId) {
         Optional<Audit> optionalAudit = findAuditService.findAuditById(auditId);
         if (optionalAudit.isPresent()) {
             Audit auditToDelete = optionalAudit.get();
             try {
                 deleteAuditService.softDeleteAudit(auditToDelete);
-                return ResponseEntity.ok("Audit with ID " + auditId + " marked as deleted.");
+                return ResponseEntity.noContent().build();
             } catch (IllegalArgumentException e) {
                 return ResponseEntity.badRequest().body(e.getMessage());
             }

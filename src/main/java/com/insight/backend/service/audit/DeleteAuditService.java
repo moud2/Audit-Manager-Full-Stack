@@ -27,7 +27,7 @@ public class DeleteAuditService {
     public void softDeleteAudit(Audit audit) {
         if (audit != null) {
             audit.setDeletedAt(LocalDateTime.now());
+            auditRepository.saveAndFlush(audit);
         }
-        auditRepository.saveAndFlush(audit);
     }
 }
