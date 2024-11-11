@@ -136,15 +136,16 @@ class RatingControllerTest {
         verify(ratingMapper, times(1)).convertToRatingDTOs(anyList());
     }
 
-
     @Test
     public void testGetRatingsAuditNotFound() throws Exception {
         when(findAuditService.findAuditById(1L)).thenReturn(Optional.empty());
 
         mockMvc.perform(get("/api/v1/audits/1/ratings"))
                 .andExpect(status().isNotFound())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("{\"error\": \"audit with id 1 not found\"}"));
+                .andExpect(jsonPath("$.timestamp").exists())
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.error").value("Not Found"))
+                .andExpect(jsonPath("$.message").value("Audit with id 1 not found"));
 
         verify(findAuditService, times(1)).findAuditById(1L);
         verify(ratingMapper, times(0)).convertToRatingDTOs(anyList());
@@ -186,7 +187,11 @@ class RatingControllerTest {
         mockMvc.perform(patch("/api/v1/ratings/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("[{\"op\":\"replace\",\"path\":\"/comment\",\"value\":\"This is not the first comment\"}]"))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.timestamp").exists())
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.error").value("Not Found"))
+                .andExpect(jsonPath("$.message").value("Rating with id 1 not found"));
 
         // save should not be called
         verify(saveRatingService, never()).saveRating(any());
