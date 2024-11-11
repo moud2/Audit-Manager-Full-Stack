@@ -55,20 +55,19 @@ export function QuestionListItem({ question, options, onChange }) {
      * Updates the question object with the selected value based on whether the checkbox is selected or not.
      *
      * @param {string} value - The value of the selected checkbox (e.g., a point or "N/A").
-     * @param {boolean} isChecked - Indicates if the checkbox is selected (value comes from the CheckboxSelect component).
      */
-    const handleCheckboxChange = (value, isChecked) => {
-        console.log("value: ", value, " isChecked: ", isChecked);
+    const handleCheckboxChange = (value) => {
+        console.log("value: ", value);
         console.log(question.id);
 
-        if (isChecked) {
+        if (value === null) {
+            onChange(question.id, {...question, points: null, nA: null});
+        } else {
             if (value === 'N/A') {
                 onChange(question.id, {...question, points: null, nA: true});
             } else {
                 onChange(question.id, {...question, points: value, nA: false});
             }
-        } else {
-            onChange(question.id, {...question, points: null, nA: null});
         }
     }
 
