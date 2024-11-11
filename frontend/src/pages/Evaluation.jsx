@@ -8,25 +8,38 @@ import api from '../api';
 import Box from "@mui/material/Box";
 
 /**
- * Evaluation component that fetches audit data and renders charts for overall progress, category progress, and question ratings.
+ * Evaluation component fetches audit data and displays it as a series of progress indicators,
+ * including an overall progress bar, circular progress indicators for each category,
+ * and a bar chart representing question ratings.
+ *
  * @component
+ * @returns {JSX.Element} A layout component rendering the evaluation details.
  */
 export function Evaluation() {
-
+    // Extract audit ID from the route parameters to dynamically load audit data
     const { auditId } = useParams();
 
-    // State variables for storing the evaluation data from the backend
+    /**
+     * overallProgress - Represents the overall completion percentage of the audit.
+     * categoryProgress - Array of objects representing each category's progress as a percentage.
+     * questionCountByRating - Array showing the count of questions rated with each score (0-5, and nA).
+     */
     const [overallProgress, setOverallProgress] = useState(0);
     const [categoryProgress, setCategoryProgress] = useState([]);
     const [questionCountByRating, setQuestionCountByRating] = useState([]);
 
+    // Define color codes for the bar chart, where the last color (black) represents "nA"
     const colors = ['#a50026', '#d73027', '#fdae61', '#d9ef8b', '#66bd63', '#006837', '#000000'];
 
-    // Fetching data from the backend API
+    /**
+     * Fetches audit progress data from the backend when the component mounts or when auditId changes.
+     * Sets the state values for overallProgress, categoryProgress, and questionCountByRating
+     * based on the retrieved data.
+     */
     useEffect(() => {
         api.get(`/v1/audits/${auditId}/progress`)
             .then(response => {
-                setOverallProgress(response.data.overallProgress);
+                setOverallProgress(response.data.overallProgress || 0);
                 setCategoryProgress(Object.entries(response.data.categoryProgress || {}).map(([name, progress]) => ({
                     name,
                     progress
@@ -36,7 +49,7 @@ export function Evaluation() {
                     count
                 })));
             })
-            .catch(error => console.error("Fehler beim Laden der Evaluationsdaten:", error));
+            .catch(error => console.error("Error loading evaluation data:", error));
     }, [auditId]);
 
     return (
