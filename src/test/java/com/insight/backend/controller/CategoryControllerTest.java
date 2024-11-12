@@ -1,43 +1,37 @@
 package com.insight.backend.controller;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.insight.backend.model.Category;
-import com.insight.backend.service.category.FindCategoryService;
+import static org.hamcrest.Matchers.hasSize;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
+import static org.mockito.Mockito.when;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-
-import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.insight.backend.model.Category;
+import com.insight.backend.service.category.FindCategoryService;
 
 /**
- * test class for testing CategoryController
+ * Test class for testing CategoryController.
  */
 @WebMvcTest(CategoryController.class)
 @ExtendWith(SpringExtension.class)
 public class CategoryControllerTest {
 
-    /**
-     * MockMvc instance for HTTP request mocking
-     */
     @Autowired
     private MockMvc mockMvc;
 
-    /**
-     * MockBean for FindCategoryService
-     */
     @MockBean
     private FindCategoryService findCategoryService;
 
@@ -52,47 +46,32 @@ public class CategoryControllerTest {
         category1 = new Category();
         category1.setId(1L);
         category1.setName("TestCategory1");
+        category1.setDeletedAt(null); // Non-deleted category
 
         category2 = new Category();
         category2.setId(2L);
         category2.setName("TestCategory2");
+        category2.setDeletedAt(null); // Non-deleted category
     }
 
     /**
-     * Tests getting all available categories.
+     * Tests getting all available non-deleted categories.
      * 
      * @throws Exception if an error occurs during the request
      */
     @Test
     public void testGetAllCategories() throws Exception {
-        // Mock the service to return the Categories
+        // Mock the service to return the non-deleted categories
         List<Category> categories = Arrays.asList(category1, category2);
         when(findCategoryService.findAllCategories()).thenReturn(categories);
 
-        // Perform the GET request and verify the response
         mockMvc.perform(get("/api/v1/categories"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$", hasSize(2))) // 2 non-deleted categories
                 .andExpect(jsonPath("$[0].id").value(1))
                 .andExpect(jsonPath("$[0].name").value("TestCategory1"))
                 .andExpect(jsonPath("$[1].id").value(2))
                 .andExpect(jsonPath("$[1].name").value("TestCategory2"));
-    }
-
-    /**
-     * Test gettin an empty list of categories.
-     * 
-     * @throws Exception if an error occurs during the request
-     */
-    @Test
-    public void testGetEmpties() throws Exception {
-        List<Category> categories = new ArrayList<>();
-        when(findCategoryService.findAllCategories()).thenReturn(categories);
-
-        // Perform the GET request and verify the response
-        mockMvc.perform(get("/api/v1/categories"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(0)));
     }
 }

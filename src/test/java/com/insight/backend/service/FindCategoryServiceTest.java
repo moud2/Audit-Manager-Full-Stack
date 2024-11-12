@@ -1,5 +1,6 @@
 package com.insight.backend.service;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +19,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.insight.backend.model.Category;
 import com.insight.backend.repository.CategoryRepository;
 import com.insight.backend.service.category.FindCategoryService;
+import com.insight.backend.specifications.CategorySpecifications;
+
 /**
  * Test class for FindCategoryService.
  */
@@ -32,6 +35,7 @@ public class FindCategoryServiceTest {
 
     private Category category1;
     private Category category2;
+    private Category category3; // Deleted category
 
     /**
      * Set up method to initialize test data.
@@ -42,12 +46,17 @@ public class FindCategoryServiceTest {
         category1 = new Category();
         category1.setId(1L);
         category1.setName("Category1");
-        category1.setDeletedAt(null);
+        category1.setDeletedAt(null); // Not deleted
 
         category2 = new Category();
         category2.setId(2L);
         category2.setName("Category2");
-        category2.setDeletedAt(null);
+        category2.setDeletedAt(null); // Not deleted
+
+        category3 = new Category();
+        category3.setId(3L);
+        category3.setName("Category3");
+        category3.setDeletedAt(LocalDateTime.now()); // Deleted category
     }
 
     /**
@@ -72,11 +81,35 @@ public class FindCategoryServiceTest {
         assertTrue(foundCategory.isEmpty());
     }
 
+    /**
+     * Test case for finding all non-deleted categories.
+     */
     @Test
     void testFindAllCategories() {
+        // Arrange: Mock behavior to return only non-deleted categories
         List<Category> categories = Arrays.asList(category1, category2);
-        when(categoryRepository.findByDeletedAtIsNull()).thenReturn(categories);
+        when(categoryRepository.findAll(CategorySpecifications.isNotDeleted())).thenReturn(categories);
+
+        // Act: Call the service method
         List<Category> foundCategories = findCategoryService.findAllCategories();
+
+        // Assert: Verify that only non-deleted categories are returned
+        assertEquals(categories, foundCategories);
+    }
+
+    /**
+     * Test case for finding categories including deleted ones.
+     */
+    @Test
+    void testFindAllCategoriesIncludingDeleted() {
+        // Arrange: Mock behavior to return all categories, including deleted ones
+        List<Category> categories = Arrays.asList(category1, category2, category3);
+        when(categoryRepository.findAll()).thenReturn(categories);
+
+        // Act: Call the service method
+        List<Category> foundCategories = findCategoryService.findAllCategoriesIncludingDeleted();
+
+        // Assert: Verify that all categories, including deleted ones, are returned
         assertEquals(categories, foundCategories);
     }
 }

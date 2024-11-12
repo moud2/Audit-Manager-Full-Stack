@@ -38,18 +38,20 @@ public class CategoryController {
      * @return a ResponseEntity containing a list of Category objects.
      */
     @GetMapping("/api/v1/categories")
-    public ResponseEntity<List<Category>> getCategories( @RequestParam(value = "includeDeleted", defaultValue = "false") boolean includeDeleted) {
+    public ResponseEntity<List<Category>> getCategories(
+            @RequestParam(value = "includeDeleted", defaultValue = "false") boolean includeDeleted) {
+        
         List<Category> response;
-        if(includeDeleted){
-            response = findCategoryService.findAllCategoriesIncludingDeleted();
-        }else{
-            response = findCategoryService.findAllCategories();
+        if (includeDeleted) {
+            response = findCategoryService.findAllCategoriesIncludingDeleted(); // Includes deleted categories
+        } else {
+            response = findCategoryService.findAllCategories(); // Only non-deleted categories
         }
         return ResponseEntity.ok(response);
     }
 
     /**
-     * GET requests for retrieving a category by its ID.
+     * GET request for retrieving a category by its ID.
      * 
      * @param id the ID of the category to retrieve.
      * @return a ResponseEntity containing the found Category object, or 404 if not found.
