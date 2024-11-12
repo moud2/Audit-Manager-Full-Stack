@@ -3,28 +3,25 @@ package com.insight.backend.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import com.insight.backend.model.Category;
 
 /**
  * Repository interface for accessing Category data.
  */
-public interface CategoryRepository extends JpaRepository<Category, Long> ,JpaSpecificationExecutor<Category>  {
+public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     /**
      * Retrieves all non-deleted categories.
      *
-     * @return a list of categories with a null deletion timestamp.
+     * @return a list of categories where the deletedAt field is null.
      */
     List<Category> findByDeletedAtIsNull();
-
+    
     /**
-     * Retrieves all categories, including deleted ones.
-     * This is inherited from JpaRepository.
+     * Retrieves all categories including deleted ones.
      *
-     * @return a list of all categories, regardless of the deletion timestamp.
+     * @return a list of all categories, including deleted ones.
      */
-    @Override
     List<Category> findAll();
 }

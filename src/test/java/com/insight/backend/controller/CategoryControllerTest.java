@@ -1,5 +1,6 @@
 package com.insight.backend.controller;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,6 +38,7 @@ public class CategoryControllerTest {
 
     private Category category1;
     private Category category2;
+    private Category category3; // Deleted category
 
     /**
      * Set up test data before each test method execution.
@@ -45,23 +47,27 @@ public class CategoryControllerTest {
     public void setup() {
         category1 = new Category();
         category1.setId(1L);
-        category1.setName("TestCategory1");
-        category1.setDeletedAt(null); // Non-deleted category
+        category1.setName("Category1");
+        category1.setDeletedAt(null); // Not deleted
 
         category2 = new Category();
         category2.setId(2L);
-        category2.setName("TestCategory2");
-        category2.setDeletedAt(null); // Non-deleted category
+        category2.setName("Category2");
+        category2.setDeletedAt(null); // Not deleted
+
+        category3 = new Category();
+        category3.setId(3L);
+        category3.setName("Category3");
+        category3.setDeletedAt(LocalDateTime.now()); // Deleted category
     }
 
     /**
-     * Tests getting all available non-deleted categories.
+     * Tests getting all available categories (not deleted).
      * 
      * @throws Exception if an error occurs during the request
      */
     @Test
     public void testGetAllCategories() throws Exception {
-        // Mock the service to return the non-deleted categories
         List<Category> categories = Arrays.asList(category1, category2);
         when(findCategoryService.findAllCategories()).thenReturn(categories);
 
@@ -70,8 +76,30 @@ public class CategoryControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(2))) // 2 non-deleted categories
                 .andExpect(jsonPath("$[0].id").value(1))
-                .andExpect(jsonPath("$[0].name").value("TestCategory1"))
+                .andExpect(jsonPath("$[0].name").value("Category1"))
                 .andExpect(jsonPath("$[1].id").value(2))
-                .andExpect(jsonPath("$[1].name").value("TestCategory2"));
+                .andExpect(jsonPath("$[1].name").value("Category2"));
+    }
+
+    /**
+     * Tests getting all categories including deleted ones.
+     * 
+     * @throws Exception if an error occurs during the request
+     */
+    @Test
+    public void testGetCategoriesIncludingDeleted() throws Exception {
+        List<Category> categories = Arrays.asList(category1, category2, category3);
+        when(findCategoryService.findAllCategoriesIncludingDeleted()).thenReturn(categories);
+
+        mockMvc.perform(get("/api/v1/categories?includeDeleted=true"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(3))) // 3 categories, including deleted one
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].name").value("Category1"))
+                .andExpect(jsonPath("$[1].id").value(2))
+                .andExpect(jsonPath("$[1].name").value("Category2"))
+                .andExpect(jsonPath("$[2].id").value(3))
+                .andExpect(jsonPath("$[2].name").value("Category3"));
     }
 }
