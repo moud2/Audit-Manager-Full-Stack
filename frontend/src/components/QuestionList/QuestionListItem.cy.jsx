@@ -1,6 +1,7 @@
 import React from 'react';
 import { QuestionListItem } from './QuestionListItem';
 
+
 describe('QuestionListItem Component Tests', () => {
     const exampleQuestion = {
         id: 1,
@@ -27,17 +28,20 @@ describe('QuestionListItem Component Tests', () => {
     });
 
     it('updates question object correctly when a checkbox is selected', () => {
+        cy.wait(500); // Füge eine kurze Pause hinzu
 
+        const onChangeSpy = cy.spy().as('onChange');
         cy.mount(
             <QuestionListItem
                 question={exampleQuestion}
                 options={options}
-                onChange={cy.stub().as('onChange')}
+                onChange={onChangeSpy}
             />
         );
 
         cy.get('input[type="checkbox"]').eq(3).click();
-        cy.get('@onChange').should('have.been.calledWith', exampleQuestion.id, { ...exampleQuestion, points: '3', nA: false });
+
+        cy.get('@onChange').should('have.been.calledOnceWith', exampleQuestion.id, { ...exampleQuestion, points: '3', nA: false });
 
         cy.get('input[type="checkbox"]').eq(6).click();
         cy.get('@onChange').should('have.been.calledWith', exampleQuestion.id, { ...exampleQuestion, points: null, nA: true });
