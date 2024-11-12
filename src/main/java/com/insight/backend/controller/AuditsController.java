@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import com.insight.backend.dto.AuditResponseDTO;
 import com.insight.backend.dto.ErrorDTO;
 import com.insight.backend.dto.NewAuditDTO;
+import com.insight.backend.exception.AuditNotFoundException;
 import com.insight.backend.model.Audit;
 import com.insight.backend.service.audit.CreateAuditService;
 import com.insight.backend.service.audit.FindAuditService;
@@ -98,8 +99,7 @@ public class AuditsController {
                 return ResponseEntity.badRequest().body(e.getMessage());
             }
         } else {
-            ErrorDTO errorResponse = new ErrorDTO("audit with id " + auditId + " not found");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+            throw new AuditNotFoundException(auditId);
         }
     }
 }

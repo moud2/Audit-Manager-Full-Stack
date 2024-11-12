@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -53,7 +52,7 @@ public class AuditsControllerTestHttpDelete {
                 .andExpect(status().isNoContent())
                 .andReturn();
 
-        // delete should be called once
+        // Delete should be called once
         verify(deleteAuditService, times(1)).softDeleteAudit(audit);
     }
 
@@ -62,12 +61,12 @@ public class AuditsControllerTestHttpDelete {
         // Mock the service to return no Audit
         when(findAuditService.findAuditById(1L)).thenReturn(Optional.empty());
 
-        // Perform the Delete Request with java spring boot delete
+        //Perform the Delete Request with java spring boot delete
         mockMvc.perform(delete("/api/v1/audits/{auditId}", 1L))
                 .andExpect(status().isNotFound())
                 .andReturn();
 
-        // delete should not be called
+        // Delete should not be called
         verify(deleteAuditService, times(0)).softDeleteAudit(audit);
     }
 }
