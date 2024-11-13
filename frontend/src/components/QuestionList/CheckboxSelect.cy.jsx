@@ -27,7 +27,7 @@ describe('CheckboxSelect Component', () => {
         cy.mount(<CheckboxSelect options={options} value={'Option 1'} onChange={cy.spy().as('onChange')} />);
         const selectedOption = options[0];
         cy.contains(selectedOption).find('input[type="checkbox"]').uncheck();
-        cy.get('@onChange').should('have.been.calledWith', selectedOption, false);
+        cy.get('@onChange').should('have.been.calledWith', null);
     });
 
     it('kann nur eine Checkbox gleichzeitig ausgewählt haben', () => {

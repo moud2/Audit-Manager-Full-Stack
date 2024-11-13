@@ -17,9 +17,6 @@ import {QuestionListItem} from "./QuestionListItem.jsx";
  * @constructor
  */
 export function QuestionList({ questions, options, onChange }){
-    console.log('QuestionList Aufruf mit Fragen:', questions);
-    console.log(options);
-
     /**
      * handleQuestionChange
      *
@@ -31,9 +28,7 @@ export function QuestionList({ questions, options, onChange }){
      * @param {Object} updatedQuestion - An object containing the fields to update for the question.
      */
     const handleQuestionChange = (id, updatedQuestion) => {
-        console.log(id);
         const newQuestions = questions.map((question) => id === question.id ? {... question, ...updatedQuestion} : question);
-        // console.log('neue Fragen:' + questions);
         onChange(newQuestions, updatedQuestion);
     }
 

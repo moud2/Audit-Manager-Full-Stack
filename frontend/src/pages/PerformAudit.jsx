@@ -67,7 +67,6 @@ export function PerformAudit() {
             path: `${destination.path}`,
             value: destination.value,
         }));
-        console.log('hier', patchData);
         api.patch(`/v1/ratings/${questionID}`, patchData)
             .then(response => {
                 console.log(response);
