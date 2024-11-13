@@ -29,6 +29,7 @@ export function PerformAudit() {
         api.get(`/v1/audits/${auditId}/ratings`)
             .then(response => {
                 setQuestions(response.data);
+                console.log(questions);
             })
             .catch(err => {
                 console.error('Error fetching data:', err);

@@ -17,9 +17,6 @@ import {QuestionListItem} from "./QuestionListItem.jsx";
  * @constructor
  */
 export function QuestionList({ questions, options, onChange }){
-    console.log('QuestionList Aufruf mit Fragen:', questions);
-    console.log(options);
-
     /**
      * handleQuestionChange
      *
