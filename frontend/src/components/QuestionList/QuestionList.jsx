@@ -9,13 +9,16 @@ import {QuestionListItem} from "./QuestionListItem.jsx";
  * the modified question list back up.
  *
  * @component
- * @param {Object[]} questions - Array of question objects to be displayed. * @param options
+ * @param {Object[]} questions - Array of question objects to be displayed.
+ * @param {Array.<string|number>} options - Array of options (labels) for each question's response, such as points (0-5) and "N/A."
  * @param {Function} onChange - Callback function that triggers when a question is updated. This function takes an
  * updated array of questions and the question ID as its argument.
  * @returns {JSX.Element} - The rendered `QuestionList` component containing a list of `QuestionListItem` components.
  * @constructor
  */
 export function QuestionList({ questions, options, onChange }){
+    console.log('QuestionList Aufruf mit Fragen:', questions);
+    console.log(options);
 
     /**
      * handleQuestionChange
@@ -28,8 +31,10 @@ export function QuestionList({ questions, options, onChange }){
      * @param {Object} updatedQuestion - An object containing the fields to update for the question.
      */
     const handleQuestionChange = (id, updatedQuestion) => {
+        console.log(id);
         const newQuestions = questions.map((question) => id === question.id ? {... question, ...updatedQuestion} : question);
-        onChange(newQuestions);
+        // console.log('neue Fragen:' + questions);
+        onChange(newQuestions, updatedQuestion);
     }
 
     return (                                                                  

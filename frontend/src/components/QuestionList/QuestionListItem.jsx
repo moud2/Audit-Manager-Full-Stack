@@ -57,9 +57,6 @@ export function QuestionListItem({ question, options, onChange }) {
      * @param {string} value - The value of the selected checkbox (e.g., a point or "N/A").
      */
     const handleCheckboxChange = (value) => {
-        console.log("value: ", value);
-        console.log(question.id);
-
         if (value === null) {
             onChange(question.id, {...question, points: null, nA: null});
         } else {
