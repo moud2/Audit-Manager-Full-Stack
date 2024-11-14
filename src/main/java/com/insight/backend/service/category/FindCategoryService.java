@@ -1,18 +1,28 @@
 package com.insight.backend.service.category;
 
-import com.insight.backend.model.Category;
-import com.insight.backend.repository.CategoryRepository;
-import com.insight.backend.specifications.CategorySpecifications;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import com.insight.backend.model.Category;
+import com.insight.backend.repository.CategoryRepository;
+import com.insight.backend.specifications.CategorySpecifications;
+
+/**
+ * Service-class to find categories in the database.
+ */
 @Service
 public class FindCategoryService {
 
     private final CategoryRepository categoryRepository;
 
+    /**
+     * Constructor to inject the CategoryRepository.
+     *
+     * @param categoryRepository the repository for accessing category data.
+     */
     public FindCategoryService(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
