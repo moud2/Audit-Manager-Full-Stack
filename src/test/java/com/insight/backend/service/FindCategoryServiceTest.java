@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.insight.backend.model.Category;
 import com.insight.backend.repository.CategoryRepository;
 import com.insight.backend.service.category.FindCategoryService;
+import com.insight.backend.specifications.CategorySpecifications;
 
 /**
  * Test class for FindCategoryService.
@@ -91,9 +92,9 @@ public class FindCategoryServiceTest {
      */
     @Test
     void shouldReturnOnlyNonDeletedCategories() {
-        // Arrange: Set up mock behavior to return non-deleted categories
+        // Arrange: Mock behavior for non-deleted categories
         List<Category> categories = Arrays.asList(category1, category2);
-        when(categoryRepository.findByDeletedAtIsNull()).thenReturn(categories);
+        when(categoryRepository.findAll(CategorySpecifications.isNotDeleted())).thenReturn(categories);
 
         // Act: Call the service method
         List<Category> foundCategories = findCategoryService.findAllCategories();

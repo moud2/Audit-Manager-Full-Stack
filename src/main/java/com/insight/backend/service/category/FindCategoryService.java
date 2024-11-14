@@ -2,11 +2,12 @@ package com.insight.backend.service.category;
 
 import com.insight.backend.model.Category;
 import com.insight.backend.repository.CategoryRepository;
+import com.insight.backend.specifications.CategorySpecifications;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
 @Service
 public class FindCategoryService {
 
@@ -23,7 +24,8 @@ public class FindCategoryService {
      */
     public List<Category> findAllCategories() {
         // Fetch only non-deleted categories (deletedAt is null)
-        return categoryRepository.findByDeletedAtIsNull();
+        Specification<Category> spec = CategorySpecifications.isNotDeleted();
+        return categoryRepository.findAll(spec);
     }
 
     /**
