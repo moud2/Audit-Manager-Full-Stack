@@ -1,6 +1,7 @@
 import {LayoutDefault} from "../layouts/LayoutDefault.jsx";
 import {useEffect, useState} from "react";
 import {QuestionList} from "../components/QuestionList/QuestionList.jsx";
+import Title from "../components/Textareas/Title.jsx";
 import api from "../api.js";
 import {useParams} from "react-router-dom";
 
@@ -25,10 +26,12 @@ export function PerformAudit() {
      * Fetches questions from the backend for the current audit on component mount
      * or when the audit ID changes.
      * It updates the `questions` state with the retrieved data.
-     */    useEffect(() => {
+     */    
+    useEffect(() => {
         api.get(`/v1/audits/${auditId}/ratings`)
             .then(response => {
-                setQuestions(response.data);
+                setQuestions(response.data.sort((a, b) => a.id - b.id));
+                console.log(response.data);
             })
             .catch(err => {
                 console.error('Error fetching data:', err);
@@ -78,7 +81,7 @@ export function PerformAudit() {
 
     return (
         <LayoutDefault>
-            {/*ToDo: Überschrift einfügen*/}
+            <Title>Audit durchführen</Title>
             <QuestionList
                 questions={questions}
                 options={labels}

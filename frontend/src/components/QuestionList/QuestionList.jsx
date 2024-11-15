@@ -1,4 +1,5 @@
 import {QuestionListItem} from "./QuestionListItem.jsx";
+import Title from "../Textareas/Title.jsx";
 
 /**
  * QuestionList Component
@@ -32,17 +33,24 @@ export function QuestionList({ questions, options, onChange }){
         onChange(newQuestions, updatedQuestion);
     }
 
-    return (                                                                  
+    return (
         <div>
-            {questions.map((question) => (
-                <div key={question.id}>
-                    <QuestionListItem
-                        question={question}
-                        options={options}
-                        onChange={handleQuestionChange}
-                    />
-                </div>
-            ))}
+            {questions.map((question, index) => {
+                // Check if this is the start of a new category block (since the questions are already sorted by ID, and therefore by category)
+                const isNewCategory =
+                    index === 0 || questions[index - 1].category.name !== question.category.name;
+
+                return (
+                    <div key={question.id}>
+                        {isNewCategory && <Title>{question.category.name}</Title>}
+                        <QuestionListItem
+                            question={question}
+                            options={options}
+                            onChange={handleQuestionChange}
+                        />
+                    </div>
+                );
+            })}
         </div>
-    )
+    );
 }
