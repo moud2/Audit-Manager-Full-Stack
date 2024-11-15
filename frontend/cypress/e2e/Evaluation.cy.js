@@ -1,37 +1,37 @@
-describe('Evaluation Page Tests', () => {
+import 'cypress-image-snapshot/command';
+
+describe('Evaluation Page Snapshot Tests', () => {
     beforeEach(() => {
+        // Mock API response for progress data
+        cy.intercept('GET', 'http://localhost:8080/api/v1/audits/1/progress', {
+            body: {
+                overallProgress: 75,
+                categoryProgress: {
+                    baum: 50,
+                    'nicht baum': 100,
+                },
+                questionCountByRating: {
+                    0: 1,
+                    3: 1,
+                    5: 1,
+                },
+            },
+        }).as('getProgress');
+
         // Visit the Evaluation page
         cy.visit('http://localhost:5173/#/evaluation/1');
+        cy.wait('@getProgress');
     });
 
-    it('should display ratings for audit ID 1', () => {
-        // Setup intercept for the ratings API call
-        cy.intercept('GET', 'http://localhost:8080/api/v1/audits/1/ratings', {
-            body: [
-                {
-                    category: {name: 'baum', id: 1},
-                    comment: 'irrelevant',
-                    na: false,
-                    points: 0,
-                    question: 'Erste Frage',
-                },
-                {
-                    category: {name: 'baum', id: 1},
-                    comment: 'irrelevant',
-                    na: false,
-                    points: 3,
-                    question: 'Zweite Frage',
-                },
-                {
-                    category: {name: 'nicht baum', id: 2},
-                    comment: 'irrelevant',
-                    na: false,
-                    points: 5,
-                    question: 'Dritte Frage',
-                },
-            ],
-        }).as('getRatings');
+    it('should match snapshot for ProgressBar', () => {
+        cy.get('[data-cy="ProgressBar"]').matchImageSnapshot();
+    });
+
+    it('should match snapshot for CircularChart', () => {
+        cy.get('[data-cy="CircularChart"]').matchImageSnapshot();
+    });
+
+    it('should match snapshot for BarChart', () => {
+        cy.get('[data-cy="BarChart"]').matchImageSnapshot();
     });
 });
-
-

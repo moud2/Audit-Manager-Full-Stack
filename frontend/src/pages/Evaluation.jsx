@@ -58,7 +58,7 @@ export function Evaluation() {
                 <h1 className="text-center text-4xl m-6">Evaluation</h1>
 
                 {/* Overall Progress Bar */}
-                <div id="result" className="w-full flex flex-col justify-center items-center h-20 mb-6">
+                <div data-cy={"ProgressBar"} id="result" className="w-full flex flex-col justify-center items-center h-20 mb-6">
                     <Box className="text-center" sx={{ width: '80%' }}>
                         <LinearProgressWithLabel value={overallProgress} />
                     </Box>
@@ -68,14 +68,14 @@ export function Evaluation() {
                 {/* Category Progress Circular Charts */}
                 <div className="w-full grid grid-cols-1 gap-6 mb-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
                     {categoryProgress.map(category => (
-                        <div key={category.name} className="flex flex-col items-center">
+                        <div data-cy={"CircularChart"} key={category.name} className="flex flex-col items-center" >
                             <CircularProgressWithLabel value={category.progress} label={category.name} size={60} />
                         </div>
                     ))}
                 </div>
 
                 {/* Question Count by Rating Bar Chart */}
-                <div className="max-w-full overflow-x-auto pb-10">
+                <div data-cy={"BarChart"} className="max-w-full overflow-x-auto pb-10">
                     <CustomBarChart
                         data={questionCountByRating.map(item => item.count)} // Extract count for the chart data
                         colors={colors}
