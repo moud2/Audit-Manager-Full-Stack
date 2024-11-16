@@ -33,6 +33,7 @@ public class FindQuestionByCategoryService {
      */
     public List<Question> findQuestionsByCategory(Category category, String sortDirection, String sortBy) {
         Sort sort = Sort.by(sortDirection.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, sortBy);
-        return questionRepository.findAll(QuestionSpecifications.inCategory(category), sort);
+
+        return questionRepository.findAll(QuestionSpecifications.inCategory(category).and(QuestionSpecifications.isNotDeleted()), sort);
     }
 }

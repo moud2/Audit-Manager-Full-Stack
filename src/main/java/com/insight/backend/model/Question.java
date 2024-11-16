@@ -14,14 +14,13 @@ public class Question {
     private Long id;
     @Column(nullable = false)
     private String name;
-    @Column
-    private LocalDateTime deletedAt;
     @JsonIgnore
     @OneToMany(mappedBy = "question")
     private Set<Rating> rating;
     @ManyToOne
     @JoinColumn(name="category_id", nullable=false)
     private Category category;
+    private LocalDateTime DeletedAt;
 
     public Question(String name, Set<Rating> rating, Category category) {
         this.name = name;
@@ -65,11 +64,11 @@ public class Question {
         this.id = id;
     }
 
-    public void setDeletedAt(LocalDateTime time) {
-        this.deletedAt = time;
+    public void setDeletedAt(LocalDateTime DeletedAt) {
+        this.DeletedAt = DeletedAt;
     }
 
     public LocalDateTime getDeletedAt() {
-        return deletedAt;
+        return DeletedAt;
     }
 }

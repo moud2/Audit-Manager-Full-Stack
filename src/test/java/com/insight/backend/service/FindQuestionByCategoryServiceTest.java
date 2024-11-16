@@ -69,7 +69,7 @@ public class FindQuestionByCategoryServiceTest {
         List<Question> questions = Arrays.asList(question1, question2);
         when(questionRepository.findAll()).thenReturn(questions);
 
-        List<Question> foundQuestions = findQuestionService.findQuestionsByCategory(category, "", "");
+        List<Question> foundQuestions = findQuestionService.findQuestionsByCategory(category, "asc", "id");
 
         assertEquals(questions, foundQuestions);
     }

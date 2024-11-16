@@ -30,5 +30,4 @@ public class QuestionSpecificationTest {
         verify(root).get("category");
         verify(cb).equal(any(), eq(category));
     }
-
 }
