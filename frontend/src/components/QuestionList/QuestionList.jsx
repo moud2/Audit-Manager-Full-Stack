@@ -1,5 +1,4 @@
 import {QuestionListItem} from "./QuestionListItem.jsx";
-import Title from "../Textareas/Title.jsx";
 
 /**
  * QuestionList Component
@@ -25,32 +24,24 @@ export function QuestionList({ questions, options, onChange }){
      * finds the question with the matching ID, and updates its values with the new data provided
      * in `updatedQuestion`. It then passes the modified question list back to the parent via `onChange`.
      *
-     * @param {number} id - The unique ID of the question to update.
      * @param {Object} updatedQuestion - An object containing the fields to update for the question.
      */
-    const handleQuestionChange = (id, updatedQuestion) => {
-        const newQuestions = questions.map((question) => id === question.id ? {... question, ...updatedQuestion} : question);
-        onChange(newQuestions, updatedQuestion);
+    const handleQuestionChange = (updatedQuestion) => {
+        const newQuestionList = questions.map((question) => updatedQuestion.id === question.id ? {... question, ...updatedQuestion} : question);
+        onChange(newQuestionList, updatedQuestion);
     }
 
     return (
         <div>
-            {questions.map((question, index) => {
-                // Check if this is the start of a new category block (since the questions are already sorted by ID, and therefore by category)
-                const isNewCategory =
-                    index === 0 || questions[index - 1].category.name !== question.category.name;
-
-                return (
-                    <div key={question.id}>
-                        {isNewCategory && <Title>{question.category.name}</Title>}
-                        <QuestionListItem
-                            question={question}
-                            options={options}
-                            onChange={handleQuestionChange}
-                        />
-                    </div>
-                );
-            })}
+            {questions.map((question) => (
+                <div key={question.id}>
+                    <QuestionListItem
+                        question={question}
+                        options={options}
+                        onChange={handleQuestionChange}
+                    />
+                </div>
+            ))}
         </div>
-    );
+    )
 }

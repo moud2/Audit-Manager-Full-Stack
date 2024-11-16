@@ -1,9 +1,11 @@
 import {LayoutDefault} from "../layouts/LayoutDefault.jsx";
 import {useEffect, useState} from "react";
 import {QuestionList} from "../components/QuestionList/QuestionList.jsx";
+import {CategoryList} from "../components/QuestionList/CategoryList.jsx";
 import Title from "../components/Textareas/Title.jsx";
 import api from "../api.js";
 import {useParams} from "react-router-dom";
+import {CategoryListItem} from "../components/QuestionList/CategoryListItem.jsx";
 
 /**
  * PerformAudit Component
@@ -20,6 +22,8 @@ export function PerformAudit() {
     // Extracting the audit ID from the URL parameters using React Router's `useParams` hook
     const { auditId } = useParams();
     const [questions, setQuestions] = useState([]);
+    const [sortedQuestions, setSortedQuestions] = useState([]);
+
     const labels = [0, 1, 2, 3, 4, 5, "N/A"];
 
     /**
@@ -82,10 +86,10 @@ export function PerformAudit() {
     return (
         <LayoutDefault>
             <Title>Audit durchführen</Title>
-            <QuestionList
-                questions={questions}
-                options={labels}
-                onChange={handleQuestionUpdate}
+            <CategoryList
+                // questions={}
+                // options={labels}
+                // onChange={handleQuestionUpdate}
             />
         </LayoutDefault>
     )
