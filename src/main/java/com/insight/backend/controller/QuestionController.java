@@ -3,28 +3,36 @@ package com.insight.backend.controller;
 import java.util.Optional;
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import com.insight.backend.model.Question;
 import com.insight.backend.model.Category;
 import com.insight.backend.service.question.DeleteQuestionService;
+import com.insight.backend.service.question.CreateQuestionService;
+import com.insight.backend.service.question.SaveQuestionService;
 import com.insight.backend.service.question.FindQuestionByCategoryService;
 import com.insight.backend.service.category.FindCategoryService;
 import com.insight.backend.dto.NewQuestionDTO;
-
+import com.insight.backend.dto.QuestionResponseDTO;
+import com.insight.backend.dto.ErrorDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 public class QuestionController {
     private final DeleteQuestionService deleteQuestionService;
     private final FindQuestionByCategoryService findQuestionService;
     private final FindCategoryService findCategoryService;
+    private final CreateQuestionService createQuestionService;
 
     /**
      * Constructs a new QuestionController with the DeleteQuestionService and
@@ -34,10 +42,11 @@ public class QuestionController {
      * 
      */
     @Autowired
-    public QuestionController(DeleteQuestionService deleteQuestionService, FindQuestionByCategoryService findQuestionService, FindCategoryService findCategoryService) {
+    public QuestionController(DeleteQuestionService deleteQuestionService, CreateQuestionService createQuestionService, FindQuestionByCategoryService findQuestionService, FindCategoryService findCategoryService) {
         this.deleteQuestionService = deleteQuestionService; 
         this.findQuestionService = findQuestionService;
         this.findCategoryService = findCategoryService;
+        this.createQuestionService = createQuestionService;
     }
 
     @DeleteMapping("/api/v1/questions/{questionID}")
@@ -53,9 +62,9 @@ public class QuestionController {
     }
 
     @PostMapping("/api/v1/questions/new")
-    public ResponseEntity<Object> postWithRequestBody(@Valid @RequestBody NewAuditDTO newAuditDTO) {
+    public ResponseEntity<Object> postWithRequestBody(@Valid @RequestBody NewQuestionDTO newQuestionDTO) {
 
-        AuditResponseDTO responseDTO = createAuditService.createAudit(newAuditDTO);
+        QuestionResponseDTO responseDTO = createQuestionService.createQuestion(newQuestionDTO);
 
         if (responseDTO == null) {
             ErrorDTO errorDTO = new ErrorDTO("non existing category provided");

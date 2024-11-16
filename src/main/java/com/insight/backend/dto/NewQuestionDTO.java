@@ -28,28 +28,22 @@ import com.insight.backend.model.Rating;
     private Category category;
     private LocalDateTime DeletedAt;
  */
-public class NewAuditDTO {
+public class NewQuestionDTO {
 
     /**
      * The supplied name of the question during creation.
      * Must not be blank and should not exceed 255 characters.
      */
     @NotBlank(message = "Name cannot be blank")
-    @Size(max = 255, message = "Name should be up to 255 characters")
+    @Size(max = 4096, message = "Name should be up to 4096 characters")
     private String name;
-
-    /*
-     * The Set of Rating asociated with a Question.
-     *
-     */
-    private Set<Rating> rating;
 
     /*
      * The Category Objects associated with the audit.
      * Must not be null.
      */
     @NotNull(message = "Categories cannot be null")
-    private Categories categories;
+    private Category category;
 
     /**
      * Gets the name of the audit.
@@ -68,14 +62,13 @@ public class NewAuditDTO {
     public void setName(String name) {
         this.name = name;
     }
-
     /**
      * Gets the list of category IDs associated with the audit.
      *
      * @return the list of category IDs
      */
-    public List<Long> getCategories() {
-        return categories;
+    public Category getCategory() {
+        return category;
     }
 
     /**
@@ -83,7 +76,7 @@ public class NewAuditDTO {
      *
      * @param categories the list of category IDs to set
      */
-    public void setCategories(List<Long> categories) {
-        this.categories = categories;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }
