@@ -89,17 +89,13 @@ public class AuditsController {
     // Soft Delete Endpoint
     @DeleteMapping("/api/v1/audits/{auditId}")
     public ResponseEntity<Object> softDeleteAudit(@PathVariable("auditId") Long auditId) {
-        Optional<Audit> optionalAudit = findAuditService.findAuditById(auditId);
-        if (optionalAudit.isPresent()) {
-            Audit auditToDelete = optionalAudit.get();
-            try {
-                deleteAuditService.softDeleteAudit(auditToDelete);
-                return ResponseEntity.noContent().build();
-            } catch (IllegalArgumentException e) {
-                return ResponseEntity.badRequest().body(e.getMessage());
-            }
-        } else {
-            throw new AuditNotFoundException(auditId);
+        //Optional<Audit> optionalAudit = findAuditService.findAuditById(auditId);
+        Audit auditToDelete = findAuditService.findAuditById(auditId).orElseThrow(() -> new AuditNotFoundException(auditId));
+        try {
+            deleteAuditService.softDeleteAudit(auditToDelete);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }
