@@ -8,6 +8,8 @@ import com.insight.backend.model.Category;
 import com.insight.backend.service.question.DeleteQuestionService;
 import com.insight.backend.service.question.FindQuestionByCategoryService;
 import com.insight.backend.service.category.FindCategoryService;
+import com.insight.backend.dto.NewQuestionDTO;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -48,6 +50,19 @@ public class QuestionController {
         else{
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Question not found");
         }
+    }
+
+    @PostMapping("/api/v1/questions/new")
+    public ResponseEntity<Object> postWithRequestBody(@Valid @RequestBody NewAuditDTO newAuditDTO) {
+
+        AuditResponseDTO responseDTO = createAuditService.createAudit(newAuditDTO);
+
+        if (responseDTO == null) {
+            ErrorDTO errorDTO = new ErrorDTO("non existing category provided");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDTO);
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
     @GetMapping("/api/v1/categories/{categoryId}/questions")
