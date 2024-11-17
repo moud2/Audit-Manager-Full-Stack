@@ -45,7 +45,8 @@ public class AuditProgressService {
 
         // Calculate category and overall progress, and question counts by rating
         int totalPoints = calculateCategoryAndOverallProgress(ratings, categoryPointsSum, categoryQuestionCount, questionCountByRating);
-        double overallProgress = calculateOverallProgress(totalPoints, ratings.size());
+        int answeredQuestions = (int) ratings.stream().filter(rating -> !rating.getNa()).count(); // Ignoriere "n.A."-Bewertungen
+        double overallProgress = calculateOverallProgress(totalPoints, answeredQuestions);
 
         // Calculate per-category progress percentages
         Map<String, Double> categoryProgress = calculateCategoryProgress(categoryPointsSum, categoryQuestionCount);
