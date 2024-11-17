@@ -87,11 +87,23 @@ public class AuditsController {
     /**
      * GET requests for retrieving overall progress of one audit.
      *
-     * @return a ResponseEntity containing percentage of progress
+     * @return a ResponseEntity containing percentage of progress or an error if the audit is not found or deleted
      */
     @GetMapping("/api/v1/audits/{auditId}/progress")
-    public ResponseEntity<AuditProgressDTO> getAuditProgress(@PathVariable Long auditId) {
+    public ResponseEntity<?> getAuditProgress(@PathVariable Long auditId) {
+        // Prüfen, ob das Audit existiert oder soft-deleted ist
+        Optional<Audit> optionalAudit = findAuditService.findAuditById(auditId);
+
+        // Wenn das Audit nicht existiert oder gelöscht wurde, 404 zurückgeben
+        if (optionalAudit.isEmpty() || optionalAudit.get().getDeletedAt() != null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Audit not found or has been deleted");
+        }
+
+        // Fortschritt berechnen
         AuditProgressDTO progressDTO = auditProgressService.calculateAuditProgress(auditId);
+
+        // Erfolgreiche Antwort mit Fortschrittsdaten zurückgeben
         return ResponseEntity.ok(progressDTO);
     }
 }
