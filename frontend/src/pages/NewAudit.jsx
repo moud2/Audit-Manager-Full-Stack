@@ -24,7 +24,7 @@ export function NewAudit() {
     api
       .post("/v1/audits/new" , {
         name: name,
-        customerName: customerName,
+        customer: customerName,
         categories: selectedCategories,
       })
       .then((response) => {
