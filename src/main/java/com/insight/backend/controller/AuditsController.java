@@ -1,7 +1,6 @@
 package com.insight.backend.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import jakarta.validation.Valid;
 
@@ -89,7 +88,6 @@ public class AuditsController {
     // Soft Delete Endpoint
     @DeleteMapping("/api/v1/audits/{auditId}")
     public ResponseEntity<Object> softDeleteAudit(@PathVariable("auditId") Long auditId) {
-        //Optional<Audit> optionalAudit = findAuditService.findAuditById(auditId);
         Audit auditToDelete = findAuditService.findAuditById(auditId).orElseThrow(() -> new AuditNotFoundException(auditId));
         try {
             deleteAuditService.softDeleteAudit(auditToDelete);

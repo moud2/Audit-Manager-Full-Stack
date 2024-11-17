@@ -32,7 +32,14 @@ public class FindAuditService {
      * @return an optional object with the audit with the specified ID, or an optional with no audit if not found
      */
     public Optional<Audit> findAuditById(Long id) {
-        return auditRepository.findById(id);
+        Optional<Audit> optionalAudit = auditRepository.findById(id);
+        if (optionalAudit.isPresent()) {
+            Audit audit = optionalAudit.get();
+            if (audit.getDeletedAt() != null) {
+                return optionalAudit;
+            }
+        }
+        return null;
     }
 
     /**
