@@ -4,6 +4,7 @@ import { LayoutDefault } from "../layouts/LayoutDefault.jsx";
 import LinearProgressWithLabel from '../components/Charts/ProgressBar.jsx';
 import CircularProgressWithLabel from '../components/Charts/CircularProgress.jsx';
 import CustomBarChart from '../components/Charts/BarChart.jsx';
+import Title from '../components/Textareas/Title.jsx';
 import api from '../api';
 import Box from "@mui/material/Box";
 
@@ -39,7 +40,7 @@ export function Evaluation() {
     useEffect(() => {
         api.get(`/v1/audits/${auditId}/progress`)
             .then(response => {
-                setOverallProgress(response.data.overallProgress || 0);
+                setOverallProgress(response.data.overallProgress);
                 setCategoryProgress(Object.entries(response.data.categoryProgress || {}).map(([name, progress]) => ({
                     name,
                     progress
@@ -55,7 +56,7 @@ export function Evaluation() {
     return (
         <LayoutDefault>
             <div className="p-4 flex flex-col items-center">
-                <h1 className="text-center text-4xl m-6">Evaluation</h1>
+                <Title>Evaluation</Title>
 
                 {/* Overall Progress Bar */}
                 <div data-cy={"ProgressBar"} id="result" className="w-full flex flex-col justify-center items-center h-20 mb-6">
