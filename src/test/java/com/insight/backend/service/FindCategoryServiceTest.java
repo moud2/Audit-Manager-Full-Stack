@@ -69,11 +69,37 @@ public class FindCategoryServiceTest {
         assertTrue(foundCategory.isEmpty());
     }
 
+    /**
+     * Test case for finding all categories.
+     */
     @Test
     void testFindAllCategories() {
         List<Category> categories = Arrays.asList(category1, category2);
         when(categoryRepository.findAll()).thenReturn(categories);
         List<Category> foundCategories = findCategoryService.findAllCategories();
         assertEquals(categories, foundCategories);
+    }
+
+    /**
+     * Test case for finding a category by name when the category is found.
+     */
+    @Test
+    void testFindCategoryByName_found() {
+        when(categoryRepository.findByName("Category1")).thenReturn(Optional.of(category1));
+        Optional<Category> foundCategory = findCategoryService.findCategoryByName("Category1");
+
+        assertTrue(foundCategory.isPresent());
+        assertEquals("Category1", foundCategory.get().getName());
+    }
+
+    /**
+     * Test case for finding a category by name when the category is not found.
+     */
+    @Test
+    void testFindCategoryByName_notFound() {
+        when(categoryRepository.findByName("NonExistentCategory")).thenReturn(Optional.empty());
+        Optional<Category> foundCategory = findCategoryService.findCategoryByName("NonExistentCategory");
+
+        assertTrue(foundCategory.isEmpty());
     }
 }
