@@ -5,24 +5,24 @@ import java.util.Optional;
 
 import jakarta.validation.Valid;
 
+import com.insight.backend.dto.AuditProgressDTO;
 import com.insight.backend.dto.AuditResponseDTO;
 import com.insight.backend.dto.ErrorDTO;
 import com.insight.backend.dto.NewAuditDTO;
-import com.insight.backend.dto.AuditProgressDTO;
 import com.insight.backend.model.Audit;
+import com.insight.backend.service.audit.AuditProgressService;
 import com.insight.backend.service.audit.CreateAuditService;
 import com.insight.backend.service.audit.FindAuditService;
-import com.insight.backend.service.audit.AuditProgressService;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.PathVariable;
+
 
 
 /**
