@@ -45,6 +45,9 @@ public class CategoryControllerTest {
      */
     @BeforeEach
     public void setup() {
+        // Reset mocks to avoid interference between tests
+        Mockito.reset(createCategoryService, findCategoryService);
+
         category1 = new Category();
         category1.setId(1L);
         category1.setName("Category1");
@@ -101,5 +104,48 @@ public class CategoryControllerTest {
                 .andExpect(jsonPath("$[1].name").value("Category2"))
                 .andExpect(jsonPath("$[2].id").value(3))
                 .andExpect(jsonPath("$[2].name").value("Category3"));
+    }
+
+    /**
+     * Test creating a new category successfully.
+     *
+     * @throws Exception if an error occurs during the request
+     */
+    @Test
+    public void testCreateCategory_Success() throws Exception {
+        NewCategoryDTO newCategoryDTO = new NewCategoryDTO();
+        newCategoryDTO.setName("New Category");
+
+        CategoryResponseDTO createdCategoryResponse = new CategoryResponseDTO(1L, "New Category");
+
+        when(createCategoryService.createCategory(anyString()))
+                .thenReturn(createdCategoryResponse);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/categories/new")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(newCategoryDTO)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.name").value("New Category"));
+    }
+
+    /**
+     * Test creating a new category with a duplicate name.
+     *
+     * @throws Exception if an error occurs during the request
+     */
+    @Test
+    public void testCreateCategory_DuplicateName() throws Exception {
+        NewCategoryDTO duplicateCategoryDTO = new NewCategoryDTO();
+        duplicateCategoryDTO.setName("Existing Category");
+
+        when(createCategoryService.createCategory("Existing Category"))
+                .thenThrow(new DuplicateCategoryNameException("Existing Category"));
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/categories/new")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(duplicateCategoryDTO)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Category with the name 'Existing Category' already exists"));
     }
 }

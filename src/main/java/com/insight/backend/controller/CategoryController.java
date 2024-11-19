@@ -3,6 +3,7 @@ package com.insight.backend.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,10 +17,12 @@ import com.insight.backend.service.category.FindCategoryService;
 public class CategoryController {
     
     private final FindCategoryService findCategoryService;
+    private final CreateCategoryService createCategoryService;
 
     @Autowired
-    public CategoryController(FindCategoryService findCategoryService) {
-        this.findCategoryService = findCategoryService; 
+    public CategoryController(FindCategoryService findCategoryService, CreateCategoryService createCategoryService) {
+        this.findCategoryService = findCategoryService;
+        this.createCategoryService = createCategoryService;
     }
 
     /**
