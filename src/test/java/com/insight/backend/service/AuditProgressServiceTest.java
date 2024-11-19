@@ -18,18 +18,36 @@ import org.mockito.MockitoAnnotations;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
+/**
+ * Test class for the {@link AuditProgressService}.
+ *
+ * This test suite verifies the behavior of the AuditProgressService class,
+ * which is responsible for calculating the progress of an audit.
+ * The progress includes overall progress, per-category progress,
+ * and question counts by ratings.
+ */
 class AuditProgressServiceTest {
 
-
-
+    /**
+     * Mocked repository for retrieving rating data associated with an audit.
+     */
     @Mock
     private RatingRepository ratingRepository;
 
+    /**
+     * Service under test, with dependencies injected.
+     */
     @InjectMocks
     private AuditProgressService auditProgressService;
 
+    /**
+     * Mock data representing a list of ratings associated with an audit.
+     */
     private List<Rating> ratings;
 
+    /**
+     * Sets up the mock environment and initializes test data before each test method.
+     */
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -69,6 +87,12 @@ class AuditProgressServiceTest {
         ratings.add(ratingNa);
     }
 
+    /**
+     * Tests the calculation of audit progress with valid ratings data.
+     *
+     * Verifies that the progress is calculated correctly, including overall progress,
+     * per-category progress, and question counts by ratings.
+     */
     @Test
     void testCalculateAuditProgress() {
         Long auditId = 1L;
@@ -93,6 +117,11 @@ class AuditProgressServiceTest {
         assertEquals(1L, progressDTO.getQuestionCountByRating().get("nA"));
     }
 
+    /**
+     * Tests the calculation of audit progress when there are no ratings.
+     *
+     * Verifies that the progress is correctly set to 0 for all metrics.
+     */
     @Test
     void testCalculateAuditProgressWithNoRatings() {
         Long auditId = 2L;
