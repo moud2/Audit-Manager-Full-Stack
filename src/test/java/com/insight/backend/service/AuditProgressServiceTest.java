@@ -1,23 +1,26 @@
 package com.insight.backend.service.audit;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.insight.backend.dto.AuditProgressDTO;
 import com.insight.backend.model.Category;
 import com.insight.backend.model.Question;
 import com.insight.backend.model.Rating;
 import com.insight.backend.repository.RatingRepository;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 class AuditProgressServiceTest {
+
+
 
     @Mock
     private RatingRepository ratingRepository;

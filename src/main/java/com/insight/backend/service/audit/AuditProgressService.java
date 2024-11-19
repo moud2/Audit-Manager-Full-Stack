@@ -1,14 +1,18 @@
 package com.insight.backend.service.audit;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.insight.backend.dto.AuditProgressDTO;
 import com.insight.backend.model.Rating;
 import com.insight.backend.repository.RatingRepository;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+
+
 
 /**
  * Service responsible for audit-specific operations.

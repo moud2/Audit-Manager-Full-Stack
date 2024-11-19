@@ -8,10 +8,10 @@ import jakarta.validation.Valid;
 import com.insight.backend.dto.AuditResponseDTO;
 import com.insight.backend.dto.ErrorDTO;
 import com.insight.backend.dto.NewAuditDTO;
+import com.insight.backend.dto.AuditProgressDTO;
 import com.insight.backend.model.Audit;
 import com.insight.backend.service.audit.CreateAuditService;
 import com.insight.backend.service.audit.FindAuditService;
-import com.insight.backend.dto.AuditProgressDTO;
 import com.insight.backend.service.audit.AuditProgressService;
 
 
