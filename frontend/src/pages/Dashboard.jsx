@@ -1,49 +1,32 @@
 import { LayoutDefault } from "../layouts/LayoutDefault.jsx";
 import AuditGrid from "../components/AuditGrid/AuditGrid.jsx";
 import { useState, useEffect } from "react";
-// import api from "../api.js";
+import api from "../api.js";
 
 export function Dashboard() {
-{/* 
-    useEffect(() => {
-        api.get('/v1/audits')
-            .then(response => {
-                console.log(response);
-                setData(response.data);
-                setLoading(false);
-            })
-            .catch(err => {
-                console.error('Error fetching data:', err);
-                setError(err);
-                setLoading(false);
-            });
-    }, []);*/}
-
-  const [data, setData] = useState([
-    {
-      id: 1, 
-      name: "Audit1"
-    },
-    {
-      id: 2, 
-      name: "Audit2"
-    },
-    {
-      id: 3, 
-      name: "Audit3"
-    },
-    {
-      id: 4, 
-      name: "Audit4"
-    },
-    {
-      id: 5, 
-      name: "Audit5"
-    }
-  ]);
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  /* fetching data from backend */
+  useEffect(() => {
+    api
+      .get("/v1/audits")
+      .then((response) => {
+        console.log(response);
+        setData(response.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching data:", err);
+        setError(err);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return <p>Laden...</p>;
+  }
 
   return (
     <LayoutDefault>

@@ -10,12 +10,6 @@ import { NewAuditGridItem } from "./NewAuditGridItem";
  * @constructor
  */
 export function AuditGrid({ data = [], loading = false, error = null }) {
-  if (loading) {
-    return <p>Laden...</p>;
-  }
-  if (error) {
-    return <p>{error.message}</p>;
-  }
   return (
     <div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-10 justify-center">
