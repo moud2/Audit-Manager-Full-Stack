@@ -35,11 +35,22 @@ public class FindCategoryService {
         return categoryRepository.findById(id);
     }
 
-        /*
-     * returns all categories
-     * @return list of all categories
+    /**
+     * Finds all categories in the database.
+     *
+     * @return a list of all categories.
      */
     public List<Category> findAllCategories() {
         return categoryRepository.findAll();
+    }
+
+    /**
+     * Finds a category based on the given name.
+     *
+     * @param name the name of category to be found.
+     * @return an Optional object that includes the category if found, or empty if not found.
+     */
+    public Optional<Category> findCategoryByName(String name) {
+        return categoryRepository.findByName(name);
     }
 }

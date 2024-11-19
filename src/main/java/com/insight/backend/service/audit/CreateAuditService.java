@@ -2,10 +2,10 @@ package com.insight.backend.service.audit;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import com.insight.backend.dto.AuditResponseDTO;
 import com.insight.backend.dto.NewAuditDTO;
+import com.insight.backend.exception.NonExistentAuditCategoryException;
 import com.insight.backend.model.Audit;
 import com.insight.backend.model.Category;
 import com.insight.backend.model.Question;
@@ -14,7 +14,6 @@ import com.insight.backend.service.category.FindCategoryService;
 import com.insight.backend.service.rating.SaveRatingService;
 
 import org.springframework.stereotype.Service;
-
 /**
  * Service class for creating audits.
  */
@@ -43,8 +42,8 @@ public class CreateAuditService {
      * This method also adds questions to the audit and creates a rating for each question.
      *
      * @param newAuditDTO the DTO containing the details of the new audit
-     * @return an AuditResponseDTO containing the details of the created audit,
-     *         or null if any of the provided category IDs are invalid
+     * @return an AuditResponseDTO containing the details of the created audit
+     * @throws NonExistentAuditCategoryException if any of the provided category IDs are invalid     
      */
     public AuditResponseDTO createAudit(NewAuditDTO newAuditDTO) {
         Audit audit = new Audit();
@@ -55,16 +54,16 @@ public class CreateAuditService {
 
         // Add questions to the audit and create ratings for each question
         for (Long categoryId : newAuditDTO.getCategories()) {
-            Optional<Category> categoryOpt = findCategoryService.findCategoryById(categoryId);
-            if (categoryOpt.isPresent()) {
-                Category category = categoryOpt.get();
-                for (Question question : category.getQuestions()) {
-                    Rating rating = new Rating();
-                    rating.setQuestion(question);
-                    rating.setAudit(audit);
-                    ratings.add(rating);
-                }
-            } else return null;
+            Category category = findCategoryService.findCategoryById(categoryId).orElseThrow(()-> new NonExistentAuditCategoryException(categoryId));
+                 
+            for (Question question : category.getQuestions()) {
+                Rating rating = new Rating();
+                rating.setQuestion(question);
+                rating.setAudit(audit);
+                ratings.add(rating);
+            }
+            
+            
         }
 
         saveAuditService.saveAudit(audit);

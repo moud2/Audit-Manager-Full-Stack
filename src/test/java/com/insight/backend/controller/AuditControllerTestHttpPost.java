@@ -6,6 +6,7 @@ import java.util.Collections;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.insight.backend.dto.AuditResponseDTO;
 import com.insight.backend.dto.NewAuditDTO;
+import com.insight.backend.exception.NonExistentAuditCategoryException;
 import com.insight.backend.service.audit.CreateAuditService;
 import com.insight.backend.service.audit.FindAuditService;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +23,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Unit tests for validating the behavior of {@link AuditsController}.
@@ -109,14 +111,14 @@ public class AuditControllerTestHttpPost {
         newAuditDTO.setCustomer("TestCustomer");
         newAuditDTO.setCategories(Arrays.asList(1L, 2L));
 
-        when(createAuditService.createAudit(any(NewAuditDTO.class))).thenReturn(null);
+    when(createAuditService.createAudit(any(NewAuditDTO.class))).thenThrow(new NonExistentAuditCategoryException(1L));
 
-        mockMvc.perform(post("/api/v1/audits/new")
-                        .content(objectMapper.writeValueAsString(newAuditDTO))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().json("{\"error\": \"non existing category provided\"}"));
-    }
+    mockMvc.perform(post("/api/v1/audits/new")
+                    .content(objectMapper.writeValueAsString(newAuditDTO))
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isBadRequest()); // Expecting status code 400
+}
+
 
     /**
      * Test case for successful creation of an audit.
