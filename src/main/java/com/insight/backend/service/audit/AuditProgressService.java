@@ -74,6 +74,7 @@ public class AuditProgressService {
 
     /**
      * Calculates the total points for all answered questions and updates category totals and rating counts.
+     * Sets not answered questions to 0 points!!
      *
      * @param ratings               list of ratings associated with an audit
      * @param categoryPointsSum     map to store the sum of points for each category
@@ -86,7 +87,7 @@ public class AuditProgressService {
         int totalPoints = 0;
         for (Rating rating : ratings) {
             if (!rating.getNa()) {
-                int points = rating.getPoints();
+                int points = rating.getPoints() != null ? rating.getPoints() : 0;
                 String categoryName = rating.getQuestion().getCategory().getName();
 
                 // Update category totals
