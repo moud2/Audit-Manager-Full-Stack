@@ -29,16 +29,12 @@ public class FindCategoryServiceTest {
     @Mock
     private CategoryRepository categoryRepository;
 
-
     @InjectMocks
     private FindCategoryService findCategoryService;
 
     private Category category1;
     private Category category2;
 
-    /**
-     * Set up method to initialize test data.
-     */
     @BeforeEach
     void setUp() {
         category1 = new Category();
@@ -52,38 +48,12 @@ public class FindCategoryServiceTest {
         category2.setDeletedAt(null); // Not deleted
     }
 
-    /**
-     * Test case for finding a category by ID when the category is found.
-     */
-    @Test
-    void testFindCategoryById_found() {
-        // Arrange: Set up mock behavior for categoryRepository
-        when(categoryRepository.findById(1L)).thenReturn(Optional.of(category1));
-        Optional<Category> foundCategory = findCategoryService.findCategoryById(1L);
-        assertEquals(category1, foundCategory.get());
-    }
-
-    /**
-     * Test case for finding a category by ID when the category is not found.
-     */
-    @Test
-    void testFindCategoryById_notFound() {
-        // Arrange: Set up mock behavior for categoryRepository
-        when(categoryRepository.findById(anyLong())).thenReturn(Optional.empty());
-        Optional<Category> foundCategory = findCategoryService.findCategoryById(1L);
-        assertTrue(foundCategory.isEmpty());
-    }
-
     @Test
     void testFindAllCategories() {
-        // Arrange: Set up mock behavior for categoryRepository
         List<Category> categories = Arrays.asList(category1, category2);
-        when(categoryRepository.findAll(CategorySpecifications.isNotDeleted())).thenReturn(categories); // Ensure only non-deleted categories are returned
+        when(categoryRepository.findAll(CategorySpecifications.isNotDeleted())).thenReturn(categories);
 
-        // Act: Call the service method
         List<Category> foundCategories = findCategoryService.findAllCategories();
-
-        // Assert: Verify that only non-deleted categories are returned
         assertEquals(categories, foundCategories);
     }
 

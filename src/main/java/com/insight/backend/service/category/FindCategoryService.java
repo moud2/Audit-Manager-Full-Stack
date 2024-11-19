@@ -10,19 +10,11 @@ import com.insight.backend.model.Category;
 import com.insight.backend.repository.CategoryRepository;
 import com.insight.backend.specifications.CategorySpecifications;
 
-/**
- * Service-class to find categories in the database.
- */
 @Service
 public class FindCategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    /**
-     * Constructor to inject the CategoryRepository.
-     *
-     * @param categoryRepository the repository for accessing category data.
-     */
     public FindCategoryService(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
