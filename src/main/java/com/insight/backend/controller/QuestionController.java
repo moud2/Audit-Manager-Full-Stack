@@ -64,7 +64,7 @@ public class QuestionController {
     @PostMapping("/api/v1/questions/new")
     public ResponseEntity<Object> postWithRequestBody(@Valid @RequestBody NewQuestionDTO newQuestionDTO) {
 
-        QuestionResponseDTO responseDTO = createQuestionService.createQuestion(newQuestionDTO);
+        QuestionResponseDTO responseDTO = this.createQuestionService.createQuestion(newQuestionDTO);
 
         if (responseDTO == null) {
             ErrorDTO errorDTO = new ErrorDTO("non existing category provided");

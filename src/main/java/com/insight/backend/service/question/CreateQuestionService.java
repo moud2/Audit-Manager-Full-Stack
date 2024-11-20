@@ -1,4 +1,4 @@
-package com.insight.backend.service.audit;
+package com.insight.backend.service.question;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +12,12 @@ import com.insight.backend.model.Category;
 import com.insight.backend.model.Question;
 import com.insight.backend.model.Rating;
 import com.insight.backend.service.category.FindCategoryService;
-import com.insight.backend.service.category.FindQuestionByCategoryService;
+import com.insight.backend.service.question.FindQuestionByCategoryService;
 import com.insight.backend.service.rating.SaveRatingService;
 import com.insight.backend.service.question.SaveQuestionService;
 import com.insight.backend.exception.QuestionNotFoundException;
 import com.insight.backend.exception.CategoryNotFoundException;
+import com.insight.backend.specifications.QuestionSpecifications;
 
 
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class CreateQuestionService {
     private final FindCategoryService findCategoryService;
     private final SaveQuestionService saveQuestionService;
     private final SaveRatingService saveRatingService;
-    private final FindQuestionByCategoryService findQuestion;
+    private final FindQuestionByCategoryService findQuestionService;
 
     /**
      * Constructs a CreateAuditService with the specified services.
@@ -38,6 +39,7 @@ public class CreateQuestionService {
      * @param findCategoryService the service to check category existence
      * @param saveQuestionService the service to save audits
      * @param saveRatingService the service to save a list of ratings
+     * @param findQuestionService 
      */
     public CreateQuestionService(FindCategoryService findCategoryService, SaveQuestionService saveQuestionService, SaveRatingService saveRatingService, FindQuestionByCategoryService findQuestionService) {
         this.findCategoryService = findCategoryService;
@@ -58,13 +60,12 @@ public class CreateQuestionService {
         Question question = new Question();
         question.setName(newQuestionDTO.getName());
 
-        // hier gibt es noch keine suche nach namen
-        /*Optional<Question> questionOpt = findQuestionService.findQuestionById(newQuestionDTO.getName());
-        if (questionOpt.isPresent()) {
+        List<Question> questionOpt = this.findQuestionService.findQuestionsByName(newQuestionDTO.getName(), "desc", "name");
+        if (!questionOpt.isEmpty()) {
             question.setName(newQuestionDTO.getName());
-        } else throw new QuestionNotFoundException(); */
+        } else throw new QuestionNotFoundException();
         
-        Optional<Category> categoryOpt = findCategoryService.findCategoryById(newQuestionDTO.getCategory().getId());
+        Optional<Category> categoryOpt = this.findCategoryService.findCategoryById(newQuestionDTO.getCategory().getId());
         if (categoryOpt.isPresent()) {
             Category category = categoryOpt.get();
             question.setCategory(category);

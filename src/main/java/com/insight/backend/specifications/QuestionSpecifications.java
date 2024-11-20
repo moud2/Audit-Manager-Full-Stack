@@ -17,6 +17,10 @@ public class QuestionSpecifications {
         return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("category"), category);
     }
 
+    public static Specification<Question> hasName(String name) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("name"), name);
+    }
+
     public static Specification<Question> isNotDeleted() {
         return (root, query, criteriaBuilder) -> criteriaBuilder.isNotNull(root.get("DeletedAt"));
     }

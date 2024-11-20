@@ -19,7 +19,7 @@ public class SaveQuestionService {
      * @param question the question to be saved
      * @return the saved question, or null if the input question is null
      */
-    public Question saveQuestion(Question question) {
+    public QuestionRepository saveQuestion(Question question) {
         if (question == null) return null;
         return questionRepository.saveAndFlush(question);
     }

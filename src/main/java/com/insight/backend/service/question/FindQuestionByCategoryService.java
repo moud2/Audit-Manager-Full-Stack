@@ -27,6 +27,19 @@ public class FindQuestionByCategoryService {
     /**
      * Finds all Questions of the specified Category.
      *
+     * @param name the name of the Category to search for
+     * @param sortDirection the direction to sort the results
+     * @return a list of all Questions of the specified Category
+     */
+    public List<Question> findQuestionsByName(String name, String sortDirection, String sortBy) {
+        Sort sort = Sort.by(sortDirection.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, sortBy);
+
+        return questionRepository.findAll(QuestionSpecifications.hasName(name).and(QuestionSpecifications.isNotDeleted()), sort);
+    }
+
+    /**
+     * Finds all Questions of the specified Category.
+     *
      * @param category the name of the Category to search for
      * @param sortDirection the direction to sort the results
      * @return a list of all Questions of the specified Category
