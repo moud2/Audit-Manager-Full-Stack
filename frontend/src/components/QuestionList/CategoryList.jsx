@@ -25,7 +25,7 @@ export function CategoryList({ categories, options, onChange }) {
 
     const handleCategoryChange = (newCategory, updatedQuestion) => {
         const newCategories = categories.map((category) => newCategory.id === category.id? {...category, ...newCategory} : category);
-        console.log(newCategories);
+        console.log("CategoryList: newCategories = ", newCategories);
         onChange(newCategories, updatedQuestion);
     }
 

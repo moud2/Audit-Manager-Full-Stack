@@ -17,7 +17,7 @@ export function CategoryListItem({ category, options, onChange }) {
 
     const handleQuestionChange = (newQuestionList, updatedQuestion) => {
         const newCategory = {...category, questions: newQuestionList};
-        console.log(newCategory);
+        console.log("CategoryListItem: newCategory = ", newCategory);
         onChange(newCategory, updatedQuestion);
     }
 
