@@ -19,6 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -37,7 +38,7 @@ public class AuditControllerTestHttpGet {
     private MockMvc mockMvc;
 
     /**
-     * MockBean for FindAutitService
+     * MockBean for FindAuditService
      */
     @MockBean
     private FindAuditService findAuditService;
@@ -62,18 +63,20 @@ public class AuditControllerTestHttpGet {
         audit2.setName("TestAudit2");
         audit1.setId(1L);
         audit2.setId(2L);
+        audit1.setCustomer("TestCustomer1");
+        audit2.setCustomer("TestCustomer2");
     }
 
     /**
      * Tests getting all available audits.
-     * 
+     *
      * @throws Exception if an error occurs during the request
      */
     @Test
     public void testGetAllAudits() throws Exception {
         // Mock the service to return the Audits
         List<Audit> audits = Arrays.asList(audit1, audit2);
-        when(findAuditService.findAllAudits()).thenReturn(audits);
+        when(findAuditService.findAllAudits("", "asc", "id")).thenReturn(audits);
 
         // Perform the GET request and verify the response
         mockMvc.perform(get("/api/v1/audits"))
@@ -83,12 +86,14 @@ public class AuditControllerTestHttpGet {
                 .andExpect(jsonPath("$[0].id").value(1))
                 .andExpect(jsonPath("$[0].name").value("TestAudit1"))
                 .andExpect(jsonPath("$[1].id").value(2))
-                .andExpect(jsonPath("$[1].name").value("TestAudit2"));
+                .andExpect(jsonPath("$[1].name").value("TestAudit2"))
+                .andExpect(jsonPath("$[0].customer").value("TestCustomer1"))
+                .andExpect(jsonPath("$[1].customer").value("TestCustomer2"));
     }
 
     /**
      * Test gettin an empty list of audits.
-     * 
+     *
      * @throws Exception if an error occurs during the request
      */
     @Test

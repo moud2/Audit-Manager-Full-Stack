@@ -1,6 +1,7 @@
 package com.insight.backend.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
 /**
@@ -20,6 +21,14 @@ public class AuditResponseDTO {
     @NotBlank(message = "Name cannot be blank")
     @Size(max = 255, message = "Name should be up to 255 characters")
     private String name;
+
+    /**
+     * The name of the Customer.
+     * Must not be empty and should not exceed 255 characters.
+     */
+    @NotEmpty(message = "Customer cannot be empty")
+    @Size(max = 255, message = "Customer should be up to 255 characters")
+    private String customer;
 
     /**
      * Getter method for ID.
@@ -55,5 +64,23 @@ public class AuditResponseDTO {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * Getter method for Customer.
+     *
+     * @return the customer of the Audit.
+     */
+    public String getCustomer() {
+        return customer;
+    }
+
+    /**
+     * Setter method for Customer.
+     *
+     * @param customer of the audit.
+     */
+    public void setCustomer(String customer) {
+        this.customer = customer;
     }
 }

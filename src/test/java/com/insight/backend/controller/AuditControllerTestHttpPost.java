@@ -98,17 +98,18 @@ public class AuditControllerTestHttpPost {
                 .andExpect(status().isBadRequest());
     }
 
-/**
- * Test case for validating handling of non-existing categories.
- * Expects a HTTP 400 Bad Request response without a specific error message.
- *
- * @throws Exception if there is an error performing the MVC request
- */
-@Test
-public void testNonExistingCategories() throws Exception {
-    NewAuditDTO newAuditDTO = new NewAuditDTO();
-    newAuditDTO.setName("Audit Name");
-    newAuditDTO.setCategories(Arrays.asList(1L, 2L));
+    /**
+     * Test case for validating handling of non-existing categories.
+     * Expects a HTTP 400 Bad Request response with a specific error message.
+     *
+     * @throws Exception if there is an error performing the MVC request
+     */
+    @Test
+    public void testNonExistingCategories() throws Exception {
+        NewAuditDTO newAuditDTO = new NewAuditDTO();
+        newAuditDTO.setName("Audit Name");
+        newAuditDTO.setCustomer("TestCustomer");
+        newAuditDTO.setCategories(Arrays.asList(1L, 2L));
 
     when(createAuditService.createAudit(any(NewAuditDTO.class))).thenThrow(new NonExistentAuditCategoryException(1L));
 
@@ -131,10 +132,12 @@ public void testNonExistingCategories() throws Exception {
         NewAuditDTO newAuditDTO = new NewAuditDTO();
         newAuditDTO.setName("Audit Name");
         newAuditDTO.setCategories(Collections.singletonList(1L));
+        newAuditDTO.setCustomer("TestCustomer");
 
         AuditResponseDTO auditResponseDTO = new AuditResponseDTO();
         auditResponseDTO.setId(1L);
         auditResponseDTO.setName("Audit Name");
+        auditResponseDTO.setCustomer("TestCustomer");
 
         // Mocking behavior of createAuditService
         when(createAuditService.createAudit(any(NewAuditDTO.class))).thenReturn(auditResponseDTO);
@@ -144,6 +147,7 @@ public void testNonExistingCategories() throws Exception {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())  // Expecting status code 201
                 .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.name").value("Audit Name"));
+                .andExpect(jsonPath("$.name").value("Audit Name"))
+                .andExpect(jsonPath("$.customer").value("TestCustomer"));
     }
 }

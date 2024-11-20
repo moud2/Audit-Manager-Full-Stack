@@ -48,6 +48,7 @@ public class CreateAuditService {
     public AuditResponseDTO createAudit(NewAuditDTO newAuditDTO) {
         Audit audit = new Audit();
         audit.setName(newAuditDTO.getName());
+        audit.setCustomer(newAuditDTO.getCustomer());
 
         List<Rating> ratings = new ArrayList<>();
 
@@ -71,6 +72,7 @@ public class CreateAuditService {
         AuditResponseDTO auditResponseDTO = new AuditResponseDTO();
         auditResponseDTO.setId(audit.getId());
         auditResponseDTO.setName(audit.getName());
+        auditResponseDTO.setCustomer(audit.getCustomer());
 
         return auditResponseDTO;
     }
