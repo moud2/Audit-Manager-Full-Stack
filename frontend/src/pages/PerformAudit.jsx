@@ -11,7 +11,8 @@ import {CategoryListItem} from "../components/QuestionList/CategoryListItem.jsx"
  * PerformAudit Component
  *
  * This component is responsible for displaying a list of questions retrieved from the backend
- * for a specific audit. It renders a `QuestionList` component that allows users to view, edit,
+ * for a specific audit. It sorts the questions by category and id to achieve a consistent display.
+ * It renders a `CategoryList` component that allows users to view, edit,
  * and submit responses for each question. It handles updating questions by passing modified data
  * back to the backend via a PATCH request.
  *
@@ -68,8 +69,45 @@ export function PerformAudit() {
     //     }
     // ];
 
+    /**
+     * Transforms an array of questions into a structured array of categories,
+     * where each category contains its associated questions.
+     *
+     * @param {Array} questions - An array of question objects. Each object is expected to have the following structure:
+     *                            {
+     *                              id: number,
+     *                              question: string,
+     *                              points: number | null,
+     *                              nA: boolean | null,
+     *                              comment: string,
+     *                              category: {
+     *                                  id: number,
+     *                                  name: string,
+     *                                  deletedAt: null | string
+     *                              }
+     *                            }
+     * @returns {Array} - A transformed array of categories. Each category has the following structure:
+     *                    {
+     *                      name: string,
+     *                      id: number,
+     *                      questions: [
+     *                          {
+     *                              id: number,
+     *                              question: string,
+     *                              points: number | null,
+     *                              nA: boolean | null,
+     *                              comment: string
+     *                          },
+     *                          ...
+     *                      ]
+     *                    }
+     *
+     * The function works as follows:
+     * 1. Sorts the input questions by category ID and then by question ID to ensure consistent order.
+     * 2. Groups the questions by their category. Each category contains a `questions` array with its associated questions.
+     */
     const transformData = (questions) => {
-        //sorts questions by category and id
+        //sorts questions by category id and then by question id
         const sortedData = questions.sort((a, b) => {
             if (a.category.id === b.category.id) {
                 return a.id - b.id;
@@ -82,6 +120,7 @@ export function PerformAudit() {
             const existingCategory = acc.find(cat => cat.id === item.category.id);
 
             if (existingCategory) {
+                // Add the question to the existing category
                 existingCategory.questions.push({
                     id: item.id,
                     question: item.question,
@@ -90,6 +129,7 @@ export function PerformAudit() {
                     comment: item.comment,
                 });
             } else {
+                // Create a new category and add the current question
                 acc.push({
                     name: item.category.name,
                     id: item.category.id,
@@ -105,7 +145,7 @@ export function PerformAudit() {
                 });
             }
 
-            return acc;
+            return acc; // Return the accumulator for the next iteration
         }, []);
 
         return transformedData;

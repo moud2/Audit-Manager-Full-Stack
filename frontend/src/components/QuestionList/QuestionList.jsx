@@ -35,7 +35,7 @@ export function QuestionList({ questions, options, onChange }){
     return (
         <div>
             {questions.map((question) => (
-                <div key={question.id}>
+                <div key={question.id} data-cy={`question-list-item-${question.id}`}>
                     <QuestionListItem
                         question={question}
                         options={options}

@@ -1,36 +1,48 @@
-import {QuestionListItem} from "./QuestionListItem.jsx";
-import {useState} from "react";
 import {CategoryListItem} from "./CategoryListItem.jsx";
 
+/**
+ * CategoryList Component
+ *
+ * Renders a list of categories, where each category contains its associated questions.
+ *
+ * @param {Array} categories - An array of category objects. Each category is expected to have the following structure:
+ *                             {
+ *                               id: number,
+ *                               name: string,
+ *                               questions: [
+ *                                   {
+ *                                       id: number,
+ *                                       question: string,
+ *                                       points: number | null,
+ *                                       nA: boolean | null,
+ *                                       comment: string
+ *                                   },
+ *                                   ...
+ *                               ]
+ *                             }
+ * @param {Array.<string|number>} options - Array of options (labels) for each question's response, such as points (0-5) and "N/A."
+ * @param {Function} onChange - A callback function triggered when a category or its associated questions are updated.
+ *                              It receives two arguments:
+ *                              1. `newCategories`: The updated array of categories.
+ *                              2. `updatedQuestion`: The question object that was updated.
+ * @returns {JSX.Element} - A React component that renders the list of categories.
+ *
+ * The component works as follows:
+ * - Iterates through the `categories` array and renders each category using the `CategoryListItem` component.
+ * - Handles changes to a category or its questions through the `handleCategoryChange` function, which:
+ *    1. Updates the corresponding category in the `categories` array.
+ *    2. Calls the `onChange` callback with the updated categories and the specific question that was modified.
+ * - Each `CategoryListItem` receives the current category, options, and the `handleCategoryChange` function as props.
+ */
 export function CategoryList({ categories, options, onChange }) {
-    const labels = [0, 1, 2, 3, 4, 5, "N/A"];
-    // const [categories, setCategories] = useState([
-    //     {
-    //         name: 'VPN',
-    //         id: 1,
-    //         questions: [
-    //             { id: '1', question: 'Frage 1?', points: 3, nA: false, comment: 'Ok' },
-    //             { id: '2', question: 'Frage 2?', points: null, nA: true, comment: '' },
-    //         ]
-    //     },
-    //     {
-    //         name: 'Network',
-    //         id: 2,
-    //         questions: [
-    //             { id: '3', question: 'Frage 3?', points: 2, nA: false, comment: '' },
-    //             { id: '4', question: 'Frage 4?', points: null, nA: null, comment: 'Schlecht' },
-    //         ]
-    //     }
-    // ]);
 
     const handleCategoryChange = (newCategory, updatedQuestion) => {
         const newCategories = categories.map((category) => newCategory.id === category.id? {...category, ...newCategory} : category);
-        console.log("CategoryList: newCategories = ", newCategories);
         onChange(newCategories, updatedQuestion);
     }
 
     return (
-        <div>
+        <div className="category-list">
             {categories.map((category) => (
                 <div key={category.id}>
                     <CategoryListItem
