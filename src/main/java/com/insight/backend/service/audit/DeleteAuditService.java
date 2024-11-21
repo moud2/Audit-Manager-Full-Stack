@@ -1,9 +1,9 @@
 package com.insight.backend.service.audit;
 
+import java.time.LocalDateTime;
+
 import com.insight.backend.model.Audit;
 import com.insight.backend.repository.AuditRepository;
-
-import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 
