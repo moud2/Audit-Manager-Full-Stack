@@ -1,8 +1,10 @@
 package com.insight.backend.service;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import com.insight.backend.model.Question;
 import com.insight.backend.model.Category;
@@ -35,6 +37,11 @@ public class FindQuestionByCategoryServiceTest {
 
     @BeforeEach
     void setUp() {
+        category = new Category();
+        category.setId(3L);
+        category.setName("Category");
+        category.setQuestions(new HashSet<Question>());
+
         question1 = new Question();
         question1.setId(1L);
         question1.setName("Question1");
@@ -44,6 +51,9 @@ public class FindQuestionByCategoryServiceTest {
         question2.setId(2L);
         question2.setName("Question2");
         question2.setCategory(category);
+
+        category.getQuestions().add(question1);
+        category.getQuestions().add(question2);
     }
 
     @Test
@@ -67,10 +77,11 @@ public class FindQuestionByCategoryServiceTest {
     @Test
     void testFindQuestionsByCategory() {
         List<Question> questions = Arrays.asList(question1, question2);
-        when(questionRepository.findAll()).thenReturn(questions);
+        when(findQuestionService.findQuestionsByCategory(category, "asc", "id")).thenReturn(questions);
 
         List<Question> foundQuestions = findQuestionService.findQuestionsByCategory(category, "asc", "id");
 
+        assertTrue(!foundQuestions.isEmpty());
         assertEquals(questions, foundQuestions);
     }
 }

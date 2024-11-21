@@ -25,6 +25,7 @@ public class DeleteQuestionServiceTest {
     private DeleteQuestionService deleteQuestionService;
 
     private Question question;
+    private Question nullQuestion;
 
     @BeforeEach
     void setUp() {
@@ -35,9 +36,17 @@ public class DeleteQuestionServiceTest {
 
     @Test
     void testDeleteQuestion() {
-        when(questionRepository.saveAndFlush(question)).thenReturn(question);
-        deleteQuestionService.deleteQuestion(question.getId());
+        deleteQuestionService.deleteQuestion(question);
+        
         verify(questionRepository, times(1)).saveAndFlush(question);
+
         assertNotNull(question.getDeletedAt());
+    }
+
+    @Test
+    void testDeleteQuestionNull() {
+        deleteQuestionService.deleteQuestion(nullQuestion);
+
+        verify(questionRepository, times(0)).saveAndFlush(question);
     }
 }

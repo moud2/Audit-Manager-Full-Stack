@@ -42,15 +42,15 @@ public class QuestionController {
     public ResponseEntity<String> deleteQuestion(@PathVariable("questionID") Long questionID){
         Optional<Question> optionalQuestion = findQuestionService.findQuestionByID(questionID);
         if(optionalQuestion.isPresent()){
-            deleteQuestionService.deleteQuestion(questionID);
-            return ResponseEntity.ok("Question succesfully deleted");
+            deleteQuestionService.deleteQuestion(findQuestionService.findQuestionByID(questionID).get());
+            return ResponseEntity.ok("Question successfully deleted");
         }
         else{
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Question not found");
         }
     }
 
-    @GetMapping("/api/v1/categories/{categoryId}/questions")
+    @GetMapping("/api/v1/categories/{categoryID}/questions")
     public ResponseEntity<List<Question>> getQuestionsByCategory(@PathVariable("categoryID") Long categoryID, @RequestParam(required = false, defaultValue = "asc") String sortDirection, @RequestParam(required = false, defaultValue = "id") String sortBy){
         Optional<Category> optionalCategory = findCategoryService.findCategoryById(categoryID);
         if(optionalCategory.isPresent()){

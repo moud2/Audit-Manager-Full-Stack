@@ -21,10 +21,11 @@ public class DeleteQuestionService {
      *
      * @param id of question to be deleted
      */
-    public void deleteQuestion(Long id){
-        Question question = questionRepository.findById(id).get();
-        question.setDeletedAt(LocalDateTime.now());
-        questionRepository.saveAndFlush(question);
+    public void deleteQuestion(Question question){
+        if(question != null) {
+            question.setDeletedAt(LocalDateTime.now());
+            questionRepository.saveAndFlush(question);
+        }
     }
 
 }
