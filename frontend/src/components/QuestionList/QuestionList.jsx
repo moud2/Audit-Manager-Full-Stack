@@ -28,7 +28,6 @@ export function QuestionList({ questions, options, onChange }){
      */
     const handleQuestionChange = (updatedQuestion) => {
         const newQuestionList = questions.map((question) => updatedQuestion.id === question.id ? {... question, ...updatedQuestion} : question);
-        console.log("QuestionList: newQuestionList = ", newQuestionList);
         onChange(newQuestionList, updatedQuestion);
     }
 
