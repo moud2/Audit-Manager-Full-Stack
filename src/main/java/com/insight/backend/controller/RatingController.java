@@ -2,15 +2,14 @@ package com.insight.backend.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
-import com.insight.backend.dto.ErrorDTO;
 import com.insight.backend.dto.RatingDTO;
+import com.insight.backend.exception.AuditNotFoundException;
 import com.insight.backend.exception.RatingNotFoundException;
 import com.insight.backend.mapper.RatingMapper;
 import com.insight.backend.model.Audit;
@@ -61,7 +60,7 @@ public class RatingController {
     @PatchMapping("/api/v1/ratings/{ratingId}")
     public ResponseEntity<Rating> updateRating(@PathVariable("ratingId") long ratingId, @RequestBody JsonPatch patch) {
         try {
-            Rating entity = findRatingService.findRatingById(ratingId).orElseThrow(RatingNotFoundException::new);
+            Rating entity = findRatingService.findRatingById(ratingId).orElseThrow(() -> new RatingNotFoundException(ratingId));
             JsonNode entityJsonNode;
             entityJsonNode = objectMapper.convertValue(entity, JsonNode.class);
             JsonNode patchedEntityJsonNode = patch.apply(entityJsonNode);
@@ -81,15 +80,9 @@ public class RatingController {
      */
     @GetMapping("/api/v1/audits/{auditId}/ratings")
     public ResponseEntity<Object> getRatings(@PathVariable("auditId") Long auditId) {
-        Optional<Audit> optionalAudit = findAuditService.findAuditById(auditId);
-        if (optionalAudit.isPresent()) {
-            Audit audit = optionalAudit.get();
-            List<Rating> ratings = new ArrayList<>(audit.getRatings());
-            List<RatingDTO> ratingDTOs = ratingMapper.convertToRatingDTOs(ratings);
-            return ResponseEntity.ok(ratingDTOs);
-        } else {
-            ErrorDTO errorResponse = new ErrorDTO("audit with id " + auditId + " not found");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
-        }
+        Audit audit = findAuditService.findAuditById(auditId).orElseThrow(() -> new AuditNotFoundException(auditId));
+        List<Rating> ratings = new ArrayList<>(audit.getRatings());
+        List<RatingDTO> ratingDTOs = ratingMapper.convertToRatingDTOs(ratings);
+        return ResponseEntity.ok(ratingDTOs);
     }
 }
