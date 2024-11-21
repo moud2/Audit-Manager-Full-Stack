@@ -98,7 +98,7 @@ public class QuestionControllerTestHttpGet {
 
         // Perform the GET request and verify the response
         mockMvc.perform(get("/api/v1/categories/3L/questions"))
-                .andExpect(status().isOk())
+                .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$", hasSize(0)));
     }
 

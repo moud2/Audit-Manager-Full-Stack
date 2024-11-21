@@ -60,7 +60,7 @@ public class QuestionController {
         }
         else
         {
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.notFound().build();
         }
     }
 }

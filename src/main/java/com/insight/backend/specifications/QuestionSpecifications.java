@@ -18,7 +18,7 @@ public class QuestionSpecifications {
     }
 
     public static Specification<Question> isNotDeleted() {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.isNotNull(root.get("DeletedAt"));
+        return (root, query, criteriaBuilder) -> criteriaBuilder.isNull(root.get("DeletedAt"));
     }
 
 
