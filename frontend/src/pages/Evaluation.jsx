@@ -3,6 +3,7 @@ import { LayoutDefault } from "../layouts/LayoutDefault.jsx";
 import ProgressBar from '../components/Charts/ProgressBar.jsx';
 import CircularProgress from '../components/Charts/CircularProgress.jsx';
 import BarChart from '../components/Charts/BarChart.jsx';
+import { CompareAudit } from '../components/CompareColumn/CompareAudit.jsx';
 
 /**
  * Evaluation component displaying progress bars and charts with responsive audit comparison functionality.
@@ -26,6 +27,7 @@ export function Evaluation() {
 
     const audits = [
         {
+<<<<<<< HEAD
             id: 1,
             name: "Audit A",
             progress: 85,
@@ -60,6 +62,29 @@ export function Evaluation() {
         }
     };
 
+=======
+          id: 1,
+          name: "Audit A",
+          progress: 85,
+          categories: [
+            { id: 1, name: "Kategorie 1", progress: 70 },
+            { id: 2, name: "Kategorie 2", progress: 90 },
+          ],
+          distribution: [4, 6, 3, 7, 5, 8],
+        },
+        {
+          id: 2,
+          name: "Audit B",
+          progress: 65,
+          categories: [
+            { id: 1, name: "Kategorie 1", progress: 50 },
+            { id: 2, name: "Kategorie 2", progress: 75 },
+          ],
+          distribution: [2, 3, 4, 5, 6, 7],
+        },
+      ];
+      
+>>>>>>> 89882e4 (Comparison of Audits)
     return (
         <LayoutDefault>
             <div className="p-4 flex flex-col items-center">
@@ -125,6 +150,7 @@ export function Evaluation() {
                     )}
                 </div>
             </div>
+            <CompareAudit audits={audits} />
         </LayoutDefault>
     );
 }
