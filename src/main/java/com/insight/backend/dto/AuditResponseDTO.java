@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
 /**
@@ -33,6 +34,14 @@ public class AuditResponseDTO {
     @NotNull(message = "Creation timestamp cannot be null")
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
+
+    /**
+     * The name of the Customer.
+     * Must not be empty and should not exceed 255 characters.
+     */
+    @NotEmpty(message = "Customer cannot be empty")
+    @Size(max = 255, message = "Customer should be up to 255 characters")
+    private String customer;
 
     /**
      * Getter method for ID.
@@ -88,4 +97,22 @@ public class AuditResponseDTO {
         this.createdAt = createdAt;
     }
 
+
+    /**
+     * Getter method for Customer.
+     *
+     * @return the customer of the Audit.
+     */
+    public String getCustomer() {
+        return customer;
+    }
+
+    /**
+     * Setter method for Customer.
+     *
+     * @param customer of the audit.
+     */
+    public void setCustomer(String customer) {
+        this.customer = customer;
+    }
 }
