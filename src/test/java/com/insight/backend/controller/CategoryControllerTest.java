@@ -134,7 +134,7 @@ public class CategoryControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/categories/new")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newCategoryDTO)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("New Category"));
     }
