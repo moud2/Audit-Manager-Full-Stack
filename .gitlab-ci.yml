@@ -42,7 +42,7 @@ test-e2e:
    # - echo "Running integration tests..."
    # - npm run dev &                          # Start the server in the background
    # - sleep 20                               # Wait for the server to start (adjust time as needed)
-   # - npm run integration-test               # Run integration tests
+   # - npm run integration-test               # Run integration test
    # - echo "Integration tests completed"
 
 
