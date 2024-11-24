@@ -44,4 +44,12 @@ public class AuditSpecifications {
     public static Specification<Audit> customerContains(String customer) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("customer"), "%" + customer + "%");
     }
+    /**
+     * Specification to find audits that are not deleted.
+     *
+     * @return the specification to find non-deleted audits
+     */
+    public static Specification<Audit> isNotDeleted() {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.isNull(root.get("deletedAt"));
+    }
 }
