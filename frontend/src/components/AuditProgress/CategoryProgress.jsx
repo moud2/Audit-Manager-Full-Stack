@@ -1,3 +1,5 @@
+
+
 function CategoryProgress(props) {
     const { progress, name } = props;
 

@@ -160,6 +160,7 @@ export function PerformAudit() {
         api.get(`/v1/audits/${auditId}/ratings`)
             .then(response => {
                 setQuestions(response.data);
+                console.log(response.data);
                 setSortedQuestions(transformData(response.data));
             })
             .catch(err => {
