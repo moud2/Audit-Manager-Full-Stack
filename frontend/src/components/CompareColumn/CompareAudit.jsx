@@ -16,10 +16,10 @@ export function CompareAudit() {
   return (
     <div className="flex items-center justify-center">
       <button
-        className="rounded-md border border-slate-300 py-2 px-4 text-center text-base transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-blue-800 hover:border-blue-800 focus:text-white focus:bg-blue-800 focus:border-blue-800 active:border-slate-300 active:text-slate-600 active:bg-transparent disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-        onClick={() => navigate("/compare-column")}
+        className="fixed right-16 p-2 bottom-20 mb-12 bg-blue-500 text-white rounded"
+        onClick={() => navigate("/compare-audits")}
       >
-        Vergleich Alle Audit
+        Audit vergleichen
       </button>
     </div>
   );
