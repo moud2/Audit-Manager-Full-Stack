@@ -146,4 +146,28 @@ public void testNonExistingCategories() throws Exception {
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.name").value("Audit Name"));
     }
+
+    /**
+     * Test case for validating handling of duplicate Category-IDs.
+     * Expects a HTTP 400 Bad Request response with a specific error message.
+     *
+     * @throws Exception if there is an error performing the MVC request
+     */
+    @Test
+    public void testDuplicateCategoryIds() throws Exception {
+        NewAuditDTO newAuditDTO = new NewAuditDTO();
+        newAuditDTO.setName("Audit Name");
+        newAuditDTO.setCategories(Arrays.asList(1L, 1L)); // Duplicate Category-IDs
+
+        // Mock the service to throw IllegalArgumentException
+        when(createAuditService.createAudit(any(NewAuditDTO.class)))
+                .thenThrow(new IllegalArgumentException("Duplicate Category-IDs are not allowed."));
+
+        mockMvc.perform(post("/api/v1/audits/new")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(newAuditDTO)))
+                .andExpect(status().isBadRequest()) // Expecting status code 400
+                .andExpect(jsonPath("$").value("Duplicate Category-IDs are not allowed.")); // Error message validation
+    }
+
 }

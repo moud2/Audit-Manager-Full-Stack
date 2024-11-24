@@ -107,4 +107,30 @@ class CreateAuditServiceTest {
         verify(findCategoryService, times(1)).findCategoryById(1L);
         verify(findCategoryService, never()).findCategoryById(2L);
     }
+
+    /**
+     * Tests the createAudit method when duplicate Category-IDs are provided.
+     * Verifies that an IllegalArgumentException is thrown.
+     */
+    @Test
+    public void testCreateAudit_duplicateCategoryIds() {
+        NewAuditDTO newAuditDTO = new NewAuditDTO();
+        newAuditDTO.setName("Audit Name");
+        newAuditDTO.setCategories(Arrays.asList(1L, 1L)); // Duplicate Category-IDs
+
+        // Assert that an IllegalArgumentException is thrown
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> createAuditService.createAudit(newAuditDTO));
+
+        // Verify that the exception message matches the expected message
+        assertEquals("Duplicate Category-IDs are not allowed.", exception.getMessage());
+
+        // Ensure no save operations are performed
+        verify(saveAuditService, never()).saveAudit(any(Audit.class));
+        verify(saveRatingService, never()).saveAllRatings(anyList());
+
+        // Verify no interactions with the FindCategoryService since duplicates are detected early
+        verify(findCategoryService, never()).findCategoryById(anyLong());
+    }
+
 }
