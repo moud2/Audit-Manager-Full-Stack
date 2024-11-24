@@ -22,7 +22,7 @@ function CategoryProgress(props) {
             {/* Fortschrittsbalken */}
             <div className="mt-2 h-2 w-full bg-gray-200 rounded">
                 <div
-                    className="h-2 bg-blue-500 rounded"
+                    className="h-2 bg-red-600 rounded"
                     style={{ width: `${progress}%` }}
                 ></div>
             </div>

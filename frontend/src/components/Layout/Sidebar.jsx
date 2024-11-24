@@ -5,8 +5,10 @@ export function Sidebar(){
     const location = useLocation();
 
     return (
-        <nav className="fw-64 h-[calc(100vh-4rem)] bg-gray-200 p-4 shadow-md fixed">
+        <nav className="w-64 h-full bg-gray-200 p-4 shadow-md fixed">
             <div className="flex flex-col gap-2">
+
+                {/*Links zum Dashboard und zur Evaluationsseite*/}
                 <Link to="/"
                       className="block p-1 mt-1 text-gray-700 hover:text-black hover:scale-105 transition-transform transform border border-gray-400 rounded text-center">Home</Link>
                 {/*<Link to="/dashboard">Dashboard</Link>*/}
@@ -15,11 +17,14 @@ export function Sidebar(){
                 <Link to="/evaluation"
                       className="block p-1 mt-1 text-gray-700 hover:text-black hover:scale-105 transition-transform transform border border-gray-400 rounded text-center">Evaluation</Link>
             </div>
+
+            {/*Horizontale Trennlinie*/}
+            {/*ToDo: richtiges Softline Rot einfügen*/}
             <hr className="border-t border-gray-300 my-4"/>
+
+
             {location.pathname.startsWith("/perform-audit") && (
-                <div className="mt-auto">
-                    <AuditProgress/>
-                </div>
+                <AuditProgress />
             )}
         </nav>
     )

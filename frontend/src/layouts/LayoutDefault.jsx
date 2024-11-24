@@ -1,5 +1,6 @@
 import {Sidebar} from "../components/Layout/Sidebar.jsx";
 import {Header} from "../components/Layout/Header.jsx";
+import {Footer} from "../components/Layout/Footer.jsx";
 import {Children} from "react";
 
 export function LayoutDefault({children}){
@@ -14,6 +15,7 @@ export function LayoutDefault({children}){
                     {Children.map(children, child => child)}
                 </main>
             </div>
+            {/*<Footer />*/}
         </div>
 
     )
