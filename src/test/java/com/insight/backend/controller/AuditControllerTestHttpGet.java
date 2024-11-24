@@ -28,6 +28,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -48,6 +49,10 @@ public class AuditControllerTestHttpGet {
     @MockBean
     private AuditProgressService auditProgressService;
 
+
+    /**
+     * MockBean for FindAuditService
+     */
     @MockBean
     private FindAuditService findAuditService;
 
@@ -110,17 +115,23 @@ public class AuditControllerTestHttpGet {
         ratingNATrue.setComment("2");
         ratingNATrue.setQuestion(question2);
         ratingNATrue.setAudit(audit1);
+
+        audit1.setCreatedAt(java.time.LocalDateTime.now());
+        audit2.setCreatedAt(java.time.LocalDateTime.now());
+        audit1.setCustomer("TestCustomer1");
+        audit2.setCustomer("TestCustomer2");
+
     }
 
     /**
      * Tests getting all available audits.
-     * 
+     *
      * @throws Exception if an error occurs during the request
      */
     @Test
     public void testGetAllAudits() throws Exception {
         List<Audit> audits = Arrays.asList(audit1, audit2);
-        when(findAuditService.findAllAudits()).thenReturn(audits);
+        when(findAuditService.findAllAudits("", "asc", "id")).thenReturn(audits);
 
         mockMvc.perform(get("/api/v1/audits"))
                 .andExpect(status().isOk())
@@ -128,13 +139,18 @@ public class AuditControllerTestHttpGet {
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].id").value(1))
                 .andExpect(jsonPath("$[0].name").value("TestAudit1"))
+                .andExpect(jsonPath("$[0].createdAt").exists())
                 .andExpect(jsonPath("$[1].id").value(2))
-                .andExpect(jsonPath("$[1].name").value("TestAudit2"));
+                .andExpect(jsonPath("$[1].name").value("TestAudit2"))
+                .andExpect(jsonPath("$[1].createdAt").exists())
+                .andExpect(jsonPath("$[1].name").value("TestAudit2"))
+                .andExpect(jsonPath("$[0].customer").value("TestCustomer1"))
+                .andExpect(jsonPath("$[1].customer").value("TestCustomer2"));
     }
 
     /**
      * Test gettin an empty list of audits.
-     * 
+     *
      * @throws Exception if an error occurs during the request
      */
     @Test
