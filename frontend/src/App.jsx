@@ -6,18 +6,21 @@ import {Dashboard} from "./pages/Dashboard.jsx";
 import {NewAudit} from "./pages/NewAudit.jsx";
 import {PerformAudit} from "./pages/PerformAudit.jsx";
 import {Evaluation} from "./pages/Evaluation.jsx";
+import { AuditProvider } from "./context/AuditContext.jsx";
 
 function App() {
     return (
-        <HashRouter>
-            <Routes>
-                <Route path="/" element={<Index />}></Route>
-                <Route path="/dashboard" element={<Dashboard />}></Route>
-                <Route path="/new-audit" element={<NewAudit />}></Route>
-                <Route path="/perform-audit/:auditId" element={<PerformAudit />}></Route>
-                <Route path="/evaluation" element={<Evaluation />}></Route>
-            </Routes>
-        </HashRouter>
+        <AuditProvider>
+            <HashRouter>
+                <Routes>
+                    <Route path="/" element={<Index />}></Route>
+                    <Route path="/dashboard" element={<Dashboard />}></Route>
+                    <Route path="/new-audit" element={<NewAudit />}></Route>
+                    <Route path="/perform-audit/:auditId" element={<PerformAudit />}></Route>
+                    <Route path="/evaluation" element={<Evaluation />}></Route>
+                </Routes>
+            </HashRouter>
+        </AuditProvider>
     );
 }
 

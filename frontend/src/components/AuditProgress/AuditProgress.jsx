@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-scroll";
 import CategoryProgress from "./CategoryProgress.jsx";
+import {useAuditData} from "../../context/AuditContext.jsx";
 
 export default function AuditProgress() {
     const dummyData = [
@@ -10,6 +11,9 @@ export default function AuditProgress() {
         { name: "Server Administration", progress: 75 },
         { name: "Datenbanken", progress: 50 },
     ];
+
+    const { auditData } = useAuditData();
+    console.log(auditData);
 
     return (
         <div>

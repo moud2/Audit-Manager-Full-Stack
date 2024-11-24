@@ -6,6 +6,8 @@ import Title from "../components/Textareas/Title.jsx";
 import api from "../api.js";
 import {useParams} from "react-router-dom";
 import {CategoryListItem} from "../components/QuestionList/CategoryListItem.jsx";
+import { useAuditData } from "../context/AuditContext.jsx";
+
 
 /**
  * PerformAudit Component
@@ -24,6 +26,7 @@ export function PerformAudit() {
     const { auditId } = useParams();
     const [questions, setQuestions] = useState([]);
     const [sortedQuestions, setSortedQuestions] = useState([]);
+    const { setAuditData } = useAuditData();
 
     const labels = [0, 1, 2, 3, 4, 5, "N/A"];
     // const backendData = [
@@ -162,6 +165,7 @@ export function PerformAudit() {
                 setQuestions(response.data);
                 console.log(response.data);
                 setSortedQuestions(transformData(response.data));
+                setAuditData(transformData(response.data));
             })
             .catch(err => {
                 console.error('Error fetching data:', err);

@@ -1,5 +1,6 @@
 import {Link, useLocation} from "react-router-dom";
 import AuditProgress from "../AuditProgress/AuditProgress.jsx";
+import { useAuditData } from "../../context/AuditContext.jsx";
 
 export function Sidebar(){
     const location = useLocation();
