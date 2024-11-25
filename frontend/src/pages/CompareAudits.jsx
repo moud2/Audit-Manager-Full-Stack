@@ -1,109 +1,101 @@
-import React from "react";
-import { useState } from 'react';
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { ComparisonAuditCard } from "../components/CompareAudit/ComparisonAuditCard.jsx";
+import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
 import { LayoutDefault } from "../layouts/LayoutDefault.jsx";
+import { AuditComparisonCard } from "../components/CompareAudit/AuditComparisonCard.jsx";
+import { AuditDropdown } from "../components/CompareAudit/AuditDropdown.jsx";
 
 /**
- * CompareColumn component handles the selection of audits for comparison
- * and passes the selected audit data to the parent component.
- *
- * @param {Array} audits - The list of audits to compare.
- * @param {Function} onCompareSelect - Callback to pass selected comparison data.
+ * CompareAudits component for comparing audits.
+ * @component
  */
 export function CompareAudits() {
-  const [firstSelectedAudit, setFirstSelectedAudit] = useState(null);
-  const [secondSelectedAudit, setSecondSelectedAudit] = useState(null);
+    const location = useLocation();
+    const selectedAudit = location.state?.selectedAudit;
 
-  const handleFirstAuditSelection = (event) => {
-    const selectedAudit = audits.find((audit) => audit.id === parseInt(event.target.value));
-    setFirstSelectedAudit(selectedAudit || null);
-  };
+    // Platzhalter-Daten
+    const audits = [
+        {
+            id: 1,
+            name: "Audit A",
+            progress: 85,
+            categories: [
+                { id: 1, name: "Kategorie 1", progress: 70 },
+                { id: 2, name: "Kategorie 2", progress: 90 },
+            ],
+            distribution: [4, 6, 3, 7, 5, 8],
+        },
+        {
+            id: 2,
+            name: "Audit B",
+            progress: 65,
+            categories: [
+                { id: 1, name: "Kategorie 1", progress: 50 },
+                { id: 2, name: "Kategorie 2", progress: 75 },
+            ],
+            distribution: [2, 3, 4, 5, 6, 7],
+        },
+        {
+          id: 3,
+          name: "Audit C",
+          progress: 78,
+          categories: [
+              { id: 1, name: "Kategorie 1", progress: 60 },
+              { id: 2, name: "Kategorie 2", progress: 80 },
+              { id: 3, name: "Kategorie 3", progress: 90 },
+          ],
+          distribution: [5, 7, 3, 6, 4, 8],
+      },
+      {
+          id: 4,
+          name: "Audit D",
+          progress: 90,
+          categories: [
+              { id: 1, name: "Kategorie 1", progress: 95 },
+              { id: 2, name: "Kategorie 2", progress: 85 },
+          ],
+          distribution: [6, 8, 4, 7, 5, 9],
+      },
+    ];
 
-  const handleSecondAuditSelection = (event) => {
-    const selectedAudit = audits.find((audit) => audit.id === parseInt(event.target.value));
-    setSecondSelectedAudit(selectedAudit || null);
-  };
+    const [secondSelectedAudit, setSecondSelectedAudit] = useState(null);
 
-  const colors = ["#a50026", "#d73027", "#fdae61", "#d9ef8b", "#66bd63", "#006837"];
+    // Filter für das Dropdown
+    const otherAudits = audits.filter((audit) => audit.id !== selectedAudit?.id);
 
-  const audits = [
-    {
-      id: 1,
-      name: "Audit A",
-      progress: 85,
-      categories: [
-        { id: 1, name: "Kategorie 1", progress: 70 },
-        { id: 2, name: "Kategorie 2", progress: 90 },
-      ],
-      distribution: [4, 6, 3, 7, 5, 8],
-    },
-    {
-      id: 2,
-      name: "Audit B",
-      progress: 65,
-      categories: [
-        { id: 1, name: "Kategorie 1", progress: 50 },
-        { id: 2, name: "Kategorie 2", progress: 75 },
-      ],
-      distribution: [2, 3, 4, 5, 6, 7],
-    },
-  ];
+    return (
+        <LayoutDefault>
+            <div className="max-w-6xl mx-auto px-4">
+                <h1 className="text-center text-2xl font-bold mb-6">Audits vergleichen</h1>
 
-  return (
-    <LayoutDefault>
-      <div className="max-w-4xl mx-auto px-4">
-        <h1 className="text-center text-2xl font-bold mb-4">Audits vergleichen</h1>
-        <div className="flex space-x-4 relative">
-          {/* First Select Element */}
-          <div className="relative flex-auto">
-            <select
-              onChange={handleFirstAuditSelection}
-              className="font-semibold appearance-none p-4 border-2 rounded border-gray-300 text-gray-900 text-sm w-full focus:ring-black focus:border-blue-300 hover:border-black"
-            >
-              <option value="">Audit auswählen</option>
-              {audits.map((audit) => (
-                <option key={audit.id} value={audit.id}>
-                  {audit.name}
-                </option>
-              ))}
-            </select>
-            <KeyboardArrowDownIcon className="absolute right-4 top-1/2 transform -translate-y-1/2 text-blue-600 pointer-events-none" />
-            {firstSelectedAudit && (
-              <ComparisonAuditCard
-                progress={firstSelectedAudit.progress}
-                categoryProgress={firstSelectedAudit.categories}
-                pointsDistribution={firstSelectedAudit.distribution}
-                colors={colors}
-              />
-            )}
-          </div>
-  
-          {/* Second Select Element */}
-          <div className="relative flex-auto">
-            <select
-              onChange={handleSecondAuditSelection}
-              className="font-semibold appearance-none p-4 border-2 rounded border-gray-300 text-gray-900 text-sm w-full focus:ring-black focus:border-blue-300 hover:border-black"
-            >
-              <option value="">Audit auswählen</option>
-              {audits.map((audit) => (
-                <option key={audit.id} value={audit.id}>
-                  {audit.name}
-                </option>
-              ))}
-            </select>
-            <KeyboardArrowDownIcon className="absolute right-4 top-1/2 transform -translate-y-1/2 text-blue-600 pointer-events-none" />
-            {secondSelectedAudit && (
-              <ComparisonAuditCard
-                progress={secondSelectedAudit.progress}
-                categoryProgress={secondSelectedAudit.categories}
-                pointsDistribution={secondSelectedAudit.distribution}
-                colors={colors}
-              />
-            )}
-          </div>
-        </div>
-      </div>
-    </LayoutDefault>
-  );  
+                {/* Dropdown zur Auswahl des zweiten Audits */}
+                <AuditDropdown
+                    audits={otherAudits}
+                    onAuditSelect={setSecondSelectedAudit}
+                />
+
+                {/* Vergleichsansicht */}
+                <div className="grid grid-cols-2 gap-6">
+                    {/* Erstes Audit */}
+                    {selectedAudit && (
+                        <AuditComparisonCard
+                            name={selectedAudit.name}
+                            progress={selectedAudit.progress}
+                            categories={selectedAudit.categories}
+                            distribution={selectedAudit.distribution}
+                        />
+                    )}
+
+                    {/* Zweites Audit */}
+                    {secondSelectedAudit && (
+                        <AuditComparisonCard
+                            name={secondSelectedAudit.name}
+                            progress={secondSelectedAudit.progress}
+                            categories={secondSelectedAudit.categories}
+                            distribution={secondSelectedAudit.distribution}
+                        />
+                    )}
+                </div>
+            </div>
+        </LayoutDefault>
+    );
 }
