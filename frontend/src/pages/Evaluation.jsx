@@ -3,7 +3,7 @@ import { LayoutDefault } from "../layouts/LayoutDefault.jsx";
 import ProgressBar from '../components/Charts/ProgressBar.jsx';
 import CircularProgress from '../components/Charts/CircularProgress.jsx';
 import BarChart from '../components/Charts/BarChart.jsx';
-import { CompareAudit } from '../components/CompareColumn/CompareAudit.jsx';
+import { CompareAudit } from '../components/CompareAudit/CompareAudit.jsx';
 
 /**
  * Evaluation component displaying progress bars and charts for evaluation data.

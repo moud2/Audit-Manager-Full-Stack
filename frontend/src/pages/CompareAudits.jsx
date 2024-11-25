@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from 'react';
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { ComparisonAuditCard } from "../components/CompareColumn/ComparisonAuditCard";
+import { ComparisonAuditCard } from "../components/CompareAudit/ComparisonAuditCard.jsx";
 import { LayoutDefault } from "../layouts/LayoutDefault.jsx";
 
 /**
@@ -52,60 +52,58 @@ export function CompareAudits() {
 
   return (
     <LayoutDefault>
-    <div className="max-w-xl mx-auto items-center">
-      <h1>Audit auswählen</h1>
-      <div className="flex space-x-4 relative">
-        {/* First Select Element */}
-        <div className="relative flex-auto">
-          <select
-            onChange={handleFirstAuditSelection}
-            className="font-semibold appearance-none p-4 border-2 rounded border-gray-300 text-gray-900 text-sm w-full focus:ring-black focus:border-blue-300 hover:border-black"
-          >
-            <option value="">Choose the Audit</option>
-            {audits.map((audit) => (
-              <option key={audit.id} value={audit.id}>
-                {audit.name}
-              </option>
-            ))}
-          </select>
-          <KeyboardArrowDownIcon className="absolute right-4 top-1/2 transform -translate-y-1/2 text-blue-600 pointer-events-none" />
-          {/* Render ComparisonAuditCard for First Selected Audit */}
-          {firstSelectedAudit && (
-            <ComparisonAuditCard
-              progress={firstSelectedAudit.progress}
-              categoryProgress={firstSelectedAudit.categories}
-              pointsDistribution={firstSelectedAudit.distribution}
-              colors={colors}
-            />
-          )}
-        </div>
-
-        {/* Second Select Element */}
-        <div className="relative flex-auto">
-          <select
-            onChange={handleSecondAuditSelection}
-            className="font-semibold appearance-none p-4 border-2 rounded border-gray-300 text-gray-900 text-sm w-full focus:ring-black focus:border-blue-300 hover:border-black"
-          >
-            <option value="">Choose the Audit</option>
-            {audits.map((audit) => (
-              <option key={audit.id} value={audit.id}>
-                {audit.name}
-              </option>
-            ))}
-          </select>
-          <KeyboardArrowDownIcon className="absolute right-4 top-1/2 transform -translate-y-1/2 text-blue-600 pointer-events-none" />
-          {/* Render ComparisonAuditCard for Second Selected Audit */}
-          {secondSelectedAudit && (
-            <ComparisonAuditCard
-              progress={secondSelectedAudit.progress}
-              categoryProgress={secondSelectedAudit.categories}
-              pointsDistribution={secondSelectedAudit.distribution}
-              colors={colors}
-            />
-          )}
+      <div className="max-w-4xl mx-auto px-4">
+        <h1 className="text-center text-2xl font-bold mb-4">Audits vergleichen</h1>
+        <div className="flex space-x-4 relative">
+          {/* First Select Element */}
+          <div className="relative flex-auto">
+            <select
+              onChange={handleFirstAuditSelection}
+              className="font-semibold appearance-none p-4 border-2 rounded border-gray-300 text-gray-900 text-sm w-full focus:ring-black focus:border-blue-300 hover:border-black"
+            >
+              <option value="">Audit auswählen</option>
+              {audits.map((audit) => (
+                <option key={audit.id} value={audit.id}>
+                  {audit.name}
+                </option>
+              ))}
+            </select>
+            <KeyboardArrowDownIcon className="absolute right-4 top-1/2 transform -translate-y-1/2 text-blue-600 pointer-events-none" />
+            {firstSelectedAudit && (
+              <ComparisonAuditCard
+                progress={firstSelectedAudit.progress}
+                categoryProgress={firstSelectedAudit.categories}
+                pointsDistribution={firstSelectedAudit.distribution}
+                colors={colors}
+              />
+            )}
+          </div>
+  
+          {/* Second Select Element */}
+          <div className="relative flex-auto">
+            <select
+              onChange={handleSecondAuditSelection}
+              className="font-semibold appearance-none p-4 border-2 rounded border-gray-300 text-gray-900 text-sm w-full focus:ring-black focus:border-blue-300 hover:border-black"
+            >
+              <option value="">Audit auswählen</option>
+              {audits.map((audit) => (
+                <option key={audit.id} value={audit.id}>
+                  {audit.name}
+                </option>
+              ))}
+            </select>
+            <KeyboardArrowDownIcon className="absolute right-4 top-1/2 transform -translate-y-1/2 text-blue-600 pointer-events-none" />
+            {secondSelectedAudit && (
+              <ComparisonAuditCard
+                progress={secondSelectedAudit.progress}
+                categoryProgress={secondSelectedAudit.categories}
+                pointsDistribution={secondSelectedAudit.distribution}
+                colors={colors}
+              />
+            )}
+          </div>
         </div>
       </div>
-    </div>
     </LayoutDefault>
-  );
+  );  
 }
