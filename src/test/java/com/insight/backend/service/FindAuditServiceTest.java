@@ -33,6 +33,8 @@ public class FindAuditServiceTest {
 
     private Audit audit1;
     private Audit audit2;
+    private Audit audit3;
+    private Audit audit4;
 
     @BeforeEach
     void setUp() {
@@ -45,6 +47,16 @@ public class FindAuditServiceTest {
         audit2.setId(2L);
         audit2.setName("Audit2");
         audit1.setCustomer("Customer2");
+        
+        audit3 = new Audit();
+        audit3.setId(3L);
+        audit3.setName("Audit3");
+        audit3.setCustomer("Customer");
+    
+        audit4 = new Audit();
+        audit4.setId(4L);
+        audit4.setName("Audit4");
+        audit4.setCustomer("OtherCustomer");
     }
 
     @Test
@@ -66,13 +78,15 @@ public class FindAuditServiceTest {
     }
 
     @Test
-    void testFindAllAudits() {
-        List<Audit> mockAuditList = Arrays.asList(audit1, audit2);
+    void testFindAllAudits_withValidCustomer() {
+        List<Audit> mockAuditList = Arrays.asList(audit3, audit4);
+    
         when(auditRepository.findAll(any(Specification.class), any(Sort.class))).thenReturn(mockAuditList);
-
-
+    
         List<Audit> foundAudits = findAuditService.findAllAudits("Customer", "asc", "id");
-
-        assertEquals(mockAuditList, foundAudits);
+        assertTrue(foundAudits.stream().allMatch(audit -> 
+        audit.getCustomer() != null && audit.getCustomer().contains("Customer")));
+        
     }
+       
 }

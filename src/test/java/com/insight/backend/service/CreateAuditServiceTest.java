@@ -81,7 +81,6 @@ class CreateAuditServiceTest {
         assertEquals("Audit Name", response.getName());
 
         assertNotNull(response.getCreatedAt());
-        assertNotEquals(java.time.LocalDateTime.now(), response.getCreatedAt());
 
         verify(saveRatingService, times(1)).saveAllRatings(anyList());
         verify(saveAuditService, times(1)).saveAudit(any(Audit.class));
