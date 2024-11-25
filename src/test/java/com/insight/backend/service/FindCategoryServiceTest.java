@@ -7,6 +7,8 @@ import java.util.Optional;
 import com.insight.backend.model.Category;
 import com.insight.backend.repository.CategoryRepository;
 import com.insight.backend.service.category.FindCategoryService;
+import com.insight.backend.specifications.CategorySpecifications;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -70,12 +72,13 @@ public class FindCategoryServiceTest {
     }
 
     /**
-     * Test case for finding all categories.
+     * Test case for finding all non-deleted categories.
      */
     @Test
     void testFindAllCategories() {
         List<Category> categories = Arrays.asList(category1, category2);
-        when(categoryRepository.findAll()).thenReturn(categories);
+        when(categoryRepository.findAll(CategorySpecifications.isNotDeleted())).thenReturn(categories);
+
         List<Category> foundCategories = findCategoryService.findAllCategories();
         assertEquals(categories, foundCategories);
     }

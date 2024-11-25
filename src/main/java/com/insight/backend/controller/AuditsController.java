@@ -47,8 +47,12 @@ public class AuditsController {
      * @return a ResponseEntity containing a list of Audit objects
      */
     @GetMapping("api/v1/audits")
-    public ResponseEntity<List<Audit>> getAudits() {
-        List<Audit> response = findAuditService.findAllAudits();
+    public ResponseEntity<List<Audit>> getAudits(
+            @RequestParam(required = false, defaultValue = "") String customer,
+            @RequestParam(required = false, defaultValue = "asc") String sortDirection,
+            @RequestParam(required = false, defaultValue = "id") String sortBy
+    ) {
+        List<Audit> response = findAuditService.findAllAudits(customer, sortDirection, sortBy);
 
         return ResponseEntity.ok(response);
     }
@@ -58,7 +62,6 @@ public class AuditsController {
      *
      * @return a ResponseEntity containing an ID and name of new Audit
      */
-
     @PostMapping("/api/v1/audits/new")
     public ResponseEntity<Object> postWithRequestBody(@Valid @RequestBody NewAuditDTO newAuditDTO) {
         AuditResponseDTO responseDTO = createAuditService.createAudit(newAuditDTO);

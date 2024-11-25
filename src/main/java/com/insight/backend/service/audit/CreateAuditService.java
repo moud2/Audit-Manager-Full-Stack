@@ -40,29 +40,31 @@ public class CreateAuditService {
     /**
      * Creates a new audit based on the provided NewAuditDTO.
      * This method also adds questions to the audit and creates a rating for each question.
+     * This method also adds a timestamp to the audit creation.
      *
      * @param newAuditDTO the DTO containing the details of the new audit
      * @return an AuditResponseDTO containing the details of the created audit
-     * @throws NonExistentAuditCategoryException if any of the provided category IDs are invalid     
+     * @throws NonExistentAuditCategoryException if any of the provided category IDs are invalid
      */
     public AuditResponseDTO createAudit(NewAuditDTO newAuditDTO) {
         Audit audit = new Audit();
         audit.setName(newAuditDTO.getName());
+        audit.setCustomer(newAuditDTO.getCustomer());
 
         List<Rating> ratings = new ArrayList<>();
 
         // Add questions to the audit and create ratings for each question
         for (Long categoryId : newAuditDTO.getCategories()) {
             Category category = findCategoryService.findCategoryById(categoryId).orElseThrow(()-> new NonExistentAuditCategoryException(categoryId));
-                 
+
             for (Question question : category.getQuestions()) {
                 Rating rating = new Rating();
                 rating.setQuestion(question);
                 rating.setAudit(audit);
                 ratings.add(rating);
             }
-            
-            
+
+
         }
 
         saveAuditService.saveAudit(audit);
@@ -71,6 +73,8 @@ public class CreateAuditService {
         AuditResponseDTO auditResponseDTO = new AuditResponseDTO();
         auditResponseDTO.setId(audit.getId());
         auditResponseDTO.setName(audit.getName());
+        auditResponseDTO.setCreatedAt(audit.getCreatedAt());
+        auditResponseDTO.setCustomer(audit.getCustomer());
 
         return auditResponseDTO;
     }

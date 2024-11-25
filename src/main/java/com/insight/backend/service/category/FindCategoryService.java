@@ -3,28 +3,20 @@ package com.insight.backend.service.category;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+import org.springframework.data.jpa.domain.Specification;
 import com.insight.backend.model.Category;
 import com.insight.backend.repository.CategoryRepository;
+import com.insight.backend.specifications.CategorySpecifications;
 
-import org.springframework.stereotype.Service;
-
-/**
- * Service-class to find categories in the database.
- */
 @Service
 public class FindCategoryService {
 
     private final CategoryRepository categoryRepository;
-    
-    /**
-     * Constructor to inject the CategoryRepository.
-     *
-     * @param categoryRepository the repository for accessing category data.
-     */
+
     public FindCategoryService(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
-
     /**
      * Finds a category based on the given id.
      *
@@ -36,12 +28,14 @@ public class FindCategoryService {
     }
 
     /**
-     * Finds all categories in the database.
+     * Retrieves all non-deleted categories using Specification.
      *
-     * @return a list of all categories.
+     * @return a list of categories that have not been marked as deleted.
      */
     public List<Category> findAllCategories() {
-        return categoryRepository.findAll();
+        // Use Specification to filter out deleted categories (deletedAt is null)
+        Specification<Category> spec = CategorySpecifications.isNotDeleted();
+        return categoryRepository.findAll(spec);
     }
 
     /**
