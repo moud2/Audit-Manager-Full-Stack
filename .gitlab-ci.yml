@@ -36,8 +36,8 @@ backend-build-job:
   image: gradle:8-jdk21
   stage: build
   environment: production
-  rules:
-    - if: $CI_COMMIT_REF_NAME == "main"
+    # rules:
+  #  - if: $CI_COMMIT_REF_NAME == "main"
   script:
     - echo "Building the application..."
     - ./gradlew bootJar
@@ -46,6 +46,7 @@ backend-build-job:
     paths:
       - build/libs/*.jar
 
+# RELEASE STAGE
 docker-deploy-job:
   image: docker:20
   stage: release
@@ -63,8 +64,14 @@ docker-deploy-job:
     - echo "Building & Deploying Docker Image..."
     - docker logout
     - echo -n "${CI_REGISTRY_PASSWORD}" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
+
+    - PIPELINE_TAG="mr-${CI_COMMIT_REF_NAME}-${CI_PIPELINE_ID}"
+
     - docker build --build-arg JAR_FILE=build/libs/*.jar -t gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/backend .
-    - docker push gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/backend
+    - docker tag gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/backend:latest gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/backend:latest-$PIPELINE_TAG
+    - docker push gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/backend:latest
+    - docker push gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/backend:latest-$PIPELINE_TAG
+
     - echo "[*] Image Build & Deployment was executed."
 
 #DEPLOYMENT STAGE
