@@ -67,7 +67,7 @@ public class Question {
     public void setDeletedAt(LocalDateTime DeletedAt) {
         this.DeletedAt = DeletedAt;
     }
-
+    
     public LocalDateTime getDeletedAt() {
         return DeletedAt;
     }

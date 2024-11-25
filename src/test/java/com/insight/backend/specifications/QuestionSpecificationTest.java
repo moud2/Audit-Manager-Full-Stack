@@ -26,7 +26,7 @@ public class QuestionSpecificationTest {
 
         spec.toPredicate(root, query, cb);
 
-        verify(root).get("category");
+        verify(root).get("category_id");
         verify(cb).equal(any(), eq(category));
     }
 

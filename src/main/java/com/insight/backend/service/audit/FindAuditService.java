@@ -5,7 +5,9 @@ import java.util.Optional;
 
 import com.insight.backend.model.Audit;
 import com.insight.backend.repository.AuditRepository;
+import com.insight.backend.specifications.AuditSpecifications;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 /**
@@ -42,5 +44,17 @@ public class FindAuditService {
      */
     public List<Audit> findAllAudits() {
         return auditRepository.findAll();
+    }
+
+    /**
+     * Finds all audits with the specified customer name.
+     *
+     * @param customerName the name of the customer to search for
+     * @param sortDirection the direction to sort the results
+     * @return a list of all audits with the specified customer name
+     */
+    public List<Audit> findAllAudits(String customerName, String sortDirection, String sortBy) {
+        Sort sort = Sort.by(sortDirection.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, sortBy);
+        return auditRepository.findAll(AuditSpecifications.customerContains(customerName), sort);
     }
 }
