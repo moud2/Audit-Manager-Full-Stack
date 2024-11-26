@@ -18,7 +18,7 @@ export function CompareAudit({ selectedAudit }) {
     };
 
     return (
-        <div className="flex items-center justify-center">
+        <div className="flex justify-center mt-6">
             <button
                 className="fixed right-16 p-2 bottom-20 mb-12 bg-blue-500 text-white rounded"
                 onClick={handleNavigate}
