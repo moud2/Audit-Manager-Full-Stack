@@ -1,5 +1,6 @@
 package com.insight.backend.service;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -14,9 +15,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.domain.Sort;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -33,8 +34,7 @@ public class FindAuditServiceTest {
 
     private Audit audit1;
     private Audit audit2;
-    private Audit audit3;
-    private Audit audit4;
+   
 
     @BeforeEach
     void setUp() {
@@ -47,16 +47,7 @@ public class FindAuditServiceTest {
         audit2.setId(2L);
         audit2.setName("Audit2");
         audit1.setCustomer("Customer2");
-        
-        audit3 = new Audit();
-        audit3.setId(3L);
-        audit3.setName("Audit3");
-        audit3.setCustomer("Customer");
-    
-        audit4 = new Audit();
-        audit4.setId(4L);
-        audit4.setName("Audit4");
-        audit4.setCustomer("OtherCustomer");
+
     }
 
     @Test
@@ -77,16 +68,21 @@ public class FindAuditServiceTest {
         assertTrue(foundAudit.isEmpty());
     }
 
-    @Test
-    void testFindAllAudits_withValidCustomer() {
-        List<Audit> mockAuditList = Arrays.asList(audit3, audit4);
+@Test
+void testFindAllAudits() {
     
-        when(auditRepository.findAll(any(Specification.class), any(Sort.class))).thenReturn(mockAuditList);
-    
-        List<Audit> foundAudits = findAuditService.findAllAudits("Customer", "asc", "id");
-        assertTrue(foundAudits.stream().allMatch(audit -> 
-        audit.getCustomer() != null && audit.getCustomer().contains("Customer")));
-        
-    }
+    audit1.setDeletedAt(null); 
+    audit2.setDeletedAt(LocalDateTime.now()); 
+
+    when(auditRepository.findAll(any(Specification.class))).thenReturn(List.of(audit1));
+
+    List<Audit> foundAudits = findAuditService.findAllAudits();
+
+    assertEquals(1, foundAudits.size()); 
+    assertTrue(foundAudits.contains(audit1)); 
+    assertFalse(foundAudits.contains(audit2));
+}
+
+
        
 }

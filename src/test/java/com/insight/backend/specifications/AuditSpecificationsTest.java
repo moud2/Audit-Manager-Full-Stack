@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import org.springframework.data.jpa.domain.Specification;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 class AuditSpecificationsTest {
@@ -63,5 +65,20 @@ class AuditSpecificationsTest {
 
         verify(root).get("customer");
         verify(cb).like(any(), eq("%Test%"));
-    }
+    } 
+
+    @Test
+    void isNotDeleted() {
+    Specification<Audit> spec = AuditSpecifications.isNotDeleted();
+
+    CriteriaBuilder cb = mock(CriteriaBuilder.class);
+    CriteriaQuery<?> query = mock(CriteriaQuery.class);
+    Root<Audit> root = mock(Root.class);
+
+    spec.toPredicate(root, query, cb);
+
+    verify(root).get("deletedAt"); 
+    verify(cb).isNull(any()); 
+}
+
 }
