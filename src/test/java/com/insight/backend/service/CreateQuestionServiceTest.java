@@ -32,6 +32,9 @@ public class CreateQuestionServiceTest {
         question.setName("Question");
     }
 
+    /*
+        Hier nochmal genauer hinschauen und gegebenfalls Test Cases abdecken
+     */
     @Test
     void testCreateQuestion_success() {
         when(questionRepository.saveAndFlush(question)).thenReturn(question);

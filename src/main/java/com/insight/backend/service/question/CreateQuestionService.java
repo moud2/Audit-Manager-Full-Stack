@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.insight.backend.dto.QuestionResponseDTO;
 import com.insight.backend.dto.NewQuestionDTO;
@@ -13,9 +14,9 @@ import com.insight.backend.model.Question;
 import com.insight.backend.model.Rating;
 import com.insight.backend.service.category.FindCategoryService;
 import com.insight.backend.service.question.FindQuestionByCategoryService;
-import com.insight.backend.service.rating.SaveRatingService;
+import com.insight.backend.service.category.SaveCategoryService;
 import com.insight.backend.service.question.SaveQuestionService;
-import com.insight.backend.exception.QuestionNotFoundException;
+import com.insight.backend.exception.QuestionFoundException;
 import com.insight.backend.exception.CategoryNotFoundException;
 import com.insight.backend.specifications.QuestionSpecifications;
 
@@ -30,7 +31,7 @@ public class CreateQuestionService {
 
     private final FindCategoryService findCategoryService;
     private final SaveQuestionService saveQuestionService;
-    private final SaveRatingService saveRatingService;
+    private final SaveCategoryService saveCategoryService;
     private final FindQuestionByCategoryService findQuestionService;
 
     /**
@@ -38,13 +39,13 @@ public class CreateQuestionService {
      *
      * @param findCategoryService the service to check category existence
      * @param saveQuestionService the service to save audits
-     * @param saveRatingService the service to save a list of ratings
+     * @param saveCategoryService the service to save a list of ratings
      * @param findQuestionService 
      */
-    public CreateQuestionService(FindCategoryService findCategoryService, SaveQuestionService saveQuestionService, SaveRatingService saveRatingService, FindQuestionByCategoryService findQuestionService) {
+    public CreateQuestionService(FindCategoryService findCategoryService, SaveQuestionService saveQuestionService, SaveCategoryService saveCategoryService, FindQuestionByCategoryService findQuestionService) {
         this.findCategoryService = findCategoryService;
         this.saveQuestionService = saveQuestionService;
-        this.saveRatingService = saveRatingService;
+        this.saveCategoryService = saveCategoryService;
         this.findQuestionService = findQuestionService;
     }
 
@@ -61,17 +62,24 @@ public class CreateQuestionService {
         question.setName(newQuestionDTO.getName());
 
         List<Question> questionOpt = this.findQuestionService.findQuestionsByName(newQuestionDTO.getName(), "desc", "name");
-        if (!questionOpt.isEmpty()) {
+        if (questionOpt.isEmpty()) {
             question.setName(newQuestionDTO.getName());
-        } else throw new QuestionNotFoundException();
+        } else throw new QuestionFoundException();
         
-        Optional<Category> categoryOpt = this.findCategoryService.findCategoryById(newQuestionDTO.getCategory().getId());
-        if (categoryOpt.isPresent()) {
-            Category category = categoryOpt.get();
-            question.setCategory(category);
+        
+        List<Category> categoryOpt = this.findCategoryService.findAllCategories().stream().filter(x -> x.getName().equals(newQuestionDTO.getCategoryName())).collect(Collectors.toList());
+        Category finding =  null;
+        if (!categoryOpt.isEmpty()) {
+            finding = categoryOpt.get(0);
+            question.setCategory(finding); //optimalerweise gibt es nur ein Ergebniss :) -> liste im nachgang uniquifyen
         } else throw new CategoryNotFoundException(); 
 
+        //Categories um die neue question aktualisieren
+        Set<Question> tmpQuestionList = finding.getQuestions();
+        tmpQuestionList.add(question);
+        finding.setQuestions(tmpQuestionList);
         saveQuestionService.saveQuestion(question);
+        saveCategoryService.saveCategory(finding);
 
         QuestionResponseDTO questionResponseDTO = new QuestionResponseDTO();
         questionResponseDTO.setId(question.getId());

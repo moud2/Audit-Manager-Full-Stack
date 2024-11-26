@@ -38,12 +38,10 @@ public class NewQuestionDTO {
     @Size(max = 4096, message = "Name should be up to 4096 characters")
     private String name;
 
-    /*
-     * The Category Objects associated with the audit.
-     * Must not be null.
-     */
-    @NotNull(message = "Categories cannot be null")
-    private Category category;
+    //@NotBlank(message = "Name cannot be blank")
+    @Size(max = 4096, message = "Category Name should be up to 4096 characters")
+    private String categoryName;
+
 
     /**
      * Gets the name of the audit.
@@ -62,21 +60,23 @@ public class NewQuestionDTO {
     public void setName(String name) {
         this.name = name;
     }
-    /**
-     * Gets the list of category IDs associated with the audit.
-     *
-     * @return the list of category IDs
+
+        /**
+     * Gets the name of the audit.
+     *  
+     * @return the name of the audit
      */
-    public Category getCategory() {
-        return category;
+    public String getCategoryName() {
+        return this.categoryName;
     }
 
     /**
-     * Sets the list of category IDs associated with the audit.
+     * Sets the name of the audit.
      *
-     * @param categories the list of category IDs to set
+     * @param name the name to set
      */
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategoryName(String name) {
+        this.categoryName = categoryName;
     }
+
 }
