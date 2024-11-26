@@ -170,7 +170,7 @@ export function PerformAudit() {
             .catch(err => {
                 console.error('Error fetching data:', err);
             });
-    }, [auditId]);
+    }, [auditId, setAuditData]);
 
     /**
      * Handles the update of a question in the list. This function is triggered when a question's
