@@ -2,7 +2,7 @@ import {LayoutDefault} from "../layouts/LayoutDefault.jsx";
 import AuditGrid from "../components/AuditGrid/AuditGrid.jsx";
 import {useState, useEffect, useMemo} from "react";
 import api from "../api.js";
-import {Input, debounce} from "@mui/material";
+import {Input, debounce, TextField} from "@mui/material";
 
 export function Dashboard() {
     const [data, setData] = useState([]);
@@ -54,7 +54,7 @@ export function Dashboard() {
             <div className="bg-green-200 w-full h-full">
                 <h1 className="text-center text-2xl mb-6">Dashboard</h1>
                 <h2 className="font-bold">Filter</h2>
-                <Input placeholder="Kundenname" onChange={handleCustomerFilterChange}></Input>
+                <TextField id="outlined-basic" label="Kundenname" variant="outlined" nChange={handleCustomerFilterChange}/>
                 <AuditGrid data={data} loading={loading} error={error}/>
             </div>
         </LayoutDefault>
