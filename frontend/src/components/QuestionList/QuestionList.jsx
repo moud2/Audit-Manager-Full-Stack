@@ -24,18 +24,17 @@ export function QuestionList({ questions, options, onChange }){
      * finds the question with the matching ID, and updates its values with the new data provided
      * in `updatedQuestion`. It then passes the modified question list back to the parent via `onChange`.
      *
-     * @param {number} id - The unique ID of the question to update.
      * @param {Object} updatedQuestion - An object containing the fields to update for the question.
      */
-    const handleQuestionChange = (id, updatedQuestion) => {
-        const newQuestions = questions.map((question) => id === question.id ? {... question, ...updatedQuestion} : question);
-        onChange(newQuestions, updatedQuestion);
+    const handleQuestionChange = (updatedQuestion) => {
+        const newQuestionList = questions.map((question) => updatedQuestion.id === question.id ? {... question, ...updatedQuestion} : question);
+        onChange(newQuestionList, updatedQuestion);
     }
 
-    return (                                                                  
+    return (
         <div>
             {questions.map((question) => (
-                <div key={question.id}>
+                <div key={question.id} data-cy={`question-list-item-${question.id}`}>
                     <QuestionListItem
                         question={question}
                         options={options}

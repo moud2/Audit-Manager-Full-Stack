@@ -58,12 +58,12 @@ export function QuestionListItem({ question, options, onChange }) {
      */
     const handleCheckboxChange = (value) => {
         if (value === null) {
-            onChange(question.id, {...question, points: null, nA: null});
+            onChange({...question, points: null, nA: null});
         } else {
             if (value === 'N/A') {
-                onChange(question.id, {...question, points: null, nA: true});
+                onChange({...question, points: null, nA: true});
             } else {
-                onChange(question.id, {...question, points: value, nA: false});
+                onChange({...question, points: value, nA: false});
             }
         }
     }
@@ -78,7 +78,7 @@ export function QuestionListItem({ question, options, onChange }) {
      */
     const handleCommentInput = (event) => {
         const newComment = event.target.value;
-        onChange(question.id, {...question, comment: newComment});
+        onChange({...question, comment: newComment});
     }
 
     /**

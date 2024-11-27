@@ -41,10 +41,10 @@ describe('QuestionListItem Component Tests', () => {
 
         cy.get('input[type="checkbox"]').eq(3).click();
 
-        cy.get('@onChangeSpy').should('have.been.calledOnceWith', exampleQuestion.id, { ...exampleQuestion, points: 3, nA: false });
+        cy.get('@onChangeSpy').should('have.been.calledOnceWith', { ...exampleQuestion, points: 3, nA: false });
 
         cy.get('input[type="checkbox"]').eq(6).click();
-        cy.get('@onChangeSpy').should('have.been.calledWith', exampleQuestion.id, { ...exampleQuestion, points: null, nA: true });
+        cy.get('@onChangeSpy').should('have.been.calledWith', { ...exampleQuestion, points: null, nA: true });
 
     });
 
@@ -68,7 +68,7 @@ describe('QuestionListItem Component Tests', () => {
         cy.get('input[type="checkbox"]').eq(3).should('be.checked');
 
         cy.get('input[type="checkbox"]').eq(3).click();
-        cy.get('@onChangeSpy2').should('have.been.calledOnceWith', 1, {
+        cy.get('@onChangeSpy2').should('have.been.calledOnceWith',  {
             id: 1,
                 question: 'Wie bewerten Sie die Qualität?',
                 points: null,
@@ -88,7 +88,7 @@ describe('QuestionListItem Component Tests', () => {
 
 
         cy.get('input[type="checkbox"]').eq(6).click();
-        cy.get('@onChangeStub2').should('have.been.calledWith', exampleQuestion.id, { ...exampleQuestion, points: null, nA: null });
+        cy.get('@onChangeStub2').should('have.been.calledWith', { ...exampleQuestion, points: null, nA: null });
     });
 
     it('updates comment in question object correctly when text is entered in the comment box', () => {
@@ -102,7 +102,7 @@ describe('QuestionListItem Component Tests', () => {
 
         const newComment = 'G';
         cy.get('[data-cy="question-comment"]').type(newComment);
-        cy.get('@onChange').should('have.been.calledWith', exampleQuestion.id, { ...exampleQuestion, comment: newComment });
+        cy.get('@onChange').should('have.been.calledWith',  { ...exampleQuestion, comment: newComment });
     });
 
 });
