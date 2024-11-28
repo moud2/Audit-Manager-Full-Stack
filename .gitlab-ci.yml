@@ -65,7 +65,7 @@ docker-deploy-job:
     - docker logout
     - echo -n "${CI_REGISTRY_PASSWORD}" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
 
-    - PIPELINE_TAG="mr-${CI_COMMIT_REF_NAME}-${CI_PIPELINE_ID}"
+    - PIPELINE_TAG="${CI_PIPELINE_ID}"
 
     - docker build --build-arg JAR_FILE=build/libs/*.jar -t gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/backend .
     - docker tag gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/backend:latest gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/backend:latest-$PIPELINE_TAG
