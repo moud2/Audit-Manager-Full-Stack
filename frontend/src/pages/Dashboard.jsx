@@ -51,7 +51,7 @@ export function Dashboard() {
 
     return (
         <LayoutDefault>
-            <div className="bg-green-200 w-full h-full">
+            <div className="w-full h-full p-5">
                 <h1 className="text-center text-2xl mb-6">Dashboard</h1>
                 <h2 className="font-bold">Filter</h2>
                 <TextField id="outlined-basic" label="Kundenname" variant="outlined" onChange={handleCustomerFilterChange}/>
