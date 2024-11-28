@@ -38,10 +38,10 @@ public class FindAuditService {
         if (optionalAudit.isPresent()) {
             Audit audit = optionalAudit.get();
             if (audit.getDeletedAt() != null) {
-                return optionalAudit;
+                return Optional.empty();
             }
         }
-        return Optional.empty();
+        return optionalAudit;
     }
 
     /**
