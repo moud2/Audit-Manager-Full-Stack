@@ -1,5 +1,6 @@
 package com.insight.backend.service;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.Set;
@@ -67,10 +68,11 @@ class CreateAuditServiceTest {
 
         when(findCategoryService.findCategoryById(1L)).thenReturn(Optional.of(category1));
         when(findCategoryService.findCategoryById(2L)).thenReturn(Optional.of(category2));
+        LocalDateTime fixedTime = LocalDateTime.of(2024, 11, 28, 18, 14, 0);
         when(saveAuditService.saveAudit(any(Audit.class))).thenAnswer(invocation -> {
             Audit audit = invocation.getArgument(0);
             audit.setId(1L);
-            audit.setCreatedAt(java.time.LocalDateTime.now());
+            audit.setCreatedAt(fixedTime);
             return audit;
         });
 
@@ -81,7 +83,7 @@ class CreateAuditServiceTest {
         assertEquals("Audit Name", response.getName());
 
         assertNotNull(response.getCreatedAt());
-        assertNotEquals(java.time.LocalDateTime.now(), response.getCreatedAt());
+        assertEquals(fixedTime, response.getCreatedAt());
 
         verify(saveRatingService, times(1)).saveAllRatings(anyList());
         verify(saveAuditService, times(1)).saveAudit(any(Audit.class));
