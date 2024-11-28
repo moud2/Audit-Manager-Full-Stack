@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.insight.backend.model.Audit;
 import com.insight.backend.service.audit.CreateAuditService;
+import com.insight.backend.service.audit.DeleteAuditService;
 import com.insight.backend.service.audit.FindAuditService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,6 +43,12 @@ public class AuditControllerTestHttpGet {
      */
     @MockBean
     private FindAuditService findAuditService;
+
+    /**
+     * MockBean for DeleteAuditService
+     */
+    @MockBean
+    private DeleteAuditService deleteAuditService;
 
     /**
      * MockBean for CreateAuditService

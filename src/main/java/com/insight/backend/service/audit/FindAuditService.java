@@ -41,7 +41,7 @@ public class FindAuditService {
                 return optionalAudit;
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     /**

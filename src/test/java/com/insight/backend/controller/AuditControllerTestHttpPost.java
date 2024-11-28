@@ -8,6 +8,7 @@ import com.insight.backend.dto.AuditResponseDTO;
 import com.insight.backend.dto.NewAuditDTO;
 import com.insight.backend.exception.NonExistentAuditCategoryException;
 import com.insight.backend.service.audit.CreateAuditService;
+import com.insight.backend.service.audit.DeleteAuditService;
 import com.insight.backend.service.audit.FindAuditService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,6 +51,12 @@ public class AuditControllerTestHttpPost {
      */
     @MockBean
     private FindAuditService findAuditService;
+
+    /**
+     * MockBean for DeleteAuditService
+     */
+    @MockBean
+    private DeleteAuditService deleteAuditService;
 
     /**
      * MockBean for CreateAuditService
