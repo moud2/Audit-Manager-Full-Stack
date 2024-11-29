@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.insight.backend.dto.AuditResponseDTO;
 import com.insight.backend.dto.NewAuditDTO;
 import com.insight.backend.exception.NonExistentAuditCategoryException;
+import com.insight.backend.service.audit.AuditProgressService;
 import com.insight.backend.service.audit.CreateAuditService;
 import com.insight.backend.service.audit.DeleteAuditService;
 import com.insight.backend.service.audit.FindAuditService;
@@ -51,6 +52,10 @@ public class AuditControllerTestHttpPost {
      */
     @MockBean
     private FindAuditService findAuditService;
+
+    @MockBean
+    private AuditProgressService auditProgressService;
+
 
     /**
      * MockBean for DeleteAuditService
