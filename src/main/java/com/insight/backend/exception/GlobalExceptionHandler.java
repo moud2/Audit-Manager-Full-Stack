@@ -44,4 +44,19 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
+
+    /**
+     * Handles exceptions of type AuditDeletedException.
+     * Returns a ResponseEntity with a status of 410 (GONE) and a JSON body containing the error details.
+     */
+    @ExceptionHandler(AuditDeletedException.class)
+    public ResponseEntity<Object> handleAuditDeletedException(AuditDeletedException ex) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.GONE.value());
+        body.put("error", "Gone");
+        body.put("message", ex.getMessage());
+
+        return new ResponseEntity<>(body, HttpStatus.GONE);
+    }
 }

@@ -8,6 +8,8 @@ import jakarta.validation.Valid;
 import com.insight.backend.dto.AuditProgressDTO;
 import com.insight.backend.dto.AuditResponseDTO;
 import com.insight.backend.dto.NewAuditDTO;
+import com.insight.backend.exception.AuditDeletedException;
+import com.insight.backend.exception.AuditNotFoundException;
 import com.insight.backend.model.Audit;
 import com.insight.backend.service.audit.AuditProgressService;
 import com.insight.backend.service.audit.CreateAuditService;
@@ -84,13 +86,12 @@ public class AuditsController {
      */
     @GetMapping("/api/v1/audits/{auditId}/progress")
     public ResponseEntity<?> getAuditProgress(@PathVariable Long auditId) {
-        // Prüfen, ob das Audit existiert oder soft-deleted ist
-        Optional<Audit> optionalAudit = findAuditService.findAuditById(auditId);
+        // Prüfen, ob das Audit existiert
+        Audit audit = findAuditService.findAuditById(auditId).orElseThrow(() -> new AuditNotFoundException(auditId));
 
-        // Wenn das Audit nicht existiert oder gelöscht wurde, 404 zurückgeben
-        if (optionalAudit.isEmpty() || optionalAudit.get().getDeletedAt() != null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Audit not found or has been deleted");
+        // Prüfen, ob das Audit gelöscht wurde
+        if (audit.getDeletedAt() != null) {
+            throw new AuditDeletedException(auditId);
         }
 
         // Fortschritt berechnen

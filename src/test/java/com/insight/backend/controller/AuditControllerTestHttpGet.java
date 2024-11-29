@@ -207,12 +207,14 @@ public class AuditControllerTestHttpGet {
         mockMvc.perform(get("/api/v1/audits/{auditId}/progress", auditId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string("Audit not found or has been deleted"));
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.error").value("Not Found"))
+                .andExpect(jsonPath("$.message").value("Audit with id " + auditId + " not found"));
     }
 
     /**
      * Tests retrieving progress when the audit is soft-deleted.
-     * Expects a 404 Not Found status.
+     * Expects a 410 Gone status.
      *
      * @throws Exception if an error occurs during the request
      */
@@ -225,8 +227,10 @@ public class AuditControllerTestHttpGet {
 
         mockMvc.perform(get("/api/v1/audits/{auditId}/progress", auditId)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound())
-                .andExpect(content().string("Audit not found or has been deleted"));
+                .andExpect(status().isGone())
+                .andExpect(jsonPath("$.status").value(410))
+                .andExpect(jsonPath("$.error").value("Gone"))
+                .andExpect(jsonPath("$.message").value("Audit with id " + auditId + " has been deleted"));
     }
 
     /**
