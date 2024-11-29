@@ -47,9 +47,11 @@ public class AuditControllerTestHttpGet {
     @Autowired
     private MockMvc mockMvc;
 
+    /**
+     * MockBean for FindAuditService
+     */
     @MockBean
     private AuditProgressService auditProgressService;
-
 
     /**
      * MockBean for FindAuditService
@@ -57,8 +59,17 @@ public class AuditControllerTestHttpGet {
     @MockBean
     private FindAuditService findAuditService;
 
+    /**
+     * MockBean for CreateAuditService
+     */
     @MockBean
     private CreateAuditService createAuditService;
+
+    /**
+     * MockBean for DeleteAuditService
+     */
+    @MockBean
+    private DeleteAuditService deleteAuditService;
 
     private Audit audit1;
     private Audit audit2;

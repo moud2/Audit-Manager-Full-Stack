@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import com.insight.backend.dto.AuditProgressDTO;
 import com.insight.backend.dto.AuditResponseDTO;
 import com.insight.backend.dto.NewAuditDTO;
+import com.insight.backend.exception.AuditDeletionException;
 import com.insight.backend.exception.AuditNotFoundException;
 import com.insight.backend.model.Audit;
 import com.insight.backend.service.audit.AuditProgressService;
@@ -32,7 +33,16 @@ public class AuditsController {
      * The FindAuditService to use the service methods.
      */
     private final FindAuditService findAuditService;
+
+    /**
+     * The CreateAuditService to use the service methods.
+     */
     private final CreateAuditService createAuditService;
+
+    /**
+     * The DeleteAuditService to use the service methods.
+     */
+    private final DeleteAuditService deleteAuditService;
 
     /**
      * The AuditProgressService to use the service methods.
@@ -45,10 +55,11 @@ public class AuditsController {
      * @param findAuditService the service to find audits
      */
     @Autowired
-    public AuditsController(FindAuditService findAuditService, CreateAuditService createAuditService, AuditProgressService auditProgressService) {
+    public AuditsController(FindAuditService findAuditService, CreateAuditService createAuditService, AuditProgressService auditProgressService, DeleteAuditService deleteAuditService) {
         this.findAuditService = findAuditService;
         this.createAuditService = createAuditService;
         this.auditProgressService = auditProgressService;
+        this.deleteAuditService = deleteAuditService;
     }
 
     /**
@@ -100,5 +111,23 @@ public class AuditsController {
 
         // Erfolgreiche Antwort mit Fortschrittsdaten zurückgeben
         return ResponseEntity.ok(progressDTO);
+    }
+
+    /**
+     * Handles DELETE requests for deleting an audit.
+     *
+     * @param auditId    the ID of the audit to softdelete
+     * @return a ResponseEntity containing info about the delete operation in JSON format
+     */
+    @DeleteMapping("/api/v1/audits/{auditId}")
+    public ResponseEntity<Void> softDeleteAudit(@PathVariable("auditId") Long auditId) {
+        Audit auditToDelete = findAuditService.findAuditById(auditId).orElseThrow(() -> new AuditNotFoundException(auditId));
+        try {
+            deleteAuditService.softDeleteAudit(auditToDelete);
+        } catch (IllegalArgumentException e) {
+            throw new AuditDeletionException(auditId);
+        }
+
+        return ResponseEntity.noContent().build();
     }
 }

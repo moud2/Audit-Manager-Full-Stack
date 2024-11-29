@@ -3,6 +3,7 @@ package com.insight.backend.controller;
 import java.util.Optional;
 
 import com.insight.backend.model.Audit;
+import com.insight.backend.service.audit.AuditProgressService;
 import com.insight.backend.service.audit.CreateAuditService;
 import com.insight.backend.service.audit.DeleteAuditService;
 import com.insight.backend.service.audit.FindAuditService;
@@ -32,6 +33,8 @@ public class AuditsControllerTestHttpDelete {
     private CreateAuditService createAuditService;
     @MockBean
     private DeleteAuditService deleteAuditService;
+    @MockBean
+    private AuditProgressService auditProgressService;
     
     @BeforeEach
     public void setUp() {
