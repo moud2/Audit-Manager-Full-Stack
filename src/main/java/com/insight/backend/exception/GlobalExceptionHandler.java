@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
      * Handles exceptions of type NonExistentAuditCategoryException.
      * Returns a ResponseEntity with a status of 400 (BAD REQUEST) and a JSON body containing the error details.
      */
-    @ExceptionHandler({NonExistentAuditCategoryException.class, DuplicateCategoryNameException.class})
+    @ExceptionHandler({NonExistentAuditCategoryException.class, DuplicateCategoryNameException.class, AuditDeletionException.class})
     public ResponseEntity<Object> handleBadRequestException(RuntimeException ex) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());

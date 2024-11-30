@@ -72,7 +72,7 @@ class CreateAuditServiceTest {
         when(saveAuditService.saveAudit(any(Audit.class))).thenAnswer(invocation -> {
             Audit audit = invocation.getArgument(0);
             audit.setId(1L);
-            audit.setCreatedAt(java.time.LocalDateTime.now());
+            audit.setCreatedAt(fixedTime);
             return audit;
         });
 
@@ -84,7 +84,7 @@ class CreateAuditServiceTest {
 
         assertNotNull(response.getCreatedAt());
         assertEquals(fixedTime, response.getCreatedAt());
-        
+
         verify(saveRatingService, times(1)).saveAllRatings(anyList());
         verify(saveAuditService, times(1)).saveAudit(any(Audit.class));
     }
