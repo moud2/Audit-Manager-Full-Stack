@@ -13,6 +13,7 @@ import com.insight.backend.model.Rating;
 import com.insight.backend.model.Question;
 import com.insight.backend.model.Category;
 import com.insight.backend.service.audit.CreateAuditService;
+import com.insight.backend.service.audit.DeleteAuditService;
 import com.insight.backend.service.audit.FindAuditService;
 import com.insight.backend.service.audit.AuditProgressService;
 import com.insight.backend.dto.AuditProgressDTO;
@@ -46,9 +47,11 @@ public class AuditControllerTestHttpGet {
     @Autowired
     private MockMvc mockMvc;
 
+    /**
+     * MockBean for FindAuditService
+     */
     @MockBean
     private AuditProgressService auditProgressService;
-
 
     /**
      * MockBean for FindAuditService
@@ -56,8 +59,17 @@ public class AuditControllerTestHttpGet {
     @MockBean
     private FindAuditService findAuditService;
 
+    /**
+     * MockBean for CreateAuditService
+     */
     @MockBean
     private CreateAuditService createAuditService;
+
+    /**
+     * MockBean for DeleteAuditService
+     */
+    @MockBean
+    private DeleteAuditService deleteAuditService;
 
     private Audit audit1;
     private Audit audit2;

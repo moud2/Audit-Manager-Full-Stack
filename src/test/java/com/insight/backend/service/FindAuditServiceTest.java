@@ -1,5 +1,6 @@
 package com.insight.backend.service;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static java.time.LocalTime.now;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -37,11 +39,13 @@ public class FindAuditServiceTest {
         audit1.setId(1L);
         audit1.setName("Audit1");
         audit1.setCustomer("Customer1");
+        audit1.setDeletedAt(null);
 
         audit2 = new Audit();
         audit2.setId(2L);
         audit2.setName("Audit2");
-        audit1.setCustomer("Customer2");
+        audit2.setCustomer("Customer2");
+        audit2.setDeletedAt(LocalDateTime.now());
     }
 
     @Test
@@ -50,6 +54,7 @@ public class FindAuditServiceTest {
 
         Optional<Audit> foundAudit = findAuditService.findAuditById(1L);
 
+        assertTrue(foundAudit.isPresent());
         assertEquals(audit1, foundAudit.get());
     }
 
