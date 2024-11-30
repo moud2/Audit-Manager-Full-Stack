@@ -65,20 +65,18 @@ class AuditSpecificationsTest {
 
         verify(root).get("customer");
         verify(cb).like(any(), eq("%Test%"));
-    } 
+    }
 
     @Test
     void isNotDeleted() {
-    Specification<Audit> spec = AuditSpecifications.isNotDeleted();
+        Specification<Audit> spec = AuditSpecifications.isNotDeleted();
+        CriteriaBuilder cb = mock(CriteriaBuilder.class);
+        CriteriaQuery<?> query = mock(CriteriaQuery.class);
+        Root<Audit> root = mock(Root.class);
 
-    CriteriaBuilder cb = mock(CriteriaBuilder.class);
-    CriteriaQuery<?> query = mock(CriteriaQuery.class);
-    Root<Audit> root = mock(Root.class);
+        spec.toPredicate(root, query, cb);
 
-    spec.toPredicate(root, query, cb);
-
-    verify(root).get("deletedAt"); 
-    verify(cb).isNull(any()); 
-}
-
+        verify(root).get("deletedAt");
+        verify(cb).isNull(any());
+    }
 }

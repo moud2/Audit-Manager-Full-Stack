@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,7 +35,6 @@ public class FindAuditServiceTest {
 
     private Audit audit1;
     private Audit audit2;
-   
 
     @BeforeEach
     void setUp() {
@@ -46,8 +46,7 @@ public class FindAuditServiceTest {
         audit2 = new Audit();
         audit2.setId(2L);
         audit2.setName("Audit2");
-        audit1.setCustomer("Customer2");
-
+        audit2.setCustomer("Customer2");
     }
 
     @Test
@@ -68,21 +67,16 @@ public class FindAuditServiceTest {
         assertTrue(foundAudit.isEmpty());
     }
 
-@Test
-void testFindAllAudits() {
+    @Test
+    void testFindAllAudits() {
+        audit2.setDeletedAt(LocalDateTime.now()); 
+        List<Audit> mockAudits = Arrays.asList(audit1);  
     
-    audit1.setDeletedAt(null); 
-    audit2.setDeletedAt(LocalDateTime.now()); 
-
-    when(auditRepository.findAll(any(Specification.class))).thenReturn(List.of(audit1));
-
-    List<Audit> foundAudits = findAuditService.findAllAudits();
-
-    assertEquals(1, foundAudits.size()); 
-    assertTrue(foundAudits.contains(audit1)); 
-    assertFalse(foundAudits.contains(audit2));
-}
-
-
-       
+        when(auditRepository.findAll(any(Specification.class), any(Sort.class))).thenReturn(mockAudits);
+    
+        List<Audit> result = findAuditService.findAllAudits("Customer", "asc", "name");
+    
+        assertEquals(1, result.size());
+        assertEquals("Audit1", result.get(0).getName());
+    }
 }
