@@ -17,6 +17,9 @@ e2e-test-job:
   script:
     - echo "Running e2e tests... This will take about 60 seconds."
     - ./gradlew test
+  artifacts:
+    paths:
+      - build/reports/tests
 
 #Sonecube Stage
 # sonarqube-check:
