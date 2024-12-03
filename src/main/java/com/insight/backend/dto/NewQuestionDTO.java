@@ -39,8 +39,7 @@ public class NewQuestionDTO {
     private String name;
 
     //@NotBlank(message = "Name cannot be blank")
-    @Size(max = 4096, message = "Category Name should be up to 4096 characters")
-    private String categoryName;
+    private long category;
 
 
     /**
@@ -66,8 +65,8 @@ public class NewQuestionDTO {
      *  
      * @return the name of the audit
      */
-    public String getCategoryName() {
-        return this.categoryName;
+    public long getCategory() {
+        return this.category;
     }
 
     /**
@@ -75,8 +74,8 @@ public class NewQuestionDTO {
      *
      * @param name the name to set
      */
-    public void setCategoryName(String name) {
-        this.categoryName = categoryName;
+    public void setCategory(long number) {
+        this.category = category;
     }
 
 }

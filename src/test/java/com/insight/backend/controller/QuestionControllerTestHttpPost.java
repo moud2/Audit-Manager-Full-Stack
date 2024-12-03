@@ -18,6 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.mockito.MockitoAnnotations;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -47,7 +48,7 @@ public class QuestionControllerTestHttpPost {
      * MockBean for FindAutitService
      */
     @MockBean
-    private FindQuestionByCategorieService findQuestionService;
+    private FindQuestionByCategoryService findQuestionService;
 
     /**
      * MockBean for CreateAuditService
@@ -58,6 +59,7 @@ public class QuestionControllerTestHttpPost {
     @BeforeEach
     void setUp() {
         // Mocking behavior for createAuditService
+        MockitoAnnotations.initMocks(this);
         when(createQuestionService.createQuestion(any(NewQuestionDTO.class))).thenReturn(null);
     }
 
@@ -72,7 +74,7 @@ public class QuestionControllerTestHttpPost {
         // Malformed JSON payload
         String invalidJson = "{ \"name\": \"Question Name\", \"categories\": ";
 
-        mockMvc.perform(post("/api/v1/question/new")
+        mockMvc.perform(post("/api/v1/questions/new")
                         .content(invalidJson)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
@@ -88,9 +90,8 @@ public class QuestionControllerTestHttpPost {
     public void testInvalidJson() throws Exception {
         NewQuestionDTO requestDto = new NewQuestionDTO();
         requestDto.setName("Question Name");
-        requestDto.setCategory(null); // Set empty categories list
 
-        mockMvc.perform(post("/api/v1/question/new")
+        mockMvc.perform(post("/api/v1/questions/new")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDto)))
                 .andExpect(status().isBadRequest());
@@ -106,11 +107,11 @@ public class QuestionControllerTestHttpPost {
     public void testNonExistingCategory() throws Exception {
         NewQuestionDTO newQuestionDTO = new NewQuestionDTO();
         newQuestionDTO.setName("Question Name");
-        newQuestionDTO.setCategory(10L);
+        newQuestionDTO.setCategory((long) -1);
 
         when(createQuestionService.createQuestion(any(NewQuestionDTO.class))).thenReturn(null);
 
-        mockMvc.perform(post("/api/v1/question/new")
+        mockMvc.perform(post("/api/v1/questions/new")
                         .content(objectMapper.writeValueAsString(newQuestionDTO))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
@@ -128,20 +129,20 @@ public class QuestionControllerTestHttpPost {
         // Audit DTO with valid categories
         NewQuestionDTO newQuestionDTO = new NewQuestionDTO();
         newQuestionDTO.setName("Question Name");
-        newQuestionDTO.setCategory(1L);
+        newQuestionDTO.setCategory((long) 1);
 
         QuestionResponseDTO questionResponseDTO = new QuestionResponseDTO();
-        questionResponseDTO.setId(1L);
+        questionResponseDTO.setId((long) 1);
         questionResponseDTO.setName("Question Name");
 
         // Mocking behavior of createAuditService
         when(createQuestionService.createQuestion(any(NewQuestionDTO.class))).thenReturn(questionResponseDTO);
 
-        mockMvc.perform(post("/api/v1/question/new")
+        mockMvc.perform(post("/api/v1/questions/new")
                         .content(objectMapper.writeValueAsString(newQuestionDTO))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())  // Expecting status code 201
-                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("Question Name"));
     }
 }

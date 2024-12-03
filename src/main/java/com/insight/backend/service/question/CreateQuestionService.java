@@ -67,10 +67,11 @@ public class CreateQuestionService {
         } else throw new QuestionFoundException();
         
         
-        List<Category> categoryOpt = this.findCategoryService.findAllCategories().stream().filter(x -> x.getName().equals(newQuestionDTO.getCategoryName())).collect(Collectors.toList());
+        //List<Category> categoryOpt = this.findCategoryService.findAllCategories().stream().filter(x -> x.getName().equals(newQuestionDTO.getCategory())).collect(Collectors.toList());
+        Optional<Category> categoryOpt = this.findCategoryService.findCategoryById(newQuestionDTO.getCategory());
         Category finding =  null;
-        if (!categoryOpt.isEmpty()) {
-            finding = categoryOpt.get(0);
+        if (categoryOpt.isPresent()) {
+            finding = categoryOpt.get();
             question.setCategory(finding); //optimalerweise gibt es nur ein Ergebniss :) -> liste im nachgang uniquifyen
         } else throw new CategoryNotFoundException(); 
 
