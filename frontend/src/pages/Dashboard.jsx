@@ -2,6 +2,7 @@ import { LayoutDefault } from "../layouts/LayoutDefault.jsx";
 import AuditGrid from "../components/AuditGrid/AuditGrid.jsx";
 import { useState, useEffect } from "react";
 import api from "../api.js";
+import Title from "../components/Textareas/Title.jsx"
 
 export function Dashboard() {
   const [data, setData] = useState([]);
@@ -31,7 +32,7 @@ export function Dashboard() {
   return (
     <LayoutDefault>
       <div className="bg-white-200 w-full h-full">
-        <h1 className="text-center text-2xl mb-6">Dashboard</h1>
+        <Title>Dashboard</Title>
         <AuditGrid data={data} loading={loading} error={error} />
       </div>
     </LayoutDefault>
