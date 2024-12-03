@@ -14,6 +14,7 @@ export function CompareAudits() {
 
     useEffect(() => {
         console.log("Audit ID from URL:", auditId);
+
         if (auditId) {
             api.get(`/v1/audits/${auditId}/progress`)
                 .then(response => {
@@ -24,8 +25,12 @@ export function CompareAudits() {
                         progress,
                     }));
 
+                    // Hole den Audit-Namen aus der Liste
+                    const auditName = allAudits.find(a => a.id === parseInt(auditId))?.name || `Audit ID: ${auditId}`;
+
                     setSelectedAudit({
                         id: auditId,
+                        name: auditName, // Name hinzufügen
                         overallProgress: response.data.overallProgress,
                         categoryProgress: categoryProgressArray,
                         questionCountByRating: response.data.questionCountByRating,
@@ -37,7 +42,7 @@ export function CompareAudits() {
         api.get('/v1/audits')
             .then(response => setAllAudits(response.data))
             .catch(() => setError("Fehler beim Laden der Audit-Liste."));
-    }, [auditId]);
+    }, [auditId, allAudits]);
 
     const handleAuditSelect = (audit) => {
         api.get(`/v1/audits/${audit.id}/progress`)
@@ -49,6 +54,7 @@ export function CompareAudits() {
 
                 setSecondAudit({
                     id: audit.id,
+                    name: audit.name || `Audit ID: ${audit.id}`,
                     overallProgress: response.data.overallProgress,
                     categoryProgress: categoryProgressArray,
                     questionCountByRating: response.data.questionCountByRating,
@@ -69,7 +75,7 @@ export function CompareAudits() {
                 <div className="grid grid-cols-2 gap-6">
                     {selectedAudit && (
                         <AuditComparisonCard
-                            name={`Audit ID: ${selectedAudit.id}`}
+                            name={selectedAudit.name || `Audit ID: ${selectedAudit.id}`}
                             progress={selectedAudit.overallProgress || 0}
                             categories={selectedAudit.categoryProgress || []}
                             distribution={Object.values(selectedAudit.questionCountByRating || {})}
@@ -77,7 +83,7 @@ export function CompareAudits() {
                     )}
                     {secondAudit && (
                         <AuditComparisonCard
-                            name={`Audit ID: ${secondAudit.id}`}
+                            name={secondAudit.name || `Audit ID: ${secondAudit.id}`}
                             progress={secondAudit.overallProgress || 0}
                             categories={secondAudit.categoryProgress || []}
                             distribution={Object.values(secondAudit.questionCountByRating || {})}
