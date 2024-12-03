@@ -11,7 +11,7 @@ function App() {
     return (
         <HashRouter>
             <Routes>
-                <Route path="/" element={<Index />}></Route>
+                <Route path="/" element={<Dashboard />}></Route>
                 <Route path="/dashboard" element={<Dashboard />}></Route>
                 <Route path="/new-audit" element={<NewAudit />}></Route>
                 <Route path="/perform-audit/:auditId" element={<PerformAudit />}></Route>
