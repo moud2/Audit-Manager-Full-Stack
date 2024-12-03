@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { LayoutDefault } from "../layouts/LayoutDefault.jsx";
 import LinearProgressWithLabel from '../components/Charts/ProgressBar.jsx';
+import RadarChart from "../components/Charts/RadarChart.jsx";
 import CircularProgressWithLabel from '../components/Charts/CircularProgress.jsx';
 import CustomBarChart from '../components/Charts/BarChart.jsx';
 import Title from '../components/Textareas/Title.jsx';
@@ -27,7 +28,6 @@ export function Evaluation() {
      */
     const [overallProgress, setOverallProgress] = useState(0);
     const [categoryProgress, setCategoryProgress] = useState([]);
-    const [questionCountByRating, setQuestionCountByRating] = useState([]);
 
     // Define color codes for the bar chart, where the last color (black) represents "nA"
     const colors = ['#a50026', '#d73027', '#fdae61', '#d9ef8b', '#66bd63', '#006837', '#000000'];
@@ -41,14 +41,20 @@ export function Evaluation() {
         api.get(`/v1/audits/${auditId}/progress`)
             .then(response => {
                 setOverallProgress(response.data.overallProgress);
-                setCategoryProgress(Object.entries(response.data.categoryProgress || {}).map(([name, progress]) => ({
-                    name,
-                    progress
-                })));
-                setQuestionCountByRating(Object.entries(response.data.questionCountByRating || {}).map(([rating, count]) => ({
-                    rating: parseInt(rating, 10),
-                    count
-                })));
+
+                const categories = response.data.categories || [];
+                const formattedCategories = categories.map(category => ({
+                    name: category.name,
+                    progress: category.progress,
+                }));
+
+                setCategoryProgress(formattedCategories);
+
+                //setQuestionCountByRating(Object.entries(response.data.questionCountByRating || {}).map(([rating, count]) => ({
+                //    rating: parseInt(rating, 10),
+                //    count
+                //})));
+
             })
             .catch(error => console.error("Error loading evaluation data:", error));
     }, [auditId]);
@@ -66,7 +72,41 @@ export function Evaluation() {
                     <p className="text-center text-xl">Gesamtfortschritt</p>
                 </div>
 
-                {/* Category Progress Circular Charts */}
+                {/* Radar Chart for Category Progress */}
+                <div className="w-full flex justify-center mb-6">
+                    <RadarChart
+                        data={{
+                            labels: categoryProgress.map(category => category.name),
+                            datasets: [
+                                {
+                                    label: 'Category Progress',
+                                    data: categoryProgress.map(category => category.progress),
+                                    fill: true,
+                                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                    borderColor: 'rgb(54, 162, 235)',
+                                    pointBackgroundColor: 'rgb(54, 162, 235)',
+                                    pointBorderColor: '#fff',
+                                    pointHoverBackgroundColor: '#fff',
+                                    pointHoverBorderColor: 'rgb(54, 162, 235)',
+                                },
+                            ],
+                        }}
+                        options={{
+                            responsive: true,
+                            scales: {
+                                r: {
+                                    angleLines: { display: false },
+                                    suggestedMin: 0,
+                                    suggestedMax: 100,
+                                },
+                            },
+                        }}
+                        title="Category Progress Radar"
+                        size={500}
+                    />
+                </div>
+
+                {/* Category Progress Circular Charts
                 <div className="w-full grid grid-cols-1 gap-6 mb-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
                     {categoryProgress.map(category => (
                         <div data-cy={"CircularChart"} key={category.name} className="flex flex-col items-center" >
@@ -74,14 +114,15 @@ export function Evaluation() {
                         </div>
                     ))}
                 </div>
-
-                {/* Question Count by Rating Bar Chart */}
+*/}
+                {/* Question Count by Rating Bar Chart
                 <div data-cy={"BarChart"} className="max-w-full overflow-x-auto pb-10">
                     <CustomBarChart
                         data={questionCountByRating.map(item => item.count)} // Extract count for the chart data
                         colors={colors}
                     />
                 </div>
+                */}
             </div>
         </LayoutDefault>
     );
