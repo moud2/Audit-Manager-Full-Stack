@@ -19,7 +19,7 @@ import java.util.List;
 public class PdfGenerator {
 
     @Autowired
-    private  AuditRepository auditRepository;
+    private AuditRepository auditRepository;
 
     public ByteArrayInputStream createPdf(long auditId) {
         // Retrieve Audit
@@ -49,7 +49,7 @@ public class PdfGenerator {
                 document.add(new Paragraph("  - Points: " + rating.getPoints()));
                 document.add(new Paragraph("  - Comment: " + rating.getComment()));
                 document.add(new Paragraph("  - Is N/A: " + rating.getNa()));
-                document.add(new Paragraph("  - Question: " + rating.getQuestion()));
+                document.add(new Paragraph("  - Question: " + rating.getComment()));
                 document.add(new Paragraph("\n")); // Add spacing between ratings
             }
 
