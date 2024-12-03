@@ -85,9 +85,13 @@ public class AuditsController {
      */
     @PostMapping("/api/v1/audits/new")
     public ResponseEntity<Object> postWithRequestBody(@Valid @RequestBody NewAuditDTO newAuditDTO) {
-        AuditResponseDTO responseDTO = createAuditService.createAudit(newAuditDTO);
+       try {
+           AuditResponseDTO responseDTO = createAuditService.createAudit(newAuditDTO);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+           return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+       }catch (IllegalArgumentException e){
+           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+       }
     }
 
     /**
