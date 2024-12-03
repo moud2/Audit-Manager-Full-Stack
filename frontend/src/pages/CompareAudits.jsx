@@ -5,13 +5,24 @@ import { AuditDropdown } from "../components/CompareAudit/AuditDropdown.jsx";
 import { AuditComparisonCard } from "../components/CompareAudit/AuditComparisonCard.jsx";
 import api from "../api";
 
+/**
+ * CompareAudits component for comparing two audits.
+ * This component fetches data for the selected audit and allows
+ * comparison with a second audit selected from a dropdown.
+ *
+ * @returns {JSX.Element} A layout component for comparing audits.
+ */
 export function CompareAudits() {
-    const { auditId } = useParams();
-    const [selectedAudit, setSelectedAudit] = useState(null);
-    const [secondAudit, setSecondAudit] = useState(null);
-    const [allAudits, setAllAudits] = useState([]);
-    const [error, setError] = useState(null);
+    const { auditId } = useParams(); // Extract audit ID from the URL
+    const [selectedAudit, setSelectedAudit] = useState(null); // State for the selected audit
+    const [secondAudit, setSecondAudit] = useState(null); // State for the second audit to compare
+    const [allAudits, setAllAudits] = useState([]); // State for the list of all audits
+    const [error, setError] = useState(null); // State for error messages
 
+    /**
+     * useEffect for fetching audit details and the list of all audits.
+     * Runs when the auditId or allAudits state changes.
+     */
     useEffect(() => {
         console.log("Audit ID from URL:", auditId);
 
@@ -25,12 +36,12 @@ export function CompareAudits() {
                         progress,
                     }));
 
-                    // Hole den Audit-Namen aus der Liste
+                    // Retrieve the audit name from the list of all audits
                     const auditName = allAudits.find(a => a.id === parseInt(auditId))?.name || `Audit ID: ${auditId}`;
 
                     setSelectedAudit({
                         id: auditId,
-                        name: auditName, // Name hinzufügen
+                        name: auditName, // Add audit name
                         overallProgress: response.data.overallProgress,
                         categoryProgress: categoryProgressArray,
                         questionCountByRating: response.data.questionCountByRating,
@@ -44,6 +55,11 @@ export function CompareAudits() {
             .catch(() => setError("Fehler beim Laden der Audit-Liste."));
     }, [auditId, allAudits]);
 
+    /**
+     * Handle the selection of a second audit to compare.
+     *
+     * @param {Object} audit - The audit selected from the dropdown.
+     */
     const handleAuditSelect = (audit) => {
         api.get(`/v1/audits/${audit.id}/progress`)
             .then(response => {
@@ -68,10 +84,13 @@ export function CompareAudits() {
             <div className="max-w-6xl mx-auto px-4">
                 <h1 className="text-center text-2xl font-bold mb-6">Audits vergleichen</h1>
 
+                {/* Display error messages, if any */}
                 {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
+                {/* Dropdown for selecting the second audit */}
                 <AuditDropdown audits={allAudits.filter(audit => audit.id !== selectedAudit?.id)} onAuditSelect={handleAuditSelect} />
 
+                {/* Display comparison cards for the selected and second audits */}
                 <div className="grid grid-cols-2 gap-6">
                     {selectedAudit && (
                         <AuditComparisonCard
