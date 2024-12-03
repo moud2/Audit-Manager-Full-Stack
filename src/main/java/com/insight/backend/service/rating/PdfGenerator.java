@@ -46,10 +46,10 @@ public class PdfGenerator {
             // Add Ratings
             for (Rating rating : ratings) {
                 document.add(new Paragraph("Rating ID: " + rating.getId()));
-                document.add(new Paragraph("  - Points: " + rating.getPoints()));
+                document.add(new Paragraph("  - Question: " + rating.getQuestion().getName()));
                 document.add(new Paragraph("  - Comment: " + rating.getComment()));
+                document.add(new Paragraph("  - Points: " + rating.getPoints()));
                 document.add(new Paragraph("  - Is N/A: " + rating.getNa()));
-                document.add(new Paragraph("  - Question: " + rating.getComment()));
                 document.add(new Paragraph("\n")); // Add spacing between ratings
             }
 
