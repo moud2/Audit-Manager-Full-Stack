@@ -13,7 +13,6 @@ export function Dashboard() {
     api
       .get("/v1/audits")
       .then((response) => {
-        console.log(response);
         setData(response.data);
         setLoading(false);
       })
