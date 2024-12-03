@@ -14,12 +14,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
-import static java.time.LocalTime.now;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -73,14 +72,14 @@ public class FindAuditServiceTest {
 
     @Test
     void testFindAllAudits() {
-        audit2.setDeletedAt(LocalDateTime.now()); 
-        List<Audit> mockAudits = Arrays.asList(audit1);  
-    
+        audit2.setDeletedAt(LocalDateTime.now());
+        List<Audit> mockAudits = Arrays.asList(audit1);
+
         when(auditRepository.findAll(any(Specification.class), any(Sort.class))).thenReturn(mockAudits);
-    
+
         List<Audit> result = findAuditService.findAllAudits("Customer", "asc", "name");
-    
+
         assertEquals(1, result.size());
-        assertEquals("Audit1", result.get(0).getName());
+        assertEquals("Audit1", result.getFirst().getName());
     }
 }
