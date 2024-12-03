@@ -10,16 +10,16 @@ stages:
   - release
   - deploy
 
-  # TESTING STAGE :)
 e2e-test-job:
   image: gradle:8-jdk21
   stage: test
   script:
-    - echo "Running e2e tests... This will take about 60 seconds."
     - ./gradlew test
   artifacts:
+    when: always
+    expire_in: 1 week
     paths:
-      - build/reports/tests
+      - ${CI_PROJECT_DIR}/build/reports/tests/test/
 
 #Sonecube Stage
 # sonarqube-check:
