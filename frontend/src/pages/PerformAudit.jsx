@@ -24,6 +24,8 @@ export function PerformAudit() {
     const { auditId } = useParams();
     const [questions, setQuestions] = useState([]);
     const [sortedQuestions, setSortedQuestions] = useState([]);
+    const [loading, setLoading] = useState(false); // Added loading state
+    const [error, setError] = useState(null); // Added error state
 
     const labels = [0, 1, 2, 3, 4, 5, "N/A"];
     // const backendData = [
@@ -157,15 +159,35 @@ export function PerformAudit() {
      * It updates the `questions` state with the retrieved data.
      */    
     useEffect(() => {
+        setLoading(true); // Set loading to true when fetching starts
         api.get(`/v1/audits/${auditId}/ratings`)
             .then(response => {
                 setQuestions(response.data);
                 setSortedQuestions(transformData(response.data));
+                setError(null); // Clear previous errors
             })
             .catch(err => {
-                console.error('Error fetching data:', err);
-            });
+                if (err.response) {
+                    console.error(`Server error: ${err.response.status} - ${err.response.data?.message || "Unknown error"}`);
+                    setError(`Error loading data: ${err.response.data?.message || "An unknown error occurred."}`);
+                } else if (err.request) {
+                    console.error("Network error: No response received from the server.");
+                    setError("Network error: Please check your connection.");
+                } else {
+                    console.error(`Error: ${err.message}`);
+                    setError(`An error occurred: ${err.message}`);
+                }
+            })
+            .finally(() => setLoading(false)); // Set loading to false when fetching ends
     }, [auditId]);
+
+    if (loading) {
+        return <p>Loading...</p>; // Display loading message while data is being fetched
+    }
+
+    if (error) {
+        return <p className="text-red-500">{error}</p>; // Display error message if fetch fails
+    }
 
     /**
      * Handles the update of a question in the list. This function is triggered when a question's
@@ -193,19 +215,25 @@ export function PerformAudit() {
      * @returns {Promise<void>} - A promise resolving once the backend update is complete.
      */
     const patchQuestion = async (questionID, newRatings) => {
-        // Transforming the ratings into a format suitable for a JSON Patch request
         const patchData = newRatings.map((destination) => ({
             op: "replace",
             path: `${destination.path}`,
             value: destination.value,
         }));
-        api.patch(`/v1/ratings/${questionID}`, patchData)
-            .then(response => {
-                console.log(response);
-            })
-            .catch(err => {
-                console.error('Error fetching data:', err);
-            });
+        try {
+            await api.patch(`/v1/ratings/${questionID}`, patchData);
+        } catch (err) {
+            if (err.response) {
+                console.error(`Serverfehler: ${err.response.status} - ${err.response.data?.message || "Unbekannter Fehler"}`);
+                alert(`Fehler beim Aktualisieren der Frage: ${err.response.data?.message || "Ein Fehler ist aufgetreten."}`);
+            } else if (err.request) {
+                console.error("Netzwerkfehler: Keine Antwort vom Server.");
+                alert("Netzwerkfehler: Bitte überprüfen Sie Ihre Verbindung.");
+            } else {
+                console.error(`Fehler: ${err.message}`);
+                alert(`Ein Fehler ist aufgetreten: ${err.message}`);
+            }
+        }
     };
 
     return (

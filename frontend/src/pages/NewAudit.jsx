@@ -21,20 +21,27 @@ export function NewAudit() {
       return;
     }
 
+    setLoading(true); // Start loading for the creation process
     api
-      .post("/v1/audits/new" , {
+      .post("/v1/audits/new", {
         name: name,
         customer: customerName,
         categories: selectedCategories,
       })
       .then((response) => {
         navigate("/perform-audit/" + response.data.id);
+        setError(null); // Clear any previous errors
       })
       .catch((err) => {
         console.error("Error creating audit:", err);
+        setError(
+          err.response?.data?.message || "Fehler beim Erstellen des Audits."
+        );
         alert("Fehler beim Erstellen des Audits.");
-      });
+      })
+      .finally(() => setLoading(false)); // End loading
   };
+
 
   const handleNameChange = (e) => {
     setName(e.target.value);
@@ -44,6 +51,7 @@ export function NewAudit() {
   };
 
   useEffect(() => {
+    setLoading(true); // Start loading when fetching categories
     api
       .get("/v1/categories")
       .then((response) => {
@@ -52,24 +60,26 @@ export function NewAudit() {
           title: category.name,
         }));
         setCards(categories);
-        setLoading(false);
+        setError(null); // Clear any previous errors
       })
       .catch((err) => {
         console.error("Error fetching categories:", err);
-        setError(err);
-        setLoading(false);
-      });
+        setError(
+          err.response?.data?.message || "Fehler beim Laden der Kategorien."
+        );
+      })
+      .finally(() => setLoading(false)); // End loading
   }, []);
-
 
   if (loading) {
     return <p>Loading...</p>; // Display loading message while data is being fetched
   }
 
   if (error) {
-    return <p>Fehler: {error.message}</p>; // Display error message if fetch fails
+    return <p className="text-red-500">Fehler: {error}</p>; // Display error message if fetch fails
   }
 
+  
   return (
     <LayoutDefault>
       <div>

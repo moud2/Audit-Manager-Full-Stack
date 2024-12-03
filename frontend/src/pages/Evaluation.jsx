@@ -28,6 +28,8 @@ export function Evaluation() {
     const [overallProgress, setOverallProgress] = useState(0);
     const [categoryProgress, setCategoryProgress] = useState([]);
     const [questionCountByRating, setQuestionCountByRating] = useState([]);
+    const [loading, setLoading] = useState(false); // Added loading state
+    const [error, setError] = useState(null); // Added error state
 
     // Define color codes for the bar chart, where the last color (black) represents "nA"
     const colors = ['#a50026', '#d73027', '#fdae61', '#d9ef8b', '#66bd63', '#006837', '#000000'];
@@ -38,6 +40,7 @@ export function Evaluation() {
      * based on the retrieved data.
      */
     useEffect(() => {
+        setLoading(true); // Set loading to true when fetching starts
         api.get(`/v1/audits/${auditId}/progress`)
             .then(response => {
                 setOverallProgress(response.data.overallProgress);
@@ -49,10 +52,32 @@ export function Evaluation() {
                     rating: parseInt(rating, 10),
                     count
                 })));
+                setError(null); // Clear previous errors
             })
-            .catch(error => console.error("Error loading evaluation data:", error));
+            .catch(error => {
+                if (error.response) {
+                    console.error(`Server error: ${error.response.status} - ${error.response.data?.message || "Unknown error"}`);
+                    setError(`Error loading evaluation data: ${error.response.data?.message || "An unknown error occurred."}`);
+                } else if (error.request) {
+                    console.error("Network error: No response received from the server.");
+                    setError("Network error: Please check your connection.");
+                } else {
+                    console.error(`Error: ${error.message}`);
+                    setError(`An error occurred: ${error.message}`);
+                }
+            })
+            .finally(() => setLoading(false)); // Set loading to false when fetching ends
     }, [auditId]);
 
+    if (loading) {
+        return <p>Loading...</p>; // Display loading message while data is being fetched
+    }
+
+    if (error) {
+        return <p className="text-red-500">{error}</p>; // Display error message if fetch fails
+    }
+
+    
     return (
         <LayoutDefault>
             <div className="p-4 flex flex-col items-center">
