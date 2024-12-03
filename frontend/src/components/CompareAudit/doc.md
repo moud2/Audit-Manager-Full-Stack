@@ -1,123 +1,74 @@
-# CompareAudit
+# Component Documentation
 
-# Props
+## CompareAudit Component
 
-# selectedAudit
+### Description
+The `CompareAudit` component renders a button that navigates to the `CompareAudits` page for comparing the selected audit.
 
-- Type: `object`
+### Props
+- **`selectedAudit`** (Object):
+  The selected audit data. It should contain an `id` property.
 
-The selected audit data to pass to the CompareAudits page.
+### Functionality
+- Navigates to the comparison page using the `useNavigate` hook.
+- Displays an error message if no audit is selected.
 
-## Methods
+### Key Methods
+- **`handleNavigate`**:
+  - Checks if `selectedAudit` exists and has an `id`.
+  - Navigates to `/compare-audits/:id` or displays an error.
 
-Handles navigation to the CompareAudits page with the selected audit data.
+---
 
-## Usage
+## AuditDropdown Component
 
-```jsx
-import { CompareAudit } from "./CompareAudit";
+### Description
+The `AuditDropdown` component renders a dropdown menu for selecting an audit to compare.
 
-<CompareAudit selectedAudit={selectedAudit} />;
-```
+### Props
+- **`audits`** (Array):
+  The list of available audits. Each audit should have an `id` and `name`.
+- **`onAuditSelect`** (Function):
+  Callback function triggered when an audit is selected.
 
-# AuditDropdown Component
+### Functionality
+- Filters out the already selected audit from the dropdown.
+- Calls the `onAuditSelect` function with the selected audit.
 
-## Description
+### Key Methods
+- **Dropdown `onChange` Handler**:
+  - Extracts the selected audit ID from the dropdown.
+  - Finds the matching audit in the `audits` array.
+  - Passes the selected audit to `onAuditSelect`.
 
-The AuditDropdown component provides a dropdown for selecting an audit from a list of available audits. When an audit is selected, the callback function onAuditSelect is called.
+---
 
-## Props
+## AuditComparisonCard Component
 
-### audits
+### Description
+The `AuditComparisonCard` component displays detailed comparison data for an audit, including overall progress, category-wise progress, and a point distribution chart.
 
-- Type: `Array`
+### Props
+- **`name`** (string):
+  The name of the audit.
+- **`progress`** (number):
+  The overall progress of the audit in percentage.
+- **`categories`** (Array):
+  Array of objects representing category progress. Each object contains:
+  - `name` (string): The category name.
+  - `progress` (number): The category progress percentage.
+- **`distribution`** (Array):
+  Array representing the point distribution for the bar chart.
 
-A list of audit objects to populate the dropdown.
+### Functionality
+- Displays a progress bar for the overall progress.
+- Displays circular progress indicators for each category.
+- Displays a bar chart for the point distribution.
 
-### onAuditSelect
-
-- Type: `Function`
-
-Callback function triggered when an audit is selected.
-
-## Methods
-
-### handleSelection
-
-Handles the audit selection and invokes the onAuditSelect callback with the selected audit.
-
-## Usage
-
-```jsx
-import { AuditDropdown } from "./AuditDropdown";
-
-const audits = [
-  { id: 1, name: "Audit 1" },
-  { id: 2, name: "Audit 2" },
-];
-
-const handleAuditSelect = (selectedAudit) => {
-  console.log(selectedAudit);
-};
-
-<AuditDropdown audits={audits} onAuditSelect={handleAuditSelect} />;
-```
-
-# AuditComparisonCard
-
-## Description
-
-The AuditComparisonCard component displays detailed comparison data for a selected audit. It includes a progress bar for overall progress, circular progress indicators for category-wise progress, and a bar chart for points distribution.
-
-## Props
-
-### name
-
-- Type: `string`
-
-The name of the audit.
-
-### progress
-
-- Type: `number`
-
-The overall progress of the audit.
-
-### categories
-
-- Type: `Array`
-
-Array of category objects, each containing id, name, and progress.
-
-### distribution
-
-- Type: `Array`
-
-Data for points distribution used in the bar chart.
-
-## Usage
-
-```jsx
-import { AuditComparisonCard } from "./AuditComparisonCard";
-
-const categories = [
-  { id: 1, name: "Category 1", progress: 75 },
-  { id: 2, name: "Category 2", progress: 50 },
-];
-
-const distribution = [
-  { label: "Label 1", value: 30 },
-  { label: "Label 2", value: 70 },
-];
-
-<AuditComparisonCard
-  name="Audit Comparison"
-  progress={80}
-  categories={categories}
-  distribution={distribution}
-/>;
-```
-
-## Methods
-
-Relies on props and child components for rendering.
+### Key Methods
+- **ProgressBar Rendering**:
+  - Displays the `progress` prop as a percentage.
+- **Category Mapping**:
+  - Iterates through `categories` to render circular progress indicators.
+- **Bar Chart**:
+  - Uses the `distribution` array to render a bar chart with predefined colors.
