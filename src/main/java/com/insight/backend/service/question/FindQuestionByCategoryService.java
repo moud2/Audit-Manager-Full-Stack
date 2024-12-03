@@ -29,6 +29,7 @@ public class FindQuestionByCategoryService {
      *
      * @param category the name of the Category to search for
      * @param sortDirection the direction to sort the results
+     * @param sortBy the attribute by which to sort the questions
      * @return a list of all Questions of the specified Category
      */
     public List<Question> findQuestionsByCategory(Category category, String sortDirection, String sortBy) {

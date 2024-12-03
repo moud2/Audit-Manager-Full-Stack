@@ -43,7 +43,7 @@ public class FindAuditService {
      * @return a list of all audits
      */
     public List<Audit> findAllAudits() {
-        return auditRepository.findAll();
+        return auditRepository.findAll(AuditSpecifications.isNotDeleted());
     }
 
     /**

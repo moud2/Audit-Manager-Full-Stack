@@ -1,5 +1,6 @@
 package com.insight.backend.service;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -15,9 +16,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -74,15 +78,16 @@ public class FindQuestionByCategoryServiceTest {
 
     @Test
     void testFindQuestionsByCategory() {
-        List<Question> questions = Arrays.asList(question1, question2);
+        question2.setDeletedAt(LocalDateTime.now());
+        List<Question> questions = Arrays.asList(question1);
+        when(questionRepository.findAll(any(Specification.class), any(Sort.class))).thenReturn(questions);
         
-        List<Question> foundQuestions = findQuestionService
-            .findQuestionsByCategory(category, "asc", "id");
+        List<Question> foundQuestions = findQuestionService.findQuestionsByCategory(category, "asc", "id");
 
         Category test = question1.getCategory();
         assertEquals(category, test);
 
-        assertTrue(!foundQuestions.isEmpty());
-        assertEquals(questions, foundQuestions);
+        assertEquals(1, foundQuestions.size());
+        assertEquals("question1", foundQuestions.getFirst().getName());
     }
 }
