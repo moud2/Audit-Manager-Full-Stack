@@ -84,8 +84,10 @@ export function Evaluation() {
                     />
                 </div>
 
-                {/* CompareAudit-Komponente mit ausgewähltem Audit */}
-                <CompareAudit selectedAudit={selectedAudit} />
+                {/* Audit vergleichen Button */}
+                <CompareAudit selectedAudit={auditId ? { id: auditId } : null} />
+
+                
             </div>
         </LayoutDefault>
     );

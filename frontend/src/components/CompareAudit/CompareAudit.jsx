@@ -1,24 +1,28 @@
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 
-/**
- * CompareAudit component renders a button for navigating to CompareAudits page.
- * @param {Object} props - The props passed to the component.
- * @param {Object} props.selectedAudit - The selected audit data.
- * @returns {JSX.Element}
- */
 export function CompareAudit({ selectedAudit }) {
     const navigate = useNavigate();
+    const [error, setError] = useState(null);
 
     const handleNavigate = () => {
-        if (selectedAudit) {
-            navigate('/compare-audits', { state: { selectedAudit } });
+        if (selectedAudit && selectedAudit.id) {
+            navigate(`/compare-audits/${selectedAudit.id}`); 
         } else {
-            console.error("Kein Audit ausgewählt");
+            setError("Kein Audit-Datensatz verfügbar. Bitte laden Sie die Seite neu oder wählen Sie ein anderes Audit aus.");
         }
     };
 
     return (
-        <div className="flex justify-center mt-6">
+        <div className="flex flex-col items-center mt-6">
+            {/* Fehlermeldung */}
+            {error && (
+                <p className="text-red-500 text-sm mb-4">
+                    {error}
+                </p>
+            )}
+
+            {/* Button */}
             <button
                 className="fixed right-16 p-2 bottom-20 mb-12 bg-blue-500 text-white rounded"
                 onClick={handleNavigate}

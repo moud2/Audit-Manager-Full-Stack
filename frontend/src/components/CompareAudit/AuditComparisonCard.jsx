@@ -28,8 +28,8 @@ export function AuditComparisonCard({ name, progress, categories, distribution }
 
             {/* Kategorien Fortschritt */}
             <div className="grid grid-cols-2 gap-4 mb-4">
-                {categories.map((category) => (
-                    <div key={category.id} className="text-center">
+                {categories.map((category, index) => (
+                    <div key={index} className="text-center">
                         <CircularProgress value={category.progress} size={60} />
                         <p className="text-sm mt-2">{category.name}</p>
                     </div>
