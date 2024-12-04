@@ -4,6 +4,7 @@ import { LayoutDefault } from "../layouts/LayoutDefault.jsx";
 import { Table } from "../components/Table/Table.jsx";
 import { useNavigate } from "react-router-dom";
 import { TextField } from "@mui/material";
+import Title from "../components/Textareas/Title.jsx";
 
 export function NewAudit() {
   const [cards, setCards] = useState([]);
@@ -73,7 +74,7 @@ export function NewAudit() {
   return (
     <LayoutDefault>
       <div>
-        <h1 className="text-center text-4xl m-6">Neues Audit anlegen</h1>
+        <Title>Neues Audit anlegen</Title>
         <form className="flex flex-col items-center w-full mb-8">
           <div className="audit-name-field w-full max-w-xs ml-12">
             <TextField
