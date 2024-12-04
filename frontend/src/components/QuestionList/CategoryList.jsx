@@ -51,7 +51,7 @@ export function CategoryList({ categories, options, onChange }) {
                         onChange={handleCategoryChange}
                     />
                 </div>
-            ))};
+            ))}
         </div>
     )
 }
