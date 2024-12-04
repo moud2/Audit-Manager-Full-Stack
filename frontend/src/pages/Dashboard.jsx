@@ -29,7 +29,11 @@ export function Dashboard() {
   useEffect(() => {
     setLoading(true); // Set loading to true at the start of the request
     api
-      .get("/v1/audits")
+      .get("/v1/audits", {
+        params: {
+          customer: debouncedCustomerName?.length ? debouncedCustomerName : undefined,
+        }
+      })
       .then((response) => {
         console.log(response);
         setData(response.data);
