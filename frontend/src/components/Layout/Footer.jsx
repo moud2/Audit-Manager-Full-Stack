@@ -1,5 +1,12 @@
 import React from "react";
 
+/**
+ * Footer Component
+ *
+ * Adds a basic footer with a link to the dashboard page.
+ *
+ * @returns {Element}
+ */
 export function Footer(){
     return (
         <footer className="fixed flex justify-center items-center bottom-0 h-16 w-full bg-white border-t border-gray-200 shadow">
