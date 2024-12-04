@@ -7,7 +7,7 @@ export function LayoutDefault({children}){
             <aside className="col-span-2">
                 <DashboardSidebar></DashboardSidebar>
             </aside>
-            <main className="col-span-10 h-full">
+            <main className="col-span-10 h-full mb-11">
                 {Children.map(children, child => child)}
             </main>
         </div>
