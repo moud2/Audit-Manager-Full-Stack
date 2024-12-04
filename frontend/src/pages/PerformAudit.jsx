@@ -200,9 +200,7 @@ export function PerformAudit() {
             value: destination.value,
         }));
         api.patch(`/v1/ratings/${questionID}`, patchData)
-            .then(response => {
-                console.log(response);
-            })
+        
             .catch(err => {
                 console.error('Error fetching data:', err);
             });
