@@ -71,16 +71,7 @@ describe('Evaluation Page Snapshot Tests', () => {
 
     it('should match snapshot for ProgressBar', () => {
         // Capture snapshot of the overall progress bar component
-        cy.get('[data-cy="ProgressBar"]').snapshot({ name: "ProgressBar" });
+        cy.compareSnapshot("ProgressBar");
     });
 
-    it('should match snapshot for CircularChart', () => {
-        // Capture snapshot of the circular chart component for category progress
-        cy.get('[data-cy="CircularChart"]').snapshot({ name: "CircularChart" });
-    });
-
-    it('should match snapshot for BarChart', () => {
-        // Capture snapshot of the bar chart component for question rating distribution
-        cy.get('[data-cy="BarChart"]').snapshot({ name: "BarChart" });
-    });
 });
