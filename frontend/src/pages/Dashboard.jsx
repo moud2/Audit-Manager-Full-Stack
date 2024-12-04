@@ -55,7 +55,8 @@ export function Dashboard() {
         }
       })
       .finally(() => setLoading(false)); // Set loading to false after the request finishes
-  }, []);
+  }, [debouncedCustomerName]); // `debouncedCustomerName` hinzugefügt
+
 
   if (loading) {
     return <p>Loading...</p>; // Display loading message while data is being fetched
