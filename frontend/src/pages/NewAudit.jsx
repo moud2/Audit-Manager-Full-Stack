@@ -98,10 +98,10 @@ export function NewAudit() {
           options={cards}
           onChange={setSelectedCategories}
         />
-        <div className="flex justify-center mt-6">
+        <div className="relative flex justify-center mt-6 pb-16">
           <button
             onClick={handleCreateAuditClick}
-            className="fixed right-16 p-2 bottom-20 mb-12 bg-blue-500 text-white rounded"
+            className="absolute bottom-4 right-4 md:bottom-8 md:right-8 lg:bottom-12 lg:right-12 p-3 bg-blue-500 text-white rounded shadow-lg"
           >
             Audit erstellen
           </button>
