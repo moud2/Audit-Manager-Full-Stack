@@ -1,1 +1,3 @@
-require('@cypress/snapshot').register();
+import compareSnapshotCommand from 'cypress-image-diff-js';
+
+compareSnapshotCommand()
