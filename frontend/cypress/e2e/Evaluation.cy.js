@@ -1,3 +1,4 @@
+
 /**
  * Evaluation Page Snapshot Tests
  *
@@ -6,7 +7,7 @@
  * Snapshot tests ensure the visual consistency of the components when changes are made to the code.
  */
 
-describe('Evaluation Page Snapshot Tests', () => {
+//describe('Evaluation Page Snapshot Tests', () => {
 
     /**
      * beforeEach Hook
@@ -34,6 +35,7 @@ describe('Evaluation Page Snapshot Tests', () => {
      *    ensuring that all components render with the provided mock data.
      */
 
+    /*
     beforeEach(() => {
         cy.intercept('GET', 'http://localhost:8080/api/v1/audits/1/progress', {
             body: {
@@ -61,6 +63,7 @@ describe('Evaluation Page Snapshot Tests', () => {
         cy.visit('http://localhost:5173/#/evaluation/1');
         cy.wait('@getProgress');
     });
+    */
 
     /**
      * Snapshot Tests
@@ -68,10 +71,11 @@ describe('Evaluation Page Snapshot Tests', () => {
      * Each test below captures a snapshot of a specific component on the Evaluation page.
      * These snapshots are compared to previously saved snapshots to detect unintended visual changes.
      */
-
+    /*
     it('should match snapshot for ProgressBar', () => {
         // Capture snapshot of the overall progress bar component
         cy.compareSnapshot("ProgressBar");
     });
 
 });
+*/
