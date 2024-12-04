@@ -21,7 +21,7 @@ export function AuditGridItem({ audit }) {
         >
             <p className="text-center">{audit.name}</p>
             <p className="absolute bottom-2 right-2 text-sm text-gray-700">{audit.customer}</p>
-            <p className="absolute bottom-2 left-2 text-sm text-gray-700">{audit.createdAt} {formattedDate}</p>
+            <p className="absolute bottom-2 left-2 text-sm text-gray-700">{formattedDate}</p>
         </Link>
     );
 }
