@@ -6,6 +6,7 @@ import {Dashboard} from "./pages/Dashboard.jsx";
 import {NewAudit} from "./pages/NewAudit.jsx";
 import {PerformAudit} from "./pages/PerformAudit.jsx";
 import {Evaluation} from "./pages/Evaluation.jsx";
+import {NewCategory} from "./pages/NewCategory.jsx";
 
 function App() {
     return (
@@ -16,6 +17,7 @@ function App() {
                 <Route path="/new-audit" element={<NewAudit />}></Route>
                 <Route path="/perform-audit/:auditId" element={<PerformAudit />}></Route>
                 <Route path="/evaluation/:auditId" element={<Evaluation />} />
+                <Route path="/new-category" element={<NewCategory />}></Route>
             </Routes>
         </HashRouter>
     );
