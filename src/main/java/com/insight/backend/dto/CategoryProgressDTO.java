@@ -9,23 +9,26 @@ public class CategoryProgressDTO {
     private String categoryName;
     private int answeredQuestions;
     private int totalQuestions;
-    private double progress;
+    private double currentCategoryProgress;
+    private double overallCategoryProgress;
 
     /**
      * Constructor to initialize all fields of the CategoryProgressDTO.
      *
-     * @param categoryId          unique identifier for the category.
-     * @param categoryName        name of the category.
-     * @param answeredQuestions   number of questions answered in the category.
-     * @param totalQuestions      total number of questions in the category.
-     * @param progress            progress percentage for the category.
+     * @param categoryId              unique identifier for the category.
+     * @param categoryName            name of the category.
+     * @param answeredQuestions       number of questions answered in the category.
+     * @param totalQuestions          total number of questions in the category.
+     * @param currentCategoryProgress progress percentage for answered questions.
+     * @param overallCategoryProgress progress percentage for all questions.
      */
-    public CategoryProgressDTO(Long categoryId, String categoryName, int answeredQuestions, int totalQuestions, double progress) {
+    public CategoryProgressDTO(Long categoryId, String categoryName, int answeredQuestions, int totalQuestions, double currentCategoryProgress, double overallCategoryProgress) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
         this.answeredQuestions = answeredQuestions;
         this.totalQuestions = totalQuestions;
-        this.progress = progress;
+        this.currentCategoryProgress = currentCategoryProgress;
+        this.overallCategoryProgress = overallCategoryProgress;
     }
 
     /**
@@ -101,20 +104,38 @@ public class CategoryProgressDTO {
     }
 
     /**
-     * Gets the progress percentage for the category.
+     * Gets the progress percentage for answered questions.
      *
-     * @return the progress percentage.
+     * @return the current category progress percentage.
      */
-    public double getProgress() {
-        return progress;
+    public double getCurrentCategoryProgress() {
+        return currentCategoryProgress;
     }
 
     /**
-     * Sets the progress percentage for the category.
+     * Sets the progress percentage for answered questions.
      *
-     * @param progress the progress percentage to set.
+     * @param currentCategoryProgress the current category progress percentage to set.
      */
-    public void setProgress(double progress) {
-        this.progress = progress;
+    public void setCurrentCategoryProgress(double currentCategoryProgress) {
+        this.currentCategoryProgress = currentCategoryProgress;
+    }
+
+    /**
+     * Gets the progress percentage for all questions.
+     *
+     * @return the overall category progress percentage.
+     */
+    public double getOverallCategoryProgress() {
+        return overallCategoryProgress;
+    }
+
+    /**
+     * Sets the progress percentage for all questions.
+     *
+     * @param overallCategoryProgress the overall category progress percentage to set.
+     */
+    public void setOverallCategoryProgress(double overallCategoryProgress) {
+        this.overallCategoryProgress = overallCategoryProgress;
     }
 }

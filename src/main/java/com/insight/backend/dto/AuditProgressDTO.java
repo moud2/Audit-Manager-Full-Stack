@@ -4,47 +4,27 @@ import java.util.List;
 
 /**
  * Data Transfer Object representing the progress and statistics of an audit.
- * This object is used in the response for audit progress endpoints.
  */
 public class AuditProgressDTO {
 
-    /**
-     * Unique identifier for the audit.
-     */
     private Long auditId;
-
-    /**
-     * Overall progress of the audit as a percentage.
-     * Calculated based on the total points for all questions within the audit.
-     */
-    private double overallProgress;
-
-    /**
-     * List containing progress details for each category within the audit.
-     * Each entry contains category name, category ID, answered questions count,
-     * total questions count, and progress percentage.
-     */
+    private double currentAuditProgress;
+    private double overallAuditProgress;
     private List<CategoryProgressDTO> categoryProgress;
-
-    /**
-     * Default constructor for AuditProgressDTO.
-     * Initializes the categoryProgress list to avoid null values.
-     */
-    public AuditProgressDTO() {
-        this.categoryProgress = List.of();
-    }
 
     /**
      * Constructor to initialize all fields of the AuditProgressDTO.
      *
-     * @param auditId          unique identifier for the audit.
-     * @param overallProgress  overall progress of the audit as a percentage.
-     * @param categoryProgress progress for each category in the audit.
+     * @param auditId              unique identifier for the audit.
+     * @param currentAuditProgress progress percentage for answered questions.
+     * @param overallAuditProgress progress percentage for all questions.
+     * @param categoryProgress     progress details for each category.
      */
-    public AuditProgressDTO(Long auditId, double overallProgress, List<CategoryProgressDTO> categoryProgress) {
+    public AuditProgressDTO(Long auditId, double currentAuditProgress, double overallAuditProgress, List<CategoryProgressDTO> categoryProgress) {
         this.auditId = auditId;
-        this.overallProgress = overallProgress;
-        this.categoryProgress = categoryProgress != null ? categoryProgress : List.of();
+        this.currentAuditProgress = currentAuditProgress;
+        this.overallAuditProgress = overallAuditProgress;
+        this.categoryProgress = categoryProgress;
     }
 
     /**
@@ -66,38 +46,56 @@ public class AuditProgressDTO {
     }
 
     /**
-     * Gets the overall progress of the audit as a percentage.
+     * Gets the progress percentage for answered questions.
      *
-     * @return the overall progress.
+     * @return the current audit progress percentage.
      */
-    public double getOverallProgress() {
-        return overallProgress;
+    public double getCurrentAuditProgress() {
+        return currentAuditProgress;
     }
 
     /**
-     * Sets the overall progress of the audit as a percentage.
+     * Sets the progress percentage for answered questions.
      *
-     * @param overallProgress the overall progress to set.
+     * @param currentAuditProgress the current audit progress percentage to set.
      */
-    public void setOverallProgress(double overallProgress) {
-        this.overallProgress = overallProgress;
+    public void setCurrentAuditProgress(double currentAuditProgress) {
+        this.currentAuditProgress = currentAuditProgress;
     }
 
     /**
-     * Gets the list of category progress details.
+     * Gets the progress percentage for all questions.
      *
-     * @return the category progress details.
+     * @return the overall audit progress percentage.
+     */
+    public double getOverallAuditProgress() {
+        return overallAuditProgress;
+    }
+
+    /**
+     * Sets the progress percentage for all questions.
+     *
+     * @param overallAuditProgress the overall audit progress percentage to set.
+     */
+    public void setOverallAuditProgress(double overallAuditProgress) {
+        this.overallAuditProgress = overallAuditProgress;
+    }
+
+    /**
+     * Gets the progress details for each category.
+     *
+     * @return the list of category progress details.
      */
     public List<CategoryProgressDTO> getCategoryProgress() {
         return categoryProgress;
     }
 
     /**
-     * Sets the list of category progress details.
+     * Sets the progress details for each category.
      *
-     * @param categoryProgress the category progress details to set.
+     * @param categoryProgress the list of category progress details to set.
      */
     public void setCategoryProgress(List<CategoryProgressDTO> categoryProgress) {
-        this.categoryProgress = categoryProgress != null ? categoryProgress : List.of();
+        this.categoryProgress = categoryProgress;
     }
 }
