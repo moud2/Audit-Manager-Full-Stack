@@ -41,6 +41,7 @@ public class PdfGenerator {
             document.add(new Paragraph("Audit Report"));
             document.add(new Paragraph("Audit ID: " + audit.getId()));
             document.add(new Paragraph("Audit Title: " + audit.getName()));
+            document.add(new Paragraph("Audit Title: " + audit.getCustomer()));
             document.add(new Paragraph("\nRatings:"));
 
             // Add Ratings
