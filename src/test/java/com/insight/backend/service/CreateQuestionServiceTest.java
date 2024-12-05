@@ -1,47 +1,52 @@
 package com.insight.backend.service;
 
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.Set;
 
-import com.insight.backend.model.Category;
-import com.insight.backend.model.Question;
-import com.insight.backend.dto.NewQuestionDTO;
-import com.insight.backend.repository.QuestionRepository;
-import com.insight.backend.service.question.SaveQuestionService;
-import com.insight.backend.service.question.CreateQuestionService;
-import com.insight.backend.service.category.FindCategoryService;
-import com.insight.backend.service.question.FindQuestionByCategoryService;
 import com.insight.backend.dto.NewQuestionDTO;
 import com.insight.backend.dto.QuestionResponseDTO;
+import com.insight.backend.model.Category;
+import com.insight.backend.model.Question;
+import com.insight.backend.repository.CategoryRepository;
+import com.insight.backend.service.category.FindCategoryService;
+import com.insight.backend.service.category.SaveCategoryService;
+import com.insight.backend.service.question.CreateQuestionService;
+import com.insight.backend.service.question.FindQuestionByCategoryService;
+import com.insight.backend.service.question.SaveQuestionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CreateQuestionServiceTest {
 
     @Mock
-    private QuestionRepository questionRepository;
-    @Mock
     private FindCategoryService findCategoryService;
+
+    @Mock
+    private SaveQuestionService saveQuestionService;
+
+    @Mock
+    private FindQuestionByCategoryService findQuestionService;
+
+    @Mock
+    private SaveCategoryService saveCategoryService;
+
     @InjectMocks
     private CreateQuestionService createQuestionService;
-    @InjectMocks
-    private SaveQuestionService saveQuestionService;
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.initMocks(this);    
+        MockitoAnnotations.initMocks(this);
     }
 
     /*
@@ -53,7 +58,7 @@ public class CreateQuestionServiceTest {
         NewQuestionDTO newQuestionDTO = new NewQuestionDTO();
         newQuestionDTO.setName("Question Name");
         newQuestionDTO.setCategory(1L);
-        
+
         Category category1 = new Category();
         category1.setId(1L);
         Question question1 = new Question();

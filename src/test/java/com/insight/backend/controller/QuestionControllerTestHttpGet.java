@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.insight.backend.model.Category;
 import com.insight.backend.model.Question;
+import com.insight.backend.service.category.FindCategoryService;
+import com.insight.backend.service.question.CreateQuestionService;
 import com.insight.backend.service.question.DeleteQuestionService;
 import com.insight.backend.service.question.FindQuestionByCategoryService;
 
@@ -41,7 +43,15 @@ public class QuestionControllerTestHttpGet {
 
     @MockBean
     private FindQuestionByCategoryService findQuestionService;
+
+    @MockBean
     private DeleteQuestionService deleteQuestionService;
+
+    @MockBean
+    private FindCategoryService findCategoryService;
+
+    @MockBean
+    private CreateQuestionService createQuestionService;
 
     private Question question1;
     private Question question2;

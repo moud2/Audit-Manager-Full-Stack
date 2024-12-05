@@ -21,6 +21,7 @@ import com.insight.backend.exception.CategoryNotFoundException;
 import com.insight.backend.specifications.QuestionSpecifications;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -68,19 +69,18 @@ public class CreateQuestionService {
         
         
         //List<Category> categoryOpt = this.findCategoryService.findAllCategories().stream().filter(x -> x.getName().equals(newQuestionDTO.getCategory())).collect(Collectors.toList());
-        Optional<Category> categoryOpt = this.findCategoryService.findCategoryById(newQuestionDTO.getCategory());
-        Category finding =  null;
-        if (categoryOpt.isPresent()) {
-            finding = categoryOpt.get();
-            question.setCategory(finding); //optimalerweise gibt es nur ein Ergebniss :) -> liste im nachgang uniquifyen
-        } else throw new CategoryNotFoundException(); 
+        Category category = this.findCategoryService.findCategoryById(newQuestionDTO.getCategory()).orElseThrow(() -> {
+                System.out.println("Category ID not found: " + newQuestionDTO.getCategory());
+                return new CategoryNotFoundException(newQuestionDTO.getCategory());
+        });
+        question.setCategory(category);
 
         //Categories um die neue question aktualisieren
-        Set<Question> tmpQuestionList = finding.getQuestions();
+        Set<Question> tmpQuestionList = category.getQuestions();
         tmpQuestionList.add(question);
-        finding.setQuestions(tmpQuestionList);
+        category.setQuestions(tmpQuestionList);
         saveQuestionService.saveQuestion(question);
-        saveCategoryService.saveCategory(finding);
+        saveCategoryService.saveCategory(category);
 
         QuestionResponseDTO questionResponseDTO = new QuestionResponseDTO();
         questionResponseDTO.setId(question.getId());

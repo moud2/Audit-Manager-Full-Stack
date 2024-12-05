@@ -38,6 +38,7 @@ public class NewQuestionDTO {
     @Size(max = 4096, message = "Name should be up to 4096 characters")
     private String name;
 
+    // TODO: maybe categoryId?
     //@NotBlank(message = "Name cannot be blank")
     private long category;
 
@@ -74,7 +75,7 @@ public class NewQuestionDTO {
      *
      * @param name the name to set
      */
-    public void setCategory(long number) {
+    public void setCategory(long category) {
         this.category = category;
     }
 
