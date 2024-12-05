@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 import com.insight.backend.model.Category;
 import com.insight.backend.model.Question;
@@ -23,6 +24,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -75,31 +77,27 @@ public class QuestionControllerTestHttpGet {
     }
 
     @Test
-    public void testGetQuestionsByCategory() throws Exception {
-        // Mock the service to return the Questions
+    public void testGetQuestionsByCategory() throws Exception  {
         List<Question> questions = Arrays.asList(question1, question2);
         when(findQuestionService.findQuestionsByCategory(category1, "asc", "id")).thenReturn(questions);
-
-        // Perform the GET request and verify the response
-        mockMvc.perform(get("/api/v1/categories/3L/questions"))
+        when(findCategoryService.findCategoryById(3L)).thenReturn(Optional.of(category1));
+        
+        mockMvc.perform(get("/api/v1/categories/3/questions"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].id").value(1L))
                 .andExpect(jsonPath("$[0].name").value("TestQuestion1"))
-                .andExpect(jsonPath("$[1].id").value(2))
+                .andExpect(jsonPath("$[1].id").value(2L))
                 .andExpect(jsonPath("$[1].name").value("TestQuestion2"));
     }
 
     @Test
-    public void testGetEmpties() throws Exception {
-        List<Question> questions = new ArrayList<>();
-        when(findQuestionService.findQuestionsByCategory(category1,  "asc", "id")).thenReturn(questions);
+    public void testCategoryNotFound() throws Exception {
+        when(findCategoryService.findCategoryById(3L)).thenReturn(Optional.empty());
 
-        // Perform the GET request and verify the response
-        mockMvc.perform(get("/api/v1/categories/3L/questions"))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$", hasSize(0)));
+        mockMvc.perform(get("/api/v1/categories/3/questions"))
+                .andExpect(status().isNotFound());
     }
 
 }

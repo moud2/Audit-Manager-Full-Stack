@@ -41,13 +41,13 @@ public class QuestionController {
     }
 
     /**
-     * Handles DELETE requests for updating a rating.
+     * Handles DELETE requests for deleting a Question.
      *
      * @param questionID    the ID of the question to be deleted
      * @return a ResponseEntity containing a String confirming the deletion
      */
     @DeleteMapping("/api/v1/questions/{questionID}")
-    public ResponseEntity<String> deleteQuestion(@PathVariable("questionID") Long questionID) {
+    public ResponseEntity<String> deleteQuestion(@PathVariable("questionID") long questionID) {
         Question question = findQuestionService.findQuestionByID(questionID).orElseThrow(() -> new QuestionNotFoundException(questionID));
 
         deleteQuestionService.deleteQuestion(question);
@@ -55,7 +55,7 @@ public class QuestionController {
     }
 
     /**
-     * Handles DELETE requests for updating a rating.
+     * Handles GET mapping for getting a question by its category.
      *
      * @param categoryID    the ID of the category by which to find the questions
      * @param sortDirection    the direction by which to sort the results
@@ -63,7 +63,7 @@ public class QuestionController {
      * @return a ResponseEntity containing the list of questions of the specified category
      */
     @GetMapping("/api/v1/categories/{categoryID}/questions")
-    public ResponseEntity<List<Question>> getQuestionsByCategory(@PathVariable("categoryID") Long categoryID, @RequestParam(required = false, defaultValue = "asc") String sortDirection, @RequestParam(required = false, defaultValue = "id") String sortBy){
+    public ResponseEntity<List<Question>> getQuestionsByCategory(@PathVariable("categoryID") long categoryID, @RequestParam(name = "sortDirection", required = false, defaultValue = "asc") String sortDirection, @RequestParam(name = "sortBy", required = false, defaultValue = "id") String sortBy){
         Category category = findCategoryService.findCategoryById(categoryID).orElseThrow(() -> new CategoryNotFoundException(categoryID));
         
         List<Question> questions = findQuestionService.findQuestionsByCategory(category, sortDirection, sortBy);

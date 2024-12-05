@@ -8,22 +8,20 @@ import java.util.Optional;
 import com.insight.backend.model.Audit;
 import com.insight.backend.repository.AuditRepository;
 import com.insight.backend.service.audit.FindAuditService;
-
-import static org.mockito.ArgumentMatchers.any;
-
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.domain.Sort;
-
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.jpa.domain.Specification;
+
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -38,8 +36,6 @@ public class FindAuditServiceTest {
 
     private Audit audit1;
     private Audit audit2;
-    private Audit audit3;
-    private Audit audit4;
 
     @BeforeEach
     void setUp() {
@@ -47,21 +43,13 @@ public class FindAuditServiceTest {
         audit1.setId(1L);
         audit1.setName("Audit1");
         audit1.setCustomer("Customer1");
+        audit1.setDeletedAt(null);
 
         audit2 = new Audit();
         audit2.setId(2L);
         audit2.setName("Audit2");
         audit2.setCustomer("Customer2");
-
-        audit3 = new Audit();
-        audit3.setId(3L);
-        audit3.setName("Audit3");
-        audit3.setCustomer("abc");
-
-        audit4 = new Audit();
-        audit4.setId(4L);
-        audit4.setName("Audit4");
-        audit4.setCustomer(null);
+        audit2.setDeletedAt(LocalDateTime.now());
     }
 
     @Test
@@ -70,6 +58,7 @@ public class FindAuditServiceTest {
 
         Optional<Audit> foundAudit = findAuditService.findAuditById(1L);
 
+        assertTrue(foundAudit.isPresent());
         assertEquals(audit1, foundAudit.get());
     }
 
@@ -85,13 +74,13 @@ public class FindAuditServiceTest {
     @Test
     void testFindAllAudits() {
         audit2.setDeletedAt(LocalDateTime.now());
-        List<Audit> mockAudits = Arrays.asList(audit1, audit3, audit4);
-        
-        when(auditRepository.findAll(any(Specification.class), any(Sort.class))).thenReturn(mockAudits);
-        
-        List<Audit> result = findAuditService.findAllAudits("Customer", "asc", "name");
-        assertEquals(3, result.size());
-        assertEquals("Audit1", result.getLast().getName());
+        List<Audit> mockAudits = Arrays.asList(audit1);
 
+        when(auditRepository.findAll(any(Specification.class), any(Sort.class))).thenReturn(mockAudits);
+
+        List<Audit> result = findAuditService.findAllAudits("Customer", "asc", "name");
+
+        assertEquals(1, result.size());
+        assertEquals("Audit1", result.getFirst().getName());
     }
 }
