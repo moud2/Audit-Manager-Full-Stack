@@ -6,7 +6,9 @@ import java.util.Collections;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.insight.backend.dto.QuestionResponseDTO;
 import com.insight.backend.dto.NewQuestionDTO;
+import com.insight.backend.service.category.FindCategoryService;
 import com.insight.backend.service.question.CreateQuestionService;
+import com.insight.backend.service.question.DeleteQuestionService;
 import com.insight.backend.service.question.FindQuestionByCategoryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,6 +51,12 @@ public class QuestionControllerTestHttpPost {
      */
     @MockBean
     private FindQuestionByCategoryService findQuestionService;
+
+    @MockBean
+    private DeleteQuestionService deleteQuestionService;
+
+    @MockBean
+    private FindCategoryService findCategoryService;
 
     /**
      * MockBean for CreateAuditService
