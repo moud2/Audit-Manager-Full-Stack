@@ -1,11 +1,13 @@
 package com.insight.backend.service;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.Set;
 
 import com.insight.backend.dto.AuditResponseDTO;
 import com.insight.backend.dto.NewAuditDTO;
+import com.insight.backend.exception.NonExistentAuditCategoryException;
 import com.insight.backend.model.Audit;
 import com.insight.backend.model.Category;
 import com.insight.backend.model.Question;
@@ -13,11 +15,11 @@ import com.insight.backend.service.audit.CreateAuditService;
 import com.insight.backend.service.audit.SaveAuditService;
 import com.insight.backend.service.category.FindCategoryService;
 import com.insight.backend.service.rating.SaveRatingService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -27,6 +29,7 @@ import static org.mockito.Mockito.*;
 /**
  * Test class for CreateAuditService.
  */
+@ExtendWith(MockitoExtension.class)
 class CreateAuditServiceTest {
 
     @Mock
@@ -40,14 +43,6 @@ class CreateAuditServiceTest {
 
     @InjectMocks
     private CreateAuditService createAuditService;
-
-    /**
-     * Sets up the test environment before each test.
-     */
-    @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     /**
      * Tests the createAudit method for a successful audit creation.
@@ -73,9 +68,11 @@ class CreateAuditServiceTest {
 
         when(findCategoryService.findCategoryById(1L)).thenReturn(Optional.of(category1));
         when(findCategoryService.findCategoryById(2L)).thenReturn(Optional.of(category2));
+        LocalDateTime fixedTime = LocalDateTime.of(2024, 11, 28, 18, 14, 0);
         when(saveAuditService.saveAudit(any(Audit.class))).thenAnswer(invocation -> {
             Audit audit = invocation.getArgument(0);
             audit.setId(1L);
+            audit.setCreatedAt(fixedTime);
             return audit;
         });
 
@@ -85,13 +82,16 @@ class CreateAuditServiceTest {
         assertEquals(1L, response.getId());
         assertEquals("Audit Name", response.getName());
 
+        assertNotNull(response.getCreatedAt());
+        assertEquals(fixedTime, response.getCreatedAt());
+
         verify(saveRatingService, times(1)).saveAllRatings(anyList());
         verify(saveAuditService, times(1)).saveAudit(any(Audit.class));
     }
 
     /**
      * Tests the createAudit method when an invalid category ID is provided.
-     * Verifies that the method returns null and no audit or ratings are saved.
+     * Verifies that the method throws NonExistentAuditCategoryException.
      */
     @Test
     public void testCreateAudit_invalidCategory() {
@@ -101,10 +101,16 @@ class CreateAuditServiceTest {
 
         when(findCategoryService.findCategoryById(1L)).thenReturn(Optional.empty());
 
-        AuditResponseDTO response = createAuditService.createAudit(newAuditDTO);
+        // Check that NonExistentAuditCategoryException is thrown
+        NonExistentAuditCategoryException exception = assertThrows(NonExistentAuditCategoryException.class, () -> createAuditService.createAudit(newAuditDTO));
+        assertEquals("Category with id 1 not found", exception.getMessage());
 
-        assertNull(response);
-        verify(saveRatingService, times(0)).saveAllRatings(anyList());
-        verify(saveAuditService, times(0)).saveAudit(any(Audit.class));
+        // Ensure that save methods are not called
+        verify(saveRatingService, never()).saveAllRatings(anyList());
+        verify(saveAuditService, never()).saveAudit(any(Audit.class));
+
+        // Verify the findCategoryService is called correctly
+        verify(findCategoryService, times(1)).findCategoryById(1L);
+        verify(findCategoryService, never()).findCategoryById(2L);
     }
 }

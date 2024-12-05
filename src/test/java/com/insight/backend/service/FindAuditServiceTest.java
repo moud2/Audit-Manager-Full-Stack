@@ -36,10 +36,12 @@ public class FindAuditServiceTest {
         audit1 = new Audit();
         audit1.setId(1L);
         audit1.setName("Audit1");
+        audit1.setCustomer("Customer1");
 
         audit2 = new Audit();
         audit2.setId(2L);
         audit2.setName("Audit2");
+        audit1.setCustomer("Customer2");
     }
 
     @Test
