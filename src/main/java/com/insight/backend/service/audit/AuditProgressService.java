@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * Service responsible for audit-specific operations.
- * Calculates the progress and statistics for an audit, based on the ratings of questions within categories.
+ * Calculates progress and statistics for an audit based on the ratings of questions within categories.
  */
 @Service
 public class AuditProgressService {
@@ -33,11 +33,11 @@ public class AuditProgressService {
     }
 
     /**
-     * Calculates the progress of an audit, including overall and per-category progress.
-     * Excludes questions marked as "n.A." for progress calculations.
+     * Calculates the progress of an audit, including both overall and per-category progress.
+     * Includes progress breakdown for answered and total questions.
      *
      * @param auditId unique identifier for the audit.
-     * @return an AuditProgressDTO containing overall progress, category progress, and other statistics.
+     * @return an AuditProgressDTO containing progress details.
      */
     public AuditProgressDTO calculateAuditProgress(Long auditId) {
         List<Rating> ratings = ratingRepository.findByAuditId(auditId);
@@ -49,15 +49,16 @@ public class AuditProgressService {
 
         int totalPoints = 0;
         int answeredQuestions = 0;
+        int totalQuestions = 0;
 
-        // Process ratings to calculate progress
+        // Iterate through ratings to calculate category-specific metrics
         for (Rating rating : ratings) {
             Long categoryId = rating.getQuestion().getCategory().getId();
             String categoryName = rating.getQuestion().getCategory().getName();
 
             categoryNames.putIfAbsent(categoryId, categoryName);
-
             totalQuestionsPerCategory.merge(categoryId, 1, Integer::sum);
+            totalQuestions++;
 
             if (!rating.getNa()) {
                 int points = rating.getPoints() != null ? rating.getPoints() : 0;
@@ -68,33 +69,43 @@ public class AuditProgressService {
             }
         }
 
-        // Create category progress details
+        // Build category progress DTOs
         List<CategoryProgressDTO> categoryProgressList = new ArrayList<>();
         for (Map.Entry<Long, String> entry : categoryNames.entrySet()) {
             Long categoryId = entry.getKey();
             String categoryName = entry.getValue();
 
-            int totalQuestions = totalQuestionsPerCategory.getOrDefault(categoryId, 0);
-            int answeredQuestionsInCategory = answeredQuestionsPerCategory.getOrDefault(categoryId, 0);
-            int pointsInCategory = pointsPerCategory.getOrDefault(categoryId, 0);
+            int categoryTotalQuestions = totalQuestionsPerCategory.getOrDefault(categoryId, 0);
+            int categoryAnsweredQuestions = answeredQuestionsPerCategory.getOrDefault(categoryId, 0);
+            int categoryPoints = pointsPerCategory.getOrDefault(categoryId, 0);
 
-            double progress = answeredQuestionsInCategory > 0
-                    ? (double) pointsInCategory / (5 * answeredQuestionsInCategory) * 100
+            double currentCategoryProgress = categoryAnsweredQuestions > 0
+                    ? (double) categoryPoints / (5 * categoryAnsweredQuestions) * 100
+                    : 0;
+
+            double overallCategoryProgress = categoryTotalQuestions > 0
+                    ? (double) categoryPoints / (5 * categoryTotalQuestions) * 100
                     : 0;
 
             categoryProgressList.add(new CategoryProgressDTO(
                     categoryId,
                     categoryName,
-                    answeredQuestionsInCategory,
-                    totalQuestions,
-                    progress
+                    categoryAnsweredQuestions,
+                    categoryTotalQuestions,
+                    currentCategoryProgress,
+                    overallCategoryProgress
             ));
         }
 
-        double overallProgress = answeredQuestions > 0
+        // Calculate overall progress metrics
+        double currentAuditProgress = answeredQuestions > 0
                 ? (double) totalPoints / (5 * answeredQuestions) * 100
                 : 0;
 
-        return new AuditProgressDTO(auditId, overallProgress, categoryProgressList);
+        double overallAuditProgress = totalQuestions > 0
+                ? (double) totalPoints / (5 * totalQuestions) * 100
+                : 0;
+
+        return new AuditProgressDTO(auditId, currentAuditProgress, overallAuditProgress, categoryProgressList);
     }
 }
