@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-scroll";
-import CategoryProgress from "./CategoryProgress.jsx";
+import {CategoryProgress} from "./CategoryProgress.jsx";
 
 /**
  * AuditProgress Component
@@ -16,7 +16,7 @@ import CategoryProgress from "./CategoryProgress.jsx";
  *   - `totalQuestions` (number): The total number of questions in the category.
  * @returns {JSX.Element} - A rendered navigation menu for audit progress.
  */
-export default function AuditProgress({ progress }) {
+export function AuditProgress({ progress }) {
 
     return (
         <div>

@@ -9,19 +9,21 @@
  * @param {number} totalQuestions - The total number of questions in this category.
  * @returns {JSX.Element} - A rendered category progress indicator.
  */
-function CategoryProgress({ name, answeredQuestions, totalQuestions}) {
+export function CategoryProgress({ name, answeredQuestions, totalQuestions}) {
+    const percentage = (answeredQuestions/totalQuestions)*100;
+
     return (
         <div className="mb-1">
             {/* Top row with the category name and progress text */}
             <div className="flex justify-between items-center">
 
                 {/* Display the category name */}
-                <div className="text-gray-900 text-base font-medium overflow-hidden text-ellipsis whitespace-nowrap">
+                <div className="text-gray-900 text-base font-medium overflow-hidden text-ellipsis whitespace-nowrap" data-cy="category-name">
                     {name}
                 </div>
 
                 {/* Display answered questions out of total questions */}
-                <div className="text-sm text-gray-600">
+                <div className="text-sm text-gray-600" data-cy="answered-out-of-total">
                     {`${answeredQuestions}/${totalQuestions}`}
                 </div>
             </div>
@@ -30,11 +32,10 @@ function CategoryProgress({ name, answeredQuestions, totalQuestions}) {
             <div className="mt-2 h-2 w-full bg-gray-200 rounded">
                 <div
                     className="h-2 bg-red-600 rounded"
-                    style={{ width: `${(answeredQuestions/totalQuestions)*100}%` }}
+                    style={{ width: `${percentage}%` }}
+                    data-cy="category-progress-bar"
                 />
             </div>
         </div>
     );
 }
-
-export default CategoryProgress;
