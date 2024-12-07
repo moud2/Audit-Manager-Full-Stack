@@ -153,6 +153,7 @@ docker-release-job:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""
+    PIPELINE_TAG: "${CI_PIPELINE_ID}"
   dependencies:
     - frontend-build-job
   rules:
@@ -163,8 +164,12 @@ docker-release-job:
     - echo -n $DOCKER_LOGIN | docker login --username eschybol1 --password-stdin
     - echo -n "${CI_REGISTRY_PASSWORD}" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin # Authenticate against the GitLab container registry
     - cd frontend
+
     - docker build -t gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend:latest .
+    - docker tag gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend:latest gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend:latest-$PIPELINE_TAG
     - docker push gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend:latest
+    - docker push gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend:latest-$PIPELINE_TAG
+
     - echo "[*] Image Build & Deployment was executed."
 
 
@@ -178,6 +183,7 @@ docker-release-job-fullstack:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""
+    PIPELINE_TAG: "${CI_PIPELINE_ID}"
   dependencies:
     - frontend-build-job-fullstack
   rules:
@@ -189,15 +195,19 @@ docker-release-job-fullstack:
     - echo -n $DOCKER_LOGIN | docker login --username eschybol1 --password-stdin
     - echo -n "${CI_DEPLOY_PASSWORD}" | docker login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin # Authenticate against the GitLab container registry
     - cd frontend
+
     - docker build -t gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend:fullstack .
+    - docker tag gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend:fullstack gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend:fullstack-$PIPELINE_TAG
     - docker push gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend:fullstack
+    - docker push gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/frontend:fullstack-$PIPELINE_TAG
+
     - echo "[*] Image Build & Deployment was executed."
 
 
 #DEPLOYMENT STAGE
 publish-job:
   stage: deploy
-  environment: 
+  environment:
     name: production
   tags:
     - prod
