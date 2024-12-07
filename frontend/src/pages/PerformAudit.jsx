@@ -248,7 +248,7 @@ export function PerformAudit() {
 
     return (
         <LayoutDefault
-            progress={progress}
+            progress={progress.categoryProgress}
         >
             <Title>Audit durchführen</Title>
             <CategoryList

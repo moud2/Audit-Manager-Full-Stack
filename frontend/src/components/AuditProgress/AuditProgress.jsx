@@ -2,20 +2,26 @@ import React from "react";
 import { Link } from "react-scroll";
 import CategoryProgress from "./CategoryProgress.jsx";
 
+/**
+ * AuditProgress Component
+ *
+ * Displays the progress of the current audit categories as a navigation menu.
+ * Each category is rendered as a clickable link, allowing users to
+ * navigate (scroll) to the respective category section smoothly.
+ *
+ * @param {Array} progress - Array of category progress data. Each element contains:
+ *   - `categoryId` (number): The unique ID of the category.
+ *   - `categoryName` (string): The name of the category.
+ *   - `answeredQuestions` (number): The number of answered questions in the category.
+ *   - `totalQuestions` (number): The total number of questions in the category.
+ * @returns {JSX.Element} - A rendered navigation menu for audit progress.
+ */
 export default function AuditProgress({ progress }) {
-    // const dummyData = [
-    //     { name: "Netzwerk", id: 1,  progress: 20 },
-    //     { name: "Server Administration", id: 3, progress: 75 },
-    //     { name: "Datenbanken", id: 5, progress: 50 },
-    //     { name: "Server Administration", progress: 75 },
-    //     { name: "Datenbanken", progress: 50 },
-    // ];
-
 
     return (
         <div>
             <nav>
-                {progress.categoryProgress.map((category) => (
+                {progress.map((category) => (
                     <Link key={category.categoryId} to={`category-${category.categoryId}`} smooth={true}>
                         <div key={category.categoryId}
                              className="block p-1 mt-2.5 text-gray-700 hover:text-black hover:scale-105 transition-transform transform border border-gray-400 rounded text-center">

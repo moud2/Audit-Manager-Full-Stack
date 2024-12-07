@@ -1,5 +1,6 @@
 import {Link, useLocation} from "react-router-dom";
 import AuditProgress from "../AuditProgress/AuditProgress.jsx";
+import categoryProgress from "../AuditProgress/CategoryProgress.jsx";
 
 export function Sidebar({ progress }){
     const location = useLocation();
