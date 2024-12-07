@@ -22,9 +22,10 @@ export function AuditProgress({ progress }) {
         <div>
             <nav>
                 {progress.map((category) => (
-                    <Link key={category.categoryId} to={`category-${category.categoryId}`} smooth={true}>
+                    <Link key={category.categoryId} to={"category-3"} smooth={true} containerId="scroll-container" onClick={() => console.log(`Click to jump to: category-${category.categoryId}`)}>
                         <div key={category.categoryId}
                              className="block p-1 mt-2.5 text-gray-700 hover:text-black hover:scale-105 transition-transform transform border border-gray-400 rounded text-center">
+                            {category.categoryId}
                             <CategoryProgress
                                 name={category.categoryName}
                                 answeredQuestions={category.answeredQuestions}

@@ -42,11 +42,11 @@ export function CategoryListItem({ category, options, onChange }) {
         onChange(newCategory, updatedQuestion);
     }
 
-    console.log(`category-${category.id}`)
+    console.log(`Rendered: category-${category.id}`)
 
     return (
         <div id={`category-${category.id}`} data-cy={`category-${category.id}`} className="category-list-item">
-            <Title data-cy={`category-title-${category.id}`}>{category.name}</Title>
+            <Title data-cy={`category-title-${category.id}`}>{category.name} {category.id}</Title>
             <QuestionList
                 questions={category.questions}
                 options={options}

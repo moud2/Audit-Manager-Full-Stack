@@ -51,6 +51,8 @@ export function PerformAudit() {
         ]
     };
 
+    console.log(progress)
+
     /**
      * Transforms an array of questions into a structured array of categories,
      * where each category contains its associated questions.

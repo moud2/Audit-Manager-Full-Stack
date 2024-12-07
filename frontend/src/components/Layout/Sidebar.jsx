@@ -23,7 +23,7 @@ export function Sidebar({ progress }){
             <hr className="border-t border-gray-300 my-4"/>
 
 
-            {location.pathname.startsWith("/perform-audit") && (
+            {location.pathname.startsWith("/perform-Audit") && (
                 <AuditProgress
                     progress={progress}
                 />
