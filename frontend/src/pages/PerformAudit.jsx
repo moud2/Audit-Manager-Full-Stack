@@ -1,12 +1,9 @@
 import {LayoutDefault} from "../layouts/LayoutDefault.jsx";
 import {useEffect, useState} from "react";
-import {QuestionList} from "../components/QuestionList/QuestionList.jsx";
 import {CategoryList} from "../components/QuestionList/CategoryList.jsx";
 import Title from "../components/Textareas/Title.jsx";
 import api from "../api.js";
 import {useParams} from "react-router-dom";
-import {CategoryListItem} from "../components/QuestionList/CategoryListItem.jsx";
-import { useAuditData } from "../context/AuditContext.jsx";
 
 
 /**
@@ -26,7 +23,7 @@ export function PerformAudit() {
     const { auditId } = useParams();
     const [questions, setQuestions] = useState([]);
     const [sortedQuestions, setSortedQuestions] = useState([]);
-    const { setAuditData } = useAuditData();
+    // const [progress, setProgress] = useState ([]);
 
     const labels = [0, 1, 2, 3, 4, 5, "N/A"];
     // const backendData = [
@@ -71,6 +68,28 @@ export function PerformAudit() {
     //         question: "Network id 11 Frage 3?"
     //     }
     // ];
+
+    const progress = {
+        auditId: 2556,
+        categoryProgress: [
+            {
+                categoryId: 3,
+                categoryName: "Netzwerk",
+                answeredQuestions: 1,
+                totalQuestions: 2,
+            },{
+                categoryId: 5,
+                categoryName: "VPN",
+                answeredQuestions: 1,
+                totalQuestions: 3,
+            },{
+                categoryId: 8,
+                categoryName: "Secure Browsing",
+                answeredQuestions: 2,
+                totalQuestions: 5,
+            }
+        ]
+    };
 
     /**
      * Transforms an array of questions into a structured array of categories,
@@ -163,14 +182,28 @@ export function PerformAudit() {
         api.get(`/v1/audits/${auditId}/ratings`)
             .then(response => {
                 setQuestions(response.data);
-                console.log(response.data);
                 setSortedQuestions(transformData(response.data));
-                setAuditData(transformData(response.data));
+                console.log(transformData(response.data));
             })
             .catch(err => {
                 console.error('Error fetching data:', err);
             });
-    }, [auditId, setAuditData]);
+    }, [auditId]);
+
+    /**
+     * Fetches audit progress from the backend for the current audit on component mount
+     * or when the audit ID changes.
+     * It updates the `progress` state with the retrieved data.
+     */
+    // useEffect(() => {
+    //     api.get(`/v1/audits/${auditId}/progress`)
+    //         .then(response => {
+    //             console.log(response.data);
+    //         })
+    //         .catch(err => {
+    //             console.error('Error fetching data:', err);
+    //         });
+    // }, [auditId]);
 
     /**
      * Handles the update of a question in the list. This function is triggered when a question's
@@ -214,7 +247,9 @@ export function PerformAudit() {
     };
 
     return (
-        <LayoutDefault>
+        <LayoutDefault
+            progress={progress}
+        >
             <Title>Audit durchführen</Title>
             <CategoryList
                 categories={sortedQuestions}

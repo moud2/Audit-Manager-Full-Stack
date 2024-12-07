@@ -1,8 +1,7 @@
 import {Link, useLocation} from "react-router-dom";
 import AuditProgress from "../AuditProgress/AuditProgress.jsx";
-import { useAuditData } from "../../context/AuditContext.jsx";
 
-export function Sidebar(){
+export function Sidebar({ progress }){
     const location = useLocation();
 
     return (
@@ -25,7 +24,9 @@ export function Sidebar(){
 
 
             {location.pathname.startsWith("/perform-audit") && (
-                <AuditProgress />
+                <AuditProgress
+                    progress={progress}
+                />
             )}
         </nav>
     )
