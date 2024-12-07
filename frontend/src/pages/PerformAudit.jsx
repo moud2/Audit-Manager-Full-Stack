@@ -1,10 +1,13 @@
-import {LayoutDefault} from "../layouts/LayoutDefault.jsx";
-import {useEffect, useState} from "react";
-import {CategoryList} from "../components/QuestionList/CategoryList.jsx";
+import { LayoutDefault } from "../layouts/LayoutDefault.jsx";
+import { useEffect, useState } from "react";
+import { CategoryList } from "../components/QuestionList/CategoryList.jsx";
 import Title from "../components/Textareas/Title.jsx";
 import api from "../api.js";
-import {useNavigate, useParams} from "react-router-dom";
-import {Button} from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
+import { Button } from "@mui/material";
+import { handleApiError } from "../utils/handleApiError";
+import { LoadingScreen } from "../components/LoadingState";
+import { AlertWithMessage } from "../components/ErrorHandling";
 
 /**
  * PerformAudit Component
@@ -24,13 +27,12 @@ export function PerformAudit() {
     const [questions, setQuestions] = useState([]);
     const [sortedQuestions, setSortedQuestions] = useState([]);
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false); // Added loading state
-    const [error, setError] = useState(null); // Added error state
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     const labels = [0, 1, 2, 3, 4, 5, "N/A"];
 
-
-    /**
+        /**
      * Transforms an array of questions into a structured array of categories,
      * where each category contains its associated questions.
      *
@@ -101,8 +103,8 @@ export function PerformAudit() {
                             points: item.points,
                             nA: item.nA,
                             comment: item.comment,
-                        }
-                    ]
+                        },
+                    ],
                 });
             }
 
@@ -110,42 +112,33 @@ export function PerformAudit() {
         }, []);
 
         return transformedData;
-    }
-
-    /**
+    };
+        /**
      * Fetches questions from the backend for the current audit on component mount
      * or when the audit ID changes.
      * It updates the `questions` state with the retrieved data.
      */    
-    useEffect(() => {
-        setLoading(true); // Set loading to true when fetching starts
+        useEffect(() => {
+        setLoading(true);
         api.get(`/v1/audits/${auditId}/ratings`)
-            .then(response => {
+            .then((response) => {
                 setQuestions(response.data);
                 setSortedQuestions(transformData(response.data));
-                setError(null); // Clear previous errors
+                setError(null);
             })
-            .catch(err => {
-                if (err.response) {
-                    console.error(`Server error: ${err.response.status} - ${err.response.data?.message || "Unknown error"}`);
-                    setError(`Error loading data: ${err.response.data?.message || "An unknown error occurred."}`);
-                } else if (err.request) {
-                    console.error("Network error: No response received from the server.");
-                    setError("Network error: Please check your connection.");
-                } else {
-                    console.error(`Error: ${err.message}`);
-                    setError(`An error occurred: ${err.message}`);
-                }
+            .catch((err) => {
+                const errorMessage = handleApiError(err); // Use handleApiError
+                setError(errorMessage);
             })
-            .finally(() => setLoading(false)); // Set loading to false when fetching ends
+            .finally(() => setLoading(false));
     }, [auditId]);
 
     if (loading) {
-        return <p>Loading...</p>; // Display loading message while data is being fetched
+        return <LoadingScreen progress={50} message="Audit is loading..." />;
     }
 
     if (error) {
-        return <p className="text-red-500">{error}</p>; // Display error message if fetch fails
+        return <AlertWithMessage severity="error" title="Fehler" message={error} />;
     }
 
     /**
@@ -182,16 +175,8 @@ export function PerformAudit() {
         try {
             await api.patch(`/v1/ratings/${questionID}`, patchData);
         } catch (err) {
-            if (err.response) {
-                console.error(`Serverfehler: ${err.response.status} - ${err.response.data?.message || "Unbekannter Fehler"}`);
-                alert(`Fehler beim Aktualisieren der Frage: ${err.response.data?.message || "Ein Fehler ist aufgetreten."}`);
-            } else if (err.request) {
-                console.error("Netzwerkfehler: Keine Antwort vom Server.");
-                alert("Netzwerkfehler: Bitte überprüfen Sie Ihre Verbindung.");
-            } else {
-                console.error(`Fehler: ${err.message}`);
-                alert(`Ein Fehler ist aufgetreten: ${err.message}`);
-            }
+            const errorMessage = handleApiError(err); // Use handleApiError
+            alert(errorMessage);
         }
     };
 
@@ -211,7 +196,6 @@ export function PerformAudit() {
                     Bewertung anzeigen
                 </Button>
             </div>
-
         </LayoutDefault>
-    )
+    );
 }

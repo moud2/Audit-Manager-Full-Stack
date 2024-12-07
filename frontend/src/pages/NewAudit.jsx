@@ -5,6 +5,9 @@ import { Table } from "../components/Table/Table.jsx";
 import { useNavigate } from "react-router-dom";
 import { TextField } from "@mui/material";
 import Title from "../components/Textareas/Title.jsx";
+import { handleApiError } from "../utils/handleApiError";
+import { LoadingScreen } from "../components/LoadingState";
+import { AlertWithMessage } from "../components/ErrorHandling";
 
 export function NewAudit() {
   const [cards, setCards] = useState([]);
@@ -16,7 +19,6 @@ export function NewAudit() {
   const navigate = useNavigate();
   
   const handleCreateAuditClick = () => {
-    
     if (!name || !customerName) {
       alert("Bitte geben Sie sowohl einen Audit-Namen als auch einen Firmennamen ein.");
       return;
@@ -34,15 +36,11 @@ export function NewAudit() {
         setError(null); // Clear any previous errors
       })
       .catch((err) => {
-        console.error("Error creating audit:", err);
-        setError(
-          err.response?.data?.message || "Fehler beim Erstellen des Audits."
-        );
-        alert("Fehler beim Erstellen des Audits.");
+        const errorMessage = handleApiError(err); // Use handleApiError
+        setError(errorMessage);
       })
       .finally(() => setLoading(false)); // End loading
   };
-
 
   const handleNameChange = (e) => {
     setName(e.target.value);
@@ -64,23 +62,20 @@ export function NewAudit() {
         setError(null); // Clear any previous errors
       })
       .catch((err) => {
-        console.error("Error fetching categories:", err);
-        setError(
-          err.response?.data?.message || "Fehler beim Laden der Kategorien."
-        );
+        const errorMessage = handleApiError(err); // Use handleApiError
+        setError(errorMessage);
       })
       .finally(() => setLoading(false)); // End loading
   }, []);
 
   if (loading) {
-    return <p>Loading...</p>; // Display loading message while data is being fetched
+    return <LoadingScreen progress={50} message="Daten werden geladen..." />;
   }
 
   if (error) {
-    return <p className="text-red-500">Fehler: {error}</p>; // Display error message if fetch fails
+    return <AlertWithMessage severity="error" title="Fehler" message={error} />;
   }
 
-  
   return (
     <LayoutDefault>
       <div>
