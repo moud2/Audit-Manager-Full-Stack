@@ -10,7 +10,6 @@ public class CategoryProgressDTO {
     private int answeredQuestions;
     private int totalQuestions;
     private double currentCategoryProgress;
-    private double overallCategoryProgress;
 
     /**
      * Constructor to initialize all fields of the CategoryProgressDTO.
