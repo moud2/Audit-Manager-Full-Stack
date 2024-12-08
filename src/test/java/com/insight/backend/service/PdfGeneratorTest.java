@@ -1,6 +1,7 @@
 package com.insight.backend.service;
 
 import com.insight.backend.model.Audit;
+import com.insight.backend.model.Question;
 import com.insight.backend.model.Rating;
 import com.insight.backend.repository.AuditRepository;
 import com.insight.backend.service.rating.PdfGenerator;
@@ -38,13 +39,18 @@ class PdfGeneratorTest {
         mockAudit.setId(1L);
         mockAudit.setName("Sample Audit");
 
+        //Mock a Question
+        Question mockQuestion = new Question();
+        mockQuestion.setId(1L);
+        mockQuestion.setName("Sample Question");
+
         // Mock a Rating
         Rating mockRating = new Rating();
         mockRating.setId(1L);
         mockRating.setPoints(5);
         mockRating.setComment("Great performance");
         mockRating.setNa(false);
-
+        mockRating.setQuestion(mockQuestion);
         // Link Rating to Audit
         Set<Rating> ratings = new HashSet<>();
         ratings.add(mockRating);
