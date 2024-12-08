@@ -1,5 +1,6 @@
 import {QuestionList} from "./QuestionList.jsx";
 import Title from "../Textareas/Title.jsx";
+import CategoryTitle from "../Textareas/CategoryTitle.jsx";
 
 /**
  * CategoryListItem Component
@@ -43,10 +44,9 @@ export function CategoryListItem({ category, options, onChange }) {
     }
 
     return (
-        <div key={category.id} data-cy={`category-${category.id}`} className="category-list-item">
-            {/*<Title data-cy={`category-title-${category.id}`}>{category.name}</Title>*/}
-            <h2 className="px-10 py-1 text-xl">{category.name}</h2>
-            <hr className="my-1 mx-10 border-red-600"/>
+        <div key={category.id} data-cy={`category-${category.id}`} className="category-list-item mt-5">
+            <CategoryTitle data-cy={`category-title-${category.id}`}>{category.name}</CategoryTitle>
+            <hr className="my-1 mx-10 border-red-600 border-t-2"/>
             <QuestionList
                 questions={category.questions}
                 options={options}
