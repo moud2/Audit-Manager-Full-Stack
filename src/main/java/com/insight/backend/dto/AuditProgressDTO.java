@@ -9,7 +9,6 @@ public class AuditProgressDTO {
 
     private Long auditId;
     private double currentAuditProgress;
-    private double overallAuditProgress;
     private List<CategoryProgressDTO> categoryProgress;
 
     /**
@@ -20,10 +19,9 @@ public class AuditProgressDTO {
      * @param overallAuditProgress progress percentage for all questions.
      * @param categoryProgress     progress details for each category.
      */
-    public AuditProgressDTO(Long auditId, double currentAuditProgress, double overallAuditProgress, List<CategoryProgressDTO> categoryProgress) {
+    public AuditProgressDTO(Long auditId, double currentAuditProgress, List<CategoryProgressDTO> categoryProgress) {
         this.auditId = auditId;
         this.currentAuditProgress = currentAuditProgress;
-        this.overallAuditProgress = overallAuditProgress;
         this.categoryProgress = categoryProgress;
     }
 
@@ -63,23 +61,6 @@ public class AuditProgressDTO {
         this.currentAuditProgress = currentAuditProgress;
     }
 
-    /**
-     * Gets the progress percentage for all questions.
-     *
-     * @return the overall audit progress percentage.
-     */
-    public double getOverallAuditProgress() {
-        return overallAuditProgress;
-    }
-
-    /**
-     * Sets the progress percentage for all questions.
-     *
-     * @param overallAuditProgress the overall audit progress percentage to set.
-     */
-    public void setOverallAuditProgress(double overallAuditProgress) {
-        this.overallAuditProgress = overallAuditProgress;
-    }
 
     /**
      * Gets the progress details for each category.

@@ -83,9 +83,6 @@ public class AuditProgressService {
                     ? (double) categoryPoints / (5 * categoryAnsweredQuestions) * 100
                     : 0;
 
-            double overallCategoryProgress = categoryTotalQuestions > 0
-                    ? (double) categoryPoints / (5 * categoryTotalQuestions) * 100
-                    : 0;
 
             categoryProgressList.add(new CategoryProgressDTO(
                     categoryId,
@@ -93,19 +90,14 @@ public class AuditProgressService {
                     categoryAnsweredQuestions,
                     categoryTotalQuestions,
                     currentCategoryProgress,
-                    overallCategoryProgress
             ));
         }
 
-        // Calculate overall progress metrics
+        // Calculate progress metrics
         double currentAuditProgress = answeredQuestions > 0
                 ? (double) totalPoints / (5 * answeredQuestions) * 100
                 : 0;
 
-        double overallAuditProgress = totalQuestions > 0
-                ? (double) totalPoints / (5 * totalQuestions) * 100
-                : 0;
-
-        return new AuditProgressDTO(auditId, currentAuditProgress, overallAuditProgress, categoryProgressList);
+        return new AuditProgressDTO(auditId, currentAuditProgress, categoryProgressList);
     }
 }

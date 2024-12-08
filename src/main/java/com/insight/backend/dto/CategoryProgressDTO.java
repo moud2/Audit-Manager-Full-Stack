@@ -22,13 +22,12 @@ public class CategoryProgressDTO {
      * @param currentCategoryProgress progress percentage for answered questions.
      * @param overallCategoryProgress progress percentage for all questions.
      */
-    public CategoryProgressDTO(Long categoryId, String categoryName, int answeredQuestions, int totalQuestions, double currentCategoryProgress, double overallCategoryProgress) {
+    public CategoryProgressDTO(Long categoryId, String categoryName, int answeredQuestions, int totalQuestions, double currentCategoryProgress) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
         this.answeredQuestions = answeredQuestions;
         this.totalQuestions = totalQuestions;
         this.currentCategoryProgress = currentCategoryProgress;
-        this.overallCategoryProgress = overallCategoryProgress;
     }
 
     /**
@@ -121,21 +120,4 @@ public class CategoryProgressDTO {
         this.currentCategoryProgress = currentCategoryProgress;
     }
 
-    /**
-     * Gets the progress percentage for all questions.
-     *
-     * @return the overall category progress percentage.
-     */
-    public double getOverallCategoryProgress() {
-        return overallCategoryProgress;
-    }
-
-    /**
-     * Sets the progress percentage for all questions.
-     *
-     * @param overallCategoryProgress the overall category progress percentage to set.
-     */
-    public void setOverallCategoryProgress(double overallCategoryProgress) {
-        this.overallCategoryProgress = overallCategoryProgress;
-    }
 }
