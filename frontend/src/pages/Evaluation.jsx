@@ -38,7 +38,6 @@ export function Evaluation() {
                 const { currentAuditProgress, overallAuditProgress, categoryProgress } = response.data;
 
                 setCurrentAuditProgress(currentAuditProgress);
-                setOverallAuditProgress(overallAuditProgress);
                 setCategoryProgress(categoryProgress || []);
             })
             .catch(error => console.error("Error loading evaluation data:", error));
@@ -54,15 +53,7 @@ export function Evaluation() {
                     <Box className="text-center" sx={{ width: '80%' }}>
                         <LinearProgressWithLabel value={currentAuditProgress} />
                     </Box>
-                    <p className="text-center text-xl">Current Audit Progress</p>
-                </div>
-
-                {/* Overall Audit Progress Bar */}
-                <div data-cy={"OverallProgressBar"} className="w-full flex flex-col justify-center items-center h-20 mb-6">
-                    <Box className="text-center" sx={{ width: '80%' }}>
-                        <LinearProgressWithLabel value={overallAuditProgress} />
-                    </Box>
-                    <p className="text-center text-xl">Overall Audit Progress</p>
+                    <p className="text-center text-xl">Gesamtbewertung</p>
                 </div>
 
                 {/* Radar Chart */}
@@ -70,7 +61,6 @@ export function Evaluation() {
                     <RadarChart
                         labels={categoryProgress.map(category => category.categoryName)}
                         currentData={categoryProgress.map(category => category.currentCategoryProgress)}
-                        overallData={categoryProgress.map(category => category.overallCategoryProgress)}
                     />
                 </div>
             </div>
