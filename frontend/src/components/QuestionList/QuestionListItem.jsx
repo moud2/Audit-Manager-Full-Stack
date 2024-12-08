@@ -25,7 +25,7 @@ export function QuestionListItem({ question, options, onChange }) {
     box-sizing: border-box;
     width: 100%;
     margin-top: 1%;
-    margin-bottom: 1%;
+    margin-bottom: 0%;
     font-family: 'IBM Plex Sans', sans-serif;
     font-size: 0.875rem;
     font-weight: 400;
