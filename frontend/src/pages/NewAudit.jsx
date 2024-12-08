@@ -10,6 +10,8 @@ import { handleApiError } from "../utils/handleApiError";
 import { LoadingScreen } from "../components/LoadingState";
 import { AlertWithMessage } from "../components/ErrorHandling";
 import { useLoadingProgress } from "../components/LoadingState/useLoadingProgress";
+import { CustomAlert } from "../components/ErrorHandling/CustomAlert";
+
 
 export function NewAudit() {
     const [cards, setCards] = useState([]);
@@ -46,7 +48,7 @@ export function NewAudit() {
                 // Navigate after timeout
                 setTimeout(() => {
                     navigate("/perform-audit/" + response.data.id);
-                }, 5000);
+                }, 2500);
             })
             .catch((err) => {
                 const errorMessage = handleApiError(err); // Use handleApiError
@@ -98,31 +100,25 @@ export function NewAudit() {
                 <Title>Neues Audit anlegen</Title>
 
                 {/* Validation Alert */}
-                {validationError && (
-                    <Alert severity="warning" className="mb-4">
-                        {validationError}
-                    </Alert>
-                )}
+                <CustomAlert
+                    show={!!validationError}
+                    severity="error"
+                    message={validationError}
+                    onClose={() => setValidationError(null)}
+                    sx={{
+                        backgroundColor: "#f8d7da",
+                        color: "#721c24",
+                        border: "1px solid #f5c6cb",
+                    }}
+                />
 
                 {/* Success Alert */}
-                <Collapse in={!!successMessage}>
-                    <Alert
-                        severity="success"
-                        action={
-                            <IconButton
-                                aria-label="close"
-                                color="inherit"
-                                size="small"
-                                onClick={() => setSuccessMessage(null)}
-                            >
-                                <CloseIcon fontSize="inherit" />
-                            </IconButton>
-                        }
-                        className="mb-4"
-                    >
-                        {successMessage}
-                    </Alert>
-                </Collapse>
+                <CustomAlert
+                    show={!!successMessage}
+                    severity="success"
+                    message={successMessage}
+                    onClose={() => setSuccessMessage(null)}
+                />  
 
                 <form className="flex flex-col items-center w-full mb-8">
                     <div className="audit-name-field w-full max-w-xs ml-12">
