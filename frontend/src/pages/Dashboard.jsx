@@ -1,16 +1,17 @@
 import { LayoutDefault } from "../layouts/LayoutDefault.jsx";
 import AuditGrid from "../components/AuditGrid/AuditGrid.jsx";
-import {useState, useEffect, useMemo} from "react";
-import  api  from "../api.js";
+import { useState, useEffect, useMemo } from "react";
+import api from "../api.js";
 import { Input, debounce, TextField } from "@mui/material";
+import Title from "../components/Textareas/Title.jsx";
 import { LoadingScreen } from "../components/LoadingState";
 import { AlertWithMessage } from "../components/ErrorHandling";
 import { handleApiError } from "../utils/handleApiError";
+import { useLoadingProgress } from "../components/LoadingState/useLoadingProgress";
 
 export function Dashboard() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [loadingProgress, setLoadingProgress] = useState(0);
     const [error, setError] = useState(null);
     const [customerName, setCustomerName] = useState("");
 
@@ -29,20 +30,8 @@ export function Dashboard() {
         debouncedCustomerUpdate(e.target.value);
     };
 
-    // Simulate loading progress
-    useEffect(() => {
-        let interval = null;
-
-        if (loading) {
-            interval = setInterval(() => {
-                setLoadingProgress((prev) => (prev < 100 ? prev + 10 : 100));
-            }, 300);
-        }
-
-        return () => {
-            if (interval) clearInterval(interval);
-        };
-    }, [loading]);
+    // Use the custom loading progress hook
+    const loadingProgress = useLoadingProgress(loading);
 
     // Fetch data from backend
     useEffect(() => {
@@ -66,21 +55,21 @@ export function Dashboard() {
     }, [debouncedCustomerName]);
 
     if (loading) {
-      return <LoadingScreen progress={loadingProgress} message="Loading, please wait..." />;
-  }
+        return <LoadingScreen progress={loadingProgress} message="Loading, please wait..." />;
+    }
 
-  if (error) {
-      return <AlertWithMessage severity="error" title="Error" message={error} />;
-  }
+    if (error) {
+        return <AlertWithMessage severity="error" title="Error" message={error} />;
+    }
 
     return (
         <LayoutDefault>
             <div className="w-full h-full p-5">
-                <h1 className="text-center text-2xl mb-6">Dashboard</h1>
+                <Title>Dashboard</Title>
                 <h2 className="font-bold">Filter</h2>
                 <TextField id="outlined-basic" label="Kundenname" variant="outlined" onChange={handleCustomerFilterChange} />
                 <AuditGrid data={data} loading={loading} error={error} />
             </div>
         </LayoutDefault>
     );
-  }    
+}

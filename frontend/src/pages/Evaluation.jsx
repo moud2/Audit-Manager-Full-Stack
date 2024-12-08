@@ -10,6 +10,7 @@ import { LoadingScreen } from "../components/LoadingState";
 import { AlertWithMessage } from "../components/ErrorHandling";
 import { handleApiError } from "../utils/handleApiError";
 import Box from "@mui/material/Box";
+import { useLoadingProgress } from "../components/LoadingState/useLoadingProgress";
 
 /**
  * Evaluation component fetches audit data and displays it as a series of progress indicators,
@@ -37,6 +38,10 @@ export function Evaluation() {
 
     // Define color codes for the bar chart, where the last color (black) represents "nA"
     const colors = ["#a50026", "#d73027", "#fdae61", "#d9ef8b", "#66bd63", "#006837", "#000000"];
+
+
+    // Use the custom loading progress hook
+    const loadingProgress = useLoadingProgress(loading);
 
     /**
      * Fetches audit progress data from the backend when the component mounts or when auditId changes.
@@ -70,7 +75,7 @@ export function Evaluation() {
 
     // Render loading screen
     if (loading) {
-        return <LoadingScreen progress={50} message="Loading evaluation data..." />;
+        return <LoadingScreen progress={loadingProgress} message="Loading evaluation data..." />;
     }
 
     // Render error message

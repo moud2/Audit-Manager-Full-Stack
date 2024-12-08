@@ -8,6 +8,7 @@ import { Button } from "@mui/material";
 import { handleApiError } from "../utils/handleApiError";
 import { LoadingScreen } from "../components/LoadingState";
 import { AlertWithMessage } from "../components/ErrorHandling";
+import { useLoadingProgress } from "../components/LoadingState/useLoadingProgress";
 
 /**
  * PerformAudit Component
@@ -29,6 +30,9 @@ export function PerformAudit() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+
+    // Use the custom loading progress hook
+    const loadingProgress = useLoadingProgress(loading);
 
     const labels = [0, 1, 2, 3, 4, 5, "N/A"];
 
@@ -134,7 +138,7 @@ export function PerformAudit() {
     }, [auditId]);
 
     if (loading) {
-        return <LoadingScreen progress={50} message="Audit is loading..." />;
+        return <LoadingScreen progress={useLoadingProgress} message="Audit is loading..." />;
     }
 
     if (error) {
