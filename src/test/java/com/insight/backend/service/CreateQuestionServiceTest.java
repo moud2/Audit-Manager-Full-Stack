@@ -19,11 +19,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-<<<<<<< HEAD
 import org.mockito.junit.jupiter.MockitoExtension;
-=======
 import org.springframework.boot.test.mock.mockito.MockBean;
->>>>>>> 920b8df (<feat-210-testing> removed loading application context errors within httppsttest)
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -34,7 +31,6 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class CreateQuestionServiceTest {
 
-<<<<<<< HEAD
     @Mock
     private FindCategoryService findCategoryService;
 
@@ -49,18 +45,7 @@ public class CreateQuestionServiceTest {
 
     @InjectMocks
     private CreateQuestionService createQuestionService;
-=======
-    @MockBean
-    private QuestionRepository questionRepository;
-    @MockBean
-    private FindCategoryService findCategoryService;
-    @MockBean
-    private FindQuestionByCategoryService findQuestionByCategoryService;
-    @InjectMocks
-    private CreateQuestionService createQuestionService;
-    @MockBean
-    private SaveQuestionService saveQuestionService;
->>>>>>> 920b8df (<feat-210-testing> removed loading application context errors within httppsttest)
+
 
     @BeforeEach
     public void setUp() {

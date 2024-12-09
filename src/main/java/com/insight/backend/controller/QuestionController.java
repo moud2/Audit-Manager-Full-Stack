@@ -66,14 +66,8 @@ public class QuestionController {
     public ResponseEntity<Object> postWithRequestBody(@Valid @RequestBody NewQuestionDTO newQuestionDTO) {
         QuestionResponseDTO responseDTO = this.createQuestionService.createQuestion(newQuestionDTO);
 
-<<<<<<< HEAD
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
-=======
-        if (responseDTO != null) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
-        } else throw new CategoryNotFoundException();
 
->>>>>>> 920b8df (<feat-210-testing> removed loading application context errors within httppsttest)
     }
 
     @GetMapping("/api/v1/categories/{categoryId}/questions")
