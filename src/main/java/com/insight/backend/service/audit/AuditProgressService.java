@@ -89,7 +89,7 @@ public class AuditProgressService {
                     categoryName,
                     categoryAnsweredQuestions,
                     categoryTotalQuestions,
-                    currentCategoryProgress,
+                    currentCategoryProgress
             ));
         }
 
