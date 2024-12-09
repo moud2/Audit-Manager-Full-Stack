@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.insight.backend.dto.CategoryResponseDTO;
 import com.insight.backend.dto.NewCategoryDTO;
@@ -72,17 +73,17 @@ public class CategoryController {
     }
 
     /**
-     * DELETE requests for soft-deleting a category by its ID.
+     * DELETE /categories/{categoryID}
+     * Soft deletes a category by its ID.
      *
      * @param id the ID of the category to be deleted
-     * @return ResponseEntity with no content if successful
+     * @return ResponseEntity with HTTP 204 (No Content) if successful, or HTTP 404 (Not Found) if the category is not found.
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/categories/{categoryID}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
         // Find the category by ID
         Category category = findCategoryService.findCategoryById(id)
-            .orElseThrow(() -> new RuntimeException("Category not found"));
-        
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category with ID " + id + " not found"));        
         // Call the delete service
         deleteCategoryService.softDeleteCategory(category);
 
