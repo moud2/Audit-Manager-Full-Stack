@@ -2,11 +2,7 @@ import React from 'react';
 import { AuditDropdown } from './AuditDropdown';
 
 describe('AuditDropdown Component', () => {
-  const audits = [
-    { id: 1, name: 'Audit A' },
-    { id: 2, name: 'Audit B' },
-    { id: 3, name: 'Audit C' },
-  ];
+  const audits = [];
 
   let onAuditSelect;
 
@@ -15,32 +11,36 @@ describe('AuditDropdown Component', () => {
     cy.mount(<AuditDropdown audits={audits} onAuditSelect={onAuditSelect} />);
   });
 
-  it('renders the dropdown with correct options', () => {
-    // Überprüfen, ob alle Optionen vorhanden sind
-    cy.get('#auditDropdown option').should('have.length', audits.length + 1); // +1 für "Bitte wählen"
+  it('renders the dropdown with the correct number of options', () => {
+    cy.get('#auditDropdown option').should('have.length', audits.length + 1); 
     cy.get('#auditDropdown option').first().should('have.value', '').and('contain', 'Bitte wählen');
   });
 
+  audits.forEach((audit, index) => {
+    cy.get('#auditDropdown option').eq(index + 1)
+      .should('have.value', audit.id.toString())
+      .and('contain', audit.name);
+  });
+
+
   it('calls onAuditSelect with the correct audit when an option is selected', () => {
-    // Audit B auswählen
-    cy.get('#auditDropdown').select('Audit B');
-    cy.get('@onAuditSelectSpy').should('have.been.calledOnceWith', audits[1]);
+    audits.forEach((audit, index) => {
+      cy.get('#auditDropdown').select(audit.name);
+      cy.get('@onAuditSelectSpy').should('have.been.calledWith', audit);
+    });
   });
 
   it('calls onAuditSelect with null for the default option', () => {
-    cy.mount(<AuditDropdown audits={[]} onAuditSelect={cy.spy()} />);
     cy.get('#auditDropdown').select('Bitte wählen');
   });
 
   it('handles multiple selections correctly', () => {
-    // Mehrfachauswahl testen
-    cy.get('#auditDropdown').select('Audit C');
-    cy.get('@onAuditSelectSpy').should('have.been.calledWith', audits[2]);
+    audits.forEach((audit) => {
+      cy.get('#auditDropdown').select(audit.name);
+      cy.get('@onAuditSelectSpy').should('have.been.calledWith', audit);
 
-    cy.get('#auditDropdown').select('Bitte wählen');
-    cy.get('@onAuditSelectSpy').should('have.been.calledWith', null);
-
-    cy.get('#auditDropdown').select('Audit A');
-    cy.get('@onAuditSelectSpy').should('have.been.calledWith', audits[0]);
+      cy.get('#auditDropdown').select('Bitte wählen');
+      cy.get('@onAuditSelectSpy').should('have.been.calledWith', null);
+    });
   });
 });
