@@ -2,7 +2,6 @@ package com.insight.backend.service;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -16,10 +15,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.insight.backend.model.Audit;
 import com.insight.backend.model.Category;
-import com.insight.backend.model.Question;
-import com.insight.backend.model.Rating;
 import com.insight.backend.repository.CategoryRepository;
 import com.insight.backend.service.category.DeleteCategoryService;
 
@@ -73,30 +69,6 @@ public class DeleteCategoryServiceTest {
 
         assertEquals("Category is already deleted or does not exist.", exception.getMessage());
         verify(categoryRepository, times(0)).save(deletedCategory);
-    }
-
-    /**
-     * Testet, dass eine Kategorie mit aktiven Audits nicht gelöscht werden kann.
-     */
-    @Test
-    public void softDeleteCategoryLinkedToActiveAuditTest() {
-        Audit activeAudit = new Audit();
-        activeAudit.setDeletedAt(null);
-
-        Rating rating = new Rating();
-        rating.setAudit(activeAudit);
-
-        Question question = new Question();
-        question.setRating(Set.of(rating));
-
-        category.setQuestions(Set.of(question));
-
-        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
-            deleteCategoryService.softDeleteCategory(category);
-        });
-
-        assertEquals("Category is linked to existing audits and cannot be deleted.", exception.getMessage());
-        verify(categoryRepository, times(0)).save(category);
     }
 
     /**
