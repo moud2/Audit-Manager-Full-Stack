@@ -239,9 +239,9 @@ public class AuditControllerTestHttpGet {
 
         mockMvc.perform(get("/api/v1/audits/{auditId}/progress", auditId)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isGone())
-                .andExpect(jsonPath("$.status").value(410))
-                .andExpect(jsonPath("$.error").value("Gone"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.error").value("Not Found"))
                 .andExpect(jsonPath("$.message").value("Audit with id " + auditId + " has been deleted"));
     }
 
