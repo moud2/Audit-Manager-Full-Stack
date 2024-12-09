@@ -34,7 +34,7 @@ export function Evaluation() {
     useEffect(() => {
         api.get(`/v1/audits/${auditId}/progress`)
             .then(response => {
-                const { currentAuditProgress, overallAuditProgress, categoryProgress } = response.data;
+                const { currentAuditProgress, categoryProgress } = response.data;
                 setCurrentAuditProgress(currentAuditProgress);
                 setCategoryProgress(categoryProgress || []);
             })
