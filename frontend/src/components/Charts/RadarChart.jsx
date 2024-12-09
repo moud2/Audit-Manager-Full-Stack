@@ -18,34 +18,24 @@ ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, 
  * @param {Object} props - The properties passed to the component.
  * @param {Array<string>} props.labels - Array of category names to display on the radar chart.
  * @param {Array<number>} props.currentData - Array of current progress percentages for each category.
- * @param {Array<number>} props.overallData - Array of overall progress percentages for each category.
+ * @param {number} [props.height=400] - The height of the radar chart in pixels.
+ * @param {number} [props.width=600] - The width of the radar chart in pixels.
  * @returns {JSX.Element} A radar chart displaying category progress data.
  */
-function RadarChart({ labels, currentData, overallData }) {
+function RadarChart({ labels, currentData, height = 400, width = 600 }) {
     const data = {
         labels,
         datasets: [
             {
                 label: 'Current Progress',
                 data: currentData,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(196, 23, 31, 0.2)',
+                borderColor: '#c4171f',
                 borderWidth: 2,
-                pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+                pointBackgroundColor: '#c4171f',
                 pointBorderColor: '#fff',
                 pointHoverBackgroundColor: '#fff',
-                pointHoverBorderColor: 'rgba(75, 192, 192, 1)',
-            },
-            {
-                label: 'Overall Progress',
-                data: overallData,
-                backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                borderColor: 'rgba(153, 102, 255, 1)',
-                borderWidth: 2,
-                pointBackgroundColor: 'rgba(153, 102, 255, 1)',
-                pointBorderColor: '#fff',
-                pointHoverBackgroundColor: '#fff',
-                pointHoverBorderColor: 'rgba(153, 102, 255, 1)',
+                pointHoverBorderColor: '#c4171f',
             },
         ],
     };
@@ -57,11 +47,36 @@ function RadarChart({ labels, currentData, overallData }) {
             r: {
                 beginAtZero: true,
                 max: 100,
+                ticks: {
+                    stepSize: 20,
+                    color: '#444',
+                    font: {
+                        size: 14,
+                    },
+                },
+                angleLines: {
+                    color: '#888',
+                },
+                grid: {
+                    color: '#ccc',
+                },
+                pointLabels: {
+                    color: '#444',
+                    font: {
+                        size: 16,
+                    },
+                },
             },
         },
         plugins: {
             legend: {
                 position: 'top',
+                labels: {
+                    color: '#444',
+                    font: {
+                        size: 14,
+                    },
+                },
             },
             tooltip: {
                 callbacks: {
@@ -74,7 +89,10 @@ function RadarChart({ labels, currentData, overallData }) {
     };
 
     return (
-        <div className="p-4" style={{ height: '400px', width: '100%' }}>
+        <div
+            className="flex justify-center items-center p-4"
+            style={{ height: `${height}px`, width: `${width}px`, margin: '0 auto' }}
+        >
             <Radar data={data} options={options} />
         </div>
     );

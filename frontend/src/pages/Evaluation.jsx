@@ -24,7 +24,6 @@ export function Evaluation() {
      * categoryProgress - Array of objects representing each category's progress details.
      */
     const [currentAuditProgress, setCurrentAuditProgress] = useState(0);
-    const [overallAuditProgress, setOverallAuditProgress] = useState(0);
     const [categoryProgress, setCategoryProgress] = useState([]);
 
     /**
@@ -36,7 +35,6 @@ export function Evaluation() {
         api.get(`/v1/audits/${auditId}/progress`)
             .then(response => {
                 const { currentAuditProgress, overallAuditProgress, categoryProgress } = response.data;
-
                 setCurrentAuditProgress(currentAuditProgress);
                 setCategoryProgress(categoryProgress || []);
             })
@@ -61,6 +59,8 @@ export function Evaluation() {
                     <RadarChart
                         labels={categoryProgress.map(category => category.categoryName)}
                         currentData={categoryProgress.map(category => category.currentCategoryProgress)}
+                        width={800}
+                        height={800}
                     />
                 </div>
             </div>
