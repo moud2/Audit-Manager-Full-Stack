@@ -69,15 +69,7 @@ function RadarChart({ labels, currentData, height = 400, width = 600 }) {
             },
         },
         plugins: {
-            legend: {
-                position: 'top',
-                labels: {
-                    color: '#444',
-                    font: {
-                        size: 14,
-                    },
-                },
-            },
+            legend: false,
             tooltip: {
                 callbacks: {
                     label: function (tooltipItem) {

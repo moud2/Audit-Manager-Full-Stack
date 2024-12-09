@@ -55,7 +55,7 @@ export function Evaluation() {
                 </div>
 
                 {/* Radar Chart */}
-                <div data-cy={"RadarChart"} className="w-full max-w-4xl">
+                <div data-cy={"RadarChart"} className="w-full flex justify-center">
                     <RadarChart
                         labels={categoryProgress.map(category => category.categoryName)}
                         currentData={categoryProgress.map(category => category.currentCategoryProgress)}
