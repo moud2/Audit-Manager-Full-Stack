@@ -18,30 +18,31 @@ import { Link } from "react-router-dom";
 
 const drawerWidth = 240;
 
-const Main = styled('main', {shouldForwardProp: (prop) => prop !== 'open'})
-(({ theme }) => ({flexGrow: 1,padding: theme.spacing(3),transition: theme.transitions.create('margin', {easing: theme.transitions.easing.sharp,duration: theme.transitions.duration.leavingScreen,}),marginLeft: `-${drawerWidth}px`,variants: [{props: ({ open }) => open, style: {transition: theme.transitions.create('margin', {easing: theme.transitions.easing.easeOut,duration: theme.transitions.duration.enteringScreen,}),marginLeft: 0,},},],}));
+const Main = styled('main', {
+    shouldForwardProp: (prop) => prop !== 'open',
+  })(({ theme, open }) => ({
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    marginLeft: open ? 0 : `-${drawerWidth}px`,
+    transition: theme.transitions.create('margin', {
+      easing: open
+        ? theme.transitions.easing.easeOut
+        : theme.transitions.easing.sharp,
+      duration: open
+        ? theme.transitions.duration.enteringScreen
+        : theme.transitions.duration.leavingScreen,
+    }),
+  }));
+
 
 const DrawerHeader = styled('div')(({ theme }) => ({display: 'flex',alignItems: 'center',padding: theme.spacing(0, 1),...theme.mixins.toolbar,justifyContent: 'flex-end',}));
 
 export function LayoutDefault({children}) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-  
-  const links = 
-  [
-    { href: "/dashboard", label: "Dashboard" },
-    { href: "/new-audit", label: "New Audit" },
-    { href: "/perform-audit", label: "Perform Audit" },
-    { href: "/evaluation", label: "Evaluation" },
-  ];
+  const handleDrawerOpen = () => {setOpen(true);};
+  const handleDrawerClose = () => {setOpen(false);};
+  const links = [{ href: "/dashboard", label: "Dashboard" },{ href: "/new-audit", label: "New Audit" },{ href: "/perform-audit", label: "Perform Audit" },{ href: "/evaluation", label: "Evaluation" },];
 
   return (
     <Box sx={{display: 'flex'}}>
@@ -51,8 +52,7 @@ export function LayoutDefault({children}) {
       <IconButton color="inherit" aria-label="open drawer" onClick={handleDrawerOpen} edge="start" sx={{position: "fixed",top: "16px",left: "16px",zIndex: 1301,display: open ? "none" : "block",}}>
         <MenuIcon/>
       </IconButton>
-
-      <Drawer sx={{width: drawerWidth,flexShrink: 0,'& .MuiDrawer-paper': {width: drawerWidth,boxSizing: 'border-box',},}} variant="persistent" anchor="left" open={open}>
+     <Drawer sx={{width: drawerWidth,flexShrink: 0,'& .MuiDrawer-paper': {width: drawerWidth,boxSizing: 'border-box',},}} variant="persistent" anchor="left" open={open}>
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon/> : <ChevronRightIcon/>}
