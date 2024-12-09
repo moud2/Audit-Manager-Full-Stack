@@ -23,11 +23,46 @@ describe('AuditProgress Component', () => {
         },
     ];
 
-    it('renders the correct category names and progress information', () => {
+    beforeEach(() => {
         cy.mount(<AuditProgress progress={progress}/>);
+    });
 
+    it('renders the correct category names', () => {
         progress.forEach((category) => {
-
+            cy.contains('div', category.categoryName)
+                .should('exist')
+                .and('have.text', category.categoryName);
         });
     });
+
+    it('renders the correct progress information for each category', () => {
+        progress.forEach((category) => {
+            const expectedProgress = `${category.answeredQuestions}/${category.totalQuestions}`;
+
+            cy.contains('div', expectedProgress)
+                .should('exist')
+                .and('have.text', expectedProgress);
+        });
+    });
+
+    it('renders clickable links for each category', () => {
+        progress.forEach((category) => {
+            cy.contains(category.categoryName)
+                .closest('a') // Sucht das `Link`-Element
+                .should('have.attr', 'data-to', `category-${category.categoryId}`); // Prüft das `data-to`-Attribut
+        });
+    });
+
+    //ToDo: Wenn Sprungmarken wieder funktionieren diesen Test einbinden
+
+    // it('simulates a click event and verifies console log', () => {
+    //     const stub = cy.stub();
+    //     cy.on('window:console', stub); // Listen for console logs
+    //
+    //     cy.contains('Category 1')
+    //         .click()
+    //         .then(() => {
+    //             expect(stub).to.be.calledWith('Click to jump to: category-1');
+    //         });
+    // });
 });

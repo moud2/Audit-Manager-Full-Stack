@@ -46,7 +46,7 @@ export function CategoryListItem({ category, options, onChange }) {
 
     return (
         <div id={`category-${category.id}`} data-cy={`category-${category.id}`} className="category-list-item">
-            <Title data-cy={`category-title-${category.id}`}>{category.name} {category.id}</Title>
+            <Title data-cy={`category-title-${category.id}`}>{category.name}</Title>
             <QuestionList
                 questions={category.questions}
                 options={options}
