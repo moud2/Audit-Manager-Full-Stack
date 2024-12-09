@@ -226,7 +226,7 @@ public class AuditControllerTestHttpGet {
 
     /**
      * Tests retrieving progress when the audit is soft-deleted.
-     * Expects a 410 Gone status.
+     * Expects a 404 Not Found status.
      *
      * @throws Exception if an error occurs during the request
      */
