@@ -80,14 +80,11 @@ public class CategoryController {
      * @return ResponseEntity with HTTP 204 (No Content) if successful, or HTTP 404 (Not Found) if the category is not found.
      */
     @DeleteMapping("/categories/{categoryID}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
-        // Find the category by ID
-        Category category = findCategoryService.findCategoryById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category with ID " + id + " not found"));        
-        // Call the delete service
+    public ResponseEntity<Void> deleteCategory(@PathVariable Long categoryID) {
+        Category category = findCategoryService.findCategoryById(categoryID)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category with ID " + categoryID + " not found"));
+    
         deleteCategoryService.softDeleteCategory(category);
-
-        // Return HTTP 204 (No Content) if successful
         return ResponseEntity.noContent().build();
     }
 

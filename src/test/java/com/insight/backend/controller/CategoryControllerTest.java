@@ -4,18 +4,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.insight.backend.dto.CategoryResponseDTO;
-import com.insight.backend.dto.NewCategoryDTO;
-import com.insight.backend.exception.DuplicateCategoryNameException;
-import com.insight.backend.model.Category;
-import com.insight.backend.service.category.CreateCategoryService;
-import com.insight.backend.service.category.FindCategoryService;
+import static org.hamcrest.Matchers.hasSize;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.anyString;
 import org.mockito.Mockito;
-
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -23,12 +20,19 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.insight.backend.dto.CategoryResponseDTO;
+import com.insight.backend.dto.NewCategoryDTO;
+import com.insight.backend.exception.DuplicateCategoryNameException;
+import com.insight.backend.model.Category;
+import com.insight.backend.service.category.CreateCategoryService;
+import com.insight.backend.service.category.DeleteCategoryService;
+import com.insight.backend.service.category.FindCategoryService;
 
 /**
  * test class for testing CategoryController
@@ -54,6 +58,13 @@ public class CategoryControllerTest {
      */
     @MockBean
     private FindCategoryService findCategoryService;
+
+     /**
+     * MockBean for DeleteCategoryService
+     */   
+    @MockBean
+    private DeleteCategoryService deleteCategoryService;
+
 
     private Category category1;
     private Category category2;
@@ -158,4 +169,40 @@ public class CategoryControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("Category with the name 'Existing Category' already exists"));
     }
+
+    /**
+     * Tests successful soft deletion of a category.
+     * - Ensures `findCategoryService` finds the category.
+     * - Verifies `DeleteCategoryService` performs the soft delete.
+     * - Expects HTTP 204 (No Content).
+     */
+    @Test
+    public void testDeleteCategory_Success() throws Exception {
+        when(findCategoryService.findCategoryById(1L)).thenReturn(java.util.Optional.of(category1));
+        Mockito.doNothing().when(deleteCategoryService).softDeleteCategory(category1);
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/categories/1"))
+                .andExpect(status().isNoContent());
+
+        verify(findCategoryService, times(1)).findCategoryById(1L);
+        verify(deleteCategoryService, times(1)).softDeleteCategory(category1);
+    }
+
+    /**
+     * Tests behavior when category is not found.
+     * - Ensures `findCategoryService` returns empty.
+     * - Expects HTTP 404 (Not Found) with an error message.
+     * - Verifies `DeleteCategoryService` is not called.
+     */
+    @Test
+    public void testDeleteCategory_NotFound() throws Exception {
+        when(findCategoryService.findCategoryById(1L)).thenReturn(java.util.Optional.empty());
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/categories/1"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Category with ID 1 not found"));
+
+        verify(deleteCategoryService, times(0)).softDeleteCategory(Mockito.any());
+    }
+
 }

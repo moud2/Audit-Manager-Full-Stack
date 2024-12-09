@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.server.ResponseStatusException;
 
 /**
  * GlobalExceptionHandler is a class that handles exceptions thrown by the application.
@@ -43,5 +44,19 @@ public class GlobalExceptionHandler {
         body.put("message", ex.getMessage());
 
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+    /**
+     * Handles ResponseStatusException to provide detailed error messages in the response body.
+     * Returns a detailed JSON response containing: timestamp, status, error, and message.
+     */
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<Object> handleResponseStatusException(ResponseStatusException ex) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", ex.getStatusCode().value());
+        body.put("error", ((HttpStatus) ex.getStatusCode()).getReasonPhrase());
+        body.put("message", ex.getReason());
+
+        return new ResponseEntity<>(body, ex.getStatusCode());
     }
 }
