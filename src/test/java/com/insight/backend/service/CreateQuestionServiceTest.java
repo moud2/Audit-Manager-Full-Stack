@@ -31,26 +31,21 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class CreateQuestionServiceTest {
 
-    @Mock
+    @MockBean
     private FindCategoryService findCategoryService;
 
-    @Mock
+    @MockBean
     private SaveQuestionService saveQuestionService;
 
-    @Mock
+    @MockBean
     private FindQuestionByCategoryService findQuestionService;
 
-    @Mock
+    @MockBean
     private SaveCategoryService saveCategoryService;
 
     @InjectMocks
     private CreateQuestionService createQuestionService;
 
-
-    @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
 
     /*
         Hier nochmal genauer hinschauen und gegebenfalls Test Cases abdecken

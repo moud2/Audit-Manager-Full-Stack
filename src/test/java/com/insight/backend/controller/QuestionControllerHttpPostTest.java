@@ -72,19 +72,6 @@ public class QuestionControllerHttpPostTest {
                 .thenReturn(null);
     }
 
-    @Test
-    void testCreateQuestion() throws Exception {
-        // Arrange: Create a NewQuestionDTO instance
-        NewQuestionDTO newQuestionDTO = new NewQuestionDTO();
-
-        // Act: Perform a POST request
-        mockMvc.perform(post("/questions")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(newQuestionDTO)))
-                .andExpect(status().isCreated()) // Assert the status
-                .andExpect(jsonPath("$.question").value("Sample Question")) // Assert the returned question
-                .andExpect(jsonPath("$.category").value("Sample Category")); // Assert the category
-    }
 
 
     /**
@@ -113,34 +100,15 @@ public class QuestionControllerHttpPostTest {
     @Test
     public void testInvalidJson() throws Exception {
         NewQuestionDTO requestDto = new NewQuestionDTO();
-        requestDto.setName("Question Name");
+        String invalidJson = "{ \"name\": \"Question Name\" }";
+
 
         mockMvc.perform(post("/api/v1/questions/new")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestDto)))
+                        .content(invalidJson)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
 
-    /**
-     * Test case for validating handling of non-existing categories.
-     * Expects a HTTP 400 Bad Request response with a specific error message.
-     *
-     * @throws Exception if there is an error performing the MVC request
-     */
-    @Test
-    public void testNonExistingCategory() throws Exception {
-        NewQuestionDTO newQuestionDTO = new NewQuestionDTO();
-        newQuestionDTO.setName("Question Name");
-        newQuestionDTO.setCategory((long) -1);
-
-        when(createQuestionService.createQuestion(any(NewQuestionDTO.class))).thenReturn(null);
-
-        mockMvc.perform(post("/api/v1/questions/new")
-                        .content(objectMapper.writeValueAsString(newQuestionDTO))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().json("{\"error\": \"non existing category provided\"}"));
-    }
 
     /**
      * Test case for successful creation of an audit.

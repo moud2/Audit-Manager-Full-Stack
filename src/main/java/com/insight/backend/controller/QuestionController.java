@@ -66,7 +66,9 @@ public class QuestionController {
     public ResponseEntity<Object> postWithRequestBody(@Valid @RequestBody NewQuestionDTO newQuestionDTO) {
         QuestionResponseDTO responseDTO = this.createQuestionService.createQuestion(newQuestionDTO);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+        if (responseDTO != null) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+        } else return ResponseEntity.badRequest().body(null);
 
     }
 
