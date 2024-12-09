@@ -1,20 +1,20 @@
 package com.insight.backend.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import jakarta.validation.Valid;
 
 import com.insight.backend.dto.AuditProgressDTO;
 import com.insight.backend.dto.AuditResponseDTO;
 import com.insight.backend.dto.NewAuditDTO;
+import com.insight.backend.exception.AuditDeletedException;
 import com.insight.backend.exception.AuditDeletionException;
 import com.insight.backend.exception.AuditNotFoundException;
 import com.insight.backend.model.Audit;
 import com.insight.backend.service.audit.AuditProgressService;
 import com.insight.backend.service.audit.CreateAuditService;
-import com.insight.backend.service.audit.FindAuditService;
 import com.insight.backend.service.audit.DeleteAuditService;
+import com.insight.backend.service.audit.FindAuditService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
