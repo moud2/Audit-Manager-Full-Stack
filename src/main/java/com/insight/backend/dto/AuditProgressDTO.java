@@ -16,7 +16,6 @@ public class AuditProgressDTO {
      *
      * @param auditId              unique identifier for the audit.
      * @param currentAuditProgress progress percentage for answered questions.
-     * @param overallAuditProgress progress percentage for all questions.
      * @param categoryProgress     progress details for each category.
      */
     public AuditProgressDTO(Long auditId, double currentAuditProgress, List<CategoryProgressDTO> categoryProgress) {

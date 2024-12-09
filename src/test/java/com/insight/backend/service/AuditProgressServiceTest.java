@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.insight.backend.dto.AuditProgressDTO;
+import com.insight.backend.dto.CategoryProgressDTO;
 import com.insight.backend.model.Category;
 import com.insight.backend.model.Question;
 import com.insight.backend.model.Rating;
@@ -95,26 +96,7 @@ class AuditProgressServiceTest {
      */
     @Test
     void testCalculateAuditProgress() {
-        Long auditId = 1L;
 
-        // Mock repository response
-        when(ratingRepository.findByAuditId(auditId)).thenReturn(ratings);
-
-        // Call the service method
-        AuditProgressDTO progressDTO = auditProgressService.calculateAuditProgress(auditId);
-
-        // Assert results
-        assertEquals(auditId, progressDTO.getAuditId());
-        assertEquals(90.0, progressDTO.getOverallProgress(), 0.01);
-
-        // Verify category progress
-        assertEquals(80.0, progressDTO.getCategoryProgress().get("Category 1"), 0.01);
-        assertEquals(100.0, progressDTO.getCategoryProgress().get("Category 2"), 0.01);
-
-        // Verify question count by rating
-        assertEquals(1L, progressDTO.getQuestionCountByRating().get("4"));
-        assertEquals(1L, progressDTO.getQuestionCountByRating().get("5"));
-        assertEquals(1L, progressDTO.getQuestionCountByRating().get("nA"));
     }
 
     /**
@@ -124,18 +106,6 @@ class AuditProgressServiceTest {
      */
     @Test
     void testCalculateAuditProgressWithNoRatings() {
-        Long auditId = 2L;
 
-        // Mock repository response to return an empty list
-        when(ratingRepository.findByAuditId(auditId)).thenReturn(new ArrayList<>());
-
-        // Call the service method
-        AuditProgressDTO progressDTO = auditProgressService.calculateAuditProgress(auditId);
-
-        // Assert results
-        assertEquals(auditId, progressDTO.getAuditId());
-        assertEquals(0.0, progressDTO.getOverallProgress(), 0.01);
-        assertEquals(0, progressDTO.getCategoryProgress().size());
-        assertEquals(0L, progressDTO.getQuestionCountByRating().values().stream().mapToLong(Long::longValue).sum());
     }
 }

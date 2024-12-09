@@ -19,7 +19,6 @@ public class CategoryProgressDTO {
      * @param answeredQuestions       number of questions answered in the category.
      * @param totalQuestions          total number of questions in the category.
      * @param currentCategoryProgress progress percentage for answered questions.
-     * @param overallCategoryProgress progress percentage for all questions.
      */
     public CategoryProgressDTO(Long categoryId, String categoryName, int answeredQuestions, int totalQuestions, double currentCategoryProgress) {
         this.categoryId = categoryId;
