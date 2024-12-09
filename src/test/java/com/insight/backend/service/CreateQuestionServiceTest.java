@@ -19,16 +19,22 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+<<<<<<< HEAD
 import org.mockito.junit.jupiter.MockitoExtension;
+=======
+import org.springframework.boot.test.mock.mockito.MockBean;
+>>>>>>> 920b8df (<feat-210-testing> removed loading application context errors within httppsttest)
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class CreateQuestionServiceTest {
 
+<<<<<<< HEAD
     @Mock
     private FindCategoryService findCategoryService;
 
@@ -43,6 +49,18 @@ public class CreateQuestionServiceTest {
 
     @InjectMocks
     private CreateQuestionService createQuestionService;
+=======
+    @MockBean
+    private QuestionRepository questionRepository;
+    @MockBean
+    private FindCategoryService findCategoryService;
+    @MockBean
+    private FindQuestionByCategoryService findQuestionByCategoryService;
+    @InjectMocks
+    private CreateQuestionService createQuestionService;
+    @MockBean
+    private SaveQuestionService saveQuestionService;
+>>>>>>> 920b8df (<feat-210-testing> removed loading application context errors within httppsttest)
 
     @BeforeEach
     public void setUp() {
@@ -62,12 +80,14 @@ public class CreateQuestionServiceTest {
         Category category1 = new Category();
         category1.setId(1L);
         Question question1 = new Question();
+        question1.setName("Question Name1");
         question1.setId(1L);
         category1.setQuestions(Set.of(question1));
 
         Category category2 = new Category();
         category2.setId(2L);
         Question question2 = new Question();
+        question2.setName("Question Name2");
         question2.setId(2L);
         category2.setQuestions(Set.of(question2));
 
@@ -75,6 +95,7 @@ public class CreateQuestionServiceTest {
         when(findCategoryService.findCategoryById(2L)).thenReturn(Optional.of(category2));
         when(saveQuestionService.saveQuestion(any(Question.class))).thenAnswer(invocation -> {
             Question question = invocation.getArgument(0);
+            question.setName("Question Name");
             question.setId(1L);
             return question;
         });

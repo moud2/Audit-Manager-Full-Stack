@@ -10,6 +10,10 @@ import com.insight.backend.exception.NonExistentAuditCategoryException;
 import com.insight.backend.service.audit.AuditProgressService;
 import com.insight.backend.service.audit.CreateAuditService;
 import com.insight.backend.service.audit.FindAuditService;
+import com.insight.backend.service.category.FindCategoryService;
+import com.insight.backend.service.question.CreateQuestionService;
+import com.insight.backend.service.question.DeleteQuestionService;
+import com.insight.backend.service.question.FindQuestionByCategoryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -61,6 +65,7 @@ public class AuditControllerTestHttpPost {
      */
     @MockBean
     private CreateAuditService createAuditService;
+
 
     @BeforeEach
     void setUp() {

@@ -4,16 +4,22 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.insight.backend.dto.NewAuditDTO;
 import com.insight.backend.dto.QuestionResponseDTO;
 import com.insight.backend.dto.NewQuestionDTO;
+import com.insight.backend.model.Question;
+import com.insight.backend.repository.QuestionRepository;
 import com.insight.backend.service.category.FindCategoryService;
 import com.insight.backend.service.question.CreateQuestionService;
 import com.insight.backend.service.question.DeleteQuestionService;
 import com.insight.backend.service.question.FindQuestionByCategoryService;
+import com.insight.backend.service.question.SaveQuestionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -28,32 +34,27 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Unit tests for validating the behavior of {@link AuditsController}.
+ * Unit tests for validating the behavior of {@link QuestionController}.
  * These tests are focused on verifying the correct handling of HTTP POST requests
  * for creating audits, including scenarios with invalid JSON payloads, empty categories,
  * and non-existing categories.
  */
 @WebMvcTest(QuestionController.class)
 @ExtendWith(SpringExtension.class)
-public class QuestionControllerTestHttpPost {
+public class QuestionControllerHttpPostTest {
 
-    /**
-     * MockMvc instance for HTTP request mocking
-     */
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
     private ObjectMapper objectMapper;
 
-    /**
-     * MockBean for FindAutitService
-     */
+    @MockBean
+    private DeleteQuestionService deleteQuestionService;
     @MockBean
     private FindQuestionByCategoryService findQuestionService;
 
-    @MockBean
-    private DeleteQuestionService deleteQuestionService;
+
 
     @MockBean
     private FindCategoryService findCategoryService;
@@ -61,15 +62,30 @@ public class QuestionControllerTestHttpPost {
     /**
      * MockBean for CreateAuditService
      */
+
     @MockBean
     private CreateQuestionService createQuestionService;
 
     @BeforeEach
     void setUp() {
-        // Mocking behavior for createAuditService
-        MockitoAnnotations.initMocks(this);
-        when(createQuestionService.createQuestion(any(NewQuestionDTO.class))).thenReturn(null);
+        when(createQuestionService.createQuestion(any(NewQuestionDTO.class)))
+                .thenReturn(null);
     }
+
+    @Test
+    void testCreateQuestion() throws Exception {
+        // Arrange: Create a NewQuestionDTO instance
+        NewQuestionDTO newQuestionDTO = new NewQuestionDTO();
+
+        // Act: Perform a POST request
+        mockMvc.perform(post("/questions")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(newQuestionDTO)))
+                .andExpect(status().isCreated()) // Assert the status
+                .andExpect(jsonPath("$.question").value("Sample Question")) // Assert the returned question
+                .andExpect(jsonPath("$.category").value("Sample Category")); // Assert the category
+    }
+
 
     /**
      * Test case for validating handling of invalid JSON payload.

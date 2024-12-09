@@ -49,4 +49,6 @@ public class FindQuestionByCategoryService {
 
         return questionRepository.findAll(QuestionSpecifications.inCategory(category).and(QuestionSpecifications.isNotDeleted()), sort);
     }
+
+
 }

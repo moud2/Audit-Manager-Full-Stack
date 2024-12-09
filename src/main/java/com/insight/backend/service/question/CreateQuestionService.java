@@ -68,12 +68,22 @@ public class CreateQuestionService {
         } else throw new QuestionFoundException();
         
         
+<<<<<<< HEAD
         //List<Category> categoryOpt = this.findCategoryService.findAllCategories().stream().filter(x -> x.getName().equals(newQuestionDTO.getCategory())).collect(Collectors.toList());
         Category category = this.findCategoryService.findCategoryById(newQuestionDTO.getCategory()).orElseThrow(() -> {
                 System.out.println("Category ID not found: " + newQuestionDTO.getCategory());
                 return new CategoryNotFoundException(newQuestionDTO.getCategory());
         });
         question.setCategory(category);
+=======
+        Optional<Category> categoryOpt = this.findCategoryService.findCategoryById(newQuestionDTO.getCategory());
+        Category finding;
+        System.out.println(categoryOpt);
+        if (!categoryOpt.isEmpty()) {
+            finding = categoryOpt.get();
+            question.setCategory(finding); //optimalerweise gibt es nur ein Ergebnis :) -> liste im nachgang uniquifyen
+        } else throw new CategoryNotFoundException(); 
+>>>>>>> 920b8df (<feat-210-testing> removed loading application context errors within httppsttest)
 
         //Categories um die neue question aktualisieren
         Set<Question> tmpQuestionList = category.getQuestions();

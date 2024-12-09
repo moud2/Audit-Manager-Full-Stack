@@ -32,6 +32,9 @@ public class Question {
 
     }
 
+    public Question(String sampleQuestion, String sampleCategory) {
+    }
+
     public Category getCategory() {
         return category;
     }
