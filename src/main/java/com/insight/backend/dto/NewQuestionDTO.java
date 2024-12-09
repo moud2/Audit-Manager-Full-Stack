@@ -11,6 +11,8 @@ import jakarta.validation.constraints.Size;
 import com.insight.backend.model.Category;
 import com.insight.backend.model.Rating;
 
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+
 
 /**
  * Data Transfer Object equivalent to JSON object of GET /api/v1/questions/new.

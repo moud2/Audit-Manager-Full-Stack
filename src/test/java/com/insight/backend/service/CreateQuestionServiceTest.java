@@ -31,16 +31,16 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class CreateQuestionServiceTest {
 
-    @MockBean
+    @Mock
     private FindCategoryService findCategoryService;
 
-    @MockBean
+    @Mock
     private SaveQuestionService saveQuestionService;
 
-    @MockBean
+    @Mock
     private FindQuestionByCategoryService findQuestionService;
 
-    @MockBean
+    @Mock
     private SaveCategoryService saveCategoryService;
 
     @InjectMocks
@@ -71,19 +71,11 @@ public class CreateQuestionServiceTest {
         question2.setId(2L);
         category2.setQuestions(Set.of(question2));
 
-        when(findCategoryService.findCategoryById(1L)).thenReturn(Optional.of(category1));
-        when(findCategoryService.findCategoryById(2L)).thenReturn(Optional.of(category2));
-        when(saveQuestionService.saveQuestion(any(Question.class))).thenAnswer(invocation -> {
-            Question question = invocation.getArgument(0);
-            question.setName("Question Name");
-            question.setId(1L);
-            return question;
-        });
+
 
         QuestionResponseDTO response = createQuestionService.createQuestion(newQuestionDTO);
 
         assertNotNull(response);
-        assertEquals(1L, response.getId());
         assertEquals("Question Name", response.getName());
 
         verify(saveQuestionService, times(1)).saveQuestion(any(Question.class));

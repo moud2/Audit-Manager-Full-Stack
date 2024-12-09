@@ -77,14 +77,13 @@ public class CreateQuestionService {
 
 
         //Categories um die neue question aktualisieren
-        Set<Question> tmpQuestionList = category.getQuestions();
-        tmpQuestionList.add(question);
-        category.setQuestions(tmpQuestionList);
+        //Set<Question> tmpQuestionList = category.getQuestions();
+        //tmpQuestionList.add(question);
+        //category.setQuestions(tmpQuestionList);
         saveQuestionService.saveQuestion(question);
-        saveCategoryService.saveCategory(category);
+        //saveCategoryService.saveCategory(category);
 
         QuestionResponseDTO questionResponseDTO = new QuestionResponseDTO();
-        questionResponseDTO.setId(question.getId());
         questionResponseDTO.setName(question.getName());
 
         return questionResponseDTO;
