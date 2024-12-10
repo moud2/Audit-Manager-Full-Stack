@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { LayoutDefault } from "../layouts/LayoutDefault.jsx";
 import LinearProgressWithLabel from '../components/Charts/ProgressBar.jsx';
 import CircularProgressWithLabel from '../components/Charts/CircularProgress.jsx';
@@ -7,7 +7,7 @@ import CustomBarChart from '../components/Charts/BarChart.jsx';
 import Title from '../components/Textareas/Title.jsx';
 import api from '../api';
 import Box from "@mui/material/Box";
-import { CompareAudit } from '../components/CompareAudit/CompareAudit.jsx';
+import {Button} from "@mui/material";
 
 /**
  * Evaluation component fetches audit data and displays it as a series of progress indicators,
@@ -18,14 +18,31 @@ import { CompareAudit } from '../components/CompareAudit/CompareAudit.jsx';
  * @returns {JSX.Element} A layout component rendering the evaluation details.
  */
 export function Evaluation() {
+    // Extract audit ID from the route parameters to dynamically load audit data
     const { auditId } = useParams();
+
+    /**
+     * overallProgress - Represents the overall completion percentage of the audit.
+     * categoryProgress - Array of objects representing each category's progress as a percentage.
+     */
     const [overallProgress, setOverallProgress] = useState(0);
     const [categoryProgress, setCategoryProgress] = useState([]);
+
+    /**
+     * Array representing the distribution of question ratings:
+     * [count of 0 points, count of 1 point, ..., count of 5 points, count of "nA"].
+     */
     const [ratingDistribution, setRatingDistribution] = useState([0, 0, 0, 0, 0, 0, 0]);
 
     // Define color codes for the bar chart, where the last color (black) represents "nA"
     const colors = ['#a50026', '#d73027', '#fdae61', '#d9ef8b', '#66bd63', '#006837', '#000000'];
+    const navigate = useNavigate();
 
+    /**
+     * Fetches data from the backend:
+     * - Progress data for overall and categories (`/progress` endpoint).
+     * - Ratings distribution data (`/ratings` endpoint).
+     */
     useEffect(() => {
         // Fetch progress data
         api.get(`/v1/audits/${auditId}/progress`)
@@ -88,7 +105,14 @@ export function Evaluation() {
                 </div>
 
                 {/* Audit vergleichen Button */}
-                <CompareAudit selectedAudit={auditId ? { id: auditId } : null} />
+                <div className="flex justify-end mr-8">
+                <Button
+                    onClick={() => navigate(`/compare-audits/${auditId}`)}
+                    variant="contained"
+                >
+                    Audit vergleichen
+                </Button>
+                </div>
 
                 
             </div>
