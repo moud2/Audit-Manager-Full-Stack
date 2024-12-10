@@ -4,6 +4,7 @@ import { LayoutDefault } from "../layouts/LayoutDefault.jsx";
 import { AuditDropdown } from "../components/CompareAudit/AuditDropdown.jsx";
 import { AuditComparisonCard } from "../components/CompareAudit/AuditComparisonCard.jsx";
 import api from "../api";
+import Title from "../components/Textareas/Title.jsx";
 
 /**
  * CompareAudits Component
@@ -109,10 +110,7 @@ export function CompareAudits() {
     return (
         <LayoutDefault>
             <div className="max-w-6xl mx-auto px-4">
-                <h1 className="text-center text-2xl font-bold mb-6">Audits vergleichen</h1>
-
-                {/* Display error messages, if any */}
-                {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+                <Title>Audits vergleichen</Title>
 
                 {/* Dropdown for selecting the second audit */}
                 <AuditDropdown

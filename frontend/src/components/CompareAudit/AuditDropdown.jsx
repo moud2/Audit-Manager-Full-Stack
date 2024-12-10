@@ -1,4 +1,5 @@
 import React from "react";
+import Text from "../Textareas/Text.jsx";
 
 /**
  * AuditDropdown component renders a dropdown menu for selecting an audit.
@@ -13,9 +14,9 @@ export function AuditDropdown({ audits, onAuditSelect }) {
     return (
         <div className="mb-6">
             {/* Label for the dropdown */}
-            <label htmlFor="auditDropdown" className="block text-gray-700 font-bold mb-2">
+            <Text htmlFor="auditDropdown" className="block text-gray-700 font-bold mb-2">
                 Zweites Audit auswählen:
-            </label>
+            </Text>
             
             {/* Dropdown for selecting an audit */}
             <select
