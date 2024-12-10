@@ -12,7 +12,7 @@ export function AuditDropdown({ audits, onAuditSelect }) {
                 renderInput={(params) => (
                     <TextField
                         {...params}
-                        label="Select a second audit" // Label for the input field
+                        label="Zweites Audit auswählen" // Label for the input field
                         variant="outlined"
                         fullWidth
                     />
