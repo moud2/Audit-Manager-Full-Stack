@@ -59,8 +59,10 @@ public class AuditProgressService {
             categoryNames.putIfAbsent(categoryId, categoryName);
             totalQuestionsPerCategory.merge(categoryId, 1, Integer::sum);
             totalQuestions++;
-
-            if (!rating.getNa()) {
+            if (rating.getNa() == null) {
+                continue;
+            }
+            if (rating.getNa() || rating.getPoints() != null) {
                 int points = rating.getPoints() != null ? rating.getPoints() : 0;
                 pointsPerCategory.merge(categoryId, points, Integer::sum);
                 answeredQuestionsPerCategory.merge(categoryId, 1, Integer::sum);
