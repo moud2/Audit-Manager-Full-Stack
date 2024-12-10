@@ -8,6 +8,7 @@ import com.insight.backend.repository.AuditRepository;
 import com.insight.backend.specifications.AuditSpecifications;
 
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 /**
@@ -62,6 +63,7 @@ public class FindAuditService {
      */
     public List<Audit> findAllAudits(String customerName, String sortDirection, String sortBy) {
         Sort sort = Sort.by(sortDirection.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, sortBy);
-        return auditRepository.findAll(AuditSpecifications.customerContains(customerName), sort);
+        Specification<Audit> specification = Specification.where(AuditSpecifications.isNotDeleted()).and(AuditSpecifications.customerContains(customerName));
+        return auditRepository.findAll(specification, sort);
     }
 }

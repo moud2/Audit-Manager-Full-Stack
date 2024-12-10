@@ -1,20 +1,20 @@
 package com.insight.backend.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import jakarta.validation.Valid;
 
 import com.insight.backend.dto.AuditProgressDTO;
 import com.insight.backend.dto.AuditResponseDTO;
 import com.insight.backend.dto.NewAuditDTO;
+import com.insight.backend.exception.AuditDeletedException;
 import com.insight.backend.exception.AuditDeletionException;
 import com.insight.backend.exception.AuditNotFoundException;
 import com.insight.backend.model.Audit;
 import com.insight.backend.service.audit.AuditProgressService;
 import com.insight.backend.service.audit.CreateAuditService;
-import com.insight.backend.service.audit.FindAuditService;
 import com.insight.backend.service.audit.DeleteAuditService;
+import com.insight.backend.service.audit.FindAuditService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -101,13 +101,12 @@ public class AuditsController {
      */
     @GetMapping("/api/v1/audits/{auditId}/progress")
     public ResponseEntity<?> getAuditProgress(@PathVariable Long auditId) {
-        // Check if the audit exists or is soft-deleted
-        Optional<Audit> optionalAudit = findAuditService.findAuditById(auditId);
+        // Prüfen, ob das Audit existiert
+        Audit audit = findAuditService.findAuditById(auditId).orElseThrow(() -> new AuditNotFoundException(auditId));
 
-        // If the audit does not exist or has been deleted, return 404 Not Found
-        if (optionalAudit.isEmpty() || optionalAudit.get().getDeletedAt() != null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Audit not found or has been deleted");
+        // Prüfen, ob das Audit gelöscht wurde
+        if (audit.getDeletedAt() != null) {
+            throw new AuditDeletedException(auditId);
         }
 
         // Calculate the progress of the audit
