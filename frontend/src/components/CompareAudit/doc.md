@@ -1,24 +1,5 @@
 # Component Documentation
 
-## CompareAudit Component
-
-### Description
-The `CompareAudit` component renders a button that navigates to the `CompareAudits` page for comparing the selected audit.
-
-### Props
-- **`selectedAudit`** (Object):
-  The selected audit data. It should contain an `id` property.
-
-### Functionality
-- Navigates to the comparison page using the `useNavigate` hook.
-- Displays an error message if no audit is selected.
-
-### Key Methods
-- **`handleNavigate`**:
-  - Checks if `selectedAudit` exists and has an `id`.
-  - Navigates to `/compare-audits/:id` or displays an error.
-
----
 
 ## AuditDropdown Component
 
