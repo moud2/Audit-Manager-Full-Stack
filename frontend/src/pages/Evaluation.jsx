@@ -59,8 +59,8 @@ export function Evaluation() {
                     <RadarChart
                         labels={categoryProgress.map(category => category.categoryName)}
                         currentData={categoryProgress.map(category => category.currentCategoryProgress)}
-                        width={800}
-                        height={800}
+                        width={50}
+                        height={50}
                     />
                 </div>
             </div>

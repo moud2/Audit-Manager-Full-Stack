@@ -83,7 +83,7 @@ function RadarChart({ labels, currentData, height = 400, width = 600 }) {
     return (
         <div
             className="flex justify-center items-center p-4"
-            style={{ height: `${height}px`, width: `${width}px`, margin: '0 auto' }}
+            style={{ height: `${height}vh`, width: `${width}vw`, margin: '0 auto' }}
         >
             <Radar data={data} options={options} />
         </div>
