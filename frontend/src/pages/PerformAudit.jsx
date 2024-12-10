@@ -127,19 +127,24 @@ export function PerformAudit() {
     }, [auditId]);
 
     /**
-     * Fetches audit progress from the backend for the current audit on component mount
-     * or when the audit ID changes.
-     * It updates the `progress` state with the retrieved data.
+     * Fetches the audit progress data from the backend when the component mounts or when the audit ID changes.
      */
     useEffect(() => {
-         api.get(`/v1/audits/${auditId}/progress`)
-             .then(response => {
-                  setProgress(response.data);
-             })
-             .catch(err => {
-                 console.error('Error fetching data:', err);
-             });
+        fetchProgress();
     }, [auditId]);
+
+    /**
+     * Fetches the progress data for the current audit from the backend
+     */
+    const fetchProgress = () => {
+        api.get(`/v1/audits/${auditId}/progress`)
+            .then(response => {
+                setProgress(response.data);
+            })
+            .catch(err => {
+                console.error('Error fetching progress data:', err);
+            });
+    };
 
     /**
      * Handles the update of a question in the list. This function is triggered when a question's
@@ -157,6 +162,7 @@ export function PerformAudit() {
             {path: "/points", value: updatedQuestion.points},
             {path: "/comment", value: updatedQuestion.comment}
         ]);
+        fetchProgress();
     }
 
     /**
