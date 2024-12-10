@@ -76,6 +76,14 @@ export function LayoutDefault({children}) {
         open={open}>
 
         <DrawerHeader>
+        <div style={{ display: "flex", alignItems: "center" }}>
+            <img
+              src="/logo-insight.png"
+              alt="Logo"
+              style={{ width: "32px", height: "32px", marginRight: "8px" }}
+            />
+            <h2 style={{ margin: 0, fontSize: "1.2rem" }}>InSight</h2>
+          </div>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon/> : <ChevronRightIcon/>}
           </IconButton>
