@@ -18,40 +18,43 @@ import { CompareAudit } from '../components/CompareAudit/CompareAudit.jsx';
  * @returns {JSX.Element} A layout component rendering the evaluation details.
  */
 export function Evaluation() {
-    // Extract audit ID from the route parameters to dynamically load audit data
     const { auditId } = useParams();
-
-    /**
-     * overallProgress - Represents the overall completion percentage of the audit.
-     * categoryProgress - Array of objects representing each category's progress as a percentage.
-     * questionCountByRating - Array showing the count of questions rated with each score (0-5, and nA).
-     */
     const [overallProgress, setOverallProgress] = useState(0);
     const [categoryProgress, setCategoryProgress] = useState([]);
-    const [questionCountByRating, setQuestionCountByRating] = useState([]);
+    const [ratingDistribution, setRatingDistribution] = useState([0, 0, 0, 0, 0, 0, 0]);
 
     // Define color codes for the bar chart, where the last color (black) represents "nA"
     const colors = ['#a50026', '#d73027', '#fdae61', '#d9ef8b', '#66bd63', '#006837', '#000000'];
 
-    /**
-     * Fetches audit progress data from the backend when the component mounts or when auditId changes.
-     * Sets the state values for overallProgress, categoryProgress, and questionCountByRating
-     * based on the retrieved data.
-     */
     useEffect(() => {
+        // Fetch progress data
         api.get(`/v1/audits/${auditId}/progress`)
             .then(response => {
-                setOverallProgress(response.data.overallProgress);
-                setCategoryProgress(Object.entries(response.data.categoryProgress || {}).map(([name, progress]) => ({
-                    name,
-                    progress
-                })));
-                setQuestionCountByRating(Object.entries(response.data.questionCountByRating || {}).map(([rating, count]) => ({
-                    rating: parseInt(rating, 10),
-                    count
-                })));
+                setOverallProgress(response.data.currentAuditProgress || 0);
+                setCategoryProgress(response.data.categoryProgress || []);
             })
-            .catch(error => console.error("Error loading evaluation data:", error));
+            .catch(error => console.error("Error loading progress data:", error));
+
+        // Fetch ratings data
+        api.get(`/v1/audits/${auditId}/ratings`)
+            .then(response => {
+                // Initialize distribution array: [0, 1, 2, 3, 4, 5, "nA"]
+                const distribution = [0, 0, 0, 0, 0, 0, 0];
+                response.data.forEach(rating => {
+                    if (rating.na === true) {
+                        // If the question is explicitly marked as "nA"
+                        distribution[6]++;
+                    } else if (rating.points !== null) {
+                        // If the question has a specific rating (0-5)
+                        distribution[rating.points]++;
+                    } else {
+                        // If the question is unanswered
+                        distribution[6]++;
+                    }
+                });
+                setRatingDistribution(distribution);
+            })
+            .catch(error => console.error("Error loading ratings data:", error));
     }, [auditId]);
 
     return (
@@ -70,8 +73,8 @@ export function Evaluation() {
                 {/* Category Progress Circular Charts */}
                 <div className="w-full grid grid-cols-1 gap-6 mb-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
                     {categoryProgress.map(category => (
-                        <div data-cy={"CircularChart"} key={category.name} className="flex flex-col items-center" >
-                            <CircularProgressWithLabel value={category.progress} label={category.name} size={60} />
+                        <div  data-cy={"CircularChart"} key={category.categoryName} className="flex flex-col items-center">
+                            <CircularProgressWithLabel value={category.currentCategoryProgress} label={category.categoryName} size={60} />
                         </div>
                     ))}
                 </div>
@@ -79,7 +82,7 @@ export function Evaluation() {
                 {/* Question Count by Rating Bar Chart */}
                 <div data-cy={"BarChart"} className="max-w-full overflow-x-auto pb-10">
                     <CustomBarChart
-                        data={questionCountByRating.map(item => item.count)} // Extract count for the chart data
+                        data={ratingDistribution} // Pass the rating distribution directly
                         colors={colors}
                     />
                 </div>
