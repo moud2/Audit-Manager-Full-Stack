@@ -14,7 +14,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import {Children} from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -34,25 +34,47 @@ const Main = styled('main', {
     }),
   }));
 
-
-const DrawerHeader = styled('div')(({ theme }) => ({display: 'flex',alignItems: 'center',padding: theme.spacing(0, 1),...theme.mixins.toolbar,justifyContent: 'flex-end',}));
+const DrawerHeader = styled('div')(({ theme }) => 
+  ({display: 'flex',
+    alignItems: 'center',
+    padding: theme.spacing(0, 1),
+    ...theme.mixins.toolbar,justifyContent: 'flex-end',}));
 
 export function LayoutDefault({children}) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const location = useLocation();
   const handleDrawerOpen = () => {setOpen(true);};
   const handleDrawerClose = () => {setOpen(false);};
-  const links = [{ href: "/dashboard", label: "Dashboard" },{ href: "/new-audit", label: "New Audit" },{ href: "/perform-audit", label: "Perform Audit" },{ href: "/evaluation", label: "Evaluation" },];
+  
+  const links = 
+  [{ href: "/dashboard", label: "Dashboard" },
+     { href: "/new-audit", label: "New Audit" },
+     { href: "/perform-audit", label: "Perform Audit" },
+     { href: "/evaluation", label: "Evaluation" },
+  ];
+
+  React.useEffect(() => {
+    setOpen(true);
+  }, [location]);
 
   return (
     <Box sx={{display: 'flex'}}>
       <CssBaseline/>
       <Header/>
-      {/* Burger-Menü-Icon */}
-      <IconButton color="inherit" aria-label="open drawer" onClick={handleDrawerOpen} edge="start" sx={{position: "fixed",top: "16px",left: "16px",zIndex: 1301,display: open ? "none" : "block",}}>
+      <IconButton color="inherit" 
+        aria-label="open drawer" 
+        onClick={handleDrawerOpen} 
+        edge="start" 
+        sx={{position: "fixed",top: "16px",left: "16px",zIndex: 1301,display: open ? "none" : "block",}}>
         <MenuIcon/>
       </IconButton>
-     <Drawer sx={{width: drawerWidth,flexShrink: 0,'& .MuiDrawer-paper': {width: drawerWidth,boxSizing: 'border-box',},}} variant="persistent" anchor="left" open={open}>
+     <Drawer 
+        sx={{width: drawerWidth, flexShrink: 0,'& .MuiDrawer-paper': {width: drawerWidth,boxSizing: 'border-box',},}} 
+        variant="persistent" 
+        anchor="left" 
+        open={open}>
+
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon/> : <ChevronRightIcon/>}
@@ -60,7 +82,12 @@ export function LayoutDefault({children}) {
         </DrawerHeader>
         <Divider/>
         <List>
-          {links.map((link, index) => (<ListItem key={index} disablePadding><ListItemButton component={Link} to={link.href}><ListItemText primary={link.label}/></ListItemButton></ListItem>))}
+          {links.map((link, index) => (
+          <ListItem key={index} disablePadding>
+          <ListItemButton component={Link} to={link.href}>
+          <ListItemText primary={link.label}/>
+          </ListItemButton>
+          </ListItem>))}
         </List>
         <Divider/>
       </Drawer>
