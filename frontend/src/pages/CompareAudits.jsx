@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from 'react-router-dom';
 import { LayoutDefault } from "../layouts/LayoutDefault.jsx";
 import { AuditDropdown } from "../components/CompareAudit/AuditDropdown.jsx";
@@ -15,36 +15,11 @@ import Title from "../components/Textareas/Title.jsx";
  * @returns {JSX.Element} The rendered CompareAudits page.
  */
 export function CompareAudits() {
-    const { auditId } = useParams(); // Extract audit ID from the URL
-    const [selectedAudit, setSelectedAudit] = useState(null); // State for the selected audit
-    const [secondAudit, setSecondAudit] = useState(null); // State for the second audit to compare
-    const [allAudits, setAllAudits] = useState([]); // List of all available audits
-    const [error, setError] = useState(null); // Error state for displaying error messages
-
-    // Load all audits first
-    useEffect(() => {
-        const fetchAllAudits = async () => {
-            try {
-                const response = await api.get('/v1/audits');
-                setAllAudits(response.data);
-            } catch {
-                setError("Fehler beim Laden der Audit-Liste.");
-            }
-        };
-
-        fetchAllAudits();
-    }, []); // Only runs once to fetch the list of audits
-
-    // Fetch selected audit data after allAudits are loaded
-    useEffect(() => {
-        if (auditId && allAudits.length > 0) {
-            fetchAuditData(
-                auditId,
-                setSelectedAudit,
-                "Fehler beim Laden der Daten des ersten Audits."
-            );
-        }
-    }, [auditId, allAudits]); // Wait for allAudits to load before fetching selectedAudit
+    const { auditId } = useParams(); 
+    const [selectedAudit, setSelectedAudit] = useState(null); 
+    const [secondAudit, setSecondAudit] = useState(null); 
+    const [allAudits, setAllAudits] = useState([]); 
+    const [error, setError] = useState(null); 
 
     /**
      * Fetches audit progress and ratings data.
@@ -53,9 +28,8 @@ export function CompareAudits() {
      * @param {Function} setAudit - State setter for updating audit data (selectedAudit or secondAudit).
      * @param {string} errorMessage - Error message to display if the fetch fails.
      */
-    const fetchAuditData = async (auditId, setAudit, errorMessage) => {
+    const fetchAuditData = useCallback(async (auditId, setAudit, errorMessage) => {
         try {
-            // Fetch progress data
             const progressResponse = await api.get(`/v1/audits/${auditId}/progress`);
             const auditName =
                 allAudits.find(a => a.id === parseInt(auditId))?.name || `Audit ${auditId}`;
@@ -67,12 +41,11 @@ export function CompareAudits() {
 
             const auditData = {
                 id: auditId,
-                name: auditName, // Set the name
+                name: auditName,
                 overallProgress: progressResponse.data.currentAuditProgress || 0,
                 categoryProgress: categoryProgressArray,
             };
 
-            // Fetch ratings data
             const ratingsResponse = await api.get(`/v1/audits/${auditId}/ratings`);
             const distribution = [0, 0, 0, 0, 0, 0, 0];
             ratingsResponse.data.forEach(rating => {
@@ -92,13 +65,33 @@ export function CompareAudits() {
         } catch {
             setError(errorMessage);
         }
-    };
+    }, [allAudits]);
 
-    /**
-     * Handles the selection of a second audit for comparison.
-     * 
-     * @param {Object} audit - The selected audit object.
-     */
+    // Load all audits first
+    useEffect(() => {
+        const fetchAllAudits = async () => {
+            try {
+                const response = await api.get('/v1/audits');
+                setAllAudits(response.data);
+            } catch {
+                setError("Fehler beim Laden der Audit-Liste.");
+            }
+        };
+
+        fetchAllAudits();
+    }, []);
+
+    // Fetch selected audit data after allAudits are loaded
+    useEffect(() => {
+        if (auditId && allAudits.length > 0) {
+            fetchAuditData(
+                auditId,
+                setSelectedAudit,
+                "Fehler beim Laden der Daten des ersten Audits."
+            );
+        }
+    }, [auditId, allAudits, fetchAuditData]);
+
     const handleAuditSelect = (audit) => {
         fetchAuditData(
             audit.id,
