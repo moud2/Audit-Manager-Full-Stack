@@ -1,5 +1,6 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import Text from "../Textareas/Text.jsx";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 /**
  * AuditDropdown component renders a dropdown menu for selecting an audit.
@@ -11,6 +12,28 @@ import Text from "../Textareas/Text.jsx";
  * @returns {JSX.Element} A dropdown component for selecting an audit.
  */
 export function AuditDropdown({ audits, onAuditSelect }) {
+    const [isOpen, setIsOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState(""); 
+    const [filteredAudits, setFilteredAudits] = useState(audits);
+
+    useEffect(() => {
+        setFilteredAudits(
+            audits.filter((audit) =>
+                audit.name.toLowerCase().includes(searchTerm)
+            )
+        );
+    }, [audits, searchTerm]);
+
+    const toggleDropdown = () => setIsOpen(!isOpen);
+
+    const handleSearch = (event) => {
+        const search = event.target.value.toLowerCase();
+        setSearchTerm(search);
+        setFilteredAudits(
+            audits.filter((audit) => audit.name.toLowerCase().includes(search))
+        );
+    };
+
     return (
         <div className="mb-6">
             {/* Label for the dropdown */}
@@ -18,23 +41,48 @@ export function AuditDropdown({ audits, onAuditSelect }) {
                 Zweites Audit auswählen:
             </Text>
             
-            {/* Dropdown for selecting an audit */}
-            <select
-                id="auditDropdown"
-                className="border rounded px-4 py-2 w-full"
-                onChange={(e) => {
-                    const selectedId = parseInt(e.target.value, 10); // Parse the selected value as an integer
-                    const selectedAudit = audits.find(audit => audit.id === selectedId); // Find the audit by ID
-                    onAuditSelect(selectedAudit); // Trigger the callback with the selected audit
-                }}
+            <button
+                onClick={toggleDropdown}
+                className="inline-flex justify-between w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-blue-500"
             >
-                <option value="">Bitte wählen</option>
-                {audits.map(audit => (
-                    <option key={audit.id} value={audit.id}>
-                        {audit.name}
-                    </option>
-                ))}
-            </select>
+                <span>Bitte Auswählen</span>
+                <KeyboardArrowDownIcon
+                    className={`transform transition-transform ${
+                        isOpen ? "rotate-180" : "rotate-0"
+                    }`}
+                />
+            </button>
+
+            {isOpen && (
+                <div className="absolute z-10 w-full mt-2 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5">
+                    <input
+                        type="text"
+                        value={searchTerm}
+                        onChange={handleSearch}
+                        placeholder="Search audits"
+                        className="w-full px-4 py-2 text-gray-800 border-b border-gray-300 focus:outline-none"
+                    />
+
+                    <div className="max-h-60 overflow-y-auto">
+                        {filteredAudits.map((audit) => (
+                            <div
+                                key={audit.id}
+                                className="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer"
+                                onClick={() => {
+                                    onAuditSelect(audit); 
+                                    setIsOpen(false); 
+                                }}
+                            >
+                                {audit.name}
+                            </div>
+                        ))}
+
+                        {filteredAudits.length === 0 && (
+                            <div className="px-4 py-2 text-gray-500">Keine Ergebnisse gefunden</div>
+                        )}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
