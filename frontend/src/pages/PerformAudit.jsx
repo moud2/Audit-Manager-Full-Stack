@@ -23,35 +23,10 @@ export function PerformAudit() {
     const { auditId } = useParams();
     const [questions, setQuestions] = useState([]);
     const [sortedQuestions, setSortedQuestions] = useState([]);
-    // const [progress, setProgress] = useState ([]);
+    const [progress, setProgress] = useState ([]);
     const navigate = useNavigate();
 
     const labels = [0, 1, 2, 3, 4, 5, "N/A"];
-
-
-    const progress = {
-        auditId: 2556,
-        categoryProgress: [
-            {
-                categoryId: 3,
-                categoryName: "Netzwerk",
-                answeredQuestions: 1,
-                totalQuestions: 2,
-            },{
-                categoryId: 5,
-                categoryName: "VPN",
-                answeredQuestions: 1,
-                totalQuestions: 3,
-            },{
-                categoryId: 8,
-                categoryName: "Secure Browsing",
-                answeredQuestions: 2,
-                totalQuestions: 5,
-            }
-        ]
-    };
-
-    console.log(progress)
 
     /**
      * Transforms an array of questions into a structured array of categories,
@@ -156,15 +131,15 @@ export function PerformAudit() {
      * or when the audit ID changes.
      * It updates the `progress` state with the retrieved data.
      */
-    // useEffect(() => {
-    //     api.get(`/v1/audits/${auditId}/progress`)
-    //         .then(response => {
-    //             console.log(response.data);
-    //         })
-    //         .catch(err => {
-    //             console.error('Error fetching data:', err);
-    //         });
-    // }, [auditId]);
+    useEffect(() => {
+         api.get(`/v1/audits/${auditId}/progress`)
+             .then(response => {
+                  setProgress(response.data);
+             })
+             .catch(err => {
+                 console.error('Error fetching data:', err);
+             });
+    }, [auditId]);
 
     /**
      * Handles the update of a question in the list. This function is triggered when a question's
