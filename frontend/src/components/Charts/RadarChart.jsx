@@ -1,65 +1,93 @@
-import React, { useRef, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { Chart, RadarController, RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend } from 'chart.js';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import { Radar } from 'react-chartjs-2';
+import {
+    Chart as ChartJS,
+    RadialLinearScale,
+    PointElement,
+    LineElement,
+    Filler,
+    Tooltip,
+    Legend,
+} from 'chart.js';
 
-// register Chart.js-components
-Chart.register(RadarController, RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
+ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
 
 /**
- * A radar chart component built with Chart.js.
- * Displays a radar chart with dynamic data and options, and an optional title.
- * @param {Object} props - Component properties.
- * @param {Object} props.data - The data for the radar chart, following the Chart.js format.
- * @param {Object} props.options - Configuration options for the radar chart, following the Chart.js format.
- * @param {string} [props.title] - Optional title displayed above the radar chart.
- * @param {number} [props.size=400] - The size (width and height) of the radar chart.
- * @returns {JSX.Element} A radar chart component.
+ * RadarChart component renders a radar chart with the given data.
+ *
+ * @component
+ * @param {Object} props - The properties passed to the component.
+ * @param {Array<string>} props.labels - Array of category names to display on the radar chart.
+ * @param {Array<number>} props.currentData - Array of current progress percentages for each category.
+ * @param {number} [props.height=400] - The height of the radar chart in pixels.
+ * @param {number} [props.width=600] - The width of the radar chart in pixels.
+ * @returns {JSX.Element} A radar chart displaying category progress data.
  */
-const RadarChart = ({ data, options, title, size = 400 }) => {
-    const canvasRef = useRef(null);
+function RadarChart({ labels, currentData, height = 400, width = 600 }) {
+    const data = {
+        labels,
+        datasets: [
+            {
+                label: 'Current Progress',
+                data: currentData,
+                backgroundColor: 'rgba(196, 23, 31, 0.2)',
+                borderColor: '#c4171f',
+                borderWidth: 2,
+                pointBackgroundColor: '#c4171f',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: '#c4171f',
+            },
+        ],
+    };
 
-    useEffect(() => {
-        // Init Chart
-        const ctx = canvasRef.current.getContext('2d');
-        const chartInstance = new Chart(ctx, {
-            type: 'radar',
-            data,
-            options,
-        });
-
-        return () => {
-            chartInstance.destroy();
-        };
-    }, [data, options]);
+    const options = {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            r: {
+                beginAtZero: true,
+                max: 100,
+                ticks: {
+                    stepSize: 20,
+                    color: '#444',
+                    font: {
+                        size: 14,
+                    },
+                },
+                angleLines: {
+                    color: '#888',
+                },
+                grid: {
+                    color: '#ccc',
+                },
+                pointLabels: {
+                    color: '#444',
+                    font: {
+                        size: 16,
+                    },
+                },
+            },
+        },
+        plugins: {
+            legend: false,
+            tooltip: {
+                callbacks: {
+                    label: function (tooltipItem) {
+                        return `${tooltipItem.dataset.label}: ${tooltipItem.raw}%`;
+                    },
+                },
+            },
+        },
+    };
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: size }}>
-            {title && (
-                <Typography variant="h6" color="text.primary" sx={{ mb: 2 }}>
-                    {title}
-                </Typography>
-            )}
-            <Box sx={{ position: 'relative', width: size, height: size }}>
-                <canvas ref={canvasRef} width={size} height={size}></canvas>
-            </Box>
-        </Box>
+        <div
+            className="flex justify-center items-center p-4"
+            style={{ height: `${height}px`, width: `${width}px`, margin: '0 auto' }}
+        >
+            <Radar data={data} options={options} />
+        </div>
     );
-};
-
-// PropTypes-Definitions
-RadarChart.propTypes = {
-    data: PropTypes.object.isRequired,
-    options: PropTypes.object.isRequired,
-    title: PropTypes.string,
-    size: PropTypes.number,
-};
-
-// default props
-RadarChart.defaultProps = {
-    title: '',
-    size: 400,
-};
+}
 
 export default RadarChart;

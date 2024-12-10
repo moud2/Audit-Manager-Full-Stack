@@ -1,18 +1,15 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { LayoutDefault } from "../layouts/LayoutDefault.jsx";
 import LinearProgressWithLabel from '../components/Charts/ProgressBar.jsx';
-import RadarChart from "../components/Charts/RadarChart.jsx";
-import CircularProgressWithLabel from '../components/Charts/CircularProgress.jsx';
-import CustomBarChart from '../components/Charts/BarChart.jsx';
+import RadarChart from '../components/Charts/RadarChart.jsx';
 import Title from '../components/Textareas/Title.jsx';
 import api from '../api';
 import Box from "@mui/material/Box";
 
 /**
  * Evaluation component fetches audit data and displays it as a series of progress indicators,
- * including an overall progress bar, circular progress indicators for each category,
- * and a bar chart representing question ratings.
+ * including overall progress bars and a radar chart representing category progress details.
  *
  * @component
  * @returns {JSX.Element} A layout component rendering the evaluation details.
@@ -22,39 +19,24 @@ export function Evaluation() {
     const { auditId } = useParams();
 
     /**
-     * overallProgress - Represents the overall completion percentage of the audit.
-     * categoryProgress - Array of objects representing each category's progress as a percentage.
-     * questionCountByRating - Array showing the count of questions rated with each score (0-5, and nA).
+     * currentAuditProgress - Progress for answered questions (excludes n.a.).
+     * overallAuditProgress - Progress for all questions (excludes n.a.).
+     * categoryProgress - Array of objects representing each category's progress details.
      */
-    const [overallProgress, setOverallProgress] = useState(0);
+    const [currentAuditProgress, setCurrentAuditProgress] = useState(0);
     const [categoryProgress, setCategoryProgress] = useState([]);
-
-    // Define color codes for the bar chart, where the last color (black) represents "nA"
-    const colors = ['#a50026', '#d73027', '#fdae61', '#d9ef8b', '#66bd63', '#006837', '#000000'];
 
     /**
      * Fetches audit progress data from the backend when the component mounts or when auditId changes.
-     * Sets the state values for overallProgress, categoryProgress, and questionCountByRating
+     * Sets the state values for currentAuditProgress, overallAuditProgress, and categoryProgress
      * based on the retrieved data.
      */
     useEffect(() => {
         api.get(`/v1/audits/${auditId}/progress`)
             .then(response => {
-                setOverallProgress(response.data.overallProgress);
-
-                const categories = response.data.categories || [];
-                const formattedCategories = categories.map(category => ({
-                    name: category.name,
-                    progress: category.progress,
-                }));
-
-                setCategoryProgress(formattedCategories);
-
-                //setQuestionCountByRating(Object.entries(response.data.questionCountByRating || {}).map(([rating, count]) => ({
-                //    rating: parseInt(rating, 10),
-                //    count
-                //})));
-
+                const { currentAuditProgress, categoryProgress } = response.data;
+                setCurrentAuditProgress(currentAuditProgress);
+                setCategoryProgress(categoryProgress || []);
             })
             .catch(error => console.error("Error loading evaluation data:", error));
     }, [auditId]);
@@ -64,65 +46,23 @@ export function Evaluation() {
             <div className="p-4 flex flex-col items-center">
                 <Title>Evaluation</Title>
 
-                {/* Overall Progress Bar */}
-                <div data-cy={"ProgressBar"} id="result" className="w-full flex flex-col justify-center items-center h-20 mb-6">
+                {/* Current Audit Progress Bar */}
+                <div data-cy={"CurrentProgressBar"} className="w-full flex flex-col justify-center items-center h-20 mb-6">
                     <Box className="text-center" sx={{ width: '80%' }}>
-                        <LinearProgressWithLabel value={overallProgress} />
+                        <LinearProgressWithLabel value={currentAuditProgress} />
                     </Box>
-                    <p className="text-center text-xl">Gesamtfortschritt</p>
+                    <p className="text-center text-xl">Gesamtbewertung</p>
                 </div>
 
-                {/* Radar Chart for Category Progress */}
-                <div className="w-full flex justify-center mb-6">
+                {/* Radar Chart */}
+                <div data-cy={"RadarChart"} className="w-full flex justify-center">
                     <RadarChart
-                        data={{
-                            labels: categoryProgress.map(category => category.name),
-                            datasets: [
-                                {
-                                    label: 'Category Progress',
-                                    data: categoryProgress.map(category => category.progress),
-                                    fill: true,
-                                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                                    borderColor: 'rgb(54, 162, 235)',
-                                    pointBackgroundColor: 'rgb(54, 162, 235)',
-                                    pointBorderColor: '#fff',
-                                    pointHoverBackgroundColor: '#fff',
-                                    pointHoverBorderColor: 'rgb(54, 162, 235)',
-                                },
-                            ],
-                        }}
-                        options={{
-                            responsive: true,
-                            scales: {
-                                r: {
-                                    angleLines: { display: false },
-                                    suggestedMin: 0,
-                                    suggestedMax: 100,
-                                },
-                            },
-                        }}
-                        title="Category Progress Radar"
-                        size={500}
+                        labels={categoryProgress.map(category => category.categoryName)}
+                        currentData={categoryProgress.map(category => category.currentCategoryProgress)}
+                        width={800}
+                        height={800}
                     />
                 </div>
-
-                {/* Category Progress Circular Charts
-                <div className="w-full grid grid-cols-1 gap-6 mb-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-                    {categoryProgress.map(category => (
-                        <div data-cy={"CircularChart"} key={category.name} className="flex flex-col items-center" >
-                            <CircularProgressWithLabel value={category.progress} label={category.name} size={60} />
-                        </div>
-                    ))}
-                </div>
-*/}
-                {/* Question Count by Rating Bar Chart
-                <div data-cy={"BarChart"} className="max-w-full overflow-x-auto pb-10">
-                    <CustomBarChart
-                        data={questionCountByRating.map(item => item.count)} // Extract count for the chart data
-                        colors={colors}
-                    />
-                </div>
-                */}
             </div>
         </LayoutDefault>
     );

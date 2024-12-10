@@ -35,7 +35,7 @@ export function CheckboxSelect({ value, options, onChange }) {
     }
 
     return (
-        <FormGroup className="px-5 flex justify-center" row>
+        <FormGroup row>
             {options.map((label) => (
                 <FormControlLabel
                     key={label}
