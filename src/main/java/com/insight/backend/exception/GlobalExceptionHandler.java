@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.server.ResponseStatusException;
 
 /**
  * GlobalExceptionHandler is a class that handles exceptions thrown by the application.
@@ -49,14 +48,41 @@ public class GlobalExceptionHandler {
      * Handles ResponseStatusException to provide detailed error messages in the response body.
      * Returns a detailed JSON response containing: timestamp, status, error, and message.
      */
-    @ExceptionHandler(ResponseStatusException.class)
-    public ResponseEntity<Object> handleResponseStatusException(ResponseStatusException ex) {
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<Object> handleCategoryNotFoundException(CategoryNotFoundException ex) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
-        body.put("status", ex.getStatusCode().value());
-        body.put("error", ((HttpStatus) ex.getStatusCode()).getReasonPhrase());
-        body.put("message", ex.getReason());
-
-        return new ResponseEntity<>(body, ex.getStatusCode());
+        body.put("status", HttpStatus.NOT_FOUND.value());
+        body.put("error", "Not Found");
+        body.put("message", ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
+    /**
+     * Handles IllegalArgumentException with a JSON error response.
+     * - Returns HTTP 500 (Internal Server Error) with details: timestamp, status, error, and message.
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException ex) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        body.put("error", "Internal Server Error");
+        body.put("message", ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    /**
+     * Handles CategoryDeletionException with a JSON error response.
+     * - Returns HTTP 500 (Internal Server Error) with details: timestamp, status, error, and message.
+     */
+    @ExceptionHandler(CategoryDeletionException.class)
+    public ResponseEntity<Object> handleCategoryDeletionException(CategoryDeletionException ex) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        body.put("error", "Internal Server Error");
+        body.put("message", ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    
 }
