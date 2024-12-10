@@ -19,12 +19,12 @@ public class GlobalExceptionHandler {
      * Handles exceptions of type AuditNotFoundException and RatingNotFoundException.
      * Returns a ResponseEntity with a status of 404 (NOT FOUND) and a JSON body containing the error details.
      */
-    @ExceptionHandler({AuditNotFoundException.class, RatingNotFoundException.class})
+    @ExceptionHandler({AuditNotFoundException.class, RatingNotFoundException.class, AuditDeletedException.class})
     public ResponseEntity<Object> handleNotFoundException(RuntimeException ex) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
         body.put("status", HttpStatus.NOT_FOUND.value());
-        body.put("error", "Not Found");
+        body.put("error", HttpStatus.NOT_FOUND.getReasonPhrase());
         body.put("message", ex.getMessage());
 
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
@@ -39,7 +39,7 @@ public class GlobalExceptionHandler {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
         body.put("status", HttpStatus.BAD_REQUEST.value());
-        body.put("error", "Bad Request");
+        body.put("error", HttpStatus.BAD_REQUEST.getReasonPhrase());
         body.put("message", ex.getMessage());
 
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
