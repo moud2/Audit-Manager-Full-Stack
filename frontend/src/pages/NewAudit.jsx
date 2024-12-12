@@ -33,6 +33,11 @@ export function NewAudit() {
             return;
         }
 
+        if (selectedCategories.length === 0) {
+            setValidationError("Bitte wählen Sie mindestens eine Kategorie aus.");
+            return;
+        }
+
         setLoading(true); // Start loading for the creation process
         api
             .post("/v1/audits/new", {
@@ -140,7 +145,12 @@ export function NewAudit() {
                 <Table
                     value={selectedCategories}
                     options={cards}
-                    onChange={setSelectedCategories}
+                    onChange={(newSelectedCategories) => {
+                        setSelectedCategories(newSelectedCategories);
+                        if (newSelectedCategories.length > 0) {
+                            setValidationError(null); // Ignore the error, when minimum one category is selected
+                        }
+                    }}
                 />
                 <div className="relative flex justify-center mt-6 pb-16">
                     <button
