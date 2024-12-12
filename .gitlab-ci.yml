@@ -60,8 +60,8 @@ docker-deploy-job:
     - docker:dind
   variables:
     PIPELINE_TAG: "${CI_PIPELINE_ID}"
-  dependencies:
-    - backend-build-job
+#  dependencies:
+#    - backend-build-job
 #  rules:
 #    - if: $CI_COMMIT_REF_NAME == "main"
   script:
