@@ -11,12 +11,12 @@ stages:
   - deploy
 
   # TESTING STAGE :)
-#e2e-test-job:
-#  image: gradle:8-jdk21
-#  stage: test
-#  script:
-#    - echo "Running e2e tests... This will take about 60 seconds."
-#    - ./gradlew test
+e2e-test-job:
+  image: gradle:8-jdk21
+  stage: test
+  script:
+    - echo "Running e2e tests... This will take about 60 seconds."
+    - ./gradlew test
 
 #Sonecube Stage
 # sonarqube-check:
@@ -38,19 +38,19 @@ stages:
 #     - develop
 
 # BUILD STAGE
-#backend-build-job:
-#  image: gradle:8-jdk21
-#  stage: build
-#  environment: production
-#  rules:
-#    - if: $CI_COMMIT_REF_NAME == "main"
-#  script:
-#    - echo "Building the application..."
-#    - ./gradlew bootJar
-#    - echo "Building complete! :)"
-#  artifacts:
-#    paths:
-#      - build/libs/*.jar
+backend-build-job:
+  image: gradle:8-jdk21
+  stage: build
+  environment: production
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
+  script:
+    - echo "Building the application..."
+    - ./gradlew bootJar
+    - echo "Building complete! :)"
+  artifacts:
+    paths:
+      - build/libs/*.jar
 
 # RELEASE STAGE
 docker-deploy-job:
@@ -60,19 +60,19 @@ docker-deploy-job:
     - docker:dind
   variables:
     PIPELINE_TAG: "${CI_PIPELINE_ID}"
-#  dependencies:
-#    - backend-build-job
-#  rules:
-#    - if: $CI_COMMIT_REF_NAME == "main"
+  dependencies:
+    - backend-build-job
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
   script:
     - echo "Building & Deploying Docker Image..."
     - docker logout
     - echo -n "${CI_REGISTRY_PASSWORD}" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
-#
-#    - docker build --build-arg JAR_FILE=build/libs/*.jar -t gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/backend .
-#    - docker tag gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/backend:latest gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/backend:latest-$PIPELINE_TAG
-#    - docker push gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/backend:latest
-#    - docker push gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/backend:latest-$PIPELINE_TAG
+
+    - docker build --build-arg JAR_FILE=build/libs/*.jar -t gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/backend .
+    - docker tag gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/backend:latest gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/backend:latest-$PIPELINE_TAG
+    - docker push gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/backend:latest
+    - docker push gitlab.dit.htwk-leipzig.de:5050/projekt2024-s-audit-tool/backend:latest-$PIPELINE_TAG
 
     - echo "[*] Image Build & Deployment was executed."
 
