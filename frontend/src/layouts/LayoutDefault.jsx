@@ -15,7 +15,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import {Children} from "react";
 import { Link } from "react-router-dom";
-import { useSidebar } from "./SidebarContext.jsx";
+import { useSidebar } from "./UseSidebar.jsx";
 
 const drawerWidth = 240;
 
