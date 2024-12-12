@@ -33,9 +33,25 @@ export function Dashboard() {
     // Use the custom loading progress hook
     const loadingProgress = useLoadingProgress(loading);
 
-    // Fetch data from backend
     useEffect(() => {
         setLoading(true);
+        api
+            .get("/v1/audits")
+            .then((response) => {
+                setData(response.data);
+                setError(null);
+            })
+            .catch((err) => {
+                // Use the helper function
+                const errorMessage = handleApiError(err);
+                setError(errorMessage);
+            })
+            .finally(() => setLoading(false));
+    }, []);
+
+
+    // Fetch data from backend
+    useEffect(() => {
         api
             .get("/v1/audits", {
                 params: {
@@ -51,7 +67,6 @@ export function Dashboard() {
                 const errorMessage = handleApiError(err);
                 setError(errorMessage);
             })
-            .finally(() => setLoading(false));
     }, [debouncedCustomerName]);
 
     if (loading) {

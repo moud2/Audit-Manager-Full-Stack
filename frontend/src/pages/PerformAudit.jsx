@@ -138,7 +138,7 @@ export function PerformAudit() {
     }, [auditId]);
 
     if (loading) {
-        return <LoadingScreen progress={useLoadingProgress} message="Audit is loading..." />;
+        return <LoadingScreen progress={loadingProgress} message="Audit is loading..." />;
     }
 
     if (error) {
