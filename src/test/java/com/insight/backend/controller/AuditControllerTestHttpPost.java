@@ -176,6 +176,7 @@ public class AuditControllerTestHttpPost {
     public void testDuplicateCategoryIds() throws Exception {
         NewAuditDTO newAuditDTO = new NewAuditDTO();
         newAuditDTO.setName("Audit Name");
+        newAuditDTO.setCustomer("Audit Customer");
         newAuditDTO.setCategories(Arrays.asList(1L, 1L)); // Duplicate Category-IDs
 
         // Mock the service to throw IllegalArgumentException

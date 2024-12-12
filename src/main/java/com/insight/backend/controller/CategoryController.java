@@ -2,21 +2,26 @@ package com.insight.backend.controller;
 
 import java.util.List;
 
-import jakarta.validation.Valid;
-
-import com.insight.backend.dto.CategoryResponseDTO;
-import com.insight.backend.dto.NewCategoryDTO;
-import com.insight.backend.model.Category;
-import com.insight.backend.service.category.CreateCategoryService;
-import com.insight.backend.service.category.FindCategoryService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.insight.backend.dto.CategoryResponseDTO;
+import com.insight.backend.dto.NewCategoryDTO;
+import com.insight.backend.exception.CategoryDeletionException;
+import com.insight.backend.exception.CategoryNotFoundException;
+import com.insight.backend.model.Category;
+import com.insight.backend.service.category.CreateCategoryService;
+import com.insight.backend.service.category.DeleteCategoryService;
+import com.insight.backend.service.category.FindCategoryService;
+
+import jakarta.validation.Valid;
 
 /**
  * CategoryController is a REST controller that handles HTTP requests related to categories.
@@ -28,16 +33,19 @@ public class CategoryController {
      */
     private final FindCategoryService findCategoryService;
     private final CreateCategoryService createCategoryService;
-
+    private final DeleteCategoryService deleteCategoryService;
     /**
      * Constructs a new CategoryController with the specified FindCategoryService.
      * 
      * @param findCategoryService the service to find categories
+     * @param createCategoryService the service to create categories
+     * @param deleteCategoryService the service to soft delete categories 
      */
     @Autowired
-    public CategoryController(FindCategoryService findCategoryService, CreateCategoryService createCategoryService) {
+    public CategoryController(FindCategoryService findCategoryService, CreateCategoryService createCategoryService, DeleteCategoryService deleteCategoryService) {
         this.findCategoryService = findCategoryService;
         this.createCategoryService = createCategoryService;
+        this.deleteCategoryService = deleteCategoryService;
     }
 
     /**
@@ -64,4 +72,26 @@ public class CategoryController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
+
+    /**
+     * DELETE /categories/{categoryID}
+     * Soft deletes a category by its ID.
+     *
+     * @param id the ID of the category to be deleted
+     * @return a ResponseEntity containing info about the delete operation in JSON format
+     */
+    @DeleteMapping("/categories/{categoryID}")
+    public ResponseEntity<Void> deleteCategory(@PathVariable Long categoryID) {
+        Category category = findCategoryService.findCategoryById(categoryID)
+            .orElseThrow(() -> new CategoryNotFoundException(categoryID));
+    
+        try {
+            deleteCategoryService.softDeleteCategory(category);
+        } catch (IllegalArgumentException e) {
+            throw new CategoryDeletionException(categoryID);
+        }
+    
+        return ResponseEntity.noContent().build();
+    }
+
 }
