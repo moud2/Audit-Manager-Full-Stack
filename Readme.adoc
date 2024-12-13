@@ -1,5 +1,9 @@
 = InSight Backend
 
+== Diagramm
+
+A detailed Class Diagramm can be found in the https://gitlab.dit.htwk-leipzig.de/projekt2024-s-audit-tool/insight/-/blob/main/TechnicalDocumentation/Classes/DetailedClassDiagramm-backend.jpg?ref_type=heads[Insight Technical Documentation]
+
 == Setup
 
 - copy `.env.example` to `.env` and fill in the values (if needed). Entweder über IDE/Filesystem oder im Terminal:
