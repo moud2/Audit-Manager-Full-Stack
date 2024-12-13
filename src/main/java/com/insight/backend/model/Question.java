@@ -1,5 +1,6 @@
 package com.insight.backend.model;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import jakarta.persistence.*;
@@ -19,6 +20,7 @@ public class Question {
     @ManyToOne
     @JoinColumn(name="category_id", nullable=false)
     private Category category;
+    private LocalDateTime DeletedAt;
 
     public Question(String name, Set<Rating> rating, Category category) {
         this.name = name;
@@ -60,5 +62,13 @@ public class Question {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public void setDeletedAt(LocalDateTime DeletedAt) {
+        this.DeletedAt = DeletedAt;
+    }
+    
+    public LocalDateTime getDeletedAt() {
+        return DeletedAt;
     }
 }
