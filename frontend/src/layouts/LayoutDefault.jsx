@@ -52,14 +52,17 @@ export function LayoutDefault({children}) {
     <Box sx={{display: 'flex'}}>
       <CssBaseline/>
       <Header/>
-      <IconButton color="inherit" 
+      <IconButton 
+        color="inherit" 
         aria-label="open drawer" 
         onClick={openSidebar} 
+        data-cy="menu-icon"
         edge="start" 
         sx={{position: "fixed",top: "16px",left: "215px",zIndex: 1301,display: open ? "none" : "block",}}>
         <MenuIcon/>
       </IconButton>
-     <Drawer 
+     <Drawer
+        data-cy="sidebar" 
         sx={{width: drawerWidth, flexShrink: 0,'& .MuiDrawer-paper': {width: drawerWidth,boxSizing: 'border-box',},}} 
         variant="persistent" 
         anchor="left" 
@@ -75,7 +78,7 @@ export function LayoutDefault({children}) {
             <h2 style={{ margin: 0, fontSize: "1.2rem" }}>InSight</h2>
           </div>
 
-          <IconButton onClick={closeSidebar}>
+          <IconButton onClick={closeSidebar} data-cy="close-icon">
             {theme.direction === 'ltr' ? <ChevronLeftIcon/> : <ChevronRightIcon/>}
           </IconButton>
         </DrawerHeader>
