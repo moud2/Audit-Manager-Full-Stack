@@ -46,10 +46,12 @@ public class AuditProgressService {
         Map<Long, Integer> totalQuestionsPerCategory = new HashMap<>();
         Map<Long, Integer> answeredQuestionsPerCategory = new HashMap<>();
         Map<Long, Integer> pointsPerCategory = new HashMap<>();
+        Map<Long, Integer> naQuestionsPerCategory = new HashMap<>();
 
         int totalPoints = 0;
         int answeredQuestions = 0;
         int totalQuestions = 0;
+        int amountNaQuestions = 0;
 
         // Iterate through ratings to calculate category-specific metrics
         for (Rating rating : ratings) {
@@ -62,7 +64,13 @@ public class AuditProgressService {
             if (rating.getNa() == null) {
                 continue;
             }
-            if (rating.getNa() || rating.getPoints() != null) {
+            if(rating.getNa()){
+                answeredQuestionsPerCategory.merge(categoryId, 1, Integer::sum);
+                amountNaQuestions++;
+                naQuestionsPerCategory.merge(categoryId, 1, Integer::sum);
+                continue;
+            }
+            if (rating.getPoints() != null) {
                 int points = rating.getPoints() != null ? rating.getPoints() : 0;
                 pointsPerCategory.merge(categoryId, points, Integer::sum);
                 answeredQuestionsPerCategory.merge(categoryId, 1, Integer::sum);
@@ -80,9 +88,10 @@ public class AuditProgressService {
             int categoryTotalQuestions = totalQuestionsPerCategory.getOrDefault(categoryId, 0);
             int categoryAnsweredQuestions = answeredQuestionsPerCategory.getOrDefault(categoryId, 0);
             int categoryPoints = pointsPerCategory.getOrDefault(categoryId, 0);
+            int categoryNaQuestions = naQuestionsPerCategory.getOrDefault(categoryId, 0);
 
             double currentCategoryProgress = categoryAnsweredQuestions > 0
-                    ? (double) categoryPoints / (5 * categoryAnsweredQuestions) * 100
+                    ? (double) categoryPoints / (5 * categoryAnsweredQuestions - 5 * categoryNaQuestions) * 100
                     : 0;
 
 
