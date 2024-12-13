@@ -1,5 +1,9 @@
 = InSight Backend
 
+== Diagramm
+
+A detailed Class Diagramm can be found in the https://gitlab.dit.htwk-leipzig.de/projekt2024-s-audit-tool/insight/-/blob/main/TechnicalDocumentation/Classes/DetailedClassDiagramm-backend.jpg?ref_type=heads[Insight Technical Documentation]
+
 == Overview
 
 This repository contains the backend for the InSight project. The backend is a Spring Boot application that uses a MSSQL database. +
