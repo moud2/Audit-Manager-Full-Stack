@@ -1,21 +1,39 @@
-describe('Sidebar Component', () => {
+import React from "react";
+import { SidebarProvider } from "../../src/layouts/SidebarContext"; // Pfad anpassen
+import LayoutDefault from "../../src/layouts/LayoutDefault"; // Die zu testende Komponente
+import { MemoryRouter } from "react-router-dom";
+
+describe("Sidebar Component with Context", () => {
     beforeEach(() => {
-        // Besuch der Seite, auf der die Sidebar gerendert wird
-        cy.visit('/Dashboard');
-      });
-  
-    it('should render the sidebar', () => {
-      cy.get('[data-cy=sidebar]').should('exist');
+      // Wrappen der Layout-Komponente mit SidebarProvider und MemoryRouter
+      mount(
+        <SidebarProvider>
+          <MemoryRouter>
+            <LayoutDefault />
+          </MemoryRouter>
+        </SidebarProvider>
+      );
     });
   
-    it('should open the sidebar when clicking the menu icon', () => {
+    it("should render the sidebar", () => {
+      cy.get('[data-cy=sidebar]').should("exist");
+    });
+  
+    it("should open the sidebar when clicking the menu icon", () => {
       cy.get('[data-cy=menu-icon]').click();
-      cy.get('[data-cy=sidebar]').should('be.visible');
+      cy.get('[data-cy=sidebar]').should("be.visible");
     });
   
-    it('should close the sidebar when clicking the close icon', () => {
-      cy.get('[data-cy=menu-icon]').click(); // Öffnen
-      cy.get('[data-cy=close-icon]').click(); // Schließen
-      cy.get('[data-cy=sidebar]').should('not.be.visible');
+    it("should close the sidebar when clicking the close icon", () => {
+      cy.get('[data-cy=menu-icon]').click();
+      cy.get('[data-cy=close-icon]').click();
+      cy.get('[data-cy=sidebar]').should("not.be.visible");
+    });
+  
+    it("should toggle sidebar state when clicking the menu icon multiple times", () => {
+      cy.get('[data-cy=menu-icon]').click();
+      cy.get('[data-cy=sidebar]').should("be.visible");
+      cy.get('[data-cy=close-icon]').click();
+      cy.get('[data-cy=sidebar]').should("not.be.visible");
     });
   });
