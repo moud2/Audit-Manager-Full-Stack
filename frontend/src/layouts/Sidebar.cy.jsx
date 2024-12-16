@@ -1,7 +1,8 @@
 import React from "react";
-import { SidebarProvider } from "../../src/layouts/SidebarContext"; // Pfad anpassen
+import { SidebarProvider } from "../../src/layouts/SidebarContext";
 import LayoutDefault from "../../src/layouts/LayoutDefault"; // Die zu testende Komponente
 import { MemoryRouter } from "react-router-dom";
+import { mount } from 'cypress/react';
 
 describe("Sidebar Component with Context", () => {
     beforeEach(() => {
