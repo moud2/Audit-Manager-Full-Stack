@@ -28,6 +28,7 @@ export function PerformAudit() {
 
     const labels = [0, 1, 2, 3, 4, 5, "N/A"];
 
+
     /**
      * Transforms an array of questions into a structured array of categories,
      * where each category contains its associated questions.
@@ -119,7 +120,6 @@ export function PerformAudit() {
             .then(response => {
                 setQuestions(response.data);
                 setSortedQuestions(transformData(response.data));
-                console.log(transformData(response.data));
             })
             .catch(err => {
                 console.error('Error fetching data:', err);

@@ -42,7 +42,7 @@ export function CategoryList({ categories, options, onChange }) {
     }
 
     return (
-        <div className="category-list h-screen overflow-y-auto" id="scroll-container">
+        <div className="category-list h-full overflow-y-auto" id="scroll-container">
             {categories.map((category) => (
                 <div key={category.id}>
                     <CategoryListItem
