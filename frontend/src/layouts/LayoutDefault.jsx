@@ -20,27 +20,28 @@ const drawerWidth = 240; // Breite der Sidebar
 
 // Hauptinhalt mit animierter Margin beim Öffnen/Schließen der Sidebar
 const Main = styled('main', {shouldForwardProp: (prop) => prop !== 'open',})
-        (({ theme, open }) => ({
+(({ theme, open }) => ({
         flexGrow: 1,
         padding: theme.spacing(3),
         marginLeft: open ? 0 : `-${drawerWidth}px`,
         transition: theme.transitions.create('margin',{
         easing: open
-        ? theme.transitions.easing.easeOut
-        : theme.transitions.easing.sharp,
+          ? theme.transitions.easing.easeOut
+          : theme.transitions.easing.sharp,
         duration: open
-        ? theme.transitions.duration.enteringScreen
-        : theme.transitions.duration.leavingScreen,
+          ? theme.transitions.duration.enteringScreen
+          : theme.transitions.duration.leavingScreen,
         }),
-        }));
+}));
 // Header der Sidebar (enthält das Logo und den Close-Button)
 const DrawerHeader = styled('div')
-        (({ theme }) => ({
+(({ theme }) => ({
         display: 'flex',
         alignItems: 'center',
         padding: theme.spacing(0, 1),
-        ...theme.mixins.toolbar,justifyContent: 'flex-end',
-        }));
+        ...theme.mixins.toolbar,
+        justifyContent: 'flex-end',
+}));
 
 export function LayoutDefault({children}) {
         const theme = useTheme();
