@@ -53,64 +53,73 @@ const links =
 
 return (// Hauptcontainer mit flexibler Anzeige für Layout
         <Box sx={{display: 'flex'}}>
-          <Header/>
+            <Header/>
 
             {/* Icon-Button zum Öffnen der Sidebar */}
             <IconButton 
-            color="inherit" 
-            aria-label="open drawer" 
-            onClick={openSidebar} 
-            data-cy="menu-icon"
-            edge="start" 
-            sx={{position: "fixed",top: "16px",left: "215px",zIndex: 1301,display: open ? "none" : "block",}}>
-            <MenuIcon/>
-          </IconButton>
+              color="inherit" 
+              aria-label="open drawer" 
+              onClick={openSidebar} 
+              data-cy="menu-icon"
+              edge="start" 
+              sx={{
+                position: "fixed",
+                top: "16px",
+                left: "215px",
+                zIndex: 1301,
+                display: open ? "none" : "block",}}>
+              <MenuIcon/>
+            </IconButton>
           
           {/* Sidebar-Komponente */}
           <Drawer
             data-cy="sidebar" 
-            sx={{width: drawerWidth, flexShrink: 0,'& .MuiDrawer-paper': {width: drawerWidth,boxSizing: 'border-box',},}} 
+            sx={{
+              width: drawerWidth,
+              flexShrink: 0,
+              '& .MuiDrawer-paper': {width: drawerWidth,boxSizing: 'border-box',},
+            }} 
             variant="persistent" 
             anchor="left" 
             open={open}>
           
-          {/* Header der Sidebar */}
-          <DrawerHeader>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <img
-              src="/logo-insight.png"
-              alt="Logo"
-              style={{ width: "32px", height: "32px", marginRight: "8px" }}
-              />
-              <h2 style={{ margin: 0, fontSize: "1.2rem" }}>InSight</h2>
-            </div>
-          {/* Icon-Button zum Schließen der Sidebar */}
-          <IconButton onClick={closeSidebar} data-cy="close-icon">
-            {theme.direction === 'ltr' ? <ChevronLeftIcon/> : <ChevronRightIcon/>}
-          </IconButton>
-          </DrawerHeader>
+              {/* Header der Sidebar */}
+            <DrawerHeader>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <img
+                  src="/logo-insight.png"
+                  alt="Logo"
+                  className="w-8 h-8 mr-2"
+                  />
+                  <h2 className="text-4xl font-medium">InSight</h2>
+                </div>
+                {/* Icon-Button zum Schließen der Sidebar */}
+                <IconButton onClick={closeSidebar} data-cy="close-icon">
+                  {theme.direction === 'ltr' ? <ChevronLeftIcon/> : <ChevronRightIcon/>}
+                </IconButton>
+            </DrawerHeader>
 
-          {/* Trennlinie */}
-          <Divider/>
+            {/* Trennlinie */}
+            <Divider className="pt-2"/>
 
-          {/* Liste von Links in der Sidebar */}
-          <List>
-            {links.map((link, index) => (
-            <ListItem key={index} disablePadding>
-            <ListItemButton component={Link} to={link.href}>
-            <ListItemText primary={link.label}/>
-            </ListItemButton>
-            </ListItem>))}
-          </List>
-          {/* Trennlinie */}
-          <Divider/>
+            {/* Liste von Links in der Sidebar */}
+            <List>
+              {links.map((link, index) => (
+              <ListItem key={index} disablePadding>
+                <ListItemButton component={Link} to={link.href}>
+                  <ListItemText primary={link.label}/>
+                </ListItemButton>
+              </ListItem>))}
+            </List>
+            {/* Trennlinie */}
+            <Divider/>
           </Drawer>
           {/* Hauptinhalt */}
           <Main open={open} className="flex-1 ml-64 bg-gray-100 pb-24">
-            <DrawerHeader/> {/* Platzhalter, um Platz für den Sidebar-Header zu schaffen */}
-            {children} {/* Dynamische Inhalte der Seite */}
+              <DrawerHeader/> {/* Platzhalter, um Platz für den Sidebar-Header zu schaffen */}
+              {children} {/* Dynamische Inhalte der Seite */}
           </Main>
           <Footer />
         </Box>
-      );
+    );
 }
