@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-scroll";
+import { Link as ScrollLink } from "react-scroll";
 import {CategoryProgress} from "./CategoryProgress.jsx";
 
 /**
@@ -24,7 +24,7 @@ export function AuditProgress({ progress }) {
         <div>
             <nav>
                 {progress.map((category) => (
-                    <Link
+                    <ScrollLink
                         key={category.categoryId}
                         to={`category-${category.categoryId}`}
                         data-to={`category-${category.categoryId}`}
@@ -39,7 +39,7 @@ export function AuditProgress({ progress }) {
                                 totalQuestions={category.totalQuestions}
                             />
                         </div>
-                    </Link>
+                    </ScrollLink>
                 ))}
             </nav>
         </div>

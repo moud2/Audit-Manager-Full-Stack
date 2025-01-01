@@ -4,7 +4,6 @@ import {CategoryList} from "../components/QuestionList/CategoryList.jsx";
 import Title from "../components/Textareas/Title.jsx";
 import api from "../api.js";
 import {useNavigate, useParams} from "react-router-dom";
-import {Button} from "@mui/material";
 
 /**
  * PerformAudit Component
