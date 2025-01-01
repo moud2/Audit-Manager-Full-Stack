@@ -13,7 +13,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import { Link } from "react-router-dom";
+import {Link, useLocation, useParams} from "react-router-dom";
 import { useSidebar } from "./UseSidebar.jsx";
 import { Footer } from "../components/Layout/Footer.jsx";
 import {AuditProgress} from "../components/AuditProgress/AuditProgress.jsx";
@@ -47,11 +47,15 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 export function LayoutDefault({ progress, children }) {
     const theme = useTheme();
     const { open, closeSidebar, openSidebar } = useSidebar();
+    const { auditId } = useParams();
+    const location = useLocation();
 
     const links = [
-        { href: "/dashboard", label: "Dashboard" },
-        { href: "/evaluation", label: "Evaluation"}
+        { href: "/dashboard", label: "Dashboard" }
     ];
+
+    const isPerformAuditPage = location.pathname.includes("/perform-Audit");
+    const isEvaluationPage = location.pathname.includes("/evaluation");
 
     return (
         <Box className="flex overflow-hidden">
@@ -106,9 +110,23 @@ export function LayoutDefault({ progress, children }) {
                             </ListItemButton>
                         </ListItem>
                     ))}
+                    {isPerformAuditPage && auditId && (
+                        <ListItem disablePadding>
+                            <ListItemButton component={Link} to={`/evaluation/${auditId}`}>
+                                <ListItemText primary="Evaluation" />
+                            </ListItemButton>
+                        </ListItem>
+                    )}
+                    {isEvaluationPage && auditId && (
+                        <ListItem disablePadding>
+                            <ListItemButton component={Link} to={`/perform-Audit/${auditId}`}>
+                                <ListItemText primary="Audit durchführen" />
+                            </ListItemButton>
+                        </ListItem>
+                    )}
                 </List>
                 <Divider />
-                <AuditProgress progress={progress}/>
+                {location.pathname.includes("/perform-Audit") && <AuditProgress progress={progress} />}
             </Drawer>
             <Main open={open} className="flex-1 ml-64 pb-24">
                 <DrawerHeader />

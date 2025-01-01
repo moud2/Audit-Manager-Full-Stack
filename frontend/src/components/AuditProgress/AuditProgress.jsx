@@ -18,7 +18,7 @@ import {CategoryProgress} from "./CategoryProgress.jsx";
  */
 export function AuditProgress({ progress }) {
     if (!progress || !Array.isArray(progress)) {
-        return <div>Loading.....</div>;
+        return <div />;
     }
     return (
         <div>

@@ -196,15 +196,6 @@ export function PerformAudit() {
                 options={labels}
                 onChange={handleQuestionUpdate}
             />
-            <div className="flex justify-end mr-8">
-                <Button
-                    onClick={() => navigate(`/evaluation/${auditId}`)}
-                    variant="contained"
-                >
-                    Bewertung anzeigen
-                </Button>
-            </div>
-
         </LayoutDefault>
     )
 }
