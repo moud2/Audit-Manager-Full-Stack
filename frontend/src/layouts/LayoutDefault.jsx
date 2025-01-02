@@ -19,8 +19,7 @@ import { useSidebar } from "./UseSidebar.jsx";
 const drawerWidth = 240; // Breite der Sidebar
 
 // Hauptinhalt mit animierter Margin beim Öffnen/Schließen der Sidebar
-const Main = styled('main', {shouldForwardProp: (prop) => prop !== 'open',})
-(({ theme, open }) => ({
+const Main = styled('main', {shouldForwardProp: (prop) => prop !== 'open',})(({ theme, open }) => ({
         flexGrow: 1,
         padding: theme.spacing(3),
         marginLeft: open ? 0 : `-${drawerWidth}px`,
@@ -34,8 +33,7 @@ const Main = styled('main', {shouldForwardProp: (prop) => prop !== 'open',})
         }),
 }));
 // Header der Sidebar (enthält das Logo und den Close-Button)
-const DrawerHeader = styled('div')
-(({ theme }) => ({
+const DrawerHeader = styled('div')(({ theme }) => ({
         display: 'flex',
         alignItems: 'center',
         padding: theme.spacing(0, 1),
@@ -45,7 +43,7 @@ const DrawerHeader = styled('div')
 
 export function LayoutDefault({children}) {
         const theme = useTheme();
-        const { open, closeSidebar, openSidebar } = useSidebar();// Custom Hook für die Sidebar-Logik
+        const { open, closeSidebar, openSidebar } = useSidebar(); // Custom Hook für die Sidebar-Logik
 
 // Links, die in der Sidebar angezeigt werden 
 const links = 
