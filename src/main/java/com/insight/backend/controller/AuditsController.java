@@ -109,12 +109,13 @@ public class AuditsController {
             throw new AuditDeletedException(auditId);
         }
 
-        // Fortschritt berechnen
+        // Calculate the progress of the audit
         AuditProgressDTO progressDTO = auditProgressService.calculateAuditProgress(auditId);
 
-        // Erfolgreiche Antwort mit Fortschrittsdaten zurückgeben
+        // Return a successful response with the progress data
         return ResponseEntity.ok(progressDTO);
     }
+
 
     /**
      * Handles DELETE requests for deleting an audit.
