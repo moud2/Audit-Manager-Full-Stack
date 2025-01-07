@@ -1,5 +1,6 @@
 package com.insight.backend.service.rating;
 
+import com.insight.backend.exception.AuditNotFoundException;
 import com.insight.backend.model.Audit;
 import com.insight.backend.model.Rating;
 import com.insight.backend.repository.AuditRepository;
@@ -24,8 +25,7 @@ public class PdfGenerator {
     public ByteArrayInputStream createPdf(long auditId) {
         // Retrieve Audit
         Audit audit = auditRepository.findById(auditId)
-                .orElseThrow(() -> new IllegalArgumentException("Audit not found for ID: " + auditId));
-
+                .orElseThrow(() -> new AuditNotFoundException(auditId));
         // Convert Ratings to a List
         List<Rating> ratings = new ArrayList<>(audit.getRatings());
 
