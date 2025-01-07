@@ -33,7 +33,7 @@ public class ExportController {
      * @return the file as a response
      */
 
-    @GetMapping(path = "/api/v1/ratings/{auditId}/export", produces = MediaType.APPLICATION_PDF_VALUE)
+    @GetMapping(path = "/api/v1/audits/{auditId}/export", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<InputStreamResource> auditReport(@PathVariable("auditId") long auditId) throws IOException {
         try {
 
