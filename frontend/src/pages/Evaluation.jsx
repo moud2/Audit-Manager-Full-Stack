@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { LayoutDefault } from "../layouts/LayoutDefault.jsx";
 import LinearProgressWithLabel from "../components/Charts/ProgressBar.jsx";
 import CircularProgressWithLabel from "../components/Charts/CircularProgress.jsx";
@@ -10,6 +10,7 @@ import { LoadingScreen } from "../components/LoadingState";
 import { AlertWithMessage } from "../components/ErrorHandling";
 import { handleApiError } from "../utils/handleApiError";
 import Box from "@mui/material/Box";
+import {Button} from "@mui/material";
 import { useLoadingProgress } from "../components/LoadingState/useLoadingProgress";
 
 /**
@@ -27,47 +28,69 @@ export function Evaluation() {
     /**
      * overallProgress - Represents the overall completion percentage of the audit.
      * categoryProgress - Array of objects representing each category's progress as a percentage.
-     * questionCountByRating - Array showing the count of questions rated with each score (0-5, and nA).
      * State variables for progress and error handling
      */
     const [overallProgress, setOverallProgress] = useState(0);
     const [categoryProgress, setCategoryProgress] = useState([]);
-    const [questionCountByRating, setQuestionCountByRating] = useState([]);
+
+    /**
+     * Array representing the distribution of question ratings:
+     * [count of 0 points, count of 1 point, ..., count of 5 points, count of "nA"].
+     */
+    const [ratingDistribution, setRatingDistribution] = useState([0, 0, 0, 0, 0, 0, 0]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     // Define color codes for the bar chart, where the last color (black) represents "nA"
     const colors = ["#a50026", "#d73027", "#fdae61", "#d9ef8b", "#66bd63", "#006837", "#000000"];
+    const navigate = useNavigate();
 
 
     // Use the custom loading progress hook
     const loadingProgress = useLoadingProgress(loading);
 
     /**
-     * Fetches audit progress data from the backend when the component mounts or when auditId changes.
-     * Sets the state values for overallProgress, categoryProgress, and questionCountByRating
-     * based on the retrieved data.
+     * Fetches data from the backend:
+     * - Progress data for overall and categories (`/progress` endpoint).
+     * - Ratings distribution data (`/ratings` endpoint).
      */
     useEffect(() => {
         setLoading(true);
         api.get(`/v1/audits/${auditId}/progress`)
-            .then((response) => {
-                setOverallProgress(response.data.overallProgress);
-                setCategoryProgress(Object.entries(response.data.categoryProgress || {}).map(([name, progress]) => ({
-                        name,
-                        progress,
-                    }))
-                );
-                setQuestionCountByRating(Object.entries(response.data.questionCountByRating || {}).map(([rating, count]) => ({
-                        rating: parseInt(rating, 10),
-                        count,
-                    }))
-                );
-                setError(null); // Clear previous errors
+            .then(response => {
+                setOverallProgress(response.data.currentAuditProgress || 0);
+                setCategoryProgress(response.data.categoryProgress || []);
             })
             .catch((err) => {
                 // Use the handleApiError utility function to generate a user-friendly error message
                 const errorMessage = handleApiError(err);
+                console.error("Error loading progress data:", error);
+                setError(errorMessage);
+            })
+
+        // Fetch ratings data
+        api.get(`/v1/audits/${auditId}/ratings`)
+            .then(response => {
+                // Initialize distribution array: [0, 1, 2, 3, 4, 5, "nA"]
+                const distribution = [0, 0, 0, 0, 0, 0, 0];
+                response.data.forEach(rating => {
+                    if (rating.na === true) {
+                        // If the question is explicitly marked as "nA"
+                        distribution[6]++;
+                    } else if (rating.points !== null) {
+                        // If the question has a specific rating (0-5)
+                        distribution[rating.points]++;
+                    } else {
+                        // If the question is unanswered
+                        distribution[6]++;
+                    }
+                });
+                setRatingDistribution(distribution);
+            })
+            .catch((err) => {
+                // Use the handleApiError utility function to generate a user-friendly error message
+                const errorMessage = handleApiError(err);
+                console.error("Error loading ratings data:", error);
                 setError(errorMessage);
             })
             .finally(() => setLoading(false));
@@ -102,13 +125,9 @@ export function Evaluation() {
 
                 {/* Category Progress Circular Charts */}
                 <div className="w-full grid grid-cols-1 gap-6 mb-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-                    {categoryProgress.map((category) => (
-                        <div
-                            data-cy={"CircularChart"}
-                            key={category.name}
-                            className="flex flex-col items-center"
-                        >
-                            <CircularProgressWithLabel value={category.progress} label={category.name} size={60} />
+                    {categoryProgress.map(category => (
+                        <div  data-cy={"CircularChart"} key={category.categoryName} className="flex flex-col items-center">
+                            <CircularProgressWithLabel value={category.currentCategoryProgress} label={category.categoryName} size={60} />
                         </div>
                     ))}
                 </div>
@@ -116,10 +135,22 @@ export function Evaluation() {
                 {/* Question Count by Rating Bar Chart */}
                 <div data-cy={"BarChart"} className="max-w-full overflow-x-auto pb-10">
                     <CustomBarChart
-                        data={questionCountByRating.map((item) => item.count)} // Extract count for the chart data
+                        data={ratingDistribution} // Pass the rating distribution directly
                         colors={colors}
                     />
                 </div>
+
+                {/* Audit vergleichen Button */}
+                <div className="flex justify-end mr-8">
+                <Button
+                    onClick={() => navigate(`/compare-audits/${auditId}`)}
+                    variant="contained"
+                >
+                    Audit vergleichen
+                </Button>
+                </div>
+
+                
             </div>
         </LayoutDefault>
     );
