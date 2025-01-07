@@ -68,9 +68,9 @@ public class CreateQuestionService {
         //Categories werden nur verknüpft glaube nicht notwendig zu speichern da sie nicht geändert werden 
         /**Set<Question> tmpQuestionList = category.getQuestions();
         tmpQuestionList.add(question);
-        category.setQuestions(tmpQuestionList);
+        category.setQuestions(tmpQuestionList);**/
         saveQuestionService.saveQuestion(question);
-        saveCategoryService.saveCategory(category);**/
+        //saveCategoryService.saveCategory(category);
 
         QuestionResponseDTO questionResponseDTO = new QuestionResponseDTO();
         questionResponseDTO.setId(question.getId());
