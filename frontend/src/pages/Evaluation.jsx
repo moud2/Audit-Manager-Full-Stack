@@ -64,7 +64,7 @@ export function Evaluation() {
             .catch((err) => {
                 // Use the handleApiError utility function to generate a user-friendly error message
                 const errorMessage = handleApiError(err);
-                console.error("Error loading progress data:", error);
+                console.error("Error loading progress data:", err);
                 setError(errorMessage);
             })
 
@@ -90,7 +90,7 @@ export function Evaluation() {
             .catch((err) => {
                 // Use the handleApiError utility function to generate a user-friendly error message
                 const errorMessage = handleApiError(err);
-                console.error("Error loading ratings data:", error);
+                console.error("Error loading ratings data:", err);
                 setError(errorMessage);
             })
             .finally(() => setLoading(false));
