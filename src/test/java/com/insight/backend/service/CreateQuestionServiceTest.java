@@ -1,5 +1,6 @@
 package com.insight.backend.service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -26,7 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class CreateQuestionServiceTest {
@@ -40,22 +40,22 @@ public class CreateQuestionServiceTest {
     @Mock
     private FindQuestionByCategoryService findQuestionService;
 
-    @Mock
-    private SaveCategoryService saveCategoryService;
-
     @InjectMocks
     private CreateQuestionService createQuestionService;
 
-
-    /*
-        Hier nochmal genauer hinschauen und gegebenfalls Test Cases abdecken
+    /**
+     * Tests the successful creation of a new question.
+     * - Verifies that the category exists.
+     * - Ensures no duplicate questions exist.
+     * - Checks that the question is saved and the correct response is returned.
+     *  Hier nochmal genauer hinschauen und gegebenfalls Test Cases abdecken
      */
     @Test
     public void testCreateQuestion_success() {
-
+        // Arrange
         NewQuestionDTO newQuestionDTO = new NewQuestionDTO();
         newQuestionDTO.setName("Question Name");
-        newQuestionDTO.setCategory(1L);
+        newQuestionDTO.setCategoryId(1L);
 
         Category category1 = new Category();
         category1.setId(1L);
@@ -64,23 +64,26 @@ public class CreateQuestionServiceTest {
         question1.setId(1L);
         category1.setQuestions(Set.of(question1));
 
-        Category category2 = new Category();
-        category2.setId(2L);
-        Question question2 = new Question();
-        question2.setName("Question Name2");
-        question2.setId(2L);
-        category2.setQuestions(Set.of(question2));
-
-
-
+        when(findCategoryService.findCategoryById(1L)).thenReturn(Optional.of(category1));
+        when(findQuestionService.findQuestionsByName("Question Name", "desc", "name")).thenReturn(List.of());
+        when(saveQuestionService.saveQuestion(any(Question.class))).thenAnswer(invocation -> {
+            Question question = invocation.getArgument(0);
+            question.setId(1L);
+            return question;
+        });
+        
+        // Act
         QuestionResponseDTO response = createQuestionService.createQuestion(newQuestionDTO);
 
+        // Assert
         assertNotNull(response);
         assertEquals("Question Name", response.getName());
+        assertNotNull(response.getId());
+        assertEquals(1L, response.getId());
 
+        verify(findCategoryService, times(1)).findCategoryById(1L);
+        verify(findQuestionService, times(1)).findQuestionsByName("Question Name", "desc", "name");
         verify(saveQuestionService, times(1)).saveQuestion(any(Question.class));
     }
-
-
-
+    
 }

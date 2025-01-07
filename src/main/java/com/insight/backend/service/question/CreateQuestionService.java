@@ -1,31 +1,20 @@
 package com.insight.backend.service.question;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
-import com.insight.backend.dto.QuestionResponseDTO;
-import com.insight.backend.dto.NewQuestionDTO;
-import com.insight.backend.model.Category;
-import com.insight.backend.model.Question;
-import com.insight.backend.model.Rating;
-import com.insight.backend.service.category.FindCategoryService;
-import com.insight.backend.service.question.FindQuestionByCategoryService;
-import com.insight.backend.service.category.SaveCategoryService;
-import com.insight.backend.service.question.SaveQuestionService;
-import com.insight.backend.exception.QuestionFoundException;
-import com.insight.backend.exception.CategoryNotFoundException;
-import com.insight.backend.specifications.QuestionSpecifications;
-
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.insight.backend.dto.NewQuestionDTO;
+import com.insight.backend.dto.QuestionResponseDTO;
+import com.insight.backend.exception.CategoryNotFoundException;
+import com.insight.backend.exception.QuestionFoundException;
+import com.insight.backend.model.Category;
+import com.insight.backend.model.Question;
+import com.insight.backend.service.category.FindCategoryService;
+import com.insight.backend.service.category.SaveCategoryService;
+
 /**
- * Service class for creating audits.
+ * Service class for creating questions.
  */
 @Service
 public class CreateQuestionService {
@@ -51,7 +40,7 @@ public class CreateQuestionService {
     }
 
     /**
-     * Creates a new audit based on the provided NewQuestionDTO.
+     * Creates a new question based on the provided NewQuestionDTO.
      * 
      *
      * @param newQuestionDTO the DTO containing the details of the new Question
@@ -69,9 +58,9 @@ public class CreateQuestionService {
         
         
         //List<Category> categoryOpt = this.findCategoryService.findAllCategories().stream().filter(x -> x.getName().equals(newQuestionDTO.getCategory())).collect(Collectors.toList());
-        Category category = this.findCategoryService.findCategoryById(newQuestionDTO.getCategory()).orElseThrow(() -> {
-                System.out.println("Category ID not found: " + newQuestionDTO.getCategory());
-                return new CategoryNotFoundException(newQuestionDTO.getCategory());
+        Category category = this.findCategoryService.findCategoryById(newQuestionDTO.getCategoryId()).orElseThrow(() -> {
+                System.out.println("Category ID not found: " + newQuestionDTO.getCategoryId());
+                return new CategoryNotFoundException(newQuestionDTO.getCategoryId());
         });
         question.setCategory(category);
 
@@ -84,6 +73,7 @@ public class CreateQuestionService {
         //saveCategoryService.saveCategory(category);
 
         QuestionResponseDTO questionResponseDTO = new QuestionResponseDTO();
+        questionResponseDTO.setId(question.getId());
         questionResponseDTO.setName(question.getName());
 
         return questionResponseDTO;

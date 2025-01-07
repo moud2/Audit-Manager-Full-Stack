@@ -121,7 +121,7 @@ public class QuestionControllerHttpPostTest {
         // Audit DTO with valid categories
         NewQuestionDTO newQuestionDTO = new NewQuestionDTO();
         newQuestionDTO.setName("Question Name");
-        newQuestionDTO.setCategory((long) 1);
+        newQuestionDTO.setCategoryId((long) 1);
 
         QuestionResponseDTO questionResponseDTO = new QuestionResponseDTO();
         questionResponseDTO.setId((long) 1);

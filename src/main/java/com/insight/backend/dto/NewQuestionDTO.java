@@ -1,18 +1,8 @@
 package com.insight.backend.dto;
 
-import java.util.List;
-import java.util.Set;
-
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-
-import com.insight.backend.model.Category;
-import com.insight.backend.model.Rating;
-
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
-
 
 /**
  * Data Transfer Object equivalent to JSON object of GET /api/v1/questions/new.
@@ -42,43 +32,43 @@ public class NewQuestionDTO {
 
     // TODO: maybe categoryId?
     //@NotBlank(message = "Name cannot be blank")
-    private long category;
-
+    @NotNull(message = "Category ID cannot be null")
+    private Long categoryId;
 
     /**
-     * Gets the name of the audit.
-     *  
-     * @return the name of the audit
+     * Gets the name of the question.
+     * 
+     * @return the name of the question
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Sets the name of the audit.
-     *
+     * Sets the name of the question.
+     * 
      * @param name the name to set
      */
     public void setName(String name) {
         this.name = name;
     }
 
-        /**
-     * Gets the name of the audit.
-     *  
-     * @return the name of the audit
+    /**
+     * Gets the ID of the category to which the question belongs.
+     * 
+     * @return the category ID
      */
-    public long getCategory() {
-        return this.category;
+    public Long getCategoryId() {
+        return categoryId;
     }
 
     /**
-     * Sets the name of the audit.
-     *
-     * @param name the name to set
+     * Sets the ID of the category to which the question belongs.
+     * 
+     * @param categoryId the category ID to set
      */
-    public void setCategory(long category) {
-        this.category = category;
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
-
+    
 }
