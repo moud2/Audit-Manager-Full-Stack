@@ -67,8 +67,6 @@ public class CreateQuestionService {
             question.setName(newQuestionDTO.getName());
         } else throw new QuestionFoundException();
         
-        
-        //List<Category> categoryOpt = this.findCategoryService.findAllCategories().stream().filter(x -> x.getName().equals(newQuestionDTO.getCategory())).collect(Collectors.toList());
         Category category = this.findCategoryService.findCategoryById(newQuestionDTO.getCategory()).orElseThrow(() -> {
                 System.out.println("Category ID not found: " + newQuestionDTO.getCategory());
                 return new CategoryNotFoundException(newQuestionDTO.getCategory());
@@ -77,11 +75,11 @@ public class CreateQuestionService {
 
 
         //Categories um die neue question aktualisieren
-        //Set<Question> tmpQuestionList = category.getQuestions();
-        //tmpQuestionList.add(question);
-        //category.setQuestions(tmpQuestionList);
+        Set<Question> tmpQuestionList = category.getQuestions();
+        tmpQuestionList.add(question);
+        category.setQuestions(tmpQuestionList);
         saveQuestionService.saveQuestion(question);
-        //saveCategoryService.saveCategory(category);
+        saveCategoryService.saveCategory(category);
 
         QuestionResponseDTO questionResponseDTO = new QuestionResponseDTO();
         questionResponseDTO.setName(question.getName());

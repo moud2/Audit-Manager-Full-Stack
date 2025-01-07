@@ -1,10 +1,12 @@
 package com.insight.backend.service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 
 import com.insight.backend.dto.NewQuestionDTO;
 import com.insight.backend.dto.QuestionResponseDTO;
+import com.insight.backend.model.Audit;
 import com.insight.backend.model.Category;
 import com.insight.backend.model.Question;
 import com.insight.backend.repository.CategoryRepository;
@@ -52,26 +54,24 @@ public class CreateQuestionServiceTest {
      */
     @Test
     public void testCreateQuestion_success() {
-
-        NewQuestionDTO newQuestionDTO = new NewQuestionDTO();
-        newQuestionDTO.setName("Question Name");
-        newQuestionDTO.setCategory(1L);
-
         Category category1 = new Category();
-        category1.setId(1L);
+        category1.setId((long) 1);
         Question question1 = new Question();
         question1.setName("Question Name1");
-        question1.setId(1L);
+        question1.setId((long) 1);
         category1.setQuestions(Set.of(question1));
 
         Category category2 = new Category();
-        category2.setId(2L);
+        category2.setId((long) 2);
         Question question2 = new Question();
         question2.setName("Question Name2");
-        question2.setId(2L);
+        question2.setId((long) 2);
         category2.setQuestions(Set.of(question2));
 
 
+        NewQuestionDTO newQuestionDTO = new NewQuestionDTO();
+        newQuestionDTO.setName("Question Name");
+        newQuestionDTO.setCategory((long) 1);
 
         QuestionResponseDTO response = createQuestionService.createQuestion(newQuestionDTO);
 
