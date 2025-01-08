@@ -28,7 +28,7 @@ public class CreateQuestionService {
      * Constructs a CreateAuditService with the specified services.
      *
      * @param findCategoryService the service to check category existence
-     * @param saveQuestionService the service to save audits
+     * @param saveQuestionService the service to save questions
      * @param saveCategoryService the service to save a list of ratings
      * @param findQuestionService 
      */
@@ -44,7 +44,7 @@ public class CreateQuestionService {
      * 
      *
      * @param newQuestionDTO the DTO containing the details of the new Question
-     * @return an AuditResponseDTO containing the details of the created Question,
+     * @return an QuestionResponseDTO containing the details of the created Question,
      *         or null if any of the provided category IDs are invalid
      */
     public QuestionResponseDTO createQuestion(NewQuestionDTO newQuestionDTO) {
