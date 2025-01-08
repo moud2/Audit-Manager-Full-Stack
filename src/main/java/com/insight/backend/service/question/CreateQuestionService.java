@@ -21,7 +21,7 @@ public class CreateQuestionService {
 
     private final FindCategoryService findCategoryService;
     private final SaveQuestionService saveQuestionService;
-    private final SaveCategoryService saveCategoryService;
+    //private final SaveCategoryService saveCategoryService;
     private final FindQuestionByCategoryService findQuestionService;
 
     /**
@@ -35,7 +35,7 @@ public class CreateQuestionService {
     public CreateQuestionService(FindCategoryService findCategoryService, SaveQuestionService saveQuestionService, SaveCategoryService saveCategoryService, FindQuestionByCategoryService findQuestionService) {
         this.findCategoryService = findCategoryService;
         this.saveQuestionService = saveQuestionService;
-        this.saveCategoryService = saveCategoryService;
+        //this.saveCategoryService = saveCategoryService;
         this.findQuestionService = findQuestionService;
     }
 
@@ -51,27 +51,30 @@ public class CreateQuestionService {
         Question question = new Question();
         question.setName(newQuestionDTO.getName());
 
-        List<Question> questionOpt = this.findQuestionService.findQuestionsByName(newQuestionDTO.getName(), "desc", "name");
-        if (questionOpt.isEmpty()) {
+        // Check if question name already exists
+        List<Question> existingQuestions = this.findQuestionService.findQuestionsByName(newQuestionDTO.getName(), "desc", "name");
+        if (existingQuestions.isEmpty()) {
             question.setName(newQuestionDTO.getName());
         } else throw new QuestionFoundException();
-                
-        //List<Category> categoryOpt = this.findCategoryService.findAllCategories().stream().filter(x -> x.getName().equals(newQuestionDTO.getCategory())).collect(Collectors.toList());
+        
+        // Fetch the category by ID
         Category category = this.findCategoryService.findCategoryById(newQuestionDTO.getCategoryId()).orElseThrow(() -> {
                 System.out.println("Category ID not found: " + newQuestionDTO.getCategoryId());
                 return new CategoryNotFoundException(newQuestionDTO.getCategoryId());
         });
+
+        // Create the new question
         question.setCategory(category);
 
-
         //Categories um die neue question aktualisieren
-        //Categories werden nur verknüpft glaube nicht notwendig zu speichern da sie nicht geändert werden 
         /**Set<Question> tmpQuestionList = category.getQuestions();
         tmpQuestionList.add(question);
         category.setQuestions(tmpQuestionList);**/
+        question.setCategory(category);
         saveQuestionService.saveQuestion(question);
         //saveCategoryService.saveCategory(category);
 
+        // Build the response DTO
         QuestionResponseDTO questionResponseDTO = new QuestionResponseDTO();
         questionResponseDTO.setId(question.getId());
         questionResponseDTO.setName(question.getName());
