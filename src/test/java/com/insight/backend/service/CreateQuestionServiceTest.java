@@ -70,7 +70,7 @@ public class CreateQuestionServiceTest {
             return question;
         });
         
-        // Act (calling createQuestion)
+        // Act
         QuestionResponseDTO response = createQuestionService.createQuestion(newQuestionDTO);
 
         // Assert
@@ -127,7 +127,5 @@ public class CreateQuestionServiceTest {
 
         // verify function of Mocks
         verify(findCategoryService, times(1)).findCategoryById(99L);
-        //verify(findQuestionService, times(0)).findQuestionsByName(anyString(), anyString(), anyString());
-        //verify(saveQuestionService, times(0)).saveQuestion(any(Question.class));
     }
 }
