@@ -6,26 +6,23 @@ import java.util.Set;
 
 import com.insight.backend.dto.NewQuestionDTO;
 import com.insight.backend.dto.QuestionResponseDTO;
+import com.insight.backend.exception.QuestionFoundException;
 import com.insight.backend.model.Category;
 import com.insight.backend.model.Question;
-import com.insight.backend.repository.CategoryRepository;
 import com.insight.backend.service.category.FindCategoryService;
-import com.insight.backend.service.category.SaveCategoryService;
 import com.insight.backend.service.question.CreateQuestionService;
 import com.insight.backend.service.question.FindQuestionByCategoryService;
 import com.insight.backend.service.question.SaveQuestionService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -48,7 +45,6 @@ public class CreateQuestionServiceTest {
      * - Verifies that the category exists.
      * - Ensures no duplicate questions exist.
      * - Checks that the question is saved and the correct response is returned.
-     *  Hier nochmal genauer hinschauen und gegebenfalls Test Cases abdecken
      */
     @Test
     public void testCreateQuestion_success() {
@@ -72,7 +68,7 @@ public class CreateQuestionServiceTest {
             return question;
         });
         
-        // Act
+        // Act (calling createQuestion)
         QuestionResponseDTO response = createQuestionService.createQuestion(newQuestionDTO);
 
         // Assert
@@ -81,9 +77,37 @@ public class CreateQuestionServiceTest {
         assertNotNull(response.getId());
         assertEquals(1L, response.getId());
 
+        // verify function of Mocks
         verify(findCategoryService, times(1)).findCategoryById(1L);
         verify(findQuestionService, times(1)).findQuestionsByName("Question Name", "desc", "name");
         verify(saveQuestionService, times(1)).saveQuestion(any(Question.class));
     }
+
+    /**
+     * Tests creating a question with a duplicate name.
+     */
+    @Test
+    public void testCreateQuestion_duplicateQuestion() {
+        // Arrange
+        NewQuestionDTO duplicateQuestionDTO = new NewQuestionDTO();
+        duplicateQuestionDTO.setName("Duplicate Question");
+        duplicateQuestionDTO.setCategoryId(1L);
+
+        when(findQuestionService.findQuestionsByName("Duplicate Question", "desc", "name"))
+                .thenReturn(List.of(new Question()));
+
+        // Act & Assert
+        //tests how the createQuestion method behaves when attempting to create a duplicate question
+        assertThrows(QuestionFoundException.class, () -> {
+            createQuestionService.createQuestion(duplicateQuestionDTO);
+        });
+
+        verify(findQuestionService, times(1)).findQuestionsByName("Duplicate Question", "desc", "name");
+        verify(findCategoryService, times(0)).findCategoryById(anyLong());
+        verify(saveQuestionService, times(0)).saveQuestion(any(Question.class));
+    }
+    /**
+     * Tests creating a question with an invalid category ID.
+     */
     
 }
