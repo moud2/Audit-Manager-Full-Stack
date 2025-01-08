@@ -55,10 +55,6 @@ public class CreateQuestionServiceTest {
 
         Category category1 = new Category();
         category1.setId(1L);
-        Question question1 = new Question();
-        question1.setName("Question Name1");
-        question1.setId(1L);
-        category1.setQuestions(Set.of(question1));
 
         when(findCategoryService.findCategoryById(1L)).thenReturn(Optional.of(category1));
         when(findQuestionService.findQuestionsByName("Question Name", "desc", "name")).thenReturn(List.of());
