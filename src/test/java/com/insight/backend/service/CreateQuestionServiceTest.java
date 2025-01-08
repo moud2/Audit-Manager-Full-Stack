@@ -1,11 +1,28 @@
 package com.insight.backend.service;
 
+import static org.hamcrest.Matchers.empty;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.insight.backend.dto.NewQuestionDTO;
 import com.insight.backend.dto.QuestionResponseDTO;
+import com.insight.backend.exception.CategoryNotFoundException;
 import com.insight.backend.exception.QuestionFoundException;
 import com.insight.backend.model.Category;
 import com.insight.backend.model.Question;
@@ -13,17 +30,6 @@ import com.insight.backend.service.category.FindCategoryService;
 import com.insight.backend.service.question.CreateQuestionService;
 import com.insight.backend.service.question.FindQuestionByCategoryService;
 import com.insight.backend.service.question.SaveQuestionService;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CreateQuestionServiceTest {
@@ -105,5 +111,23 @@ public class CreateQuestionServiceTest {
     /**
      * Tests creating a question with an invalid category ID.
      */
-    
+    @Test
+    public void testCreateQuestion_invalidCategory(){
+        // Arrange
+        NewQuestionDTO invalidCategoryDTO = new NewQuestionDTO();
+        invalidCategoryDTO.setName("Invalid Category Question");
+        invalidCategoryDTO.setCategoryId(99L);
+
+        when(findCategoryService.findCategoryById(99L)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(CategoryNotFoundException.class, () -> {
+            createQuestionService.createQuestion(invalidCategoryDTO);
+        });
+
+        // verify function of Mocks
+        verify(findCategoryService, times(1)).findCategoryById(99L);
+        //verify(findQuestionService, times(0)).findQuestionsByName(anyString(), anyString(), anyString());
+        //verify(saveQuestionService, times(0)).saveQuestion(any(Question.class));
+    }
 }
