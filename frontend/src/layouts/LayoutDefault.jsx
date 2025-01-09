@@ -24,7 +24,6 @@ const Main = styled('main', {
     shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
     flexGrow: 1,
-    padding: theme.spacing(3),
     marginLeft: open ? 0 : `-${drawerWidth}px`,
     transition: theme.transitions.create('margin', {
         easing: open
@@ -58,7 +57,7 @@ export function LayoutDefault({ progress, children }) {
     const isEvaluationPage = location.pathname.includes("/evaluation");
 
     return (
-        <Box className="flex overflow-hidden">
+        <Box className="flex overflow-hidden h-full">
             <CssBaseline />
             <Header />
             <IconButton
@@ -128,9 +127,11 @@ export function LayoutDefault({ progress, children }) {
                 <Divider />
                 {location.pathname.includes("/perform-Audit") && <AuditProgress progress={progress} />}
             </Drawer>
-            <Main open={open} className="flex-1 ml-64 pb-24">
+            <Main open={open} className="flex-1 ml-64 overflow-y-auto" id="scroll-main">
                 <DrawerHeader />
-                {children}
+                    <div className="mb-16">
+                        {children}
+                    </div>
             </Main>
             <Footer />
         </Box>

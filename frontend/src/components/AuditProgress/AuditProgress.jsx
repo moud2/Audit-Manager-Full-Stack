@@ -29,7 +29,7 @@ export function AuditProgress({ progress }) {
                         to={`category-${category.categoryId}`}
                         data-to={`category-${category.categoryId}`}
                         smooth={true}
-                        containerId="scroll-container"
+                        containerId="scroll-main"
                         onClick={() => console.log(`Click to jump to: category-${category.categoryId}`)}>
                         <div key={category.categoryId}
                              className="block p-1 m-2.5 text-gray-700 hover:text-black hover:scale-105 transition-transform transform border border-gray-400 rounded text-center">
