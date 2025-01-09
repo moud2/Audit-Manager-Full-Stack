@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from 'react-router-dom';
 import { LayoutDefault } from "../layouts/LayoutDefault.jsx";
 import { AuditDropdown } from "../components/CompareAudit/AuditDropdown.jsx";
@@ -50,6 +51,7 @@ export function CompareAudits() {
 
             const auditData = {
                 id: auditId,
+                name: auditName,
                 name: auditName,
                 overallProgress: progressResponse.data.currentAuditProgress || 0,
                 categoryProgress: categoryProgressArray,
@@ -137,7 +139,6 @@ export function CompareAudits() {
                     onAuditSelect={handleAuditSelect}
                 />
 
-                {/* Display comparison cards for the selected and second audits */}
                 <div className="grid grid-cols-2 gap-6">
                     {selectedAudit && (
                         <AuditComparisonCard
