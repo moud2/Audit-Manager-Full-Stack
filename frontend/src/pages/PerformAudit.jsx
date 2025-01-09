@@ -1,10 +1,10 @@
 import {LayoutDefault} from "../layouts/LayoutDefault.jsx";
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {CategoryList} from "../components/QuestionList/CategoryList.jsx";
 import Title from "../components/Textareas/Title.jsx";
 import api from "../api.js";
 import {useNavigate, useParams} from "react-router-dom";
-import {Button} from "@mui/material";
+import {Button, debounce} from "@mui/material";
 
 /**
  * PerformAudit Component
@@ -19,14 +19,12 @@ import {Button} from "@mui/material";
  * @returns {JSX.Element} - The rendered `PerformAudit` component wrapped within `LayoutDefault`.
  */
 export function PerformAudit() {
-    // Extracting the audit ID from the URL parameters using React Router's `useParams` hook
     const { auditId } = useParams();
     const [questions, setQuestions] = useState([]);
     const [sortedQuestions, setSortedQuestions] = useState([]);
     const navigate = useNavigate();
 
     const labels = [0, 1, 2, 3, 4, 5, "N/A"];
-
 
     /**
      * Transforms an array of questions into a structured array of categories,
@@ -126,6 +124,14 @@ export function PerformAudit() {
             });
     }, [auditId]);
 
+    const debouncedPatchQuestion = useMemo(
+        () =>
+            debounce((questionID, newRatings) => {
+                return patchQuestion(questionID, newRatings);
+            }, 1000),
+        [],
+    );
+
     /**
      * Handles the update of a question in the list. This function is triggered when a question's
      * rating, comment, or applicability is modified. It updates the question locally and sends
@@ -135,14 +141,14 @@ export function PerformAudit() {
      * @param {question} updatedQuestion - The specific question that was modified.
      * @returns {Promise<void>} - A promise resolving once the backend update is complete.
      */
-    const handleQuestionUpdate = async (updatedQuestions, updatedQuestion) => {
+    const handleQuestionUpdate = useMemo(() => (updatedQuestions, updatedQuestion)=>{
         setSortedQuestions(updatedQuestions);
-        await patchQuestion(updatedQuestion.id, [
+        debouncedPatchQuestion(updatedQuestion.id, [
             {path: "/na", value: updatedQuestion.nA},
             {path: "/points", value: updatedQuestion.points},
             {path: "/comment", value: updatedQuestion.comment}
         ]);
-    }
+    },[])
 
     /**
      * Sends a PATCH request to update a specific question's fields in the backend.
@@ -159,7 +165,6 @@ export function PerformAudit() {
             value: destination.value,
         }));
         api.patch(`/v1/ratings/${questionID}`, patchData)
-        
             .catch(err => {
                 console.error('Error fetching data:', err);
             });
@@ -167,7 +172,6 @@ export function PerformAudit() {
 
     return (
         <LayoutDefault>
-            {/*^= h1*/}
             <Title>Audit durchführen</Title>
             <CategoryList
                 categories={sortedQuestions}
@@ -182,7 +186,6 @@ export function PerformAudit() {
                     Bewertung anzeigen
                 </Button>
             </div>
-
         </LayoutDefault>
     )
 }
