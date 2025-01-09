@@ -1,6 +1,7 @@
 package com.insight.backend.service.audit;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import com.insight.backend.dto.AuditResponseDTO;
@@ -47,6 +48,10 @@ public class CreateAuditService {
      * @throws NonExistentAuditCategoryException if any of the provided category IDs are invalid
      */
     public AuditResponseDTO createAudit(NewAuditDTO newAuditDTO) {
+        // Validate for duplicate Category-IDs
+        if (newAuditDTO.getCategories().size() != new HashSet<>(newAuditDTO.getCategories()).size()) {
+            throw new IllegalArgumentException("Duplicate Category-IDs are not allowed.");
+        }
         Audit audit = new Audit();
         audit.setName(newAuditDTO.getName());
         audit.setCustomer(newAuditDTO.getCustomer());

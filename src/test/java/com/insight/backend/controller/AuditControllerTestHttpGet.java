@@ -8,11 +8,13 @@ import java.util.Optional;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.insight.backend.dto.CategoryProgressDTO;
 import com.insight.backend.model.Audit;
 import com.insight.backend.model.Rating;
 import com.insight.backend.model.Question;
 import com.insight.backend.model.Category;
 import com.insight.backend.service.audit.CreateAuditService;
+import com.insight.backend.service.audit.DeleteAuditService;
 import com.insight.backend.service.audit.FindAuditService;
 import com.insight.backend.service.audit.AuditProgressService;
 import com.insight.backend.dto.AuditProgressDTO;
@@ -46,9 +48,11 @@ public class AuditControllerTestHttpGet {
     @Autowired
     private MockMvc mockMvc;
 
+    /**
+     * MockBean for FindAuditService
+     */
     @MockBean
     private AuditProgressService auditProgressService;
-
 
     /**
      * MockBean for FindAuditService
@@ -56,8 +60,17 @@ public class AuditControllerTestHttpGet {
     @MockBean
     private FindAuditService findAuditService;
 
+    /**
+     * MockBean for CreateAuditService
+     */
     @MockBean
     private CreateAuditService createAuditService;
+
+    /**
+     * MockBean for DeleteAuditService
+     */
+    @MockBean
+    private DeleteAuditService deleteAuditService;
 
     private Audit audit1;
     private Audit audit2;
@@ -172,11 +185,14 @@ public class AuditControllerTestHttpGet {
     public void testGetAuditProgressSuccess() throws Exception {
         Long auditId = 1L;
 
-        AuditProgressDTO progressDTO = new AuditProgressDTO();
-        progressDTO.setAuditId(auditId);
-        progressDTO.setOverallProgress(75.0);
-        progressDTO.setCategoryProgress(Map.of("Kategorie 1", 80.0, "Kategorie 2", 70.0));
-        progressDTO.setQuestionCountByRating(Map.of("5", 1L, "nA", 1L));
+        AuditProgressDTO progressDTO = new AuditProgressDTO(
+                auditId,
+                50.0,
+                List.of(
+                        new CategoryProgressDTO(1L, "Kategorie 1", 5, 10, 50.0),
+                        new CategoryProgressDTO(2L, "Kategorie 2", 3, 10, 30.0)
+                )
+        );
 
         when(findAuditService.findAuditById(auditId)).thenReturn(Optional.of(audit1));
         when(auditProgressService.calculateAuditProgress(auditId)).thenReturn(progressDTO);
@@ -184,12 +200,19 @@ public class AuditControllerTestHttpGet {
         mockMvc.perform(get("/api/v1/audits/{auditId}/progress", auditId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.auditId").value(auditId))
-                .andExpect(jsonPath("$.overallProgress").value(75.0))
-                .andExpect(jsonPath("$.categoryProgress['Kategorie 1']").value(80.0))
-                .andExpect(jsonPath("$.categoryProgress['Kategorie 2']").value(70.0))
-                .andExpect(jsonPath("$.questionCountByRating.5").value(1))
-                .andExpect(jsonPath("$.questionCountByRating.nA").value(1));
+                .andExpect(jsonPath("$.auditId").value(1))
+                .andExpect(jsonPath("$.currentAuditProgress").value(50.0))
+                .andExpect(jsonPath("$.categoryProgress", hasSize(2)))
+                .andExpect(jsonPath("$.categoryProgress[0].categoryId").value(1))
+                .andExpect(jsonPath("$.categoryProgress[0].categoryName").value("Kategorie 1"))
+                .andExpect(jsonPath("$.categoryProgress[0].answeredQuestions").value(5))
+                .andExpect(jsonPath("$.categoryProgress[0].totalQuestions").value(10))
+                .andExpect(jsonPath("$.categoryProgress[0].currentCategoryProgress").value(50.0))
+                .andExpect(jsonPath("$.categoryProgress[1].categoryId").value(2))
+                .andExpect(jsonPath("$.categoryProgress[1].categoryName").value("Kategorie 2"))
+                .andExpect(jsonPath("$.categoryProgress[1].answeredQuestions").value(3))
+                .andExpect(jsonPath("$.categoryProgress[1].totalQuestions").value(10))
+                .andExpect(jsonPath("$.categoryProgress[1].currentCategoryProgress").value(30.0));
     }
 
     /**
@@ -207,7 +230,9 @@ public class AuditControllerTestHttpGet {
         mockMvc.perform(get("/api/v1/audits/{auditId}/progress", auditId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string("Audit not found or has been deleted"));
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.error").value("Not Found"))
+                .andExpect(jsonPath("$.message").value("Audit with id " + auditId + " not found"));
     }
 
     /**
@@ -226,7 +251,9 @@ public class AuditControllerTestHttpGet {
         mockMvc.perform(get("/api/v1/audits/{auditId}/progress", auditId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string("Audit not found or has been deleted"));
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.error").value("Not Found"))
+                .andExpect(jsonPath("$.message").value("Audit with id " + auditId + " has been deleted"));
     }
 
     /**
@@ -238,11 +265,7 @@ public class AuditControllerTestHttpGet {
     public void testGetAuditProgressEmptyData() throws Exception {
         Long auditId = 1L;
 
-        AuditProgressDTO progressDTO = new AuditProgressDTO();
-        progressDTO.setAuditId(auditId);
-        progressDTO.setOverallProgress(0.0);
-        progressDTO.setCategoryProgress(Map.of());
-        progressDTO.setQuestionCountByRating(Map.of());
+        AuditProgressDTO progressDTO = new AuditProgressDTO(auditId, 0.0, List.of());
 
         when(findAuditService.findAuditById(auditId)).thenReturn(Optional.of(audit1));
         when(auditProgressService.calculateAuditProgress(auditId)).thenReturn(progressDTO);
@@ -250,9 +273,8 @@ public class AuditControllerTestHttpGet {
         mockMvc.perform(get("/api/v1/audits/{auditId}/progress", auditId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.auditId").value(auditId))
-                .andExpect(jsonPath("$.overallProgress").value(0.0))
-                .andExpect(jsonPath("$.categoryProgress").isEmpty())
-                .andExpect(jsonPath("$.questionCountByRating").isEmpty());
+                .andExpect(jsonPath("$.auditId").value(1))
+                .andExpect(jsonPath("$.currentAuditProgress").value(0.0))
+                .andExpect(jsonPath("$.categoryProgress", hasSize(0)));
     }
 }

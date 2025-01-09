@@ -13,7 +13,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class DeleteQuestionServiceTest {
@@ -25,6 +24,7 @@ public class DeleteQuestionServiceTest {
     private DeleteQuestionService deleteQuestionService;
 
     private Question question;
+    private Question nullQuestion;
 
     @BeforeEach
     void setUp() {
@@ -35,9 +35,17 @@ public class DeleteQuestionServiceTest {
 
     @Test
     void testDeleteQuestion() {
-        when(questionRepository.saveAndFlush(question)).thenReturn(question);
-        deleteQuestionService.deleteQuestion(question.getId());
+        deleteQuestionService.deleteQuestion(question);
+        
         verify(questionRepository, times(1)).saveAndFlush(question);
+
         assertNotNull(question.getDeletedAt());
+    }
+
+    @Test
+    void testDeleteQuestionNull() {
+        deleteQuestionService.deleteQuestion(nullQuestion);
+
+        verify(questionRepository, times(0)).saveAndFlush(question);
     }
 }

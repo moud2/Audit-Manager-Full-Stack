@@ -8,6 +8,8 @@ import jakarta.validation.Valid;
 
 import com.insight.backend.model.Question;
 import com.insight.backend.model.Category;
+import com.insight.backend.exception.QuestionNotFoundException;
+import com.insight.backend.exception.CategoryNotFoundException;
 import com.insight.backend.service.question.DeleteQuestionService;
 import com.insight.backend.service.question.CreateQuestionService;
 import com.insight.backend.service.question.SaveQuestionService;
@@ -50,16 +52,18 @@ public class QuestionController {
         this.createQuestionService = createQuestionService;
     }
 
+    /**
+     * Handles DELETE requests for deleting a Question.
+     *
+     * @param questionID    the ID of the question to be deleted
+     * @return a ResponseEntity containing a String confirming the deletion
+     */
     @DeleteMapping("/api/v1/questions/{questionID}")
-    public ResponseEntity<String> deleteQuestion(@PathVariable("questionID") Long questionID){
-        Optional<Question> optionalQuestion = findQuestionService.findQuestionByID(questionID);
-        if(optionalQuestion.isPresent()){
-            deleteQuestionService.deleteQuestion(questionID);
-            return ResponseEntity.ok("Question succesfully deleted");
-        }
-        else{
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Question not found");
-        }
+    public ResponseEntity<String> deleteQuestion(@PathVariable("questionID") long questionID) {
+        Question question = findQuestionService.findQuestionByID(questionID).orElseThrow(() -> new QuestionNotFoundException(questionID));
+
+        deleteQuestionService.deleteQuestion(question);
+        return ResponseEntity.ok("Question successfully deleted");
     }
 
     @PostMapping("/api/v1/questions/new")
@@ -72,6 +76,14 @@ public class QuestionController {
 
     }
 
+    /**
+     * Handles GET mapping for getting a question by its category.
+     *
+     * @param categoryID    the ID of the category by which to find the questions
+     * @param sortDirection    the direction by which to sort the results
+     * @param sortBy    the attribute by which to sort the results
+     * @return a ResponseEntity containing the list of questions of the specified category
+     */
     @GetMapping("/api/v1/categories/{categoryId}/questions")
     public ResponseEntity<List<Question>> getQuestionsByCategory(@PathVariable("categoryID") Long categoryID, @RequestParam(required = false, defaultValue = "asc") String sortDirection, @RequestParam(required = false, defaultValue = "id") String sortBy){
         Optional<Category> optionalCategory = findCategoryService.findCategoryById(categoryID);
