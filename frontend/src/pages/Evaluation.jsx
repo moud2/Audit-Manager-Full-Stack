@@ -31,16 +31,9 @@ export function Evaluation() {
     const [currentAuditProgress, setCurrentAuditProgress] = useState(0);
     const [categoryProgress, setCategoryProgress] = useState([]);
 
-    /**
-     * Array representing the distribution of question ratings:
-     * [count of 0 points, count of 1 point, ..., count of 5 points, count of "nA"].
-     */
-    const [ratingDistribution, setRatingDistribution] = useState([0, 0, 0, 0, 0, 0, 0]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    // Define color codes for the bar chart, where the last color (black) represents "nA"
-    const colors = ["#a50026", "#d73027", "#fdae61", "#d9ef8b", "#66bd63", "#006837", "#000000"];
     const navigate = useNavigate();
 
 
