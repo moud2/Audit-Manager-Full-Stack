@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { LayoutDefault } from "../layouts/LayoutDefault.jsx";
 import LinearProgressWithLabel from '../components/Charts/ProgressBar.jsx';
-import CircularProgressWithLabel from '../components/Charts/CircularProgress.jsx';
-import CustomBarChart from '../components/Charts/BarChart.jsx';
 import RadarChart from '../components/Charts/RadarChart.jsx';
 import { LoadingScreen } from "../components/LoadingState";
 import { AlertWithMessage } from "../components/ErrorHandling";
