@@ -161,7 +161,6 @@ docker-release-job:
   script:
     - echo "Building & Deploying Docker Image...."
     - docker logout
-    - echo -n $DOCKER_LOGIN | docker login --username eschybol1 --password-stdin
     - echo -n "${CI_REGISTRY_PASSWORD}" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin # Authenticate against the GitLab container registry
     - cd frontend
 
@@ -192,7 +191,6 @@ docker-release-job-fullstack:
   script:
     - echo "Building & Deploying Docker Image...."
     - docker logout
-    - echo -n $DOCKER_LOGIN | docker login --username eschybol1 --password-stdin
     - echo -n "${CI_DEPLOY_PASSWORD}" | docker login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin # Authenticate against the GitLab container registry
     - cd frontend
 

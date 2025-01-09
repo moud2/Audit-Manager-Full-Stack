@@ -1,11 +1,18 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { LayoutDefault } from "../layouts/LayoutDefault.jsx";
 import LinearProgressWithLabel from '../components/Charts/ProgressBar.jsx';
+import CircularProgressWithLabel from '../components/Charts/CircularProgress.jsx';
+import CustomBarChart from '../components/Charts/BarChart.jsx';
 import RadarChart from '../components/Charts/RadarChart.jsx';
+import { LoadingScreen } from "../components/LoadingState";
+import { AlertWithMessage } from "../components/ErrorHandling";
+import { handleApiError } from "../utils/handleApiError";
 import Title from '../components/Textareas/Title.jsx';
 import api from '../api';
 import Box from "@mui/material/Box";
+import {Button} from "@mui/material";
+import { useLoadingProgress } from "../components/LoadingState/useLoadingProgress";
 
 /**
  * Evaluation component fetches audit data and displays it as a series of progress indicators,
@@ -27,19 +34,52 @@ export function Evaluation() {
     const [categoryProgress, setCategoryProgress] = useState([]);
 
     /**
+     * Array representing the distribution of question ratings:
+     * [count of 0 points, count of 1 point, ..., count of 5 points, count of "nA"].
+     */
+    const [ratingDistribution, setRatingDistribution] = useState([0, 0, 0, 0, 0, 0, 0]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    // Define color codes for the bar chart, where the last color (black) represents "nA"
+    const colors = ["#a50026", "#d73027", "#fdae61", "#d9ef8b", "#66bd63", "#006837", "#000000"];
+    const navigate = useNavigate();
+
+
+    // Use the custom loading progress hook
+    const loadingProgress = useLoadingProgress(loading);
+
+    /**
      * Fetches audit progress data from the backend when the component mounts or when auditId changes.
      * Sets the state values for currentAuditProgress, overallAuditProgress, and categoryProgress
      * based on the retrieved data.
      */
     useEffect(() => {
+        setLoading(true);
         api.get(`/v1/audits/${auditId}/progress`)
             .then(response => {
                 const { currentAuditProgress, categoryProgress } = response.data;
                 setCurrentAuditProgress(currentAuditProgress);
                 setCategoryProgress(categoryProgress || []);
             })
-            .catch(error => console.error("Error loading evaluation data:", error));
+            .catch((err) => {
+                // Use the handleApiError utility function to generate a user-friendly error message
+                const errorMessage = handleApiError(err);
+                console.error("Error loading ratings data:", err);
+                setError(errorMessage);
+            })
+            .finally(() => setLoading(false));
     }, [auditId]);
+
+    // Render loading screen
+    if (loading) {
+        return <LoadingScreen progress={loadingProgress} message="Loading evaluation data..." />;
+    }
+
+    // Render error message
+    if (error) {
+        return <AlertWithMessage severity="error" title="Error" message={error} />;
+    }
 
     return (
         <LayoutDefault>
@@ -63,6 +103,18 @@ export function Evaluation() {
                         height={50}
                     />
                 </div>
+
+                {/* Audit vergleichen Button */}
+                <div className="flex justify-end mr-8">
+                <Button
+                    onClick={() => navigate(`/compare-audits/${auditId}`)}
+                    variant="contained"
+                >
+                    Audit vergleichen
+                </Button>
+                </div>
+
+
             </div>
         </LayoutDefault>
     );
