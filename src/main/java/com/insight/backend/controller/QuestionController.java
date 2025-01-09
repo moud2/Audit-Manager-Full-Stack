@@ -1,34 +1,30 @@
 package com.insight.backend.controller;
 
-import java.util.Optional;
 import java.util.List;
-
-import com.insight.backend.exception.CategoryNotFoundException;
-import jakarta.validation.Valid;
-
-import com.insight.backend.model.Question;
-import com.insight.backend.model.Category;
-import com.insight.backend.exception.QuestionNotFoundException;
-import com.insight.backend.exception.CategoryNotFoundException;
-import com.insight.backend.service.question.DeleteQuestionService;
-import com.insight.backend.service.question.CreateQuestionService;
-import com.insight.backend.service.question.SaveQuestionService;
-import com.insight.backend.service.question.FindQuestionByCategoryService;
-import com.insight.backend.service.category.FindCategoryService;
-import com.insight.backend.dto.NewQuestionDTO;
-import com.insight.backend.dto.QuestionResponseDTO;
-import com.insight.backend.dto.ErrorDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestBody;
+
+import com.insight.backend.dto.NewQuestionDTO;
+import com.insight.backend.dto.QuestionResponseDTO;
+import com.insight.backend.exception.CategoryNotFoundException;
+import com.insight.backend.exception.QuestionNotFoundException;
+import com.insight.backend.model.Category;
+import com.insight.backend.model.Question;
+import com.insight.backend.service.category.FindCategoryService;
+import com.insight.backend.service.question.CreateQuestionService;
+import com.insight.backend.service.question.DeleteQuestionService;
+import com.insight.backend.service.question.FindQuestionByCategoryService;
+
+import jakarta.validation.Valid;
 
 @RestController
 public class QuestionController {
@@ -85,16 +81,16 @@ public class QuestionController {
      * @return a ResponseEntity containing the list of questions of the specified category
      */
     @GetMapping("/api/v1/categories/{categoryId}/questions")
-    public ResponseEntity<List<Question>> getQuestionsByCategory(@PathVariable("categoryID") Long categoryID, @RequestParam(required = false, defaultValue = "asc") String sortDirection, @RequestParam(required = false, defaultValue = "id") String sortBy){
-        Optional<Category> optionalCategory = findCategoryService.findCategoryById(categoryID);
-        if(optionalCategory.isPresent()){
-            Category category = optionalCategory.get();
-            List<Question> questions = findQuestionService.findQuestionsByCategory(category, sortDirection, sortBy);
-            return ResponseEntity.ok(questions);
-        }
-        else
-        {
-            return ResponseEntity.badRequest().body(null);
-        }
+    public ResponseEntity<List<Question>> getQuestionsByCategory(
+            @PathVariable("categoryId") Long categoryId,
+            @RequestParam(required = false, defaultValue = "asc") String sortDirection,
+            @RequestParam(required = false, defaultValue = "id") String sortBy) {
+
+        Category category = findCategoryService.findCategoryById(categoryId)
+                .orElseThrow(() -> new CategoryNotFoundException(categoryId));
+
+        List<Question> questions = findQuestionService.findQuestionsByCategory(category, sortDirection, sortBy);
+
+        return ResponseEntity.ok(questions);
     }
 }
