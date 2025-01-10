@@ -2,25 +2,24 @@ package com.insight.backend.controller;
 
 import java.util.Optional;
 
-import com.insight.backend.model.Question;
-import com.insight.backend.service.question.DeleteQuestionService;
-import com.insight.backend.service.question.FindQuestionByCategoryService;
-import com.insight.backend.service.category.FindCategoryService;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.insight.backend.model.Question;
+import com.insight.backend.service.category.FindCategoryService;
+import com.insight.backend.service.question.DeleteQuestionService;
+import com.insight.backend.service.question.FindQuestionByCategoryService;
 
 @WebMvcTest(QuestionController.class)
 @ExtendWith(SpringExtension.class)
@@ -49,7 +48,7 @@ public class QuestionControllerTestHttpDelete {
     }
 
     @Test
-    public void testDeleteAuditFound() throws Exception {
+    public void testDeleteQuestionFound() throws Exception {
 
         when(findQuestionService.findQuestionByID(1L)).thenReturn(Optional.of(question));
 
@@ -62,7 +61,7 @@ public class QuestionControllerTestHttpDelete {
     }
 
     @Test
-    public void testDeleteAuditNotFound() throws Exception {
+    public void testDeleteQuestionNotFound() throws Exception {
 
         when(findQuestionService.findQuestionByID(1L)).thenReturn(Optional.empty());
 
