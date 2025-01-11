@@ -3,9 +3,16 @@ package com.insight.backend.model;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-import jakarta.persistence.*;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Question {
@@ -20,7 +27,7 @@ public class Question {
     @ManyToOne
     @JoinColumn(name="category_id", nullable=false)
     private Category category;
-    private LocalDateTime DeletedAt;
+    private LocalDateTime deletedAt;
 
     public Question(String name, Set<Rating> rating, Category category) {
         this.name = name;
@@ -67,11 +74,11 @@ public class Question {
         this.id = id;
     }
 
-    public void setDeletedAt(LocalDateTime DeletedAt) {
-        this.DeletedAt = DeletedAt;
+    public void setDeletedAt(LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
     }
 
     public LocalDateTime getDeletedAt() {
-        return DeletedAt;
+        return deletedAt;
     }
 }

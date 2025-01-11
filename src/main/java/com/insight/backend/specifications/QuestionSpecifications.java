@@ -1,9 +1,9 @@
 package com.insight.backend.specifications;
 
-import com.insight.backend.model.Question;
-import com.insight.backend.model.Category;
-
 import org.springframework.data.jpa.domain.Specification;
+
+import com.insight.backend.model.Category;
+import com.insight.backend.model.Question;
 
 public class QuestionSpecifications {
     
@@ -31,7 +31,7 @@ public class QuestionSpecifications {
      */
     public static Specification<Question> isNotDeleted() {
         return (root, query, criteriaBuilder) -> criteriaBuilder
-            .isNull(root.get("DeletedAt"));
+            .isNull(root.get("deletedAt"));
     }
 }
 

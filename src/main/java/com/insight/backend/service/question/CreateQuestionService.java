@@ -53,7 +53,7 @@ public class CreateQuestionService {
                 .findQuestionsByName(newQuestionDTO.getName(), "desc", "name");
     
         if (!existingQuestions.isEmpty()) {
-            throw new QuestionAlreadyExistsException();
+            throw new QuestionAlreadyExistsException("Question already exists.");
         }
     
         // Kategorie anhand der ID abrufen
