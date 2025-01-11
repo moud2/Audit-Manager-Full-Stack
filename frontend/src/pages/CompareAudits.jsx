@@ -8,8 +8,13 @@ import Title from "../components/Textareas/Title.jsx";
 
 export function CompareAudits() {
     const { auditId } = useParams(); 
-    const [selectedAudit, setSelectedAudit] = useState(null); 
-    const [secondAudit, setSecondAudit] = useState(null); 
+    const [selectedAudit, setSelectedAudit] = useState(null);
+    const [secondAudit, setSecondAudit] = useState({
+        name: "",
+        overallProgress: 0,
+        categoryProgress: [],
+    });
+
     const [allAudits, setAllAudits] = useState([]); 
     const [error, setError] = useState(null); 
 
@@ -23,38 +28,23 @@ export function CompareAudits() {
     const fetchAuditData = useCallback(async (auditId, setAudit, errorMessage) => {
         try {
             const progressResponse = await api.get(`/v1/audits/${auditId}/progress`);
-            const auditName =
-                allAudits.find(a => a.id === parseInt(auditId))?.name || `Audit ${auditId}`;
-            
-            const categoryProgressArray = (progressResponse.data.categoryProgress || []).map(category => ({
-                name: category.categoryName,
-                progress: category.currentCategoryProgress,
-            }));
+            console.log("API Response:", progressResponse.data);
 
             const auditData = {
                 id: auditId,
-                name: auditName,
+                name: allAudits.find(a => a.id === parseInt(auditId))?.name || `Audit ${auditId}`,
                 overallProgress: progressResponse.data.currentAuditProgress || 0,
-                categoryProgress: categoryProgressArray,
+                categoryProgress: (progressResponse.data.categoryProgress || []).map(category => ({
+                    categoryName: category.categoryName,
+                    currentCategoryProgress: category.currentCategoryProgress,
+                })),
             };
 
-            const ratingsResponse = await api.get(`/v1/audits/${auditId}/ratings`);
-            const distribution = [0, 0, 0, 0, 0, 0, 0];
-            ratingsResponse.data.forEach(rating => {
-                if (rating.na === true) {
-                    distribution[6]++;
-                } else if (rating.points !== null) {
-                    distribution[rating.points]++;
-                } else {
-                    distribution[6]++;
-                }
-            });
+            console.log("Processed Audit Data:", auditData);
 
-            setAudit({
-                ...auditData,
-                distribution,
-            });
-        } catch {
+            setAudit(auditData);
+        } catch (err) {
+            console.error(errorMessage, err);
             setError(errorMessage);
         }
     }, [allAudits]);
@@ -107,17 +97,19 @@ export function CompareAudits() {
                         <AuditComparisonCard
                             name={selectedAudit.name}
                             progress={selectedAudit.overallProgress}
-                            categories={selectedAudit.categoryProgress}
-                            distribution={selectedAudit.distribution}
+                            categoryProgress={selectedAudit.categoryProgress}
                         />
                     )}
-                    {secondAudit && (
+                    {secondAudit && secondAudit.name ? (
                         <AuditComparisonCard
                             name={secondAudit.name}
                             progress={secondAudit.overallProgress}
-                            categories={secondAudit.categoryProgress}
-                            distribution={secondAudit.distribution}
+                            categoryProgress={secondAudit.categoryProgress}
                         />
+                    ) : (
+                        <div className="p-4 bg-gray-100 rounded shadow">
+                            <p className="text-center text-sm">Bitte ein zweites Audit auswählen</p>
+                        </div>
                     )}
                 </div>
             </div>
