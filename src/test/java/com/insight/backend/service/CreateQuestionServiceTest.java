@@ -1,34 +1,31 @@
 package com.insight.backend.service;
 
-import static org.hamcrest.Matchers.empty;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.insight.backend.dto.NewQuestionDTO;
 import com.insight.backend.dto.QuestionResponseDTO;
 import com.insight.backend.exception.CategoryNotFoundException;
-import com.insight.backend.exception.QuestionFoundException;
+import com.insight.backend.exception.QuestionAlreadyExistsException;
 import com.insight.backend.model.Category;
 import com.insight.backend.model.Question;
 import com.insight.backend.service.category.FindCategoryService;
 import com.insight.backend.service.question.CreateQuestionService;
-import com.insight.backend.service.question.FindQuestionByCategoryService;
+import com.insight.backend.service.question.FindQuestionService;
 import com.insight.backend.service.question.SaveQuestionService;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,7 +38,7 @@ public class CreateQuestionServiceTest {
     private SaveQuestionService saveQuestionService;
 
     @Mock
-    private FindQuestionByCategoryService findQuestionService;
+    private FindQuestionService findQuestionService;
 
     @InjectMocks
     private CreateQuestionService createQuestionService;
@@ -100,7 +97,7 @@ public class CreateQuestionServiceTest {
 
         // Act & Assert
         //tests how the createQuestion method behaves when attempting to create a duplicate question
-        assertThrows(QuestionFoundException.class, () -> {
+        assertThrows(QuestionAlreadyExistsException.class, () -> {
             createQuestionService.createQuestion(duplicateQuestionDTO);
         });
 

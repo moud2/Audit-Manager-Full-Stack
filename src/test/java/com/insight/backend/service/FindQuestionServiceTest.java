@@ -9,7 +9,7 @@ import java.util.Optional;
 import com.insight.backend.model.Question;
 import com.insight.backend.model.Category;
 import com.insight.backend.repository.QuestionRepository;
-import com.insight.backend.service.question.FindQuestionByCategoryService;
+import com.insight.backend.service.question.FindQuestionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,13 +26,13 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class FindQuestionByCategoryServiceTest {
+public class FindQuestionServiceTest {
     
     @Mock
     private QuestionRepository questionRepository;
 
     @InjectMocks
-    private FindQuestionByCategoryService findQuestionService;
+    private FindQuestionService findQuestionService;
 
     private Question question1;
     private Question question2;

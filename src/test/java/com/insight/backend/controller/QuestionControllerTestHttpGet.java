@@ -1,6 +1,5 @@
 package com.insight.backend.controller;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -8,10 +7,9 @@ import java.util.Optional;
 
 import com.insight.backend.model.Category;
 import com.insight.backend.model.Question;
-import com.insight.backend.service.category.FindCategoryService;
 import com.insight.backend.service.question.CreateQuestionService;
 import com.insight.backend.service.question.DeleteQuestionService;
-import com.insight.backend.service.question.FindQuestionByCategoryService;
+import com.insight.backend.service.question.FindQuestionService;
 import com.insight.backend.service.category.FindCategoryService;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +24,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -45,7 +42,7 @@ public class QuestionControllerTestHttpGet {
     private MockMvc mockMvc;
 
     @MockBean
-    private FindQuestionByCategoryService findQuestionService;
+    private FindQuestionService findQuestionService;
 
     @MockBean
     private DeleteQuestionService deleteQuestionService;

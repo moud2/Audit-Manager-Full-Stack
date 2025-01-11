@@ -12,11 +12,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FindQuestionByCategoryService {
+public class FindQuestionService {
     
     private final QuestionRepository questionRepository;
 
-    public FindQuestionByCategoryService(QuestionRepository questionRepository) {
+    public FindQuestionService(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
     }
 

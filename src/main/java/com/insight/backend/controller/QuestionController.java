@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,18 +23,20 @@ import com.insight.backend.model.Question;
 import com.insight.backend.service.category.FindCategoryService;
 import com.insight.backend.service.question.CreateQuestionService;
 import com.insight.backend.service.question.DeleteQuestionService;
-import com.insight.backend.service.question.FindQuestionByCategoryService;
+import com.insight.backend.service.question.FindQuestionService;
 
 import jakarta.validation.Valid;
 
 @RestController
+@Validated // Aktiviert Validierung für Controller-Eingaben
 public class QuestionController {
+
     private final DeleteQuestionService deleteQuestionService;
-    private final FindQuestionByCategoryService findQuestionService;
+    private final FindQuestionService findQuestionService;
     private final FindCategoryService findCategoryService;
     private final CreateQuestionService createQuestionService;
 
-    /**
+     /**
      * Constructs a new QuestionController with the DeleteQuestionService and
      * FindQuestionsByCategoryService
      * 
@@ -41,8 +44,9 @@ public class QuestionController {
      * 
      */
     @Autowired
-    public QuestionController(DeleteQuestionService deleteQuestionService, CreateQuestionService createQuestionService, FindQuestionByCategoryService findQuestionService, FindCategoryService findCategoryService) {
-        this.deleteQuestionService = deleteQuestionService; 
+    public QuestionController(DeleteQuestionService deleteQuestionService, CreateQuestionService createQuestionService, 
+                               FindQuestionService findQuestionService, FindCategoryService findCategoryService) {
+        this.deleteQuestionService = deleteQuestionService;
         this.findQuestionService = findQuestionService;
         this.findCategoryService = findCategoryService;
         this.createQuestionService = createQuestionService;
@@ -56,7 +60,8 @@ public class QuestionController {
      */
     @DeleteMapping("/api/v1/questions/{questionID}")
     public ResponseEntity<String> deleteQuestion(@PathVariable("questionID") long questionID) {
-        Question question = findQuestionService.findQuestionByID(questionID).orElseThrow(() -> new QuestionNotFoundException(questionID));
+        Question question = findQuestionService.findQuestionByID(questionID)
+                .orElseThrow(() -> new QuestionNotFoundException(questionID));
 
         deleteQuestionService.deleteQuestion(question);
         return ResponseEntity.ok("Question successfully deleted");
@@ -65,32 +70,20 @@ public class QuestionController {
     @PostMapping("/api/v1/questions/new")
     public ResponseEntity<Object> postWithRequestBody(@Valid @RequestBody NewQuestionDTO newQuestionDTO) {
         QuestionResponseDTO responseDTO = this.createQuestionService.createQuestion(newQuestionDTO);
-
-        if (responseDTO != null) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
-        } else return ResponseEntity.badRequest().body(null);
-
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
-    /**
-     * Handles GET mapping for getting a question by its category.
-     *
-     * @param categoryID    the ID of the category by which to find the questions
-     * @param sortDirection    the direction by which to sort the results
-     * @param sortBy    the attribute by which to sort the results
-     * @return a ResponseEntity containing the list of questions of the specified category
-     */
-    @GetMapping("/api/v1/categories/{categoryId}/questions")
+    @GetMapping("/api/v1/categories/{categoryID}/questions")
     public ResponseEntity<List<Question>> getQuestionsByCategory(
-            @PathVariable("categoryId") Long categoryId,
+            @PathVariable("categoryID") Long categoryID,
             @RequestParam(required = false, defaultValue = "asc") String sortDirection,
             @RequestParam(required = false, defaultValue = "id") String sortBy) {
 
-        Category category = findCategoryService.findCategoryById(categoryId)
-                .orElseThrow(() -> new CategoryNotFoundException(categoryId));
+        Category category = findCategoryService.findCategoryById(categoryID)
+                .filter(cat -> cat.getDeletedAt() == null) // Sicherstellen, dass die Kategorie nicht gelöscht ist
+                .orElseThrow(() -> new CategoryNotFoundException(categoryID));
 
         List<Question> questions = findQuestionService.findQuestionsByCategory(category, sortDirection, sortBy);
-
         return ResponseEntity.ok(questions);
     }
 }

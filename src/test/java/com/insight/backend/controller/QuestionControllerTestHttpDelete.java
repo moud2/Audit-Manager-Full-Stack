@@ -17,25 +17,21 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.insight.backend.model.Question;
-import com.insight.backend.service.category.FindCategoryService;
 import com.insight.backend.service.question.DeleteQuestionService;
-import com.insight.backend.service.question.FindQuestionByCategoryService;
+import com.insight.backend.service.question.FindQuestionService;
 
 @WebMvcTest(QuestionController.class)
 @ExtendWith(SpringExtension.class)
 public class QuestionControllerTestHttpDelete {
-    
+
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private FindQuestionByCategoryService findQuestionService;
+    private FindQuestionService findQuestionService;
 
     @MockBean
     private DeleteQuestionService deleteQuestionService;
-
-    @MockBean
-    private FindCategoryService findCategoryService;
 
     private Question question;
 
@@ -49,27 +45,23 @@ public class QuestionControllerTestHttpDelete {
 
     @Test
     public void testDeleteQuestionFound() throws Exception {
-
         when(findQuestionService.findQuestionByID(1L)).thenReturn(Optional.of(question));
 
         mockMvc.perform(delete("/api/v1/questions/{questionID}", 1L))
-            .andExpect(status().isOk())
-            .andReturn();
+            .andExpect(status().isOk());
 
+        verify(findQuestionService, times(1)).findQuestionByID(1L);
         verify(deleteQuestionService, times(1)).deleteQuestion(question);
-
     }
 
     @Test
     public void testDeleteQuestionNotFound() throws Exception {
-
         when(findQuestionService.findQuestionByID(1L)).thenReturn(Optional.empty());
 
         mockMvc.perform(delete("/api/v1/questions/{questionID}", 1L))
-            .andExpect(status().isNotFound())
-            .andReturn();
+            .andExpect(status().isNotFound());
 
+        verify(findQuestionService, times(1)).findQuestionByID(1L);
         verify(deleteQuestionService, times(0)).deleteQuestion(question);
-
     }
 }
