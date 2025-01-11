@@ -15,7 +15,7 @@ describe('Evaluation Page Tests', () => {
      * - Category progress details
      */
     beforeEach(() => {
-        cy.intercept('GET', 'http://localhost:8080/api/v1/audits/1/progress', {
+        cy.intercept('GET', '/api/v1/audits/1/progress', {
             body: {
                 currentAuditProgress: 85,
                 categoryProgress: [
