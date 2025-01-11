@@ -2,6 +2,20 @@ import React from "react";
 import ProgressBar from "../Charts/ProgressBar.jsx";
 import RadarChart from "../Charts/RadarChart";
 
+
+/**
+ * AuditComparisonCard component displays detailed comparison data for a single audit.
+ * Includes overall progress as a progress bar and category-specific progress in a radar chart.
+ *
+ * @component
+ * @param {Object} props - The properties passed to the component.
+ * @param {string} props.name - The name of the audit.
+ * @param {number} props.progress - The overall progress of the audit in percentage.
+ * @param {Array} props.categoryProgress - Array of category progress data, each containing:
+ *    - {string} categoryName: The name of the category.
+ *    - {number} currentCategoryProgress: The progress percentage for the category.
+ * @returns {JSX.Element} A card displaying the audit comparison details.
+ */
 export function AuditComparisonCard({ name, progress, categoryProgress }) {
     const labels = categoryProgress?.map(category => category.categoryName) || [];
     const data = categoryProgress?.map(category => category.currentCategoryProgress) || [];

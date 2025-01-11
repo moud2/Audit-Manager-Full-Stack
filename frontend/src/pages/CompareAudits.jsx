@@ -6,24 +6,31 @@ import { AuditComparisonCard } from "../components/CompareAudit/AuditComparisonC
 import api from "../api";
 import Title from "../components/Textareas/Title.jsx";
 
+/**
+ * CompareAudits component renders a page for comparing two audits.
+ * The user can select a second audit to compare it with the currently selected audit.
+ *
+ * @component
+ * @returns {JSX.Element} A page displaying a comparison of two audits with progress data and a radar chart.
+ */
 export function CompareAudits() {
-    const { auditId } = useParams(); 
-    const [selectedAudit, setSelectedAudit] = useState(null);
-    const [secondAudit, setSecondAudit] = useState({
+    const { auditId } = useParams();
+    const [selectedAudit, setSelectedAudit] = useState(null); // Stores data of the first audit
+    const [secondAudit, setSecondAudit] = useState({ // Stores data of the second audit
         name: "",
         overallProgress: 0,
         categoryProgress: [],
     });
 
-    const [allAudits, setAllAudits] = useState([]); 
-    const [error, setError] = useState(null); 
+    const [allAudits, setAllAudits] = useState([]); // Stores the list of all audits available for comparison
+    const [error, setError] = useState(null); // Stores error messages, if any
 
     /**
-     * Fetches audit progress and ratings data.
-     * 
+     * Fetches audit progress and category-specific progress data from the API.
+     *
      * @param {number} auditId - The ID of the audit to fetch data for.
-     * @param {Function} setAudit - State setter for updating audit data (selectedAudit or secondAudit).
-     * @param {string} errorMessage - Error message to display if the fetch fails.
+     * @param {Function} setAudit - State setter function for updating the audit data (selectedAudit or secondAudit).
+     * @param {string} errorMessage - Error message to display if the API request fails.
      */
     const fetchAuditData = useCallback(async (auditId, setAudit, errorMessage) => {
         try {
@@ -49,7 +56,9 @@ export function CompareAudits() {
         }
     }, [allAudits]);
 
-    // Load all audits first
+    /**
+     * Fetches the list of all available audits for selection.
+     */
     useEffect(() => {
         const fetchAllAudits = async () => {
             try {
@@ -63,7 +72,9 @@ export function CompareAudits() {
         fetchAllAudits();
     }, []);
 
-    // Fetch selected audit data after allAudits are loaded
+    /**
+     * Fetches data for the selected audit after all audits are loaded.
+     */
     useEffect(() => {
         if (auditId && allAudits.length > 0) {
             fetchAuditData(
@@ -74,6 +85,11 @@ export function CompareAudits() {
         }
     }, [auditId, allAudits, fetchAuditData]);
 
+    /**
+     * Handles the selection of the second audit from the dropdown.
+     *
+     * @param {Object} audit - The selected audit object.
+     */
     const handleAuditSelect = (audit) => {
         fetchAuditData(
             audit.id,
