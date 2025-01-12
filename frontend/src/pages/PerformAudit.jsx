@@ -159,7 +159,7 @@ export function PerformAudit() {
             {path: "/points", value: updatedQuestion.points},
             {path: "/comment", value: updatedQuestion.comment}
         ]);
-    },[]);
+    },[debouncedPatchQuestion]);
 
     /**
      * Sends a PATCH request to update a specific question's fields in the backend.
