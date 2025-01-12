@@ -1,57 +1,56 @@
 = InSight Backend
 
+== Diagramm
+
+A detailed Class Diagramm can be found in the https://gitlab.dit.htwk-leipzig.de/projekt2024-s-audit-tool/insight/-/blob/main/TechnicalDocumentation/Classes/DetailedClassDiagramm-backend.jpg?ref_type=heads[Insight Technical Documentation]
+
+== Overview
+
+This repository contains the backend for the InSight project. The backend is a Spring Boot application that uses a MSSQL database. +
+This project documentation can be found in the https://gitlab.dit.htwk-leipzig.de/projekt2024-s-audit-tool/insight[Insight Repository].
+
 == Setup
 
-- copy `.env.example` to `.env` and fill in the values (if needed). Entweder über IDE/Filesystem oder im Terminal:
-[source,bash]
+*copy `.env.example` to `.env` and fill in the values (if needed)*
+[source, shell]
 ----
 cp .env.example .env
 ----
 
-- copy `application.properties.example` to `application.properties` and fill in the values (if needed). Entweder über IDE/Filesystem oder im Terminal:
-
-(Linux/MacOS)
-
-[source,bash]
+*copy `application.properties.example` to `application.properties` and fill in the values (if needed)*
+[source, shell]
 ----
 cp ./src/main/resources/application.properties.example ./src/main/resources/application.properties
 ----
 
 == Running MSSQL Server
-
-(Linux/MacOS)
-
-[source,bash]
+[source, shell]
 ----
 docker compose up -d
 ----
 
 == Create the database
-
-- create a database called `insight`
-
+*create a database called `insight`*
+[source, shell]
 ----
 docker compose exec -it mssql /opt/mssql-tools18/bin/sqlcmd -S mssql -U sa -P 'YourStrong@Passw0rd' -Q 'CREATE DATABASE insight;' -C
 ----
 
 == Seeding the database (optional)
-
-- GET request to http://localhost:8080/api/v1/database/seed
-- this will **add** dummy data to the database
+*Add test data*
+[source, shell]
+----
+curl http://localhost:8080/api/v1/database/seed
+----
 
 == Running the application
-
-Entweder über IDE Integration oder im Terminal:
-
-(Linux)
-
+.Linux
 [source,bash]
 ----
 ./gradlew bootRun
 ----
 
-(Windows)
-
+.Windows
 [source,bash]
 ----
 gradlew.bat bootRun

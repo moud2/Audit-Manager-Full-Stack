@@ -7,7 +7,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.insight.backend.dto.AuditResponseDTO;
 import com.insight.backend.dto.NewAuditDTO;
 import com.insight.backend.exception.NonExistentAuditCategoryException;
+import com.insight.backend.service.audit.AuditProgressService;
 import com.insight.backend.service.audit.CreateAuditService;
+import com.insight.backend.service.audit.DeleteAuditService;
 import com.insight.backend.service.audit.FindAuditService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,6 +52,16 @@ public class AuditControllerTestHttpPost {
      */
     @MockBean
     private FindAuditService findAuditService;
+
+    @MockBean
+    private AuditProgressService auditProgressService;
+
+
+    /**
+     * MockBean for DeleteAuditService
+     */
+    @MockBean
+    private DeleteAuditService deleteAuditService;
 
     /**
      * MockBean for CreateAuditService
@@ -98,17 +110,18 @@ public class AuditControllerTestHttpPost {
                 .andExpect(status().isBadRequest());
     }
 
-/**
- * Test case for validating handling of non-existing categories.
- * Expects a HTTP 400 Bad Request response without a specific error message.
- *
- * @throws Exception if there is an error performing the MVC request
- */
-@Test
-public void testNonExistingCategories() throws Exception {
-    NewAuditDTO newAuditDTO = new NewAuditDTO();
-    newAuditDTO.setName("Audit Name");
-    newAuditDTO.setCategories(Arrays.asList(1L, 2L));
+    /**
+     * Test case for validating handling of non-existing categories.
+     * Expects a HTTP 400 Bad Request response with a specific error message.
+     *
+     * @throws Exception if there is an error performing the MVC request
+     */
+    @Test
+    public void testNonExistingCategories() throws Exception {
+        NewAuditDTO newAuditDTO = new NewAuditDTO();
+        newAuditDTO.setName("Audit Name");
+        newAuditDTO.setCustomer("TestCustomer");
+        newAuditDTO.setCategories(Arrays.asList(1L, 2L));
 
     when(createAuditService.createAudit(any(NewAuditDTO.class))).thenThrow(new NonExistentAuditCategoryException(1L));
 
@@ -131,10 +144,13 @@ public void testNonExistingCategories() throws Exception {
         NewAuditDTO newAuditDTO = new NewAuditDTO();
         newAuditDTO.setName("Audit Name");
         newAuditDTO.setCategories(Collections.singletonList(1L));
+        newAuditDTO.setCustomer("TestCustomer");
 
         AuditResponseDTO auditResponseDTO = new AuditResponseDTO();
         auditResponseDTO.setId(1L);
         auditResponseDTO.setName("Audit Name");
+        auditResponseDTO.setCreatedAt(java.time.LocalDateTime.now());
+        auditResponseDTO.setCustomer("TestCustomer");
 
         // Mocking behavior of createAuditService
         when(createAuditService.createAudit(any(NewAuditDTO.class))).thenReturn(auditResponseDTO);
@@ -144,6 +160,34 @@ public void testNonExistingCategories() throws Exception {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())  // Expecting status code 201
                 .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.name").value("Audit Name"));
+                .andExpect(jsonPath("$.name").value("Audit Name"))
+                .andExpect(jsonPath("$.customer").value("TestCustomer"))
+                .andExpect(jsonPath("$.name").value("Audit Name"))
+                .andExpect(jsonPath("$.createdAt").exists());
     }
+
+    /**
+     * Test case for validating handling of duplicate Category-IDs.
+     * Expects a HTTP 400 Bad Request response with a specific error message.
+     *
+     * @throws Exception if there is an error performing the MVC request
+     */
+    @Test
+    public void testDuplicateCategoryIds() throws Exception {
+        NewAuditDTO newAuditDTO = new NewAuditDTO();
+        newAuditDTO.setName("Audit Name");
+        newAuditDTO.setCustomer("Audit Customer");
+        newAuditDTO.setCategories(Arrays.asList(1L, 1L)); // Duplicate Category-IDs
+
+        // Mock the service to throw IllegalArgumentException
+        when(createAuditService.createAudit(any(NewAuditDTO.class)))
+                .thenThrow(new IllegalArgumentException("Duplicate Category-IDs are not allowed."));
+
+        mockMvc.perform(post("/api/v1/audits/new")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(newAuditDTO)))
+                .andExpect(status().isBadRequest()) // Expecting status code 400
+                .andExpect(jsonPath("$").value("Duplicate Category-IDs are not allowed.")); // Error message validation
+    }
+
 }
