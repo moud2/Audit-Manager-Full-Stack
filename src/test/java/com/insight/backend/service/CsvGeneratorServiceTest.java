@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
@@ -115,5 +116,36 @@ class CsvGeneratorServiceTest {
 
         // Verify that Question 1 (not deleted) is in the CSV
         assertTrue(csvContent.contains("Question 1"));
+    }
+
+    /**
+     * Tests that the CSV export is successful when there are no categories or questions.
+     */
+    @Test
+    void testCsvExportWithNoCategoriesOrQuestions() {
+        when(categoryRepository.findAll()).thenReturn(new ArrayList<>());
+
+        ByteArrayInputStream csvStream = csvGeneratorService.createCsv();
+        String csvContent = new String(csvStream.readAllBytes());
+
+        // Verify that the CSV is empty
+        assertEquals("", csvContent);
+    }
+
+    /**
+     * Tests that the CSV export matches the expected output with valid data.
+     */
+    @Test
+    void testCsvExportMatchesExpectedOutput() {
+        when(categoryRepository.findAll()).thenReturn(categories);
+
+        ByteArrayInputStream csvStream = csvGeneratorService.createCsv();
+        String csvContent = new String(csvStream.readAllBytes());
+
+        // Expected CSV content
+        String expectedCsv = "Category 1,Question 1\n";
+
+        // Verify that the CSV matches the expected output
+        assertEquals(expectedCsv, csvContent);
     }
 }
