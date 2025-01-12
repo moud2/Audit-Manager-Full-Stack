@@ -12,37 +12,45 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Service for generating CSV exports of categories and their associated questions.
+ * Ensures that deleted categories or questions are excluded and that no duplicate entries are exported.
+ */
 @Service
 public class CsvGeneratorService {
 
     @Autowired
     private CategoryRepository categoryRepository;
 
+    /**
+     * Generates a CSV containing all categories and their associated questions.
+     *
+     * <p>Each row in the CSV follows the format: {@code category,question}.
+     * Categories and questions marked as deleted are excluded, and duplicate entries are avoided.</p>
+     *
+     * @return A {@link ByteArrayInputStream} containing the CSV data.
+     */
     public ByteArrayInputStream createCsv() {
-        // Retrieve all Categories
+
         List<Category> categories = categoryRepository.findAll();
 
-        // Create CSV Content
+
         StringBuilder csvContent = new StringBuilder();
-        Set<String> exportedQuestions = new HashSet<>(); // Track exported questions to avoid duplicates
+        Set<String> exportedQuestions = new HashSet<>();
 
         for (Category category : categories) {
-            // Skip categories that are marked as deleted
             if (category.getDeletedAt() != null) {
                 continue;
             }
 
             for (Question question : category.getQuestions()) {
-                // Skip questions that are marked as deleted
                 if (question.getDeletedAt() != null) {
                     continue;
                 }
 
-                // Replace commas with semicolons and remove newlines
                 String categoryName = category.getName().replace(",", ";");
                 String questionName = question.getName().replace(",", ";").replace("\n", " ");
 
-                // Avoid exporting duplicate questions
                 String questionKey = categoryName + "," + questionName;
                 if (exportedQuestions.contains(questionKey)) {
                     continue;
@@ -50,7 +58,6 @@ public class CsvGeneratorService {
 
                 exportedQuestions.add(questionKey);
 
-                // Format: category,question
                 csvContent.append(categoryName)
                         .append(",")
                         .append(questionName)
@@ -58,7 +65,6 @@ public class CsvGeneratorService {
             }
         }
 
-        // Convert StringBuilder to ByteArrayInputStream
         return new ByteArrayInputStream(csvContent.toString().getBytes(StandardCharsets.UTF_8));
     }
 }
