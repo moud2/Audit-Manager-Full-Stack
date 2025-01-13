@@ -48,8 +48,8 @@ public class CsvGeneratorService {
                     continue;
                 }
 
-                String categoryName = category.getName().replace(",", ";");
-                String questionName = question.getName().replace(",", ";").replace("\n", " ");
+                String categoryName = category.getName();
+                String questionName = "\"" + question.getName().replace("\n", " ") + "\"";
 
                 String questionKey = categoryName + "," + questionName;
                 if (exportedQuestions.contains(questionKey)) {
