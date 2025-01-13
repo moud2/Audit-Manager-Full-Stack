@@ -25,7 +25,7 @@ public class CsvGeneratorService {
     /**
      * Generates a CSV containing all categories and their associated questions.
      *
-     * <p>Each row in the CSV follows the format: {@code category,question}.
+     * <p>Each row in the CSV follows the format: {@code "category","question"}.
      * Categories and questions marked as deleted are excluded, and duplicate entries are avoided.</p>
      *
      * @return A {@link ByteArrayInputStream} containing the CSV data.
@@ -48,7 +48,7 @@ public class CsvGeneratorService {
                     continue;
                 }
 
-                String categoryName = category.getName();
+                String categoryName = "\"" + category.getName() + "\"";
                 String questionName = "\"" + question.getName().replace("\n", " ") + "\"";
 
                 String questionKey = categoryName + "," + questionName;
