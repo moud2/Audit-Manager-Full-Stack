@@ -25,7 +25,8 @@ import static org.mockito.Mockito.when;
  * Test class for the {@link CsvGeneratorService}.
  *
  * This test suite verifies the behavior of the CsvGeneratorService class,
- * ensuring that categories and questions with 'deletedAt' values are excluded from the CSV export.
+ * ensuring that categories and questions with 'deletedAt' values are excluded from the CSV export
+ * and that questions are correctly wrapped in double quotes.
  */
 class CsvGeneratorServiceTest {
 
@@ -70,7 +71,7 @@ class CsvGeneratorServiceTest {
 
         Question question2 = new Question();
         question2.setId(2L);
-        question2.setName("Question 2");
+        question2.setName("Question, 2");
         question2.setCategory(category1);
         question2.setDeletedAt(LocalDateTime.now()); // Marked as deleted
 
@@ -112,7 +113,7 @@ class CsvGeneratorServiceTest {
         String csvContent = new String(csvStream.readAllBytes());
 
         // Verify that Question 2 (deleted) is not in the CSV
-        assertFalse(csvContent.contains("Question 2"));
+        assertFalse(csvContent.contains("Question, 2"));
 
         // Verify that Question 1 (not deleted) is in the CSV
         assertTrue(csvContent.contains("Question 1"));
@@ -143,9 +144,26 @@ class CsvGeneratorServiceTest {
         String csvContent = new String(csvStream.readAllBytes());
 
         // Expected CSV content
-        String expectedCsv = "Category 1,Question 1\n";
+        String expectedCsv = "Category 1,\"Question 1\"\n";
 
         // Verify that the CSV matches the expected output
         assertEquals(expectedCsv, csvContent);
+    }
+
+    /**
+     * Tests that questions with commas are properly wrapped in double quotes.
+     */
+    @Test
+    void testQuestionsWithCommasAreWrappedInQuotes() {
+        when(categoryRepository.findAll()).thenReturn(categories);
+
+        ByteArrayInputStream csvStream = csvGeneratorService.createCsv();
+        String csvContent = new String(csvStream.readAllBytes());
+
+        // Verify that Question 1 is in the CSV without quotes
+        assertTrue(csvContent.contains("Category 1,\"Question 1\""));
+
+        // Verify that Question 2 (contains a comma) is wrapped in quotes and excluded
+        assertFalse(csvContent.contains("Question, 2"));
     }
 }
