@@ -9,6 +9,7 @@ import { handleApiError } from "../utils/handleApiError";
 import { LoadingScreen } from "../components/LoadingState";
 import { AlertWithMessage } from "../components/ErrorHandling";
 import { useLoadingProgress } from "../components/LoadingState/useLoadingProgress";
+import ExportButton from "../components/ExportButton/ExportButton";
 
 /**
  * PerformAudit Component
@@ -146,6 +147,28 @@ export function PerformAudit() {
     }
 
     /**
+     * Handles exporting questions to a CSV file.
+     */
+    const handleExport = async () => {
+        try {
+            const csvData = questions.map((q) => {
+                return `${q.category.name},${q.question}`;
+            });
+
+            const csvContent = `data:text/csv;charset=utf-8,Category,Question\n${csvData.join("\n")}`;
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "audit_export.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (error) {
+            console.error("Error exporting CSV:", error);
+        }
+    };
+    
+    /**
      * Handles the update of a question in the list. This function is triggered when a question's
      * rating, comment, or applicability is modified. It updates the question locally and sends
      * the change to the backend.
@@ -193,13 +216,15 @@ export function PerformAudit() {
                 options={labels}
                 onChange={handleQuestionUpdate}
             />
-            <div className="flex justify-end mr-8">
-                <Button
+            <div className="flex flex-col justify-end items-end mr-8">
+                 <Button
                     onClick={() => navigate(`/evaluation/${auditId}`)}
                     variant="contained"
+                    style={{ marginBottom: "10px" }}  
                 >
                     Bewertung anzeigen
                 </Button>
+                <ExportButton onClick={handleExport} />
             </div>
         </LayoutDefault>
     );
