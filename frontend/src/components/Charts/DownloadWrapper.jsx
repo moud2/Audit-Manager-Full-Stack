@@ -26,12 +26,12 @@ const DownloadWrapper = ({children}) => {
                     onClick={() => {
                         handleJPEGExport();
                     }}
-                >Export as JPEG</Button>
+                >JPEG</Button>
                 <Button
                     onClick={() => {
                         handlePNGExport();
                     }}
-                >Export as PNG</Button>
+                >PNG</Button>
             </ButtonGroup>
             <div className="w-full" ref={componentRef}>
                 {children}

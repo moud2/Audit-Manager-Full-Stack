@@ -1,7 +1,6 @@
 import React from "react";
 import ProgressBar from "../Charts/ProgressBar.jsx";
 import RadarChart from "../Charts/RadarChart";
-import BarChart from "../Charts/BarChart.jsx";
 import DownloadWrapper from "../Charts/DownloadWrapper.jsx";
 
 /**
@@ -21,9 +20,6 @@ export function AuditComparisonCard({ name, progress, categoryProgress }) {
     const labels = categoryProgress?.map(category => category.categoryName) || [];
     const data = categoryProgress?.map(category => category.currentCategoryProgress) || [];
 
-    console.log("Labels for RadarChart:", labels);
-    console.log("Data for RadarChart:", data);
-
     return (
         <div className="p-4 bg-gray-100 rounded shadow">
             <h2 className="text-xl font-semibold mb-4">{name}</h2>
@@ -41,16 +37,6 @@ export function AuditComparisonCard({ name, progress, categoryProgress }) {
                     <p className="text-sm text-gray-500">Keine Daten für Kategorien verfügbar</p>
                 )}
             </div>
-            </DownloadWrapper>
-
-            {/* Point Distribution Chart */}
-            <DownloadWrapper>
-                <BarChart
-                    data={distribution}
-                    colors={colors}
-                    width={400}
-                    height={300}
-                />
             </DownloadWrapper>
         </div>
     );
