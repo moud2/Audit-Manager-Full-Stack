@@ -4,6 +4,7 @@ import {CategoryList} from "../components/QuestionList/CategoryList.jsx";
 import Title from "../components/Textareas/Title.jsx";
 import api from "../api.js";
 import {useNavigate, useParams} from "react-router-dom";
+import { useCallback } from "react";
 
 /**
  * PerformAudit Component
@@ -125,17 +126,7 @@ export function PerformAudit() {
             });
     }, [auditId]);
 
-    /**
-     * Fetches the audit progress data from the backend when the component mounts or when the audit ID changes.
-     */
-    useEffect(() => {
-        fetchProgress();
-    }, [auditId]);
-
-    /**
-     * Fetches the progress data for the current audit from the backend
-     */
-    const fetchProgress = () => {
+    const fetchProgress = useCallback(() => {
         api.get(`/v1/audits/${auditId}/progress`)
             .then(response => {
                 setProgress(response.data);
@@ -143,7 +134,11 @@ export function PerformAudit() {
             .catch(err => {
                 console.error('Error fetching progress data:', err);
             });
-    };
+    }, [auditId]); // Jetzt ist fetchProgress stabil
+    
+    useEffect(() => {
+        fetchProgress();
+    }, [auditId, fetchProgress]);
 
     /**
      * Handles the update of a question in the list. This function is triggered when a question's
