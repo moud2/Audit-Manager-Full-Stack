@@ -11,6 +11,7 @@ import Box from '@mui/material/Box';
  * @param {number} [props.size=80] - The size of the circular progress.
  * @returns {JSX.Element} A circular progress component with a percentage label and a category name.
  */
+/*
 const CircularProgressWithLabel = ({ value, label, size = 80 }) => {
     return (
         <Box sx={{ position: 'relative', display: 'inline-flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -41,3 +42,4 @@ const CircularProgressWithLabel = ({ value, label, size = 80 }) => {
 };
 
 export default CircularProgressWithLabel;
+*/
