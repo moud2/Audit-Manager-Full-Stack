@@ -34,6 +34,20 @@ test-e2e:
     - echo "Cypress e2e tests completed"
 
 
+test-component:
+  stage: test
+  image: cypress/base:latest
+  extends:
+    - ".setup:npm"
+  script:
+    - cd frontend
+    - npx cypress install
+    - echo "Running Cypress component tests..."
+    - npm run dev &                             
+    - npx cypress run --component
+    - echo "Cypress component tests completed"
+
+
 #test-integration:
  # stage: test
   #extends:
