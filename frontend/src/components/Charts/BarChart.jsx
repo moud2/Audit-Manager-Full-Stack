@@ -10,6 +10,9 @@ import DownloadWrapper from "./DownloadWrapper.jsx";
  * @param {number} [props.height=350] - The height of the chart.
  * @returns {JSX.Element} A bar chart component.
  */
+
+/*
+
 const CustomBarChart = ({data, colors, width = 900, height = 350}) => {
     return (
         <BarChart
@@ -41,3 +44,5 @@ const CustomBarChart = ({data, colors, width = 900, height = 350}) => {
 };
 
 export default CustomBarChart;
+
+*/
