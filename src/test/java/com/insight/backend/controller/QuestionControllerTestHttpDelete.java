@@ -4,10 +4,11 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.Optional;
 
+import com.insight.backend.exception.QuestionNotFoundException;
 import com.insight.backend.service.category.FindCategoryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -66,32 +67,21 @@ public class QuestionControllerTestHttpDelete {
         verify(deleteQuestionService, times(1)).deleteQuestion(question);
     }
 
-   /** @Test
+  @Test
     public void testDeleteQuestionNotFound() throws Exception {
         // Mock the service to throw QuestionNotFoundException
-        when(findQuestionService.findQuestionByID(QUESTION_ID)).thenThrow(new QuestionNotFoundException(QUESTION_ID));
+        when(findQuestionService.findQuestionByID(1L)).thenThrow(new QuestionNotFoundException(1L));
 
         // Perform delete request and assert response
-        mockMvc.perform(delete("/api/v1/questions/{questionID}", QUESTION_ID))
+        mockMvc.perform(delete("/api/v1/questions/{questionID}", 1L))
             .andExpect(status().isNotFound())
-            .andExpect(jsonPath("$.message").value("Question with id " + QUESTION_ID + " not found"))
+            .andExpect(jsonPath("$.message").value("Question with id '" + 1L + "' not found"))
             .andExpect(header().string("Content-Type", "application/json"));
 
         // Verify interactions
-        verify(findQuestionService, times(1)).findQuestionByID(QUESTION_ID);
+        verify(findQuestionService, times(1)).findQuestionByID(1L);
         verify(deleteQuestionService, times(0)).deleteQuestion(question);
     }
 
-    @Test
-    public void testDeleteQuestionWithInvalidID() throws Exception {
-        // Perform delete request with an invalid ID
-        mockMvc.perform(delete("/api/v1/questions/{questionID}", -1L))
-            .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.message").value("Invalid ID provided"))
-            .andExpect(header().string("Content-Type", "application/json"));
 
-        // Verify no interactions with services
-        verify(findQuestionService, times(0)).findQuestionByID(-1L);
-        verify(deleteQuestionService, times(0)).deleteQuestion(question);
-    }*/
 }
