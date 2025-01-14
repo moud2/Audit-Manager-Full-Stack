@@ -1,11 +1,14 @@
-import {LayoutDefault} from "../layouts/LayoutDefault.jsx";
-import {useEffect, useState} from "react";
-import {QuestionList} from "../components/QuestionList/QuestionList.jsx";
-import {CategoryList} from "../components/QuestionList/CategoryList.jsx";
+import { LayoutDefault } from "../layouts/LayoutDefault.jsx";
+import { useEffect, useState } from "react";
+import { CategoryList } from "../components/QuestionList/CategoryList.jsx";
 import Title from "../components/Textareas/Title.jsx";
 import api from "../api.js";
-import {useParams} from "react-router-dom";
-import {CategoryListItem} from "../components/QuestionList/CategoryListItem.jsx";
+import { useNavigate, useParams } from "react-router-dom";
+import { Button } from "@mui/material";
+import { handleApiError } from "../utils/handleApiError";
+import { LoadingScreen } from "../components/LoadingState";
+import { AlertWithMessage } from "../components/ErrorHandling";
+import { useLoadingProgress } from "../components/LoadingState/useLoadingProgress";
 
 /**
  * PerformAudit Component
@@ -24,52 +27,16 @@ export function PerformAudit() {
     const { auditId } = useParams();
     const [questions, setQuestions] = useState([]);
     const [sortedQuestions, setSortedQuestions] = useState([]);
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    // Use the custom loading progress hook
+    const loadingProgress = useLoadingProgress(loading);
 
     const labels = [0, 1, 2, 3, 4, 5, "N/A"];
-    // const backendData = [
-    //     {
-    //         category: { id: 1, name: "VPN", deletedAt: null },
-    //         id: 76,
-    //         comment: "hi",
-    //         points: 3,
-    //         nA: false,
-    //         question: "VPN id76 Frage 2?"
-    //     },
-    //     {
-    //         category: { id: 1, name: "VPN", deletedAt: null },
-    //         id: 44,
-    //         comment: "",
-    //         points: null,
-    //         nA: true,
-    //         question: "VPN id44 Frage 1?"
-    //     },
-    //     {
-    //         category: { id: 2, name: "Network", deletedAt: null },
-    //         id: 80,
-    //         comment: "",
-    //         points: 2,
-    //         nA: false,
-    //         question: "Network id80 Frage 5?"
-    //     },
-    //     {
-    //         category: { id: 2, name: "Network", deletedAt: null },
-    //         id: 24,
-    //         comment: "Schlecht",
-    //         points: null,
-    //         nA: null,
-    //         question: "Network id24 Frage 4?"
-    //     },
-    //     {
-    //         category: { id: 2, name: "Network", deletedAt: null },
-    //         id: 11,
-    //         comment: "Noch schlechter",
-    //         points: 1,
-    //         nA: false,
-    //         question: "Network id 11 Frage 3?"
-    //     }
-    // ];
 
-    /**
+        /**
      * Transforms an array of questions into a structured array of categories,
      * where each category contains its associated questions.
      *
@@ -140,8 +107,8 @@ export function PerformAudit() {
                             points: item.points,
                             nA: item.nA,
                             comment: item.comment,
-                        }
-                    ]
+                        },
+                    ],
                 });
             }
 
@@ -149,23 +116,34 @@ export function PerformAudit() {
         }, []);
 
         return transformedData;
-    }
-
-    /**
+    };
+        /**
      * Fetches questions from the backend for the current audit on component mount
      * or when the audit ID changes.
      * It updates the `questions` state with the retrieved data.
      */    
-    useEffect(() => {
+        useEffect(() => {
+        setLoading(true);
         api.get(`/v1/audits/${auditId}/ratings`)
-            .then(response => {
+            .then((response) => {
                 setQuestions(response.data);
                 setSortedQuestions(transformData(response.data));
+                setError(null);
             })
-            .catch(err => {
-                console.error('Error fetching data:', err);
-            });
+            .catch((err) => {
+                const errorMessage = handleApiError(err); // Use handleApiError
+                setError(errorMessage);
+            })
+            .finally(() => setLoading(false));
     }, [auditId]);
+
+    if (loading) {
+        return <LoadingScreen progress={loadingProgress} message="Audit is loading..." />;
+    }
+
+    if (error) {
+        return <AlertWithMessage severity="error" title="Fehler" message={error} />;
+    }
 
     /**
      * Handles the update of a question in the list. This function is triggered when a question's
@@ -193,29 +171,36 @@ export function PerformAudit() {
      * @returns {Promise<void>} - A promise resolving once the backend update is complete.
      */
     const patchQuestion = async (questionID, newRatings) => {
-        // Transforming the ratings into a format suitable for a JSON Patch request
         const patchData = newRatings.map((destination) => ({
             op: "replace",
             path: `${destination.path}`,
             value: destination.value,
         }));
-        api.patch(`/v1/ratings/${questionID}`, patchData)
-            .then(response => {
-                console.log(response);
-            })
-            .catch(err => {
-                console.error('Error fetching data:', err);
-            });
+        try {
+            await api.patch(`/v1/ratings/${questionID}`, patchData);
+        } catch (err) {
+            const errorMessage = handleApiError(err); // Use handleApiError
+            alert(errorMessage);
+        }
     };
 
     return (
         <LayoutDefault>
+            {/*^= h1*/}
             <Title>Audit durchführen</Title>
             <CategoryList
                 categories={sortedQuestions}
                 options={labels}
                 onChange={handleQuestionUpdate}
             />
+            <div className="flex justify-end mr-8">
+                <Button
+                    onClick={() => navigate(`/evaluation/${auditId}`)}
+                    variant="contained"
+                >
+                    Bewertung anzeigen
+                </Button>
+            </div>
         </LayoutDefault>
-    )
+    );
 }
