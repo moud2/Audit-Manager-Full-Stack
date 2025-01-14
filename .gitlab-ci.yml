@@ -59,13 +59,6 @@ backend-build-job:
 docker-deploy-job:
   image: docker:20
   stage: release
-  services:
-    - docker:dind
-  variables:
-    DOCKER_HOST: tcp://docker:2375/
-    DOCKER_DRIVER: overlay2
-    DOCKER_TLS_CERTDIR: ""
-    PIPELINE_TAG: "${CI_PIPELINE_ID}"
   dependencies:
     - backend-build-job
   rules:
