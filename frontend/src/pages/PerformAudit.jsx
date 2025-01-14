@@ -3,8 +3,12 @@ import {useEffect, useMemo, useState} from "react";
 import {CategoryList} from "../components/QuestionList/CategoryList.jsx";
 import Title from "../components/Textareas/Title.jsx";
 import api from "../api.js";
-import {useNavigate, useParams} from "react-router-dom";
-import {Button, debounce} from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
+import { Button, debounce } from "@mui/material";
+import { handleApiError } from "../utils/handleApiError";
+import { LoadingScreen } from "../components/LoadingState";
+import { AlertWithMessage } from "../components/ErrorHandling";
+import { useLoadingProgress } from "../components/LoadingState/useLoadingProgress";
 
 /**
  * PerformAudit Component
@@ -23,6 +27,11 @@ export function PerformAudit() {
     const [questions, setQuestions] = useState([]);
     const [sortedQuestions, setSortedQuestions] = useState([]);
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    // Use the custom loading progress hook
+    const loadingProgress = useLoadingProgress(loading);
 
     const labels = [0, 1, 2, 3, 4, 5, "N/A"];
 
@@ -97,8 +106,8 @@ export function PerformAudit() {
                             points: item.points,
                             nA: item.nA,
                             comment: item.comment,
-                        }
-                    ]
+                        },
+                    ],
                 });
             }
 
@@ -106,23 +115,34 @@ export function PerformAudit() {
         }, []);
 
         return transformedData;
-    }
-
-    /**
+    };
+        /**
      * Fetches questions from the backend for the current audit on component mount
      * or when the audit ID changes.
      * It updates the `questions` state with the retrieved data.
      */    
-    useEffect(() => {
+        useEffect(() => {
+        setLoading(true);
         api.get(`/v1/audits/${auditId}/ratings`)
             .then(response => {
                 setQuestions(response.data);
                 setSortedQuestions(transformData(response.data));
+                setError(null);
             })
-            .catch(err => {
-                console.error('Error fetching data:', err);
-            });
+            .catch((err) => {
+                const errorMessage = handleApiError(err); // Use handleApiError
+                setError(errorMessage);
+            })
+            .finally(() => setLoading(false));
     }, [auditId]);
+
+    if (loading) {
+        return <LoadingScreen progress={loadingProgress} message="Audit is loading..." />;
+    }
+
+    if (error) {
+        return <AlertWithMessage severity="error" title="Fehler" message={error} />;
+    }
 
     /**
      * A debounced function that sends a PATCH request to update a question's ratings or comment.
@@ -175,10 +195,12 @@ export function PerformAudit() {
             path: `${destination.path}`,
             value: destination.value,
         }));
-        api.patch(`/v1/ratings/${questionID}`, patchData)
-            .catch(err => {
-                console.error('Error fetching data:', err);
-            });
+        try {
+            await api.patch(`/v1/ratings/${questionID}`, patchData);
+        } catch (err) {
+            const errorMessage = handleApiError(err); // Use handleApiError
+            alert(errorMessage);
+        }
     };
 
     return (
@@ -198,5 +220,5 @@ export function PerformAudit() {
                 </Button>
             </div>
         </LayoutDefault>
-    )
+    );
 }
