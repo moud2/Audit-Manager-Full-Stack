@@ -2,6 +2,7 @@ import React from "react";
 import ProgressBar from "../Charts/ProgressBar.jsx";
 import CircularProgress from "../Charts/CircularProgress.jsx";
 import BarChart from "../Charts/BarChart.jsx";
+import DownloadWrapper from "../Charts/DownloadWrapper.jsx";
 
 /**
  * AuditComparisonCard component displays detailed comparison data for an audit.
@@ -39,12 +40,14 @@ export function AuditComparisonCard({ name, progress, categories, distribution }
             </div>
 
             {/* Point Distribution Chart */}
-            <BarChart
-                data={distribution}
-                colors={colors}
-                width={400}
-                height={300}
-            />
+            <DownloadWrapper>
+                <BarChart
+                    data={distribution}
+                    colors={colors}
+                    width={400}
+                    height={300}
+                />
+            </DownloadWrapper>
         </div>
     );
 }

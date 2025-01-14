@@ -1,17 +1,18 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { LayoutDefault } from "../layouts/LayoutDefault.jsx";
+import {useState, useEffect} from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
+import {LayoutDefault} from "../layouts/LayoutDefault.jsx";
 import LinearProgressWithLabel from "../components/Charts/ProgressBar.jsx";
 import CircularProgressWithLabel from "../components/Charts/CircularProgress.jsx";
 import CustomBarChart from "../components/Charts/BarChart.jsx";
 import Title from "../components/Textareas/Title.jsx";
 import api from "../api";
-import { LoadingScreen } from "../components/LoadingState";
-import { AlertWithMessage } from "../components/ErrorHandling";
-import { handleApiError } from "../utils/handleApiError";
+import {LoadingScreen} from "../components/LoadingState";
+import {AlertWithMessage} from "../components/ErrorHandling";
+import {handleApiError} from "../utils/handleApiError";
 import Box from "@mui/material/Box";
 import {Button} from "@mui/material";
-import { useLoadingProgress } from "../components/LoadingState/useLoadingProgress";
+import {useLoadingProgress} from "../components/LoadingState/useLoadingProgress";
+import DownloadWrapper from "../components/Charts/DownloadWrapper.jsx";
 
 /**
  * Evaluation component fetches audit data and displays it as a series of progress indicators,
@@ -23,7 +24,7 @@ import { useLoadingProgress } from "../components/LoadingState/useLoadingProgres
  */
 export function Evaluation() {
     // Extract audit ID from the route parameters to dynamically load audit data
-    const { auditId } = useParams();
+    const {auditId} = useParams();
 
     /**
      * overallProgress - Represents the overall completion percentage of the audit.
@@ -98,59 +99,68 @@ export function Evaluation() {
 
     // Render loading screen
     if (loading) {
-        return <LoadingScreen progress={loadingProgress} message="Loading evaluation data..." />;
+        return <LoadingScreen progress={loadingProgress} message="Loading evaluation data..."/>;
     }
 
     // Render error message
     if (error) {
-        return <AlertWithMessage severity="error" title="Error" message={error} />;
+        return <AlertWithMessage severity="error" title="Error" message={error}/>;
     }
 
     return (
         <LayoutDefault>
-            <div className="p-4 flex flex-col items-center">
+            <div className="p-4 flex flex-col items-center max-w-5xl mx-auto">
                 <Title>Evaluation</Title>
 
-                {/* Overall Progress Bar */}
-                <div
-                    data-cy={"ProgressBar"}
-                    id="result"
-                    className="w-full flex flex-col justify-center items-center h-20 mb-6"
-                >
-                    <Box className="text-center" sx={{ width: "80%" }}>
-                        <LinearProgressWithLabel value={overallProgress} />
-                    </Box>
-                    <p className="text-center text-xl">Gesamtfortschritt</p>
-                </div>
+                <DownloadWrapper>
+                    {/* Overall Progress Bar */}
+                    <div
+                        data-cy={"ProgressBar"}
+                        id="result"
+                        className="w-full flex flex-col justify-center items-center h-20 mb-6"
+                    >
+                        <Box className="text-center" sx={{width: "80%"}}>
+                            <LinearProgressWithLabel value={overallProgress}/>
+                        </Box>
+                        <p className="text-center text-xl">Gesamtfortschritt</p>
+                    </div>
+                </DownloadWrapper>
 
-                {/* Category Progress Circular Charts */}
-                <div className="w-full grid grid-cols-1 gap-6 mb-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-                    {categoryProgress.map(category => (
-                        <div  data-cy={"CircularChart"} key={category.categoryName} className="flex flex-col items-center">
-                            <CircularProgressWithLabel value={category.currentCategoryProgress} label={category.categoryName} size={60} />
-                        </div>
-                    ))}
-                </div>
 
+                <DownloadWrapper>
+                    {/* Category Progress Circular Charts */}
+                    <div
+                        className="w-full grid grid-cols-1 gap-6 mb-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                        {categoryProgress.map(category => (
+                            <div data-cy={"CircularChart"} key={category.categoryName}
+                                 className="flex flex-col items-center">
+                                <CircularProgressWithLabel value={category.currentCategoryProgress}
+                                                           label={category.categoryName} size={60}/>
+                            </div>
+                        ))}
+                    </div>
+                </DownloadWrapper>
                 {/* Question Count by Rating Bar Chart */}
-                <div data-cy={"BarChart"} className="max-w-full overflow-x-auto pb-10">
-                    <CustomBarChart
-                        data={ratingDistribution} // Pass the rating distribution directly
-                        colors={colors}
-                    />
-                </div>
+                <DownloadWrapper>
+                    <div data-cy={"BarChart"} className="max-w-full overflow-x-auto pb-10">
+                        <CustomBarChart
+                            data={ratingDistribution} // Pass the rating distribution directly
+                            colors={colors}
+                        />
+                    </div>
+                </DownloadWrapper>
 
                 {/* Audit vergleichen Button */}
                 <div className="flex justify-end mr-8">
-                <Button
-                    onClick={() => navigate(`/compare-audits/${auditId}`)}
-                    variant="contained"
-                >
-                    Audit vergleichen
-                </Button>
+                    <Button
+                        onClick={() => navigate(`/compare-audits/${auditId}`)}
+                        variant="contained"
+                    >
+                        Audit vergleichen
+                    </Button>
                 </div>
 
-                
+
             </div>
         </LayoutDefault>
     );

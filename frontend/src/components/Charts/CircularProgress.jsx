@@ -1,7 +1,7 @@
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import ChartWrapper from "./ChartWrapper.jsx";
+import DownloadWrapper from "./DownloadWrapper.jsx";
 
 /**
  * A circular progress component with a label in the center displaying the percentage value.
@@ -14,32 +14,30 @@ import ChartWrapper from "./ChartWrapper.jsx";
  */
 const CircularProgressWithLabel = ({value, label, size = 80}) => {
     return (
-        <ChartWrapper>
-            <Box sx={{position: 'relative', display: 'inline-flex', flexDirection: 'column', alignItems: 'center'}}>
-                <Box sx={{position: 'relative', display: 'inline-flex'}}>
-                    <CircularProgress variant="determinate" value={value} size={size}/>
-                    <Box
-                        sx={{
-                            top: 0,
-                            left: 0,
-                            bottom: 0,
-                            right: 0,
-                            position: 'absolute',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}
-                    >
-                        <Typography variant="caption" component="div" color="text.secondary">
-                            {`${Math.round(value)}%`}
-                        </Typography>
-                    </Box>
+        <Box sx={{position: 'relative', display: 'inline-flex', flexDirection: 'column', alignItems: 'center'}}>
+            <Box sx={{position: 'relative', display: 'inline-flex'}}>
+                <CircularProgress variant="determinate" value={value} size={size}/>
+                <Box
+                    sx={{
+                        top: 0,
+                        left: 0,
+                        bottom: 0,
+                        right: 0,
+                        position: 'absolute',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                >
+                    <Typography variant="caption" component="div" color="text.secondary">
+                        {`${Math.round(value)}%`}
+                    </Typography>
                 </Box>
-                <Typography variant="body2" color="text.secondary" sx={{mt: 1}}>
-                    {label}
-                </Typography>
             </Box>
-        </ChartWrapper>
+            <Typography variant="body2" color="text.secondary" sx={{mt: 1}}>
+                {label}
+            </Typography>
+        </Box>
     );
 };
 
