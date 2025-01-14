@@ -137,8 +137,7 @@ export function PerformAudit() {
         () =>
             debounce((questionID, newRatings) => {
                 return patchQuestion(questionID, newRatings);
-            }, 1000),
-        [],
+            }, 1000)
     );
 
     /**
@@ -158,7 +157,7 @@ export function PerformAudit() {
             {path: "/points", value: updatedQuestion.points},
             {path: "/comment", value: updatedQuestion.comment}
         ]);
-    }, []);
+    });
 
     /**
      * Sends a PATCH request to update a specific question's fields in the backend.
