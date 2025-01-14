@@ -147,13 +147,6 @@ frontend-build-job-fullstack:
 docker-release-job:
   image: docker:20
   stage: release
-  services:
-    - docker:dind
-  variables:
-    DOCKER_HOST: tcp://docker:2375/
-    DOCKER_DRIVER: overlay2
-    DOCKER_TLS_CERTDIR: ""
-    PIPELINE_TAG: "${CI_PIPELINE_ID}"
   dependencies:
     - frontend-build-job
   rules:
@@ -176,13 +169,6 @@ docker-release-job:
 docker-release-job-fullstack:
   image: docker:20
   stage: release
-  services:
-    - docker:dind
-  variables:
-    DOCKER_HOST: tcp://docker:2375/
-    DOCKER_DRIVER: overlay2
-    DOCKER_TLS_CERTDIR: ""
-    PIPELINE_TAG: "${CI_PIPELINE_ID}"
   dependencies:
     - frontend-build-job-fullstack
   rules:
