@@ -13,7 +13,7 @@ export function NewCategory() {
             alert("Kategorie erfolgreich erstellt.");
             setName("");
         }).catch((err) => {
-            alert("Fehler beim Erstellen der Kategorie.");
+            alert("Fehler beim Erstellen der Kategorie. :(");
         })
     }
 

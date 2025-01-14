@@ -1,7 +1,6 @@
 import React from 'react';
 import './index.css';
 import {Route, HashRouter, Routes} from "react-router-dom";
-import {Index} from "./pages/Index.jsx";
 import {Dashboard} from "./pages/Dashboard.jsx";
 import {NewAudit} from "./pages/NewAudit.jsx";
 import {PerformAudit} from "./pages/PerformAudit.jsx";
