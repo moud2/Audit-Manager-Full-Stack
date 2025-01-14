@@ -155,7 +155,6 @@ export function PerformAudit() {
             {path: "/comment", value: updatedQuestion.comment}
         ]);
     }
-    });
 
     /**
      * Sends a PATCH request to update a specific question's fields in the backend.
