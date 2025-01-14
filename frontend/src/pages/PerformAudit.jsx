@@ -133,9 +133,13 @@ export function PerformAudit() {
      * @param {Object[]} newRatings - An array of objects representing the paths and values to update.
      * @returns {Promise<void>} - A promise that resolves once the backend update is complete.
      */
-    const debouncedPatchQuestion = () => debounce((questionID, newRatings) => {
-        return patchQuestion(questionID, newRatings);
-    }, 1000)
+    const debouncedPatchQuestion = useMemo(
+        () =>
+            debounce((questionID, newRatings) => {
+                return patchQuestion(questionID, newRatings);
+            }, 1000),
+        [],
+    );
 
     /**
      * Handles the update of a question in the list. This function is triggered whenever a question's
@@ -147,14 +151,14 @@ export function PerformAudit() {
      * @param {question} updatedQuestion - The specific question that was modified.
      * @returns {void}
      */
-    const handleQuestionUpdate = (updatedQuestions, updatedQuestion) => {
+    const handleQuestionUpdate = useMemo(() => (updatedQuestions, updatedQuestion) => {
         setSortedQuestions(updatedQuestions);
         debouncedPatchQuestion(updatedQuestion.id, [
             {path: "/na", value: updatedQuestion.nA},
             {path: "/points", value: updatedQuestion.points},
             {path: "/comment", value: updatedQuestion.comment}
         ]);
-    }
+    }, [debouncedPatchQuestion]);
 
     /**
      * Sends a PATCH request to update a specific question's fields in the backend.
