@@ -94,7 +94,7 @@ sonarqube-check:
     paths:
       - .sonar/cache
   dependencies:
-    - test-coverage    
+   # - test-coverage
   script: 
     - cd frontend
     - sonar-scanner               # use -X for debugging
