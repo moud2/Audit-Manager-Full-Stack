@@ -15,15 +15,12 @@ import Title from "../components/Textareas/Title.jsx";
  */
 export function CompareAudits() {
     const { auditId } = useParams();
-    const [selectedAudit, setSelectedAudit] = useState(null); // Stores data of the first audit
-    const [secondAudit, setSecondAudit] = useState({ // Stores data of the second audit
-        name: "",
-        overallProgress: 0,
-        categoryProgress: [],
-    });
-
-    const [allAudits, setAllAudits] = useState([]); // Stores the list of all audits available for comparison
-    const [error, setError] = useState(null); // Stores error messages, if any
+    const [selectedAudit, setSelectedAudit] = useState(null);
+    const [secondAudit, setSecondAudit] = useState(null);
+    const [allAudits, setAllAudits] = useState([]);
+    const [filteredAudits, setFilteredAudits] = useState([]);
+    const [filters, setFilters] = useState({ customer: "", date: "" });
+    const [error, setError] = useState(null);
 
     /**
      * Fetches audit progress and category-specific progress data from the API.
@@ -64,6 +61,7 @@ export function CompareAudits() {
             try {
                 const response = await api.get('/v1/audits');
                 setAllAudits(response.data);
+                setFilteredAudits(response.data);
             } catch {
                 setError("Fehler beim Laden der Audit-Liste.");
             }
@@ -85,11 +83,20 @@ export function CompareAudits() {
         }
     }, [auditId, allAudits, fetchAuditData]);
 
-    /**
-     * Handles the selection of the second audit from the dropdown.
-     *
-     * @param {Object} audit - The selected audit object.
-     */
+    const applyFilters = useCallback(() => {
+        const { customer, date } = filters;
+        const filtered = allAudits.filter(audit => {
+            const matchesCustomer = customer ? audit.customer.toLowerCase().includes(customer.toLowerCase()) : true;
+            const matchesDate = date ? audit.createdAt.startsWith(date) : true;
+            return matchesCustomer && matchesDate;
+        });
+        setFilteredAudits(filtered);
+    }, [filters, allAudits]);
+
+    useEffect(() => {
+        applyFilters();
+    }, [filters, allAudits, applyFilters]);
+
     const handleAuditSelect = (audit) => {
         fetchAuditData(
             audit.id,
@@ -98,13 +105,35 @@ export function CompareAudits() {
         );
     };
 
+    const handleFilterChange = (filterType, value) => {
+        setFilters(prev => ({ ...prev, [filterType]: value }));
+    };
+
     return (
         <LayoutDefault>
             <div className="max-w-6xl mx-auto px-4">
                 <Title>Audits vergleichen</Title>
 
+                {/* Filter Inputs */}
+                <div className="flex flex-wrap gap-4 mb-6">
+                    <input
+                        type="text"
+                        placeholder="Kunde"
+                        value={filters.customer}
+                        onChange={(e) => handleFilterChange("customer", e.target.value)}
+                        className="border rounded px-4 py-2"
+                    />
+                    <input
+                        type="date"
+                        value={filters.date}
+                        onChange={(e) => handleFilterChange("date", e.target.value)}
+                        className="border rounded px-4 py-2"
+                    />
+                </div>
+
+                {/* Dropdown for selecting the second audit */}
                 <AuditDropdown
-                    audits={allAudits.filter(audit => audit.id !== selectedAudit?.id)}
+                    audits={filteredAudits.filter(audit => audit.id !== selectedAudit?.id)}
                     onAuditSelect={handleAuditSelect}
                 />
 
