@@ -3,12 +3,12 @@ import {useEffect, useMemo, useState} from "react";
 import {CategoryList} from "../components/QuestionList/CategoryList.jsx";
 import Title from "../components/Textareas/Title.jsx";
 import api from "../api.js";
-import { useNavigate, useParams } from "react-router-dom";
-import { Button, debounce } from "@mui/material";
-import { handleApiError } from "../utils/handleApiError";
-import { LoadingScreen } from "../components/LoadingState";
-import { AlertWithMessage } from "../components/ErrorHandling";
-import { useLoadingProgress } from "../components/LoadingState/useLoadingProgress";
+import {useNavigate, useParams} from "react-router-dom";
+import {Button, debounce} from "@mui/material";
+import {handleApiError} from "../utils/handleApiError";
+import {LoadingScreen} from "../components/LoadingState";
+import {AlertWithMessage} from "../components/ErrorHandling";
+import {useLoadingProgress} from "../components/LoadingState/useLoadingProgress";
 
 /**
  * PerformAudit Component
@@ -23,15 +23,15 @@ import { useLoadingProgress } from "../components/LoadingState/useLoadingProgres
  * @returns {JSX.Element} - The rendered `PerformAudit` component wrapped within `LayoutDefault`.
  */
 export function PerformAudit() {
-    const { auditId } = useParams();
+    const {auditId} = useParams();
     const [questions, setQuestions] = useState([]);
     const [sortedQuestions, setSortedQuestions] = useState([]);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    // Use the custom loading progress hook
     const loadingProgress = useLoadingProgress(loading);
+    // Use the custom loading progress hook
 
     const labels = [0, 1, 2, 3, 4, 5, "N/A"];
 
@@ -116,33 +116,12 @@ export function PerformAudit() {
 
         return transformedData;
     };
-        /**
+    /**
      * Fetches questions from the backend for the current audit on component mount
      * or when the audit ID changes.
      * It updates the `questions` state with the retrieved data.
-     */    
-        useEffect(() => {
-        setLoading(true);
-        api.get(`/v1/audits/${auditId}/ratings`)
-            .then(response => {
-                setQuestions(response.data);
-                setSortedQuestions(transformData(response.data));
-                setError(null);
-            })
-            .catch((err) => {
-                const errorMessage = handleApiError(err); // Use handleApiError
-                setError(errorMessage);
-            })
-            .finally(() => setLoading(false));
-    }, [auditId]);
+     */
 
-    if (loading) {
-        return <LoadingScreen progress={loadingProgress} message="Audit is loading..." />;
-    }
-
-    if (error) {
-        return <AlertWithMessage severity="error" title="Fehler" message={error} />;
-    }
 
     /**
      * A debounced function that sends a PATCH request to update a question's ratings or comment.
@@ -172,14 +151,14 @@ export function PerformAudit() {
      * @param {question} updatedQuestion - The specific question that was modified.
      * @returns {void}
      */
-    const handleQuestionUpdate = useMemo(() => (updatedQuestions, updatedQuestion)=>{
+    const handleQuestionUpdate = useMemo(() => (updatedQuestions, updatedQuestion) => {
         setSortedQuestions(updatedQuestions);
         debouncedPatchQuestion(updatedQuestion.id, [
             {path: "/na", value: updatedQuestion.nA},
             {path: "/points", value: updatedQuestion.points},
             {path: "/comment", value: updatedQuestion.comment}
         ]);
-    },[]);
+    }, []);
 
     /**
      * Sends a PATCH request to update a specific question's fields in the backend.
@@ -202,6 +181,30 @@ export function PerformAudit() {
             alert(errorMessage);
         }
     };
+
+    useEffect(() => {
+        setLoading(true);
+        api.get(`/v1/audits/${auditId}/ratings`)
+            .then(response => {
+                setQuestions(response.data);
+                setSortedQuestions(transformData(response.data));
+                setError(null);
+            })
+            .catch((err) => {
+                const errorMessage = handleApiError(err); // Use handleApiError
+                setError(errorMessage);
+            })
+            .finally(() => setLoading(false));
+    }, [auditId]);
+
+    if (loading) {
+        return <LoadingScreen progress={loadingProgress} message="Audit is loading..."/>;
+
+    }
+    if (error) {
+        return <AlertWithMessage severity="error" title="Fehler" message={error}/>;
+
+    }
 
     return (
         <LayoutDefault>
