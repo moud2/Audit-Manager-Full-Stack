@@ -49,4 +49,15 @@ describe('Evaluation Page Tests', () => {
         cy.get('[data-cy="RadarChart"]').should('be.visible');
     });
 
+    it('Audit Export Button sollte angezeigt und klickbar sein', () => {
+        cy.get('[data-cy="ExportAuditButton"]')
+            .should('be.visible')
+            .should('not.be.disabled');
+    });
+
+    it('sollte beim Klick auf den Export Audit Button zur richtigen URL weiterleiten', () => {
+        cy.get('[data-cy="ExportAuditButton"]').click();
+        // ToDo: URL der neuen Page checken, ob es `http://localhost:8080/api/v1/audits/1/export`ist
+    });
+
 });

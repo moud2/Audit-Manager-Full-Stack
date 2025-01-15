@@ -109,21 +109,19 @@ export function Evaluation() {
                     </div>
                 </DownloadWrapper>
 
-                {/* Audit vergleichen Button */}
-                <div className="flex justify-end mr-8">
+                <div className="flex justify-center mr-8 space-x-4 mb-11">
                     <Button
                         onClick={() => navigate(`/compare-audits/${auditId}`)}
-                        variant="contained"
+                        variant="outlined"
+                        color="error"
                     >
                         Audit vergleichen
                     </Button>
-                </div>
-
-                {/* Audit Download Button */}
-                <div className="flex justify-end mr-8">
                     <Button
+                        data-cy="ExportAuditButton"
                         onClick={handleExportClick}
-                        variant="contained"
+                        variant="outlined"
+                        color="error"
                     >
                         Audit Exportieren
                     </Button>
