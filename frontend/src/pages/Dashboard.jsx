@@ -57,6 +57,8 @@ export function Dashboard() {
             .get("/v1/audits", {
                 params: {
                     customer: debouncedCustomerName?.length ? debouncedCustomerName : undefined,
+                    sortBy: "createdAt",
+                    sortDirection: "desc",
                 },
             })
             .then((response) => {
@@ -68,6 +70,7 @@ export function Dashboard() {
                 setError(handleApiError(err));
                 setData([]); 
             })
+            .finally(() => setLoading(false));
             .finally(() => setLoading(false));
     }, [debouncedCustomerName]);
     if (loading) {
