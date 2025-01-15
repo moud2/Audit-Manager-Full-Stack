@@ -71,7 +71,7 @@ export function Dashboard() {
                 setData([]); 
             })
             .finally(() => setLoading(false));
-            .finally(() => setLoading(false));
+
     }, [debouncedCustomerName]);
     if (loading) {
         return <LoadingScreen progress={loadingProgress} message="Loading, please wait..." />;
