@@ -1,5 +1,12 @@
 package com.insight.backend.service;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
+
+import java.io.ByteArrayInputStream;
+import java.util.HashSet;
+import java.util.Set;
+
 import com.insight.backend.model.Audit;
 import com.insight.backend.model.Question;
 import com.insight.backend.model.Rating;
@@ -10,13 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import java.io.ByteArrayInputStream;
-import java.util.HashSet;
-import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
 
 class PdfGeneratorServiceTest {
 
