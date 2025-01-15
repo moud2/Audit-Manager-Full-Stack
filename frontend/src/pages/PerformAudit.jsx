@@ -30,13 +30,14 @@ export function PerformAudit() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [patchError, setPatchError] = useState(null);
 
     // Use the custom loading progress hook
     const loadingProgress = useLoadingProgress(loading);
 
     const labels = [0, 1, 2, 3, 4, 5, "N/A"];
 
-        /**
+    /**
      * Transforms an array of questions into a structured array of categories,
      * where each category contains its associated questions.
      *
@@ -117,11 +118,11 @@ export function PerformAudit() {
 
         return transformedData;
     };
-        /**
+    /**
      * Fetches questions from the backend for the current audit on component mount
      * or when the audit ID changes.
      * It updates the `questions` state with the retrieved data.
-     */    
+     */  
         useEffect(() => {
         setLoading(true);
         api.get(`/v1/audits/${auditId}/ratings`)
@@ -157,11 +158,11 @@ export function PerformAudit() {
     const handleQuestionUpdate = async (updatedQuestions, updatedQuestion) => {
         setSortedQuestions(updatedQuestions);
         await patchQuestion(updatedQuestion.id, [
-            {path: "/na", value: updatedQuestion.nA},
-            {path: "/points", value: updatedQuestion.points},
-            {path: "/comment", value: updatedQuestion.comment}
+            { path: "/na", value: updatedQuestion.nA },
+            { path: "/points", value: updatedQuestion.points },
+            { path: "/comment", value: updatedQuestion.comment }
         ]);
-    }
+    };
 
     /**
      * Sends a PATCH request to update a specific question's fields in the backend.
@@ -178,14 +179,20 @@ export function PerformAudit() {
         }));
         try {
             await api.patch(`/v1/ratings/${questionID}`, patchData);
+            setPatchError(null); // Clear any previous patch errors
         } catch (err) {
-            const errorMessage = handleApiError(err); // Use handleApiError
-            alert(errorMessage);
+            const errorMessage = handleApiError(err);
+            setPatchError(errorMessage); // Set the error to display via AlertWithMessage
         }
     };
 
     return (
         <LayoutDefault>
+            {patchError && (
+                <div className="fixed top-50 left-0 w-full z-50">
+                    <AlertWithMessage severity="error" title="Fehler" message={patchError} />
+                </div>
+            )}
             {/*^= h1*/}
             <Title>Audit durchführen</Title>
             <CategoryList
