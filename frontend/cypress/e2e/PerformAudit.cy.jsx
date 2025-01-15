@@ -30,10 +30,10 @@ export const interceptGET = () => {
     }).as('getQuestions');
 };
 
-// Intercept PATCH request for updating a question
 export const interceptPATCH = () => {
-    cy.intercept('PATCH', '/v1/ratings/1', {
+    cy.intercept('PATCH', '/api/v1/ratings/1', {
         statusCode: 200,
+        body: [{ id: 1, question: "Frage 1", points: null, comment: "Neue Anmerkung", na: null}]
     }).as('patchQuestion');
 };
 
@@ -67,19 +67,52 @@ describe('PerformAudit Page', () => {
         cy.get('input[type="checkbox"]').eq(6).uncheck({ force: true }).should('not.be.checked');
     });
 
-    it.only('should handle comment input and send PATCH request', () => {
+    it('should send patch request for checkbox change correctly', () => {
+        cy.get('input[type="checkbox"]').eq(0).check({ force: true }).should('be.checked');
+        cy.wait(1500);
+        cy.wait('@patchQuestion').its('request.body')
+            .should('deep.equal', [
+                { op: 'replace', path: '/na', value: false },
+                { op: 'replace', path: '/points', value: 0 },
+                { op: 'replace', path: '/comment', value: '' }
+            ]);
+    });
+
+    it('should handle comment input and send PATCH request', () => {
         cy.get('[data-cy="question-comment"]').first().click().type('Neue Anmerkung');
-        // cy.wait(1500);
-        cy.wait('@patchQuestion')
-        //     .its('request.body').should('deep.include', {
-        //     op: 'replace',
-        //     path: '/comment',
-        //     value: 'Neue Anmerkung',
-        // });
+        cy.wait(1500);
+        cy.wait('@patchQuestion').its('request.body')
+            .should('deep.equal', [
+                { op: 'replace', path: '/na', value: null },
+                { op: 'replace', path: '/points', value: null },
+                { op: 'replace', path: '/comment', value: 'Neue Anmerkung' }
+            ]);
+        cy.get('[data-cy="question-comment"]').first().should('have.value', 'Neue Anmerkung');
     });
 
     it('should navigate to the evaluation page on button click', () => {
         cy.get('button').contains('Bewertung anzeigen').click();
         cy.url().should('include', '/evaluation/1');
     });
+
+    it('GET request fails and print error correctly', () => {
+        cy.intercept('GET', '/api/v1/audits/1/ratings', {
+            statusCode: 500,
+        }).as('getQuestionsError');
+
+        cy.visit('http://localhost:5173/#/perform-Audit/1');
+        cy.wait('@getQuestionsError');
+        cy.contains('Error fetching data').should('be.visible');
+    });
+
+    // it('PATCH request fails and print error correctly', () => {
+    //     cy.intercept('PATCH', '/api/v1/ratings/1', {
+    //         statusCode: 500,
+    //     }).as('patchQuestionError');
+    //
+    //     cy.get('[data-cy="question-comment"]').first().click().type('Neue Anmerkung');
+    //     cy.wait('@patchQuestionError');
+    //     cy.contains('Fehler beim Aktualisieren der Daten').should('be.visible');
+    // });
+
 });

@@ -214,7 +214,7 @@ export function PerformAudit() {
                 options={labels}
                 onChange={handleQuestionUpdate}
             />
-            <div className="flex justify-end mr-8">
+            <div className="flex justify-end mr-8 mb-11"> {/*mb-11 perspektivisch entfernen, wenn das Problem mit der Footer Positionierung gelöst wird*/}
                 <Button
                     onClick={() => navigate(`/evaluation/${auditId}`)}
                     variant="contained"
