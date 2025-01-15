@@ -1,20 +1,20 @@
 package com.insight.backend.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import jakarta.validation.Valid;
 
 import com.insight.backend.dto.AuditProgressDTO;
 import com.insight.backend.dto.AuditResponseDTO;
 import com.insight.backend.dto.NewAuditDTO;
+import com.insight.backend.exception.AuditDeletedException;
 import com.insight.backend.exception.AuditDeletionException;
 import com.insight.backend.exception.AuditNotFoundException;
 import com.insight.backend.model.Audit;
 import com.insight.backend.service.audit.AuditProgressService;
 import com.insight.backend.service.audit.CreateAuditService;
-import com.insight.backend.service.audit.FindAuditService;
 import com.insight.backend.service.audit.DeleteAuditService;
+import com.insight.backend.service.audit.FindAuditService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -69,11 +69,11 @@ public class AuditsController {
      */
     @GetMapping("api/v1/audits")
     public ResponseEntity<List<Audit>> getAudits(
-            @RequestParam(required = false, defaultValue = "") String customer,
+            @RequestParam(required = false, defaultValue = "") String search,
             @RequestParam(required = false, defaultValue = "asc") String sortDirection,
             @RequestParam(required = false, defaultValue = "id") String sortBy
     ) {
-        List<Audit> response = findAuditService.findAllAudits(customer, sortDirection, sortBy);
+        List<Audit> response = findAuditService.findAllAudits(search, sortDirection, sortBy);
 
         return ResponseEntity.ok(response);
     }
@@ -101,21 +101,21 @@ public class AuditsController {
      */
     @GetMapping("/api/v1/audits/{auditId}/progress")
     public ResponseEntity<?> getAuditProgress(@PathVariable Long auditId) {
-        // Prüfen, ob das Audit existiert oder soft-deleted ist
-        Optional<Audit> optionalAudit = findAuditService.findAuditById(auditId);
+        // Prüfen, ob das Audit existiert
+        Audit audit = findAuditService.findAuditById(auditId).orElseThrow(() -> new AuditNotFoundException(auditId));
 
-        // Wenn das Audit nicht existiert oder gelöscht wurde, 404 zurückgeben
-        if (optionalAudit.isEmpty() || optionalAudit.get().getDeletedAt() != null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Audit not found or has been deleted");
+        // Prüfen, ob das Audit gelöscht wurde
+        if (audit.getDeletedAt() != null) {
+            throw new AuditDeletedException(auditId);
         }
 
-        // Fortschritt berechnen
+        // Calculate the progress of the audit
         AuditProgressDTO progressDTO = auditProgressService.calculateAuditProgress(auditId);
 
-        // Erfolgreiche Antwort mit Fortschrittsdaten zurückgeben
+        // Return a successful response with the progress data
         return ResponseEntity.ok(progressDTO);
     }
+
 
     /**
      * Handles DELETE requests for deleting an audit.

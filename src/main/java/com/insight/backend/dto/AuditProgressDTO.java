@@ -1,144 +1,81 @@
 package com.insight.backend.dto;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 /**
- * Data Transfer Object representing the progress and rating summary of an audit.
- * This object is used in the response for audit progress endpoints.
+ * Data Transfer Object representing the progress and statistics of an audit.
  */
 public class AuditProgressDTO {
 
-    /**
-     * Unique identifier for the audit.
-     */
     private Long auditId;
-
-    /**
-     * Overall progress of the audit as a percentage.
-     * Calculated based on the total points for all questions within the audit.
-     */
-    private double overallProgress;
-
-    /**
-     * Map containing progress for each category within the audit.
-     * The map's keys are category names, and the values are progress percentages.
-     */
-    private Map<String, Double> categoryProgress;
-
-    /**
-     * Map representing the count of questions by their rating.
-     * The keys represent rating values (0-5, nA), and the values are the counts for each rating.
-     */
-    private Map<String, Long> questionCountByRating;
-
-    /**
-     * Default constructor for AuditProgressDTO.
-     * Initializes the Map fields to avoid null values.
-     */
-    public AuditProgressDTO() {
-        this.categoryProgress = new HashMap<>();
-        this.questionCountByRating = new HashMap<>();
-        initializeDefaultRatings();
-    }
+    private double currentAuditProgress;
+    private List<CategoryProgressDTO> categoryProgress;
 
     /**
      * Constructor to initialize all fields of the AuditProgressDTO.
      *
-     * @param auditId             unique identifier for the audit.
-     * @param overallProgress     overall progress of the audit as a percentage.
-     * @param categoryProgress    progress for each category in the audit, represented as a map.
-     * @param questionCountByRating the count of questions by their rating, represented as a map.
+     * @param auditId              unique identifier for the audit.
+     * @param currentAuditProgress progress percentage for answered questions.
+     * @param categoryProgress     progress details for each category.
      */
-    public AuditProgressDTO(Long auditId, double overallProgress, Map<String, Double> categoryProgress, Map<String, Long> questionCountByRating) {
+    public AuditProgressDTO(Long auditId, double currentAuditProgress, List<CategoryProgressDTO> categoryProgress) {
         this.auditId = auditId;
-        this.overallProgress = overallProgress;
-        this.categoryProgress = categoryProgress != null ? categoryProgress : new HashMap<>();
-        this.questionCountByRating = questionCountByRating != null ? questionCountByRating : new HashMap<>();
-        initializeDefaultRatings();
+        this.currentAuditProgress = currentAuditProgress;
+        this.categoryProgress = categoryProgress;
     }
 
     /**
-     * Initializes default rating values (0-5, nA) to 0 if they are not already set.
-     */
-    private void initializeDefaultRatings() {
-        for (int i = 0; i <= 5; i++) {
-            this.questionCountByRating.putIfAbsent(String.valueOf(i), 0L);
-        }
-        this.questionCountByRating.putIfAbsent("nA", 0L);
-    }
-
-    /**
-     * Getter method for audit ID.
+     * Gets the unique identifier for the audit.
      *
-     * @return the unique identifier for the audit.
+     * @return the audit ID.
      */
     public Long getAuditId() {
         return auditId;
     }
 
     /**
-     * Setter method for audit ID.
+     * Sets the unique identifier for the audit.
      *
-     * @param auditId the unique identifier for the audit.
+     * @param auditId the audit ID to set.
      */
     public void setAuditId(Long auditId) {
         this.auditId = auditId;
     }
 
     /**
-     * Getter method for overall progress.
+     * Gets the progress percentage for answered questions.
      *
-     * @return the overall progress of the audit as a percentage.
+     * @return the current audit progress percentage.
      */
-    public double getOverallProgress() {
-        return overallProgress;
+    public double getCurrentAuditProgress() {
+        return currentAuditProgress;
     }
 
     /**
-     * Setter method for overall progress.
+     * Sets the progress percentage for answered questions.
      *
-     * @param overallProgress the overall progress of the audit as a percentage.
+     * @param currentAuditProgress the current audit progress percentage to set.
      */
-    public void setOverallProgress(double overallProgress) {
-        this.overallProgress = overallProgress;
+    public void setCurrentAuditProgress(double currentAuditProgress) {
+        this.currentAuditProgress = currentAuditProgress;
     }
 
+
     /**
-     * Getter method for category progress.
+     * Gets the progress details for each category.
      *
-     * @return a map of category IDs to their respective progress percentages.
+     * @return the list of category progress details.
      */
-    public Map<String, Double> getCategoryProgress() {
+    public List<CategoryProgressDTO> getCategoryProgress() {
         return categoryProgress;
     }
 
     /**
-     * Setter method for category progress.
-     * Ensures a non-null value by initializing an empty map if null is passed.
+     * Sets the progress details for each category.
      *
-     * @param categoryProgress a map of category IDs to their respective progress percentages.
+     * @param categoryProgress the list of category progress details to set.
      */
-    public void setCategoryProgress(Map<String, Double> categoryProgress) {
-        this.categoryProgress = categoryProgress != null ? categoryProgress : new HashMap<>();
-    }
-
-    /**
-     * Getter method for question count by rating.
-     *
-     * @return a map of rating values (0-5) to their respective question counts.
-     */
-    public Map<String, Long> getQuestionCountByRating() {
-        return questionCountByRating;
-    }
-
-    /**
-     * Setter method for question count by rating.
-     * Ensures a non-null value by initializing an empty map if null is passed.
-     *
-     * @param questionCountByRating a map of rating values (0-5) to their respective question counts.
-     */
-    public void setQuestionCountByRating(Map<String, Long> questionCountByRating) {
-        this.questionCountByRating = questionCountByRating != null ? questionCountByRating : new HashMap<>();
+    public void setCategoryProgress(List<CategoryProgressDTO> categoryProgress) {
+        this.categoryProgress = categoryProgress;
     }
 }

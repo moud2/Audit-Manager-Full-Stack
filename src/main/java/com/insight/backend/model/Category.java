@@ -22,16 +22,36 @@ public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id; // Unique identifier for the category
+    private Long id;
 
     @Column(nullable = false)
     private String name; 
 
     @JsonIgnore
     @OneToMany(mappedBy = "category")
-    private Set<Question> questions; 
+    private Set<Question> questions;
 
-    private LocalDateTime deletedAt; // Timestamp for soft deletion; null if not deleted
+    private LocalDateTime deletedAt;
+
+    /**
+     * Constructor for creating a new Category with specified name and questions.
+     *
+     * @param name the name of the category.
+     * @param questions the set of questions associated with the category.
+     */
+    public Category(String name, Set<Question> questions) {
+        this.name = name;
+        this.questions = questions;
+        this.deletedAt = null;
+    }
+
+    /**
+     * Default constructor for creating an empty Category.
+     * Initializes deletedAt to null.
+     */
+    public Category() {
+        this.deletedAt = null;
+    }
 
     /**
      * Gets the timestamp indicating when the category was deleted.
@@ -49,26 +69,6 @@ public class Category {
      */
     public void setDeletedAt(LocalDateTime deletedAt) {
         this.deletedAt = deletedAt;
-    }
-
-    /**
-     * Constructor for creating a new Category with specified name and questions.
-     *
-     * @param name the name of the category.
-     * @param questions the set of questions associated with the category.
-     */
-    public Category(String name, Set<Question> questions) {
-        this.name = name;
-        this.questions = questions;
-        this.deletedAt = null; // Initially, the category is not deleted
-    }
-
-    /**
-     * Default constructor for creating an empty Category.
-     * Initializes deletedAt to null.
-     */
-    public Category() {
-        this.deletedAt = null; // Set deletedAt to null for new categories
     }
 
     /**
