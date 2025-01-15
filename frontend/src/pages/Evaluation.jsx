@@ -74,6 +74,11 @@ export function Evaluation() {
         return <AlertWithMessage severity="error" title="Error" message={error}/>;
     }
 
+    const handleExportClick = () => {
+        const exportUrl = `http://localhost:8080/api/v1/audits/${auditId}/export`;
+        window.location.href = exportUrl;
+    };
+
     return (
         <LayoutDefault>
             <div className="p-4 flex flex-col items-center max-w-5xl mx-auto">
@@ -94,14 +99,14 @@ export function Evaluation() {
 
                 {/* Radar Chart */}
                 <DownloadWrapper>
-                <div data-cy={"RadarChart"} className="w-full flex justify-center">
-                    <RadarChart
-                        labels={categoryProgress.map(category => category.categoryName)}
-                        currentData={categoryProgress.map(category => category.currentCategoryProgress)}
-                        width={50}
-                        height={50}
-                    />
-                </div>
+                    <div data-cy={"RadarChart"} className="w-full flex justify-center">
+                        <RadarChart
+                            labels={categoryProgress.map(category => category.categoryName)}
+                            currentData={categoryProgress.map(category => category.currentCategoryProgress)}
+                            width={50}
+                            height={50}
+                        />
+                    </div>
                 </DownloadWrapper>
 
                 {/* Audit vergleichen Button */}
@@ -111,6 +116,16 @@ export function Evaluation() {
                         variant="contained"
                     >
                         Audit vergleichen
+                    </Button>
+                </div>
+
+                {/* Audit Download Button */}
+                <div className="flex justify-end mr-8">
+                    <Button
+                        onClick={handleExportClick}
+                        variant="contained"
+                    >
+                        Audit Exportieren
                     </Button>
                 </div>
 
