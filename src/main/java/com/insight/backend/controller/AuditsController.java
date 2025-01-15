@@ -69,11 +69,11 @@ public class AuditsController {
      */
     @GetMapping("api/v1/audits")
     public ResponseEntity<List<Audit>> getAudits(
-            @RequestParam(required = false, defaultValue = "") String customer,
+            @RequestParam(required = false, defaultValue = "") String search,
             @RequestParam(required = false, defaultValue = "asc") String sortDirection,
             @RequestParam(required = false, defaultValue = "id") String sortBy
     ) {
-        List<Audit> response = findAuditService.findAllAudits(customer, sortDirection, sortBy);
+        List<Audit> response = findAuditService.findAllAudits(search, sortDirection, sortBy);
 
         return ResponseEntity.ok(response);
     }

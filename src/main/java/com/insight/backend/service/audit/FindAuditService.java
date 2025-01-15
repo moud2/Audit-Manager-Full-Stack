@@ -55,15 +55,15 @@ public class FindAuditService {
     }
 
     /**
-     * Finds all audits with the specified customer name.
+     * Finds all audits with the specified search string.
      *
-     * @param customerName the name of the customer to search for
+     * @param search the string to search for in the name or customer
      * @param sortDirection the direction to sort the results
-     * @return a list of all audits with the specified customer name
+     * @return a list of all audits with the specified search string
      */
-    public List<Audit> findAllAudits(String customerName, String sortDirection, String sortBy) {
+    public List<Audit> findAllAudits(String search, String sortDirection, String sortBy) {
         Sort sort = Sort.by(sortDirection.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, sortBy);
-        Specification<Audit> specification = Specification.where(AuditSpecifications.isNotDeleted()).and(AuditSpecifications.customerContains(customerName));
+        Specification<Audit> specification = Specification.where(AuditSpecifications.isNotDeleted()).and(AuditSpecifications.nameOrCustomerContains(search));
         return auditRepository.findAll(specification, sort);
     }
 }

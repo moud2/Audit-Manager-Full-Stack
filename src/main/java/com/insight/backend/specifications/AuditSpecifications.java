@@ -52,4 +52,21 @@ public class AuditSpecifications {
     public static Specification<Audit> isNotDeleted() {
         return (root, query, criteriaBuilder) -> criteriaBuilder.isNull(root.get("deletedAt"));
     }
+
+    /**
+     * Specification to find audits with a name or customer that contains the specified search string.
+     *
+     * @param search the string to search for in the name or customer
+     * @return the specification to find audits with a name or customer that contains the search string
+     */
+    public static Specification<Audit> nameOrCustomerContains(String search) {
+        return (root, query, criteriaBuilder) -> {
+            String pattern = "%" + search.toLowerCase() + "%";
+
+            return criteriaBuilder.or(
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), pattern),
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get("customer")), pattern)
+            );
+        };
+    }
 }
