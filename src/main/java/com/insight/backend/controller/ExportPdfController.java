@@ -14,7 +14,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 @RestController
-public class ExportController {
+public class ExportPdfController {
     private final PdfGenerator pdfGenerator;
 
     /**
@@ -22,7 +22,7 @@ public class ExportController {
      * @param pdfGenerator the mapper to convert ratings to pdf
      */
     @Autowired
-    public ExportController(PdfGenerator pdfGenerator) {
+    public ExportPdfController(PdfGenerator pdfGenerator) {
         this.pdfGenerator = pdfGenerator;
     }
 
