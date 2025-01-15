@@ -17,7 +17,7 @@ import java.io.IOException;
  * Provides an endpoint for exporting the database as a CSV file.
  */
 @RestController
-public class ExportController {
+public class CsvExportController {
 
     private final CsvGeneratorService csvGenerator;
 
@@ -27,7 +27,7 @@ public class ExportController {
      * @param csvGenerator the service used to generate CSV exports
      */
     @Autowired
-    public ExportController(CsvGeneratorService csvGenerator) {
+    public CsvExportController(CsvGeneratorService csvGenerator) {
         this.csvGenerator = csvGenerator;
     }
 

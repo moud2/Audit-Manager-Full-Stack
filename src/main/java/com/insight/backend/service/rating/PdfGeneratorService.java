@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class PdfGenerator {
+public class PdfGeneratorService {
 
     @Autowired
     private AuditRepository auditRepository;
