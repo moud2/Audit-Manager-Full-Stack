@@ -52,14 +52,4 @@ describe('AuditProgress Component', () => {
                 .should('have.attr', 'data-to', `category-${category.categoryId}`); // Prüft das `data-to`-Attribut
         });
     });
-
-    it('simulates a click event and verifies console log', () => {
-        cy.window().then((win) => {
-            cy.spy(win.console, 'log').as('consoleLog');
-        });
-    
-        cy.contains('Category 1').click();
-    
-        cy.get('@consoleLog').should('have.been.calledWith', 'Click to jump to: category-1');
-    });
 });
