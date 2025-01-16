@@ -53,16 +53,13 @@ describe('AuditProgress Component', () => {
         });
     });
 
-    //ToDo: Wenn Sprungmarken wieder funktionieren diesen Test einbinden
-
-    // it('simulates a click event and verifies console log', () => {
-    //     const stub = cy.stub();
-    //     cy.on('window:console', stub); // Listen for console logs
-    //
-    //     cy.contains('Category 1')
-    //         .click()
-    //         .then(() => {
-    //             expect(stub).to.be.calledWith('Click to jump to: category-1');
-    //         });
-    // });
+    it('simulates a click event and verifies console log', () => {
+        cy.window().then((win) => {
+            cy.spy(win.console, 'log').as('consoleLog');
+        });
+    
+        cy.contains('Category 1').click();
+    
+        cy.get('@consoleLog').should('have.been.calledWith', 'Click to jump to: category-1');
+    });
 });
