@@ -17,9 +17,6 @@ import {CategoryProgress} from "./CategoryProgress.jsx";
  * @returns {JSX.Element} - A rendered navigation menu for audit progress.
  */
 export function AuditProgress({ progress }) {
-    if (!progress || !Array.isArray(progress)) {
-        return <div />;
-    }
     return (
         <div>
             <nav>
