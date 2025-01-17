@@ -1,4 +1,5 @@
 import { Header } from "../components/Layout/Header.jsx";
+import { Footer } from "../components/Layout/Footer.jsx";
 import * as React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -15,7 +16,6 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import {Link, useLocation, useParams} from "react-router-dom";
 import { useSidebar } from "./UseSidebar.jsx";
-import { Footer } from "../components/Layout/Footer.jsx";
 import {AuditProgress} from "../components/AuditProgress/AuditProgress.jsx";
 
 const drawerWidth = 260;
@@ -35,6 +35,7 @@ const Main = styled('main', {
     }),
 }));
 
+// Header der Sidebar (enthält das Logo und den Close-Button)
 const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
@@ -53,12 +54,13 @@ export function LayoutDefault({ progress, children }) {
         { href: "/dashboard", label: "Dashboard" }
     ];
 
+    const isDashboardPage = location.hash.includes("/dashboard");
     const isPerformAuditPage = location.pathname.includes("/perform-Audit");
     const isEvaluationPage = location.pathname.includes("/evaluation");
 
     return (
         <Box className="flex overflow-hidden h-full">
-            <CssBaseline />
+            {/* Icon-Button zum Öffnen der Sidebar */}
             <Header />
             <IconButton
                 color="inherit"
@@ -76,6 +78,8 @@ export function LayoutDefault({ progress, children }) {
             >
                 <MenuIcon />
             </IconButton>
+
+            {/* Sidebar-Komponente */}
             <Drawer
                 data-cy="sidebar"
                 sx={{
@@ -87,6 +91,7 @@ export function LayoutDefault({ progress, children }) {
                 anchor="left"
                 open={open}
             >
+                {/* Header der Sidebar */}
                 <DrawerHeader>
                     <div className="flex items-center mt-2">
                         <img
@@ -96,11 +101,17 @@ export function LayoutDefault({ progress, children }) {
                         />
                         <h2 className="text-4xl font-medium">InSight</h2>
                     </div>
+
+                    {/* Icon-Button zum Schließen der Sidebar */}
                     <IconButton onClick={closeSidebar} data-cy="close-icon">
                         {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                     </IconButton>
                 </DrawerHeader>
+
+                {/* Trennlinie */}
                 <Divider className="pt-2" />
+
+                {/* Liste von Links in der Sidebar */}
                 <List>
                     {links.map((link, index) => (
                         <ListItem key={index} disablePadding>
@@ -109,6 +120,11 @@ export function LayoutDefault({ progress, children }) {
                             </ListItemButton>
                         </ListItem>
                     ))}
+                    <ListItem disablePadding>
+                        <ListItemButton component={Link} to={`/manage-categories-and-questions`}>
+                            <ListItemText primary="Kategorien und Fragen verwalten" />
+                        </ListItemButton>
+                    </ListItem>
                     {isPerformAuditPage && auditId && (
                         <ListItem disablePadding>
                             <ListItemButton component={Link} to={`/evaluation/${auditId}`}>
@@ -126,12 +142,12 @@ export function LayoutDefault({ progress, children }) {
                 </List>
                 <Divider />
                 {location.pathname.includes("/perform-Audit") && <AuditProgress progress={progress} />}
+
             </Drawer>
+
             <Main open={open} className="flex-1 ml-64 overflow-y-auto" id="scroll-main">
-                <DrawerHeader />
-                    <div className="mb-16">
-                        {children}
-                    </div>
+                <DrawerHeader /> {/* Platzhalter, um Platz für den Sidebar-Header zu schaffen */}
+                {children}
             </Main>
             <Footer />
         </Box>
