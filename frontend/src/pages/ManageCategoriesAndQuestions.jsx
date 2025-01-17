@@ -16,6 +16,7 @@ export function ManageCategoriesAndQuestions() {
             <Title>Kategorien und Fragen verwalten</Title>
             <div className="flex justify-center space-x-4">
                 <Button
+                    data-cy="ExportQuestionsButton"
                     onClick={handleExportQuestionsClick}
                     variant="outlined"
                     color="error"
@@ -23,6 +24,7 @@ export function ManageCategoriesAndQuestions() {
                     Daten exportieren
                 </Button>
                 <Button
+                    data-cy="ImportQuestionsButton"
                     onClick={handleImportQuestionsClick}
                     variant="outlined"
                     color="error"

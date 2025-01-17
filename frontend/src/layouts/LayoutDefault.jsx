@@ -111,13 +111,11 @@ return (// Hauptcontainer mit flexibler Anzeige für Layout
                   <ListItemText primary={link.label}/>
                 </ListItemButton>
               </ListItem>))}
-                {isDashboardPage && (
-                    <ListItem disablePadding>
-                        <ListItemButton component={Link} to={`/manage-categories-and-questions`}>
-                            <ListItemText primary="Kategorien und Fragen verwalten" />
-                        </ListItemButton>
-                    </ListItem>
-                )}
+                <ListItem disablePadding>
+                    <ListItemButton component={Link} to={`/manage-categories-and-questions`}>
+                        <ListItemText primary="Kategorien und Fragen verwalten" />
+                    </ListItemButton>
+                </ListItem>
             </List>
             {/* Trennlinie */}
             <Divider/>
