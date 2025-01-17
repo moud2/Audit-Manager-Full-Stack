@@ -42,8 +42,6 @@ export function CategoryListItem({ category, options, onChange }) {
         onChange(newCategory, updatedQuestion);
     }
 
-    console.log(`category-${category.id}`);
-
     return (
         <div id={`category-${category.id}`} data-cy={`category-${category.id}`} className="category-list-item mt-5">
             <CategoryTitle data-cy={`category-title-${category.id}`}>{category.name}</CategoryTitle>
