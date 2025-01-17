@@ -40,7 +40,7 @@ public class CsvExportController {
      * excluding deleted entries and avoiding duplicates.</p>
      *
      * @return a {@link ResponseEntity} containing the CSV data as an attachment
-     * @throws GlobalExceptionHandler if an error occurs during CSV generation
+     * @throws IOException if an error occurs during CSV generation
      */
     @GetMapping(path = "/api/v1/database/export", produces = "text/csv")
     public ResponseEntity<InputStreamResource> databaseExport() throws GlobalExceptionHandler {
