@@ -42,8 +42,7 @@ test-component:
   script:
     - cd frontend
     - npx cypress install
-    - echo "Running Cypress component tests..."
-    - npm run dev &                             
+    - echo "Running Cypress component tests..."                       
     - npx cypress run --component
     - echo "Cypress component tests completed"
 
