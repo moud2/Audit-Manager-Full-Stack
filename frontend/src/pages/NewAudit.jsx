@@ -98,7 +98,7 @@ export function NewAudit() {
     return (
         <LayoutDefault>
             <div>
-                {error && <AlertWithMessage severity="error" title="Error" message={error} />} {/* Fehleranzeige */}
+                {error && <AlertWithMessage severity="error" title="Fehler" message={error} />} {/* Fehleranzeige */}
                 <Title>Neues Audit anlegen</Title>
 
                 {/* Validation Alert */}

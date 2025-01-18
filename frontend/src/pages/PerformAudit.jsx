@@ -246,11 +246,7 @@ export function PerformAudit() {
         <LayoutDefault
             progress={progress.categoryProgress}
         >
-            {patchError && (
-                <div className="fixed top-50 left-0 w-full z-50">
-                    <AlertWithMessage severity="error" title="Fehler" message={patchError} />
-                </div>
-            )}
+            {patchError && <AlertWithMessage severity="error" title="Fehler" message={patchError} />} {/* Fehleranzeige */}
             {/*^= h1*/}
             <Title>Audit durchführen</Title>
             <CategoryList

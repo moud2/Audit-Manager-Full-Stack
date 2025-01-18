@@ -82,7 +82,7 @@ export function Dashboard() {
                 <Title>Dashboard</Title>
                 <h2 className="font-bold">Filter</h2>
                 <TextField id="outlined-basic" label="Kundenname" variant="outlined" onChange={handleCustomerFilterChange} />
-                {error && <AlertWithMessage severity="error" title="Error" message={error} />} {/* Fehleranzeige */}
+                {error && <AlertWithMessage severity="error" title="Fehler" message={error} />} {/* Fehleranzeige */}
                 <AuditGrid data={data} loading={loading} error={error} />
             </div>
         </LayoutDefault>
