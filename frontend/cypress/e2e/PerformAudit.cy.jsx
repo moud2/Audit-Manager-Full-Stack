@@ -67,18 +67,19 @@ describe('PerformAudit Page', () => {
         cy.get('input[type="checkbox"]').eq(6).uncheck({ force: true }).should('not.be.checked');
     });
 
+    
     it('should send patch request for checkbox change correctly', () => {
         cy.get('input[type="checkbox"]').eq(0).check({ force: true });
-        cy.wait(1500);
-        cy.wait('@patchQuestion').its('request.body')
-            .should('deep.equal', [
+        cy.wait('@patchQuestion').then((xhr) => {
+            expect(xhr.request.body).to.deep.equal([
                 { op: 'replace', path: '/na', value: false },
                 { op: 'replace', path: '/points', value: 0 },
                 { op: 'replace', path: '/comment', value: '' }
             ]);
+        });
         cy.get('input[type="checkbox"]').eq(0).should('be.checked');
-
     });
+    
 
     it('should handle comment input and send PATCH request', () => {
         cy.get('[data-cy="question-comment"]').first().click().type('Neue Anmerkung');
