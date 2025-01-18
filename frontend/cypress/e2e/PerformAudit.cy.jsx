@@ -56,7 +56,7 @@ describe('PerformAudit Page', () => {
         });
     });
 
-    it('should handle checkbox interactions correctly', () => {
+    it.only('should handle checkbox interactions correctly', () => {
         cy.get('input[type="checkbox"]').eq(0).check({ force: true }).should('be.checked');
         cy.get('input[type="checkbox"]').eq(0).uncheck({ force: true }).should('not.be.checked');
         cy.get('input[type="checkbox"]').eq(1).check({ force: true }).should('be.checked');
@@ -93,7 +93,8 @@ describe('PerformAudit Page', () => {
     });
 
     it('should navigate to the evaluation page on button click', () => {
-        cy.get('button').contains('Bewertung anzeigen').click();
+        cy.get('[data-cy="menu-icon"]').click();
+        cy.get('[data-cy="evaluationButton"]').contains('Evaluation').click();
         cy.url().should('include', '/evaluation/1');
     });
 

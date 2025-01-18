@@ -127,7 +127,7 @@ export function LayoutDefault({ progress, children }) {
                     </ListItem>
                     {isPerformAuditPage && auditId && (
                         <ListItem disablePadding>
-                            <ListItemButton component={Link} to={`/evaluation/${auditId}`}>
+                            <ListItemButton component={Link} to={`/evaluation/${auditId}`} data-cy="evaluationButton">
                                 <ListItemText primary="Evaluation" />
                             </ListItemButton>
                         </ListItem>

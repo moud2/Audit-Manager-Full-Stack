@@ -170,7 +170,6 @@ export function PerformAudit() {
             debounce((questionID, newRatings) => {
                 return patchQuestion(questionID, newRatings);
             }, 500),
-        [],
     );
 
     /**
