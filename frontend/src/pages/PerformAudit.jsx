@@ -155,6 +155,30 @@ export function PerformAudit() {
         fetchProgress();
     }, [auditId, fetchProgress]);
 
+
+    /**
+     * Sends a PATCH request to update a specific question's fields in the backend.
+     *
+     * @param {number} questionID - The ID of the question to update.
+     * @param {rating[]} newRatings - An array of fields to update with their new values.
+     * @returns {Promise<void>} - A promise resolving once the backend update is complete.
+     */
+    const patchQuestion = useMemo(()=>async (questionID, newRatings) => {
+        // Transforming the ratings into a format suitable for a JSON Patch request
+        const patchData = newRatings.map((destination) => ({
+            op: "replace",
+            path: `${destination.path}`,
+            value: destination.value,
+        }));
+        try {
+            await api.patch(`/v1/ratings/${questionID}`, patchData);
+            fetchProgress();
+        } catch (err) {
+            const errorMessage = handleApiError(err); // Use handleApiError
+            alert(errorMessage);
+        }
+    },[fetchProgress])
+
     /**
      * A debounced function that sends a PATCH request to update a question's ratings or comment.
      * The request is delayed by 1000 milliseconds to prevent sending too many requests in quick
@@ -169,7 +193,7 @@ export function PerformAudit() {
             debounce((questionID, newRatings) => {
                 return patchQuestion(questionID, newRatings);
             }, 500),
-        [],
+        [patchQuestion],
     );
 
     /**
@@ -191,28 +215,6 @@ export function PerformAudit() {
         ]);
     }, [debouncedPatchQuestion]);
 
-    /**
-     * Sends a PATCH request to update a specific question's fields in the backend.
-     *
-     * @param {number} questionID - The ID of the question to update.
-     * @param {rating[]} newRatings - An array of fields to update with their new values.
-     * @returns {Promise<void>} - A promise resolving once the backend update is complete.
-     */
-    const patchQuestion = async (questionID, newRatings) => {
-        // Transforming the ratings into a format suitable for a JSON Patch request
-        const patchData = newRatings.map((destination) => ({
-            op: "replace",
-            path: `${destination.path}`,
-            value: destination.value,
-        }));
-        try {
-            await api.patch(`/v1/ratings/${questionID}`, patchData);
-            fetchProgress();
-        } catch (err) {
-            const errorMessage = handleApiError(err); // Use handleApiError
-            alert(errorMessage);
-        }
-    };
 
     /**
      * Fetches questions from the backend for the current audit on component mount
