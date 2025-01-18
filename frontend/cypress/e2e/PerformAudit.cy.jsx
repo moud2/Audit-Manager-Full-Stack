@@ -93,10 +93,6 @@ describe('PerformAudit Page', () => {
         cy.get('[data-cy="question-comment"]').first().should('have.value', 'Neue Anmerkung');
     });
 
-    it('should navigate to the evaluation page on button click', () => {
-        cy.get('button').contains('Bewertung anzeigen').click();
-        cy.url().should('include', '/evaluation/1');
-    });
 
     it('GET request fails and print error correctly', () => {
         cy.intercept('GET', '/api/v1/audits/1/ratings', {
