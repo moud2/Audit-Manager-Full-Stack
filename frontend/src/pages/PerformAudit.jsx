@@ -156,42 +156,6 @@ export function PerformAudit() {
     }, [auditId, fetchProgress]);
 
     /**
-     * A debounced function that sends a PATCH request to update a question's ratings or comment.
-     * The request is delayed by 1000 milliseconds to prevent sending too many requests in quick
-     * succession. The debounced function can be canceled to avoid unnecessary backend calls.
-     *
-     * @type {(function(number, Object[]): Promise<void>) & Cancelable}
-     * @param {number} questionID - The ID of the question to update.
-     * @param {Object[]} newRatings - An array of objects representing the paths and values to update.
-     * @returns {Promise<void>} - A promise that resolves once the backend update is complete.
-     */
-    const debouncedPatchQuestion = useMemo(
-        () =>
-            debounce((questionID, newRatings) => {
-                return patchQuestion(questionID, newRatings);
-            }, 500),
-    );
-
-    /**
-     * Handles the update of a question in the list. This function is triggered whenever a question's
-     * rating or comment is modified. It updates the question locally and calls the debouncedPatchQuestion
-     * function to send a request to the backend after a delay, ensuring that multiple rapid changes
-     * are batched together.
-     *
-     * @param {question[]} updatedQuestions - The updated array of questions.
-     * @param {question} updatedQuestion - The specific question that was modified.
-     * @returns {void}
-     */
-    const handleQuestionUpdate = useMemo(() => (updatedQuestions, updatedQuestion) => {
-        setSortedQuestions(updatedQuestions);
-        debouncedPatchQuestion(updatedQuestion.id, [
-            {path: "/na", value: updatedQuestion.nA},
-            {path: "/points", value: updatedQuestion.points},
-            {path: "/comment", value: updatedQuestion.comment}
-        ]);
-    }, [debouncedPatchQuestion]);
-
-    /**
      * Sends a PATCH request to update a specific question's fields in the backend.
      *
      * @param {number} questionID - The ID of the question to update.
@@ -213,6 +177,42 @@ export function PerformAudit() {
             alert(errorMessage);
         }
     };
+
+    /**
+     * A debounced function that sends a PATCH request to update a question's ratings or comment.
+     * The request is delayed by 1000 milliseconds to prevent sending too many requests in quick
+     * succession. The debounced function can be canceled to avoid unnecessary backend calls.
+     *
+     * @param {number} questionID - The ID of the question to update.
+     * @param {Object[]} newRatings - An array of objects representing the paths and values to update.
+     * @returns {Promise<void>} - A promise that resolves once the backend update is complete.
+     */
+    const debouncedPatchQuestion = useMemo(
+        () =>
+            debounce((questionID, newRatings) => {
+                return patchQuestion(questionID, newRatings);
+            }, 500),
+        [patchQuestion]
+    );
+
+    /**
+     * Handles the update of a question in the list. This function is triggered whenever a question's
+     * rating or comment is modified. It updates the question locally and calls the debouncedPatchQuestion
+     * function to send a request to the backend after a delay, ensuring that multiple rapid changes
+     * are batched together.
+     *
+     * @param {question[]} updatedQuestions - The updated array of questions.
+     * @param {question} updatedQuestion - The specific question that was modified.
+     * @returns {void}
+     */
+    const handleQuestionUpdate = useMemo(() => (updatedQuestions, updatedQuestion) => {
+        setSortedQuestions(updatedQuestions);
+        debouncedPatchQuestion(updatedQuestion.id, [
+            {path: "/na", value: updatedQuestion.nA},
+            {path: "/points", value: updatedQuestion.points},
+            {path: "/comment", value: updatedQuestion.comment}
+        ]);
+    }, [debouncedPatchQuestion]);
 
     /**
      * Fetches questions from the backend for the current audit on component mount
