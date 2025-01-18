@@ -1,13 +1,31 @@
 import { LayoutDefault } from "../layouts/LayoutDefault.jsx";
 import { Button } from "@mui/material";
 import Title from "../components/Textareas/Title.jsx";
+import {useState} from "react";
+import {AlertWithMessage} from "../components/ErrorHandling/index.js";
 
 export function ManageCategoriesAndQuestions() {
-    const handleExportQuestionsClick = () => {
+    const [error, setError] = useState(null);
 
+    if (error) {
+        return <AlertWithMessage severity="error" title="Fehler" message={error}/>;
     }
 
-    const handleImportQuestionsClick = () => {
+    const handleExportQuestionsClick = () => {
+        try {
+            const link = document.createElement('a');
+            link.href = (import.meta.env.VITE_BACKEND_URL || "/api") + "/v1/database/export";
+            link.setAttribute('download', 'DatabaseExport.csv');
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+        } catch (error) {
+            console.error('Error exporting questions:', error);
+            setError(error);
+        }
+    }
+
+    const handleImportQuestionsClick = async () => {
 
     }
 
