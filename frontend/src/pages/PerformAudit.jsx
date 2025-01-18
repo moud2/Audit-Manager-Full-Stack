@@ -4,11 +4,12 @@ import {CategoryList} from "../components/QuestionList/CategoryList.jsx";
 import Title from "../components/Textareas/Title.jsx";
 import api from "../api.js";
 import {useNavigate, useParams} from "react-router-dom";
-import {Button, debounce} from "@mui/material";
+import {debounce} from "@mui/material";
 import {handleApiError} from "../utils/handleApiError";
 import {LoadingScreen} from "../components/LoadingState";
 import {AlertWithMessage} from "../components/ErrorHandling";
 import {useLoadingProgress} from "../components/LoadingState/useLoadingProgress";
+import { useCallback } from "react";
 
 /**
  * PerformAudit Component
@@ -24,9 +25,8 @@ import {useLoadingProgress} from "../components/LoadingState/useLoadingProgress"
  */
 export function PerformAudit() {
     const {auditId} = useParams();
-    const [questions, setQuestions] = useState([]);
     const [sortedQuestions, setSortedQuestions] = useState([]);
-    const navigate = useNavigate();
+    const [progress, setProgress] = useState ([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
@@ -82,7 +82,7 @@ export function PerformAudit() {
         });
 
         //sorts questions in a new array of categories with questions
-        const transformedData = sortedData.reduce((acc, item) => {
+        return sortedData.reduce((acc, item) => {
             const existingCategory = acc.find(cat => cat.id === item.category.id);
 
             if (existingCategory) {
@@ -114,21 +114,76 @@ export function PerformAudit() {
             return acc; // Return the accumulator for the next iteration
         }, []);
 
-        return transformedData;
-    };
-    /**
-     * Fetches questions from the backend for the current audit on component mount
-     * or when the audit ID changes.
-     * It updates the `questions` state with the retrieved data.
-     */
+    }
 
+    /**
+     * fetchProgress is a function that retrieves the current progress of an audit
+     * from the backend API and updates the local state with the received data.
+     * It is wrapped with the useCallback hook to ensure that the function remains
+     * stable across re-renders unless the auditId changes.
+     *
+     * @type {function(): void}
+     * - Makes an HTTP GET request to the API endpoint for fetching audit progress.
+     * - Updates the progress state with the response data.
+     * - Logs an error message to the console if the request fails.
+     *
+     * Dependencies:
+     * - auditId: The ID of the audit whose progress is being fetched.
+     */
+    const fetchProgress = useCallback(() => {
+        api.get(`/v1/audits/${auditId}/progress`)
+            .then(response => {
+                setProgress(response.data);
+            })
+            .catch(err => {
+                console.error('Error fetching progress data:', err);
+            });
+    }, [auditId]);
+
+    /**
+     * useEffect hook that triggers the fetchProgress function whenever the auditId
+     * or fetchProgress function reference changes. This ensures the latest progress
+     * data is fetched and updated in the component.
+     *
+     * - auditId: The ID of the current audit, used as a dependency to re-fetch the progress
+     *   data whenever it changes.
+     * - fetchProgress: The callback function responsible for fetching and setting the progress data.
+     *
+     * This hook runs on the initial render and whenever the auditId or fetchProgress function changes.
+     */
+    useEffect(() => {
+        fetchProgress();
+    }, [auditId, fetchProgress]);
+
+
+    /**
+     * Sends a PATCH request to update a specific question's fields in the backend.
+     *
+     * @param {number} questionID - The ID of the question to update.
+     * @param {rating[]} newRatings - An array of fields to update with their new values.
+     * @returns {Promise<void>} - A promise resolving once the backend update is complete.
+     */
+    const patchQuestion = useMemo(()=>async (questionID, newRatings) => {
+        // Transforming the ratings into a format suitable for a JSON Patch request
+        const patchData = newRatings.map((destination) => ({
+            op: "replace",
+            path: `${destination.path}`,
+            value: destination.value,
+        }));
+        try {
+            await api.patch(`/v1/ratings/${questionID}`, patchData);
+            fetchProgress();
+        } catch (err) {
+            const errorMessage = handleApiError(err); // Use handleApiError
+            alert(errorMessage);
+        }
+    },[fetchProgress])
 
     /**
      * A debounced function that sends a PATCH request to update a question's ratings or comment.
      * The request is delayed by 1000 milliseconds to prevent sending too many requests in quick
      * succession. The debounced function can be canceled to avoid unnecessary backend calls.
      *
-     * @type {(function(number, Object[]): Promise<void>) & Cancelable}
      * @param {number} questionID - The ID of the question to update.
      * @param {Object[]} newRatings - An array of objects representing the paths and values to update.
      * @returns {Promise<void>} - A promise that resolves once the backend update is complete.
@@ -137,8 +192,8 @@ export function PerformAudit() {
         () =>
             debounce((questionID, newRatings) => {
                 return patchQuestion(questionID, newRatings);
-            }, 1000),
-        [],
+            }, 500),
+        [patchQuestion],
     );
 
     /**
@@ -160,33 +215,16 @@ export function PerformAudit() {
         ]);
     }, [debouncedPatchQuestion]);
 
-    /**
-     * Sends a PATCH request to update a specific question's fields in the backend.
-     *
-     * @param {number} questionID - The ID of the question to update.
-     * @param {rating[]} newRatings - An array of fields to update with their new values.
-     * @returns {Promise<void>} - A promise resolving once the backend update is complete.
-     */
-    const patchQuestion = async (questionID, newRatings) => {
-        // Transforming the ratings into a format suitable for a JSON Patch request
-        const patchData = newRatings.map((destination) => ({
-            op: "replace",
-            path: `${destination.path}`,
-            value: destination.value,
-        }));
-        try {
-            await api.patch(`/v1/ratings/${questionID}`, patchData);
-        } catch (err) {
-            const errorMessage = handleApiError(err); // Use handleApiError
-            alert(errorMessage);
-        }
-    };
 
+    /**
+     * Fetches questions from the backend for the current audit on component mount
+     * or when the audit ID changes.
+     * It updates the `questions` state with the retrieved data.
+     */
     useEffect(() => {
         setLoading(true);
         api.get(`/v1/audits/${auditId}/ratings`)
             .then(response => {
-                setQuestions(response.data);
                 setSortedQuestions(transformData(response.data));
                 setError(null);
             })
@@ -207,21 +245,15 @@ export function PerformAudit() {
     }
 
     return (
-        <LayoutDefault>
+        <LayoutDefault
+            progress={progress.categoryProgress}
+        >
             <Title>Audit durchführen</Title>
             <CategoryList
                 categories={sortedQuestions}
                 options={labels}
                 onChange={handleQuestionUpdate}
             />
-            <div className="flex justify-end mr-8 mb-11"> {/*mb-11 perspektivisch entfernen, wenn das Problem mit der Footer Positionierung gelöst wird*/}
-                <Button
-                    onClick={() => navigate(`/evaluation/${auditId}`)}
-                    variant="contained"
-                >
-                    Bewertung anzeigen
-                </Button>
-            </div>
         </LayoutDefault>
     );
 }
