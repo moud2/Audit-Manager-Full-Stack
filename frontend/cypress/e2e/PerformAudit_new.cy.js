@@ -1,21 +1,21 @@
 // import React from 'react';
 // import { transformData } from '../../src/pages/PerformAudit.jsx';
 //
-// export const interceptGET = (points, na, comment) => {
-//     cy.intercept('GET', '/api/v1/audits/1/ratings', {
-//         statusCode: 200,
-//         body: [
-//             { id: 1, question: "Frage 1", points: points, comment: comment, na: na },
-//         ]
-//     }).as('questions');
-// };
-//
-// export const interceptPATCH = (points, na, comment) => {
-//     cy.intercept('PATCH', '/v1/ratings/0', {
-//         statusCode: 200,
-//         body: [{ id: 1, question: "Frage 1", points: points, comment: comment, na: na}]
-//     });
-// };
+// // export const interceptGET = (points, na, comment) => {
+// //     cy.intercept('GET', '/api/v1/audits/1/ratings', {
+// //         statusCode: 200,
+// //         body: [
+// //             { id: 1, question: "Frage 1", points: points, comment: comment, na: na },
+// //         ]
+// //     }).as('questions');
+// // };
+// //
+// // export const interceptPATCH = (points, na, comment) => {
+// //     cy.intercept('PATCH', '/v1/ratings/0', {
+// //         statusCode: 200,
+// //         body: [{ id: 1, question: "Frage 1", points: points, comment: comment, na: na}]
+// //     });
+// // };
 //
 // describe('transformData', () => {
 //
@@ -62,10 +62,10 @@
 //         }
 //     ];
 //
-//     beforeEach(() => {
-//         interceptGET(null, null, '');
-//         cy.visit('http://localhost:5173/#/perform-audit/1');
-//     });
+//     // beforeEach(() => {
+//     //     interceptGET(null, null, '');
+//     //     cy.visit('http://localhost:5173/#/perform-audit/1');
+//     // });
 //
 //     it('should correctly sort and group questions by category and ID', () => {
 //         const unsortedData = [...backendData].reverse();
@@ -128,8 +128,8 @@
 //     it('', () => {
 //
 //     });
-//
-//     it('', () => {
-//
-//     });
+//     //
+//     // it('', () => {
+//     //
+//     // });
 // });

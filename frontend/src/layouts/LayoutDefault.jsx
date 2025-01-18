@@ -16,6 +16,7 @@ import ListItemText from '@mui/material/ListItemText';
 import { Link } from "react-router-dom";
 import { useSidebar } from "./UseSidebar.jsx";
 
+
 const drawerWidth = 240; // Breite der Sidebar
 
 // Hauptinhalt mit animierter Margin beim Öffnen/Schließen der Sidebar
@@ -48,6 +49,8 @@ export function LayoutDefault({children}) {
 // Links, die in der Sidebar angezeigt werden 
 const links = 
         [{ href: "/dashboard", label: "Dashboard" },];
+
+    const isDashboardPage = location.hash.includes("/dashboard");
 
 return (// Hauptcontainer mit flexibler Anzeige für Layout
         <Box sx={{display: 'flex'}}>
@@ -108,6 +111,11 @@ return (// Hauptcontainer mit flexibler Anzeige für Layout
                   <ListItemText primary={link.label}/>
                 </ListItemButton>
               </ListItem>))}
+                <ListItem disablePadding>
+                    <ListItemButton component={Link} to={`/manage-categories-and-questions`}>
+                        <ListItemText primary="Kategorien und Fragen verwalten" />
+                    </ListItemButton>
+                </ListItem>
             </List>
             {/* Trennlinie */}
             <Divider/>
