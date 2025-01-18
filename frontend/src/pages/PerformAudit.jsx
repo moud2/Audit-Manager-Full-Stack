@@ -4,7 +4,7 @@ import {CategoryList} from "../components/QuestionList/CategoryList.jsx";
 import Title from "../components/Textareas/Title.jsx";
 import api from "../api.js";
 import {useNavigate, useParams} from "react-router-dom";
-import {Button, debounce} from "@mui/material";
+import {debounce} from "@mui/material";
 import {handleApiError} from "../utils/handleApiError";
 import {LoadingScreen} from "../components/LoadingState";
 import {AlertWithMessage} from "../components/ErrorHandling";
@@ -25,10 +25,8 @@ import { useCallback } from "react";
  */
 export function PerformAudit() {
     const {auditId} = useParams();
-    const [questions, setQuestions] = useState([]);
     const [sortedQuestions, setSortedQuestions] = useState([]);
     const [progress, setProgress] = useState ([]);
-    const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
@@ -118,6 +116,20 @@ export function PerformAudit() {
 
     }
 
+    /**
+     * fetchProgress is a function that retrieves the current progress of an audit
+     * from the backend API and updates the local state with the received data.
+     * It is wrapped with the useCallback hook to ensure that the function remains
+     * stable across re-renders unless the auditId changes.
+     *
+     * @type {function(): void}
+     * - Makes an HTTP GET request to the API endpoint for fetching audit progress.
+     * - Updates the progress state with the response data.
+     * - Logs an error message to the console if the request fails.
+     *
+     * Dependencies:
+     * - auditId: The ID of the audit whose progress is being fetched.
+     */
     const fetchProgress = useCallback(() => {
         api.get(`/v1/audits/${auditId}/progress`)
             .then(response => {
@@ -126,8 +138,19 @@ export function PerformAudit() {
             .catch(err => {
                 console.error('Error fetching progress data:', err);
             });
-    }, [auditId]); // Jetzt ist fetchProgress stabil
+    }, [auditId]);
 
+    /**
+     * useEffect hook that triggers the fetchProgress function whenever the auditId
+     * or fetchProgress function reference changes. This ensures the latest progress
+     * data is fetched and updated in the component.
+     *
+     * - auditId: The ID of the current audit, used as a dependency to re-fetch the progress
+     *   data whenever it changes.
+     * - fetchProgress: The callback function responsible for fetching and setting the progress data.
+     *
+     * This hook runs on the initial render and whenever the auditId or fetchProgress function changes.
+     */
     useEffect(() => {
         fetchProgress();
     }, [auditId, fetchProgress]);
@@ -146,7 +169,7 @@ export function PerformAudit() {
         () =>
             debounce((questionID, newRatings) => {
                 return patchQuestion(questionID, newRatings);
-            }, 1000),
+            }, 500),
         [],
     );
 
@@ -167,7 +190,6 @@ export function PerformAudit() {
             {path: "/points", value: updatedQuestion.points},
             {path: "/comment", value: updatedQuestion.comment}
         ]);
-        fetchProgress();
     }, [debouncedPatchQuestion]);
 
     /**
@@ -186,6 +208,7 @@ export function PerformAudit() {
         }));
         try {
             await api.patch(`/v1/ratings/${questionID}`, patchData);
+            fetchProgress();
         } catch (err) {
             const errorMessage = handleApiError(err); // Use handleApiError
             alert(errorMessage);
@@ -201,7 +224,6 @@ export function PerformAudit() {
         setLoading(true);
         api.get(`/v1/audits/${auditId}/ratings`)
             .then(response => {
-                setQuestions(response.data);
                 setSortedQuestions(transformData(response.data));
                 setError(null);
             })
