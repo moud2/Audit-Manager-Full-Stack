@@ -50,7 +50,7 @@ describe('Evaluation Page Tests', () => {
     });
 
     it('sollte sicherstellen, dass Download-Buttons im DownloadWrapper existieren', () => {
-        // Prüfen des DownloadWrapper für CurrentProgressBar
+        // Check DownloadWrapper CurrentProgressBar
         cy.get('[data-cy="chart-wrapper"]')
             .first()
             .within(() => {
@@ -58,7 +58,7 @@ describe('Evaluation Page Tests', () => {
                 cy.contains('button', 'PNG').should('exist').and('be.visible');
             });
 
-        // Prüfen des DownloadWrapper für RadarChart
+        // Check DownloadWrapper RadarChart
         cy.get('[data-cy="chart-wrapper"]')
             .last()
             .within(() => {
