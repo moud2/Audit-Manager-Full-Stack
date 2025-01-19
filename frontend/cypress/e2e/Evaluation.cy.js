@@ -49,4 +49,21 @@ describe('Evaluation Page Tests', () => {
         cy.get('[data-cy="RadarChart"]').should('be.visible');
     });
 
+    it('sollte sicherstellen, dass Download-Buttons im DownloadWrapper existieren', () => {
+        // Prüfen des DownloadWrapper für CurrentProgressBar
+        cy.get('[data-cy="chart-wrapper"]')
+            .first()
+            .within(() => {
+                cy.contains('button', 'JPEG').should('exist').and('be.visible');
+                cy.contains('button', 'PNG').should('exist').and('be.visible');
+            });
+
+        // Prüfen des DownloadWrapper für RadarChart
+        cy.get('[data-cy="chart-wrapper"]')
+            .last()
+            .within(() => {
+                cy.contains('button', 'JPEG').should('exist').and('be.visible');
+                cy.contains('button', 'PNG').should('exist').and('be.visible');
+            });
+    });
 });
