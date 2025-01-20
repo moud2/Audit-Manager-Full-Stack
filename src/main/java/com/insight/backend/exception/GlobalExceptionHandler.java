@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
  * GlobalExceptionHandler is a class that handles exceptions thrown by the application.
  */
 @ControllerAdvice
-public class GlobalExceptionHandler {
+public class GlobalExceptionHandler extends Throwable {
 
     /**
      * Handles exceptions of type AuditNotFoundException and RatingNotFoundException.
