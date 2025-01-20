@@ -148,6 +148,7 @@ export function LayoutDefault({ progress, children }) {
             <Main open={open} className="flex-1 ml-64 overflow-y-auto" id="scroll-main">
                 <DrawerHeader /> {/* Platzhalter, um Platz für den Sidebar-Header zu schaffen */}
                 {children}
+                <DrawerHeader /> {/* Platzhalter, um Platz für den Footer zu schaffen */}
             </Main>
             <Footer />
         </Box>
