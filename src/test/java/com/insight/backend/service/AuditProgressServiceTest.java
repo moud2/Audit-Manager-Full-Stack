@@ -9,6 +9,7 @@ import com.insight.backend.model.Category;
 import com.insight.backend.model.Question;
 import com.insight.backend.model.Rating;
 import com.insight.backend.repository.RatingRepository;
+import com.insight.backend.service.audit.AuditProgressService;
 
 import com.insight.backend.service.audit.AuditProgressService;
 import org.junit.jupiter.api.BeforeEach;

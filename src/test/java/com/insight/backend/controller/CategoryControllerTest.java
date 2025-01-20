@@ -226,7 +226,7 @@ public void testDeleteCategory_NotFound() throws Exception {
     
     mockMvc.perform(delete("/categories/1"))
             .andExpect(status().isNotFound())
-            .andExpect(jsonPath("$.message").value("Category with ID 1 not found"));
+            .andExpect(jsonPath("$.message").value("Category with the id '1' not found"));
 
     verify(deleteCategoryService, times(0)).softDeleteCategory(any());
 }

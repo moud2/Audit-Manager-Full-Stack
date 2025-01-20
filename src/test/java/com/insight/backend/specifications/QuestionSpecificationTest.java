@@ -1,18 +1,19 @@
 package com.insight.backend.specifications;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.data.jpa.domain.Specification;
 
 import com.insight.backend.model.Category;
 import com.insight.backend.model.Question;
-import org.junit.jupiter.api.Test;
 
-import org.springframework.data.jpa.domain.Specification;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 
 public class QuestionSpecificationTest {
         
@@ -39,6 +40,6 @@ public class QuestionSpecificationTest {
 
         spec.toPredicate(root, query, cb);
         
-        verify(cb).isNull(root.get("DeletedAt"));
+        verify(cb).isNull(root.get("deletedAt"));
     }
 }

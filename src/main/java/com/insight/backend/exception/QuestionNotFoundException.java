@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(value= HttpStatus.NOT_FOUND)
 public class QuestionNotFoundException extends RuntimeException {
     public QuestionNotFoundException(Long questionID) {
-        super("Audit with id " + questionID + " not found");
+        super("Question with id '" + questionID + "' not found");
     }
+
 }
