@@ -1,5 +1,8 @@
 package com.insight.backend.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
 import com.insight.backend.service.rating.PdfGeneratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -10,9 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 
 @RestController
 public class PdfExportController {
