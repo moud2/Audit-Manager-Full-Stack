@@ -137,6 +137,9 @@ nb-configuration.xml
 *.iml
 out/
 
+# Ignore Cypress downloads folder
+../cypress/downloads/
+
 # Other
 *.log
 *.tmp
