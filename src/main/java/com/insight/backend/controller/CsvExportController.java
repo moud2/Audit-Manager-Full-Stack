@@ -1,5 +1,9 @@
 package com.insight.backend.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
+import com.insight.backend.exception.GlobalExceptionHandler;
 import com.insight.backend.service.rating.CsvGeneratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -7,17 +11,15 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Controller for handling export-related operations.
  * Provides an endpoint for exporting the database as a CSV file.
  */
 @RestController
-public class ExportController {
+public class CsvExportController {
 
     private final CsvGeneratorService csvGenerator;
 
@@ -27,7 +29,7 @@ public class ExportController {
      * @param csvGenerator the service used to generate CSV exports
      */
     @Autowired
-    public ExportController(CsvGeneratorService csvGenerator) {
+    public CsvExportController(CsvGeneratorService csvGenerator) {
         this.csvGenerator = csvGenerator;
     }
 
@@ -41,7 +43,7 @@ public class ExportController {
      * @throws IOException if an error occurs during CSV generation
      */
     @GetMapping(path = "/api/v1/database/export", produces = "text/csv")
-    public ResponseEntity<InputStreamResource> databaseExport() throws IOException {
+    public ResponseEntity<InputStreamResource> databaseExport() throws GlobalExceptionHandler {
         try {
             ByteArrayInputStream bis = csvGenerator.createCsv();
 
