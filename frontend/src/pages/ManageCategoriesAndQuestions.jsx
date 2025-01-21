@@ -14,11 +14,6 @@ import {AlertWithMessage} from "../components/ErrorHandling/index.js";
  * @constructor
  */
 export function ManageCategoriesAndQuestions() {
-    const [error, setError] = useState(null);
-
-    if (error) {
-        return <AlertWithMessage severity="error" title="Fehler" message={error}/>;
-    }
 
     /**
      * Handle the export questions button click.
@@ -27,17 +22,12 @@ export function ManageCategoriesAndQuestions() {
      * of the exported questions as a CSV file, and simulates a click to start the download.
      */
     const handleExportQuestionsClick = () => {
-        try {
-            const link = document.createElement('a');
-            link.href = (import.meta.env.VITE_BACKEND_URL || "/api") + "/v1/database/export";
-            link.setAttribute('download', 'DatabaseExport.csv');
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
-        } catch (error) {
-            console.error('Error exporting questions:', error);
-            setError(error);
-        }
+        const link = document.createElement('a');
+        link.href = (import.meta.env.VITE_BACKEND_URL || "/api") + "/v1/database/export";
+        link.setAttribute('download', 'DatabaseExport.csv');
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
     }
 
     /**
