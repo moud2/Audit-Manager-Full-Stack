@@ -10,6 +10,7 @@ import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import com.insight.backend.dto.RatingDTO;
 import com.insight.backend.exception.AuditNotFoundException;
+import com.insight.backend.exception.InvalidJsonPatchException;
 import com.insight.backend.exception.RatingNotFoundException;
 import com.insight.backend.mapper.RatingMapper;
 import com.insight.backend.model.Audit;
@@ -68,7 +69,7 @@ public class RatingController {
             Rating updatedEntity = saveRatingService.saveRating(patchedEntity);
             return ResponseEntity.ok(updatedEntity);
         } catch (JsonPatchException | JsonProcessingException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            throw new InvalidJsonPatchException(ratingId, e.getMessage());
         }
     }
 

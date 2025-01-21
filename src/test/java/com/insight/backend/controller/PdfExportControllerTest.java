@@ -2,6 +2,7 @@ package com.insight.backend.controller;
 
 import java.io.ByteArrayInputStream;
 
+import com.insight.backend.exception.PdfGenerationException;
 import com.insight.backend.service.rating.PdfGeneratorService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -57,12 +58,13 @@ class PdfExportControllerTest {
         long auditId = 1L;
 
         // Mock PdfGenerator to throw an exception
-        when(pdfGeneratorService.createPdf(auditId)).thenThrow(new RuntimeException("Error generating PDF"));
+        when(pdfGeneratorService.createPdf(auditId)).thenThrow(new PdfGenerationException("test"));
 
         // Perform the GET request and validate the response
         mockMvc.perform(get("/api/v1/audits/{auditId}/export", auditId)
                         .contentType(MediaType.APPLICATION_PDF))
-                .andExpect(status().isInternalServerError());
+                        .andExpect(status().isInternalServerError())
+                        .andExpect(jsonPath("$.message").value("Error while generating PDF: test"));
 
         // Verify that PdfGenerator's method was called once
         verify(pdfGeneratorService, times(1)).createPdf(auditId);

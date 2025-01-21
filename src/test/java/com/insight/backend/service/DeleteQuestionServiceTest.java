@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import com.insight.backend.exception.InvalidQuestionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -69,7 +70,7 @@ public class DeleteQuestionServiceTest {
 
     @Test
     public void testDeleteQuestion_nullInput() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        InvalidQuestionException exception = assertThrows(InvalidQuestionException.class, () -> {
             deleteQuestionService.deleteQuestion(null);
         });
         assertEquals("Question cannot be null", exception.getMessage());
