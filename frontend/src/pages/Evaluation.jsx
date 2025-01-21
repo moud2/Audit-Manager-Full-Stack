@@ -74,9 +74,20 @@ export function Evaluation() {
         return <AlertWithMessage severity="error" title="Error" message={error}/>;
     }
 
+    /**
+     * Handle the export audit button click.
+     *
+     * Creates an anchor element, sets the download attribute to trigger the download
+     * of the exported questions as a PDF file, and simulates a click to start the download/shows the
+     * PDF file in preview mode.
+     */
     const handleExportClick = () => {
-        const exportUrl = `http://localhost:8080/api/v1/audits/${auditId}/export`;
-        window.location.href = exportUrl;
+        const link = document.createElement('a');
+        link.href = (import.meta.env.VITE_BACKEND_URL || "/api") + `/v1/audits/${auditId}/export`;
+        link.setAttribute('download', 'DatabaseExport.csv');
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
     };
 
     return (
