@@ -23,6 +23,7 @@ export function ManageCategoriesAndQuestions() {
      */
     const handleExportQuestionsClick = () => {
         const link = document.createElement('a');
+        link.target = "_blank";
         link.href = (import.meta.env.VITE_BACKEND_URL || "/api") + "/v1/database/export";
         link.setAttribute('download', 'DatabaseExport.csv');
         document.body.appendChild(link);
