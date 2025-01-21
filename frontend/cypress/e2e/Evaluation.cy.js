@@ -29,7 +29,11 @@ describe('Evaluation Page Tests', () => {
         }).as('getProgress');
 
         // Visit the Evaluation page and wait for the mock API response
-        cy.visit('http://localhost:5173/#/evaluation/1');
+        cy.visit('http://localhost:5173/#/evaluation/1', {
+            onBeforeLoad(win) {
+                cy.spy(win, 'open').as('windowOpen');
+            }
+        });
         cy.wait('@getProgress');
     });
 
@@ -54,10 +58,5 @@ describe('Evaluation Page Tests', () => {
             .should('be.visible')
             .should('not.be.disabled');
     });
-
-    // it('sollte beim Klick auf den Export Audit Button zur richtigen URL weiterleiten', () => {
-    //     cy.get('[data-cy="ExportAuditButton"]').click();
-    //     ToDo: URL der neuen Page checken, ob es `http://localhost:8080/api/v1/audits/1/export`ist
-    // });
 
 });

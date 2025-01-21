@@ -83,8 +83,8 @@ export function Evaluation() {
      */
     const handleExportClick = () => {
         const link = document.createElement('a');
+        link.target = "_blank";
         link.href = (import.meta.env.VITE_BACKEND_URL || "/api") + `/v1/audits/${auditId}/export`;
-        link.setAttribute('download', 'DatabaseExport.csv');
         document.body.appendChild(link);
         link.click();
         link.remove();
