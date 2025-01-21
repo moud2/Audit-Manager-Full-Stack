@@ -13,6 +13,7 @@ export default defineConfig({
       // with any changed environment variables
       return getCompareSnapshotsPlugin(on, config);
     },
+    downloadsFolder: 'cypress/downloads',
   },
 
   component: {
