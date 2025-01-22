@@ -30,7 +30,7 @@ test-e2e:
     - npx cypress install
     - echo "Running Cypress e2e tests..."
     - npm run dev &                             # Start the server in the background
-    - npx cypress run                           # Run Cypress end-to-end test
+    - npx cypress run --browser chrome          # Run Cypress end-to-end test
     - echo "Cypress e2e tests completed"
 
 
