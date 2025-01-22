@@ -17,6 +17,7 @@ import ListItemText from '@mui/material/ListItemText';
 import {Link, useLocation, useParams} from "react-router-dom";
 import { useSidebar } from "./UseSidebar.jsx";
 import {AuditProgress} from "../components/AuditProgress/AuditProgress.jsx";
+import CustomThemeProvider from "./Theme.jsx";
 
 const drawerWidth = 260;
 
@@ -147,7 +148,9 @@ export function LayoutDefault({ progress, children }) {
 
             <Main open={open} className="flex-1 ml-64 overflow-y-auto" id="scroll-main">
                 <DrawerHeader /> {/* Platzhalter, um Platz für den Sidebar-Header zu schaffen */}
-                {children}
+                <CustomThemeProvider>
+                    {children}
+                </CustomThemeProvider>
             </Main>
             <Footer />
         </Box>

@@ -19,9 +19,6 @@ function LinearProgressWithLabel({ value }) {
                     sx={{
                         height: 10,
                         borderRadius: 5,
-                        '& .MuiLinearProgress-bar': {
-                            backgroundColor: '#c4171f',
-                        },
                     }}
                 />
             </Box>

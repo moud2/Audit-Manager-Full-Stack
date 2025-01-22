@@ -69,7 +69,7 @@ export function Dashboard() {
             <div className="w-full h-full p-5">
                 <Title>Dashboard</Title>
                 <h2 className="font-bold">Filter</h2>
-                <TextField id="outlined-basic" label="Kundenname" variant="outlined" onChange={handleCustomerFilterChange} />
+                <TextField id="outlined-basic" label="Kundenname" variant="outlined" color="primary" onChange={handleCustomerFilterChange} />
                 <AuditGrid data={data} loading={loading} error={error} />
             </div>
         </LayoutDefault>
