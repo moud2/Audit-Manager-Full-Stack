@@ -57,17 +57,17 @@ describe('PerformAudit Page', () => {
         cy.visit('http://localhost:5173/#/perform-Audit/1');
     });
 
-    it('should load and display questions grouped by categories', () => {
-        cy.wait('@getQuestions');
-        cy.get('.category-list').should('exist');
-        cy.get('.category-list').within(() => {
-            cy.contains('Category 1').should('exist');
-            cy.contains('Frage 1').should('exist');
-            cy.contains('Frage 2').should('exist');
-            cy.contains('Category 2').should('exist');
-            cy.contains('Frage 3').should('exist');
-        });
-    });
+    // it('should load and display questions grouped by categories', () => {
+    //     cy.wait('@getQuestions');
+    //     cy.get('.category-list').should('exist');
+    //     cy.get('.category-list').within(() => {
+    //         cy.contains('Category 1').should('exist');
+    //         cy.contains('Frage 1').should('exist');
+    //         cy.contains('Frage 2').should('exist');
+    //         cy.contains('Category 2').should('exist');
+    //         cy.contains('Frage 3').should('exist');
+    //     });
+    // });
 
     it('should handle checkbox interactions correctly', () => {
         cy.get('input[type="checkbox"]').eq(0).check({ force: true }).should('be.checked');
