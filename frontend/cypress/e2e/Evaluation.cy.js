@@ -72,7 +72,7 @@ describe('Evaluation Page Tests', () => {
     });
     it('Audit Export Button sollte angezeigt und klickbar sein', () => {
         cy.get('[data-cy="ExportAuditButton"]')
-            .should('be.visible')
+            .scrollIntoView().should('be.visible')
             .should('not.be.disabled');
     });
 
