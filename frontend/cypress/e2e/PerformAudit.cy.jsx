@@ -28,6 +28,19 @@ export const interceptGET = () => {
             }
         ]
     }).as('getQuestions');
+
+    cy.intercept('GET', '/api/v1/audits/1/progress', {
+        statusCode: 200,
+        body: [
+            {
+                answeredQuestions: 1,
+                categoryId: 1,
+                categoryName: "Server Administration",
+                currentCategoryProgress: 1,
+                totalQuestions: 2,
+            },
+        ]
+    }).as('getProgress');
 };
 
 export const interceptPATCH = () => {
@@ -56,7 +69,7 @@ describe('PerformAudit Page', () => {
         });
     });
 
-    it.only('should handle checkbox interactions correctly', () => {
+    it('should handle checkbox interactions correctly', () => {
         cy.get('input[type="checkbox"]').eq(0).check({ force: true }).should('be.checked');
         cy.get('input[type="checkbox"]').eq(0).uncheck({ force: true }).should('not.be.checked');
         cy.get('input[type="checkbox"]').eq(1).check({ force: true }).should('be.checked');
