@@ -29,6 +29,7 @@ export function PerformAudit() {
     const [progress, setProgress] = useState ([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [patchError, setPatchError] = useState(null);
 
     const loadingProgress = useLoadingProgress(loading);
     // Use the custom loading progress hook
@@ -155,29 +156,29 @@ export function PerformAudit() {
         fetchProgress();
     }, [auditId, fetchProgress]);
 
-
     /**
-     * Sends a PATCH request to update a specific question's fields in the backend.
-     *
-     * @param {number} questionID - The ID of the question to update.
-     * @param {rating[]} newRatings - An array of fields to update with their new values.
-     * @returns {Promise<void>} - A promise resolving once the backend update is complete.
-     */
+    * Sends a PATCH request to update a specific question's fields in the backend.
+    *
+    * @param {number} questionID - The ID of the question to update.
+    * @param {rating[]} newRatings - An array of fields to update with their new values.
+    * @returns {Promise<void>} - A promise resolving once the backend update is complete.
+    */
     const patchQuestion = useMemo(()=>async (questionID, newRatings) => {
-        // Transforming the ratings into a format suitable for a JSON Patch request
-        const patchData = newRatings.map((destination) => ({
-            op: "replace",
-            path: `${destination.path}`,
-            value: destination.value,
-        }));
-        try {
-            await api.patch(`/v1/ratings/${questionID}`, patchData);
-            fetchProgress();
-        } catch (err) {
-            const errorMessage = handleApiError(err); // Use handleApiError
-            alert(errorMessage);
-        }
-    },[fetchProgress])
+       // Transforming the ratings into a format suitable for a JSON Patch request
+       const patchData = newRatings.map((destination) => ({
+           op: "replace",
+           path: `${destination.path}`,
+           value: destination.value,
+       }));
+       try {
+           await api.patch(`/v1/ratings/${questionID}`, patchData);
+           fetchProgress();
+           setPatchError(null); // Clear any previous patch errors
+       } catch (err) {
+           const errorMessage = handleApiError(err); // Use handleApiError
+           setPatchError(errorMessage); // Set the error to display via AlertWithMessage
+       }
+   },[fetchProgress]);
 
     /**
      * A debounced function that sends a PATCH request to update a question's ratings or comment.
@@ -216,11 +217,8 @@ export function PerformAudit() {
     }, [debouncedPatchQuestion]);
 
 
-    /**
-     * Fetches questions from the backend for the current audit on component mount
-     * or when the audit ID changes.
-     * It updates the `questions` state with the retrieved data.
-     */
+
+
     useEffect(() => {
         setLoading(true);
         api.get(`/v1/audits/${auditId}/ratings`)
@@ -239,15 +237,14 @@ export function PerformAudit() {
         return <LoadingScreen progress={loadingProgress} message="Audit is loading..."/>;
 
     }
-    if (error) {
-        return <AlertWithMessage severity="error" title="Fehler" message={error}/>;
-
-    }
 
     return (
         <LayoutDefault
             progress={progress.categoryProgress}
         >
+            {patchError && <AlertWithMessage severity="error" title="Fehler" message={patchError} />} {/* Fehleranzeige */}
+            {error && <AlertWithMessage severity="error" title="Fehler" message={error} />} {/* Fehleranzeige */}
+            {/*^= h1*/}
             <Title>Audit durchführen</Title>
             <CategoryList
                 categories={sortedQuestions}
