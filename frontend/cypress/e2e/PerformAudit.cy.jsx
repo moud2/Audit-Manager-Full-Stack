@@ -57,28 +57,28 @@ describe('PerformAudit Page', () => {
         cy.visit('http://localhost:5173/#/perform-Audit/1');
     });
 
-    // it('should load and display questions grouped by categories', () => {
-    //     cy.wait('@getQuestions');
-    //     cy.get('.category-list').should('exist');
-    //     cy.get('.category-list').within(() => {
-    //         cy.contains('Category 1').should('exist');
-    //         cy.contains('Frage 1').should('exist');
-    //         cy.contains('Frage 2').should('exist');
-    //         cy.contains('Category 2').should('exist');
-    //         cy.contains('Frage 3').should('exist');
-    //     });
-    // });
-
-    it('should handle checkbox interactions correctly', () => {
-        cy.get('input[type="checkbox"]').eq(0).check({ force: true }).should('be.checked');
-        cy.get('input[type="checkbox"]').eq(0).uncheck({ force: true }).should('not.be.checked');
-        cy.get('input[type="checkbox"]').eq(1).check({ force: true }).should('be.checked');
-        cy.get('input[type="checkbox"]').eq(1).uncheck({ force: true }).should('not.be.checked');
-        cy.get('input[type="checkbox"]').eq(2).check({ force: true }).should('be.checked');
-        cy.get('input[type="checkbox"]').eq(2).uncheck({ force: true }).should('not.be.checked');
-        cy.get('input[type="checkbox"]').eq(6).check({ force: true }).should('be.checked');
-        cy.get('input[type="checkbox"]').eq(6).uncheck({ force: true }).should('not.be.checked');
+    it('should load and display questions grouped by categories', () => {
+        cy.wait('@getQuestions');
+        cy.get('.category-list').should('exist');
+        cy.get('.category-list').within(() => {
+            cy.contains('Category 1').should('exist');
+            cy.contains('Frage 1').should('exist');
+            cy.contains('Frage 2').should('exist');
+            cy.contains('Category 2').should('exist');
+            cy.contains('Frage 3').should('exist');
+        });
     });
+
+    // it('should handle checkbox interactions correctly', () => {
+    //     cy.get('input[type="checkbox"]').eq(0).check({ force: true }).should('be.checked');
+    //     cy.get('input[type="checkbox"]').eq(0).uncheck({ force: true }).should('not.be.checked');
+    //     cy.get('input[type="checkbox"]').eq(1).check({ force: true }).should('be.checked');
+    //     cy.get('input[type="checkbox"]').eq(1).uncheck({ force: true }).should('not.be.checked');
+    //     cy.get('input[type="checkbox"]').eq(2).check({ force: true }).should('be.checked');
+    //     cy.get('input[type="checkbox"]').eq(2).uncheck({ force: true }).should('not.be.checked');
+    //     cy.get('input[type="checkbox"]').eq(6).check({ force: true }).should('be.checked');
+    //     cy.get('input[type="checkbox"]').eq(6).uncheck({ force: true }).should('not.be.checked');
+    // });
 
     it('should send patch request for checkbox change correctly', () => {
         cy.get('input[type="checkbox"]').eq(0).check({ force: true });
