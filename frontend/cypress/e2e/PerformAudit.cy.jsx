@@ -1,4 +1,4 @@
-export const interceptGET = () => {
+export const interceptGETaudits = () => {
     cy.intercept('GET', '/api/v1/audits/1/ratings', {
         statusCode: 200,
         body: [
@@ -28,20 +28,29 @@ export const interceptGET = () => {
             }
         ]
     }).as('getQuestions');
+};
 
+export const interceptGETprogress = () => {
     cy.intercept('GET', '/api/v1/audits/1/progress', {
         statusCode: 200,
         body: [
             {
                 answeredQuestions: 1,
                 categoryId: 1,
-                categoryName: "Server Administration",
-                currentCategoryProgress: 1,
+                categoryName: "Category 1",
+                currentCategoryProgress: 0.125,
                 totalQuestions: 2,
             },
+            {
+                answeredQuestions: 1,
+                categoryId: 2,
+                categoryName: "Category 2",
+                currentCategoryProgress: 0,
+                totalQuestions: 1,
+            }
         ]
     }).as('getProgress');
-};
+}
 
 export const interceptPATCH = () => {
     cy.intercept('PATCH', '/api/v1/ratings/1', {
@@ -52,7 +61,8 @@ export const interceptPATCH = () => {
 
 describe('PerformAudit Page', () => {
     beforeEach(() => {
-        interceptGET();
+        interceptGETaudits();
+        interceptGETprogress();
         interceptPATCH();
         cy.visit('http://localhost:5173/#/perform-Audit/1');
     });
@@ -69,16 +79,16 @@ describe('PerformAudit Page', () => {
         });
     });
 
-    // it('should handle checkbox interactions correctly', () => {
-    //     cy.get('input[type="checkbox"]').eq(0).check({ force: true }).should('be.checked');
-    //     cy.get('input[type="checkbox"]').eq(0).uncheck({ force: true }).should('not.be.checked');
-    //     cy.get('input[type="checkbox"]').eq(1).check({ force: true }).should('be.checked');
-    //     cy.get('input[type="checkbox"]').eq(1).uncheck({ force: true }).should('not.be.checked');
-    //     cy.get('input[type="checkbox"]').eq(2).check({ force: true }).should('be.checked');
-    //     cy.get('input[type="checkbox"]').eq(2).uncheck({ force: true }).should('not.be.checked');
-    //     cy.get('input[type="checkbox"]').eq(6).check({ force: true }).should('be.checked');
-    //     cy.get('input[type="checkbox"]').eq(6).uncheck({ force: true }).should('not.be.checked');
-    // });
+    it('should handle checkbox interactions correctly', () => {
+        cy.get('input[type="checkbox"]').eq(0).check({ force: true }).should('be.checked');
+        cy.get('input[type="checkbox"]').eq(0).uncheck({ force: true }).should('not.be.checked');
+        cy.get('input[type="checkbox"]').eq(1).check({ force: true }).should('be.checked');
+        cy.get('input[type="checkbox"]').eq(1).uncheck({ force: true }).should('not.be.checked');
+        cy.get('input[type="checkbox"]').eq(2).check({ force: true }).should('be.checked');
+        cy.get('input[type="checkbox"]').eq(2).uncheck({ force: true }).should('not.be.checked');
+        cy.get('input[type="checkbox"]').eq(6).check({ force: true }).should('be.checked');
+        cy.get('input[type="checkbox"]').eq(6).uncheck({ force: true }).should('not.be.checked');
+    });
 
     it('should send patch request for checkbox change correctly', () => {
         cy.get('input[type="checkbox"]').eq(0).check({ force: true });
@@ -121,14 +131,14 @@ describe('PerformAudit Page', () => {
         cy.contains('Error fetching data').should('be.visible');
     });
 
-    // it('PATCH request fails and print error correctly', () => {
-    //     cy.intercept('PATCH', '/api/v1/ratings/1', {
-    //         statusCode: 500,
-    //     }).as('patchQuestionError');
-    //
-    //     cy.get('[data-cy="question-comment"]').first().click().type('Neue Anmerkung');
-    //     cy.wait('@patchQuestionError');
-    //     cy.contains('Fehler beim Aktualisieren der Daten').should('be.visible');
-    // });
+    it('PATCH request fails and print error correctly', () => {
+        cy.intercept('PATCH', '/api/v1/ratings/1', {
+            statusCode: 500,
+        }).as('patchQuestionError');
+
+        cy.get('[data-cy="question-comment"]').first().click().type('Neue Anmerkung');
+        cy.wait('@patchQuestionError');
+        // cy.contains('Fehler beim Aktualisieren der Daten').should('be.visible');
+    });
 
 });
