@@ -67,7 +67,7 @@ export function LayoutDefault({ progress, children }) {
         }}>
             {/* Header */}
             <Box sx={{ height: 74 }}>
-                <Header />
+                <Header data-cy="header"/>
             </Box>
             {/* Icon-Button zum Öffnen der Sidebar */}
             <IconButton
@@ -159,7 +159,7 @@ export function LayoutDefault({ progress, children }) {
 
             {/* Footer */}
             <Box sx={{ height: 64, marginLeft: open ? 0 : `+${drawerWidth}px` }}>
-                <Footer />
+                <Footer data-cy="footer"/>
             </Box>
         </Box>
     );
