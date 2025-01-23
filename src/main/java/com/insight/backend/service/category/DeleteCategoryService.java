@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 
+import com.insight.backend.exception.CategoryAlreadyDeletedException;
 import com.insight.backend.model.Category;
 import com.insight.backend.repository.CategoryRepository;
 
@@ -29,11 +30,11 @@ public class DeleteCategoryService {
      * Soft deletes a category by setting the deletedAt timestamp.
      *
      * @param category the category to be soft deleted.
-     * @throws IllegalStateException if the category is already deleted or does not exist.
+     * @throws CategoryAlreadyDeletedException if the category is already deleted or does not exist.
      */
     public void softDeleteCategory(Category category) {
         if (category == null || category.isDeleted()) {
-            throw new IllegalStateException("Category is already deleted or does not exist.");
+            throw new CategoryAlreadyDeletedException();
         }
         // SoftDelete 
         category.setDeletedAt(LocalDateTime.now());

@@ -7,6 +7,7 @@ import java.io.Reader;
 import java.util.List;
 import java.util.Map;
 
+import com.insight.backend.exception.CsvReadException;
 import com.insight.backend.model.Category;
 import com.insight.backend.model.Question;
 import com.insight.backend.service.category.SaveCategoryService;
@@ -52,13 +53,15 @@ public class DatabaseSeederService {
         }
     }
 
-    private List<String[]> readAllLinesFromCsv(String filePath) throws Exception {  
+    private List<String[]> readAllLinesFromCsv(String filePath) {
         try (InputStream in = getClass().getClassLoader().getResourceAsStream(filePath)) {
             Reader reader = new BufferedReader(new InputStreamReader(in));
 
             try (CSVReader csvReader = new CSVReader(reader)) {
                 return csvReader.readAll();
             }
+        } catch (Exception e) {
+            throw new CsvReadException(e.getMessage());
         }
     }
 }

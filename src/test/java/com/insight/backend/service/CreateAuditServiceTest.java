@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.insight.backend.dto.AuditResponseDTO;
 import com.insight.backend.dto.NewAuditDTO;
+import com.insight.backend.exception.DuplicateCategoryIdException;
 import com.insight.backend.exception.NonExistentAuditCategoryException;
 import com.insight.backend.model.Audit;
 import com.insight.backend.model.Category;
@@ -125,7 +126,7 @@ class CreateAuditServiceTest {
         newAuditDTO.setCategories(Arrays.asList(1L, 1L)); // Duplicate Category-IDs
 
         // Assert that an IllegalArgumentException is thrown
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+        DuplicateCategoryIdException exception = assertThrows(DuplicateCategoryIdException.class,
                 () -> createAuditService.createAudit(newAuditDTO));
 
         // Verify that the exception message matches the expected message

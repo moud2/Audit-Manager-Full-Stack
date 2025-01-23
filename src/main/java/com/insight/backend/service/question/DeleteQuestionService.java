@@ -3,6 +3,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 
+import com.insight.backend.exception.InvalidQuestionException;
 import com.insight.backend.model.Question;
 import com.insight.backend.repository.QuestionRepository;
 
@@ -18,11 +19,11 @@ public class DeleteQuestionService {
     /**
      * sets the attribute deletedAt to the time of deletion
      *
-     * @param id of question to be deleted
+     * @param question the question to be deleted
      */
     public void deleteQuestion(Question question) {
         if (question == null) {
-            throw new IllegalArgumentException("Question cannot be null");
+            throw new InvalidQuestionException();
         }
         question.setDeletedAt(LocalDateTime.now());
         questionRepository.saveAndFlush(question);

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.insight.backend.exception.AuditNotFoundException;
+import com.insight.backend.exception.PdfGenerationException;
 import com.insight.backend.model.Audit;
 import com.insight.backend.model.Rating;
 import com.insight.backend.repository.AuditRepository;
@@ -55,7 +56,7 @@ public class PdfGeneratorService {
             }
 
         } catch (DocumentException e) {
-            throw new RuntimeException("Error while generating PDF: " + e.getMessage(), e);
+            throw new PdfGenerationException(e.getMessage());
         } finally {
             document.close();
         }
