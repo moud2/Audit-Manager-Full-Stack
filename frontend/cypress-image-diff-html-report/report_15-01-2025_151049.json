@@ -1,0 +1,13 @@
+{
+  "total": 0,
+  "totalPassed": 0,
+  "totalFailed": 0,
+  "totalSuites": 0,
+  "suites": [],
+  "startedAt": "2025-01-15T14:10:49.162Z",
+  "endedAt": "2025-01-15T14:10:56.574Z",
+  "duration": 7412,
+  "browserName": "electron",
+  "browserVersion": "118.0.5993.159",
+  "cypressVersion": "13.15.2"
+}

@@ -42,7 +42,7 @@ export function CategoryList({ categories, options, onChange }) {
     }
 
     return (
-        <div className="category-list">
+        <div className="category-list h-full">
             {categories.map((category) => (
                 <div key={category.id}>
                     <CategoryListItem

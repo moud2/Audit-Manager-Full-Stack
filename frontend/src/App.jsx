@@ -6,7 +6,9 @@ import {NewAudit} from "./pages/NewAudit.jsx";
 import {PerformAudit} from "./pages/PerformAudit.jsx";
 import {Evaluation} from "./pages/Evaluation.jsx";
 import {NewCategory} from "./pages/NewCategory.jsx";
-import { CompareAudits} from "./pages/CompareAudits.jsx";
+import {NewQuestion} from "./pages/NewQuestion.jsx";
+import { CompareAudits} from './pages/CompareAudits.jsx';
+import {ManageCategoriesAndQuestions} from "./pages/ManageCategoriesAndQuestions.jsx";
 
 function App() {
     return (
@@ -18,8 +20,9 @@ function App() {
                 <Route path="/perform-audit/:auditId" element={<PerformAudit />}></Route>
                 <Route path="/new-category" element={<NewCategory />}></Route>
                 <Route path="/evaluation/:auditId" element={<Evaluation />} />
+                <Route path="/new-question" element={<NewQuestion />}></Route>
                 <Route path="/compare-audits/:auditId" element={<CompareAudits />} />
-
+                <Route path="/manage-categories-and-questions" element={<ManageCategoriesAndQuestions />} />
             </Routes>
         </HashRouter>
     );

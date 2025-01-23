@@ -1,17 +1,18 @@
 import React from "react";
-import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { LayoutDefault } from "../layouts/LayoutDefault.jsx";
+import {useState, useEffect} from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
+import {LayoutDefault} from "../layouts/LayoutDefault.jsx";
 import LinearProgressWithLabel from '../components/Charts/ProgressBar.jsx';
 import RadarChart from '../components/Charts/RadarChart.jsx';
-import { LoadingScreen } from "../components/LoadingState";
-import { AlertWithMessage } from "../components/ErrorHandling";
-import { handleApiError } from "../utils/handleApiError";
+import {LoadingScreen} from "../components/LoadingState";
+import {AlertWithMessage} from "../components/ErrorHandling";
+import {handleApiError} from "../utils/handleApiError";
 import Title from '../components/Textareas/Title.jsx';
 import api from '../api';
 import Box from "@mui/material/Box";
 import {Button} from "@mui/material";
-import { useLoadingProgress } from "../components/LoadingState/useLoadingProgress";
+import {useLoadingProgress} from "../components/LoadingState/useLoadingProgress";
+import DownloadWrapper from "../components/Charts/DownloadWrapper.jsx";
 
 /**
  * Evaluation component fetches audit data and displays it as a series of progress indicators,
@@ -22,7 +23,7 @@ import { useLoadingProgress } from "../components/LoadingState/useLoadingProgres
  */
 export function Evaluation() {
     // Extract audit ID from the route parameters to dynamically load audit data
-    const { auditId } = useParams();
+    const {auditId} = useParams();
 
     /**
      * currentAuditProgress - Progress for answered questions (excludes n.a.).
@@ -65,45 +66,76 @@ export function Evaluation() {
 
     // Render loading screen
     if (loading) {
-        return <LoadingScreen progress={loadingProgress} message="Loading evaluation data..." />;
+        return <LoadingScreen progress={loadingProgress} message="Loading evaluation data..."/>;
     }
 
     // Render error message
     if (error) {
-        return <AlertWithMessage severity="error" title="Error" message={error} />;
+        return <AlertWithMessage severity="error" title="Error" message={error}/>;
     }
+
+    /**
+     * Handle the export audit button click.
+     *
+     * Creates an anchor element, sets the download attribute to trigger the download
+     * of the exported questions as a PDF file, and simulates a click to start the download/shows the
+     * PDF file in preview mode.
+     */
+    const handleExportClick = () => {
+        const link = document.createElement('a');
+        link.target = "_blank";
+        link.href = (import.meta.env.VITE_BACKEND_URL || "/api") + `/v1/audits/${auditId}/export`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+    };
 
     return (
         <LayoutDefault>
-            <div className="p-4 flex flex-col items-center">
+            <div className="p-4 flex flex-col items-center max-w-5xl mx-auto">
                 <Title>Evaluation</Title>
 
-                {/* Current Audit Progress Bar */}
-                <div data-cy={"CurrentProgressBar"} className="w-full flex flex-col justify-center items-center h-20 mb-6">
-                    <Box className="text-center" sx={{ width: '80%' }}>
-                        <LinearProgressWithLabel value={currentAuditProgress} />
-                    </Box>
-                    <p className="text-center text-xl">Gesamtbewertung</p>
-                </div>
+                <DownloadWrapper>
+                    {/* Current Audit Progress Bar */}
+                    <div
+                        data-cy={"CurrentProgressBar"}
+                        className="w-full flex flex-col justify-center items-center h-20 mb-6">
+
+                        <Box className="text-center" sx={{width: '80%'}}>
+                            <LinearProgressWithLabel value={currentAuditProgress}/>
+                        </Box>
+                        <p className="text-center text-xl">Gesamtbewertung</p>
+                    </div>
+                </DownloadWrapper>
 
                 {/* Radar Chart */}
-                <div data-cy={"RadarChart"} className="w-full flex justify-center">
-                    <RadarChart
-                        labels={categoryProgress.map(category => category.categoryName)}
-                        currentData={categoryProgress.map(category => category.currentCategoryProgress)}
-                        width={50}
-                        height={50}
-                    />
-                </div>
+                <DownloadWrapper>
+                    <div data-cy={"RadarChart"} className="w-full flex justify-center">
+                        <RadarChart
+                            labels={categoryProgress.map(category => category.categoryName)}
+                            currentData={categoryProgress.map(category => category.currentCategoryProgress)}
+                            width={50}
+                            height={50}
+                        />
+                    </div>
+                </DownloadWrapper>
 
-                {/* Audit vergleichen Button */}
-                <div className="flex justify-end mr-8">
-                <Button
-                    onClick={() => navigate(`/compare-audits/${auditId}`)}
-                    variant="contained"
-                >
-                    Audit vergleichen
-                </Button>
+                <div className="flex justify-center mr-8 space-x-4 mb-11">
+                    <Button
+                        onClick={() => navigate(`/compare-audits/${auditId}`)}
+                        variant="outlined"
+                        color="error"
+                    >
+                        Audit vergleichen
+                    </Button>
+                    <Button
+                        data-cy="ExportAuditButton"
+                        onClick={handleExportClick}
+                        variant="outlined"
+                        color="error"
+                    >
+                        Audit Exportieren
+                    </Button>
                 </div>
 
 

@@ -8,7 +8,7 @@ import React from "react";
  */
 export function Header() {
   return (
-    <header className="fixed top-0 left-0 w-full bg-white shadow-md items-center justify-between p-4 z-10 transition-all duration-300 ${open ? 'ml-60' : 'ml-0'}">
+    <header className="fixed top-0 left-0 w-full bg-white shadow-md items-center justify-between p-4 z-10 transition-all duration-300">
       <div className="flex items-center justify-start pl-6">
         <img
           src="/logo-insight.png"

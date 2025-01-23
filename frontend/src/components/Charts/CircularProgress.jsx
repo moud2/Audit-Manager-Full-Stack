@@ -1,6 +1,7 @@
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import DownloadWrapper from "./DownloadWrapper.jsx";
 
 /**
  * A circular progress component with a label in the center displaying the percentage value.
@@ -12,11 +13,11 @@ import Box from '@mui/material/Box';
  * @returns {JSX.Element} A circular progress component with a percentage label and a category name.
  */
 /*
-const CircularProgressWithLabel = ({ value, label, size = 80 }) => {
+const CircularProgressWithLabel = ({value, label, size = 80}) => {
     return (
-        <Box sx={{ position: 'relative', display: 'inline-flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-                <CircularProgress variant="determinate" value={value} size={size} />
+        <Box sx={{position: 'relative', display: 'inline-flex', flexDirection: 'column', alignItems: 'center'}}>
+            <Box sx={{position: 'relative', display: 'inline-flex'}}>
+                <CircularProgress variant="determinate" value={value} size={size}/>
                 <Box
                     sx={{
                         top: 0,
@@ -34,7 +35,7 @@ const CircularProgressWithLabel = ({ value, label, size = 80 }) => {
                     </Typography>
                 </Box>
             </Box>
-            <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+            <Typography variant="body2" color="text.secondary" sx={{mt: 1}}>
                 {label}
             </Typography>
         </Box>

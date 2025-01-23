@@ -22,7 +22,7 @@ stages:
 
 test-e2e:
   stage: test
-  image: cypress/base:latest
+  image: cypress/browsers:node-20.18.0-chrome-130.0.6723.69-1-ff-131.0.3-edge-130.0.2849.52-1
   extends:
     - ".setup:npm"
   script:
@@ -30,8 +30,21 @@ test-e2e:
     - npx cypress install
     - echo "Running Cypress e2e tests..."
     - npm run dev &                             # Start the server in the background
-    - npx cypress run                           # Run Cypress end-to-end test
+    - npx cypress run --browser chrome          # Run Cypress end-to-end test
     - echo "Cypress e2e tests completed"
+
+
+test-component:
+  stage: test
+  image: cypress/base:latest
+  extends:
+    - ".setup:npm"
+  script:
+    - cd frontend
+    - npx cypress install
+    - echo "Running Cypress component tests..."                       
+    - npx cypress run --component
+    - echo "Cypress component tests completed"
 
 
 #test-integration:
@@ -147,13 +160,6 @@ frontend-build-job-fullstack:
 docker-release-job:
   image: docker:20
   stage: release
-  services:
-    - docker:dind
-  variables:
-    DOCKER_HOST: tcp://docker:2375/
-    DOCKER_DRIVER: overlay2
-    DOCKER_TLS_CERTDIR: ""
-    PIPELINE_TAG: "${CI_PIPELINE_ID}"
   dependencies:
     - frontend-build-job
   rules:
@@ -176,13 +182,6 @@ docker-release-job:
 docker-release-job-fullstack:
   image: docker:20
   stage: release
-  services:
-    - docker:dind
-  variables:
-    DOCKER_HOST: tcp://docker:2375/
-    DOCKER_DRIVER: overlay2
-    DOCKER_TLS_CERTDIR: ""
-    PIPELINE_TAG: "${CI_PIPELINE_ID}"
   dependencies:
     - frontend-build-job-fullstack
   rules:
