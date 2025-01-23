@@ -13,6 +13,7 @@ export default defineConfig({
       // with any changed environment variables
       return getCompareSnapshotsPlugin(on, config);
     },
+    downloadsFolder: 'cypress/downloads',
   },
 
   component: {
@@ -20,5 +21,6 @@ export default defineConfig({
       framework: "react",
       bundler: "vite",
     },
+    specPattern: 'src/**/*.cy.{js,jsx,ts,tsx}', 
   },
 });

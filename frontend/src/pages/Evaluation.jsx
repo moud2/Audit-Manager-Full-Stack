@@ -74,6 +74,22 @@ export function Evaluation() {
         return <AlertWithMessage severity="error" title="Error" message={error}/>;
     }
 
+    /**
+     * Handle the export audit button click.
+     *
+     * Creates an anchor element, sets the download attribute to trigger the download
+     * of the exported questions as a PDF file, and simulates a click to start the download/shows the
+     * PDF file in preview mode.
+     */
+    const handleExportClick = () => {
+        const link = document.createElement('a');
+        link.target = "_blank";
+        link.href = (import.meta.env.VITE_BACKEND_URL || "/api") + `/v1/audits/${auditId}/export`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+    };
+
     return (
         <LayoutDefault>
             <div className="p-4 flex flex-col items-center max-w-5xl mx-auto">
@@ -94,23 +110,31 @@ export function Evaluation() {
 
                 {/* Radar Chart */}
                 <DownloadWrapper>
-                <div data-cy={"RadarChart"} className="w-full flex justify-center">
-                    <RadarChart
-                        labels={categoryProgress.map(category => category.categoryName)}
-                        currentData={categoryProgress.map(category => category.currentCategoryProgress)}
-                        width={50}
-                        height={50}
-                    />
-                </div>
+                    <div data-cy={"RadarChart"} className="w-full flex justify-center">
+                        <RadarChart
+                            labels={categoryProgress.map(category => category.categoryName)}
+                            currentData={categoryProgress.map(category => category.currentCategoryProgress)}
+                            width={50}
+                            height={50}
+                        />
+                    </div>
                 </DownloadWrapper>
 
-                {/* Audit vergleichen Button */}
-                <div className="flex justify-end mr-8">
+                <div className="flex justify-center mr-8 space-x-4 mb-11">
                     <Button
                         onClick={() => navigate(`/compare-audits/${auditId}`)}
-                        variant="contained"
+                        variant="outlined"
+                        color="error"
                     >
                         Audit vergleichen
+                    </Button>
+                    <Button
+                        data-cy="ExportAuditButton"
+                        onClick={handleExportClick}
+                        variant="outlined"
+                        color="error"
+                    >
+                        Audit Exportieren
                     </Button>
                 </div>
 

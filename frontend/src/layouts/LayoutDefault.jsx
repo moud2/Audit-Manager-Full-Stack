@@ -54,7 +54,7 @@ export function LayoutDefault({ progress, children }) {
     ];
 
     const isDashboardPage = location.hash.includes("/dashboard");
-    const isPerformAuditPage = location.pathname.includes("/perform-Audit");
+    const isPerformAuditPage = location.pathname.includes("/perform-audit");
     const isEvaluationPage = location.pathname.includes("/evaluation");
 
     return (
@@ -142,14 +142,14 @@ export function LayoutDefault({ progress, children }) {
                     )}
                     {isEvaluationPage && auditId && (
                         <ListItem disablePadding>
-                            <ListItemButton component={Link} to={`/perform-Audit/${auditId}`}>
+                            <ListItemButton component={Link} to={`/perform-audit/${auditId}`}>
                                 <ListItemText primary="Audit durchführen" />
                             </ListItemButton>
                         </ListItem>
                     )}
                 </List>
                 <Divider />
-                {location.pathname.includes("/perform-Audit") && <AuditProgress progress={progress} />}
+                {location.pathname.includes("/perform-audit") && <AuditProgress progress={progress} />}
 
             </Drawer>
 
