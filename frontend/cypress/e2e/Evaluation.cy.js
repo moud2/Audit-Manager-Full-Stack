@@ -29,7 +29,11 @@ describe('Evaluation Page Tests', () => {
         }).as('getProgress');
 
         // Visit the Evaluation page and wait for the mock API response
-        cy.visit('http://localhost:5173/#/evaluation/1');
+        cy.visit('http://localhost:5173/#/evaluation/1', {
+            onBeforeLoad(win) {
+                cy.spy(win, 'open').as('windowOpen');
+            }
+        });
         cy.wait('@getProgress');
     });
 
@@ -47,6 +51,29 @@ describe('Evaluation Page Tests', () => {
      */
     it('sollte das RadarChart anzeigen', () => {
         cy.get('[data-cy="RadarChart"]').should('be.visible');
+    });
+
+    it('sollte sicherstellen, dass Download-Buttons im DownloadWrapper existieren', () => {
+        // Check DownloadWrapper CurrentProgressBar
+        cy.get('[data-cy="chart-wrapper"]')
+            .first()
+            .within(() => {
+                cy.contains('button', 'JPEG').should('exist').and('be.visible');
+                cy.contains('button', 'PNG').should('exist').and('be.visible');
+            });
+
+        // Check DownloadWrapper RadarChart
+        cy.get('[data-cy="chart-wrapper"]')
+            .last()
+            .within(() => {
+                cy.contains('button', 'JPEG').should('exist').and('be.visible');
+                cy.contains('button', 'PNG').should('exist').and('be.visible');
+            });
+    });
+    it('Audit Export Button sollte angezeigt und klickbar sein', () => {
+        cy.get('[data-cy="ExportAuditButton"]')
+            .scrollIntoView().should('be.visible')
+            .should('not.be.disabled');
     });
 
 });
