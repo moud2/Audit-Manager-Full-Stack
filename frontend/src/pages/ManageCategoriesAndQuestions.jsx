@@ -3,6 +3,7 @@ import { Button } from "@mui/material";
 import Title from "../components/Textareas/Title.jsx";
 import {useState} from "react";
 
+
 export function ManageCategoriesAndQuestions() {
     const handleExportQuestionsClick = () => {
 
@@ -22,7 +23,7 @@ export function ManageCategoriesAndQuestions() {
         formData.append('file', file);
 
         try {
-            const response = await fetch('/api/database/upload', {
+            const response = await fetch('http://localhost:8080/api/v1/database/import', {
                 method: 'POST',
                 body: formData,
             });
