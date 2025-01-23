@@ -14,17 +14,13 @@ export default function CategoryQuestionCard({onOpen, children, questions, categ
         onAddQuestion?.();
     }
 
-    const handleEdit = (question) => {
-        onEditQuestion?.(question);
-    }
-
     const handleDelete = (question)=>{
         onDeleteQuestion?.(question)
     }
 
     return (
         <ExpandableCard onExpandChange={handleExpandChange} title={category.name}>
-            {children ? children : <QuestionTable questions={questions} onNew={handleNew} onEdit={handleEdit} onDelete={handleDelete}></QuestionTable>}
+            {children ? children : <QuestionTable questions={questions} onNew={handleNew} onDelete={handleDelete}></QuestionTable>}
         </ExpandableCard>
     )
 }

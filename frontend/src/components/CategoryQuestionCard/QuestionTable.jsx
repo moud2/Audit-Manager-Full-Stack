@@ -10,10 +10,9 @@ import {
     TableRow
 } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 
-export default function QuestionTable({questions, onDelete,onEdit, onNew}) {
+export default function QuestionTable({questions, onDelete, onNew}) {
     return (
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
@@ -36,7 +35,6 @@ export default function QuestionTable({questions, onDelete,onEdit, onNew}) {
                             </TableCell>
                             <TableCell align="right">
                                 <div className="flex justify-end">
-                                    <IconButton onClick={()=>onEdit?.(row)}><EditIcon></EditIcon></IconButton>
                                     <IconButton onClick={()=>onDelete?.(row)}><DeleteIcon></DeleteIcon></IconButton>
                                 </div>
                             </TableCell>

@@ -31,18 +31,14 @@ const LazyCategoryQuestionCard = ({category}) => {
         alert('Add question for category ' + category.name);
     }
 
-    const handleEditQuestion = (question) => {
-        alert('Edit Question with id ' + question.id);
-    }
-
     const handleDeleteQuestion = (question)=>{
         alert('Delete Question with id ' + question.id);
     }
 
     return (
         <CategoryQuestionCard category={category} questions={questions} onOpen={handleOpen}
-                              onAddQuestion={handleAddQuestion} onEditQuestion={handleEditQuestion}
-                                onDeleteQuestion={handleDeleteQuestion}>
+                              onAddQuestion={handleAddQuestion}
+                              onDeleteQuestion={handleDeleteQuestion}>
             {loading ? <div>Loading...</div> : undefined}
         </CategoryQuestionCard>
     )
