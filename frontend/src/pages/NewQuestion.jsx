@@ -23,7 +23,7 @@ export function NewQuestion() {
 
     const handleSubmit = () => {
         api.post('/v1/questions/new', {
-            category: category,
+            categoryId: category,
             name: question
         }).then(response => {
             alert('Question created successfully')

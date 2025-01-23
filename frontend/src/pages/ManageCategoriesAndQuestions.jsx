@@ -1,15 +1,16 @@
 import {LayoutDefault} from "../layouts/LayoutDefault.jsx";
 import {Button} from "@mui/material";
 import Title from "../components/Textareas/Title.jsx";
-import ExpandableCard from "../components/CategoryQuestionCard/ExpandableCard.jsx";
 import CategoryQuestionCard from "../components/CategoryQuestionCard/CategoryQuestionCard.jsx";
-import {useCallback, useEffect, useState} from "react";
+import {Fragment, useCallback, useEffect, useState} from "react";
 import api from "../api.js";
+import NewQuestionDialog from "../components/CategoryQuestionCard/NewQuestionDialog.jsx";
 
-const LazyCategoryQuestionCard = ({category}) => {
+const LazyCategoryQuestionCard = ({category, availableCategories = [], onAddedQuestion}) => {
     const [questions, setQuestions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [openedOnce, setOpenedOnce] = useState(false);
+    const [newQuestionDialogOpen, setNewQuestionDialogOpen] = useState(false);
 
     const handleOpen = async () => {
         if (!openedOnce) {
@@ -28,19 +29,40 @@ const LazyCategoryQuestionCard = ({category}) => {
     }, [category])
 
     const handleAddQuestion = () => {
-        alert('Add question for category ' + category.name);
+        setNewQuestionDialogOpen(true)
     }
 
-    const handleDeleteQuestion = (question)=>{
+    const handleDeleteQuestion = (question) => {
         alert('Delete Question with id ' + question.id);
     }
 
+
+    function handleCreate(newQuestion) {
+        api.post('/v1/questions/new', {
+            categoryId: newQuestion.category,
+            name: newQuestion.name
+        }).then(response => {
+            setQuestions?.((oldQuestions)=>[...oldQuestions, response.data])
+            // todo: show success message
+        }).catch(err => {
+            alert('Error creating question') // TODO
+        }).finally(()=>{
+            setNewQuestionDialogOpen(false)
+        })
+    }
+
     return (
-        <CategoryQuestionCard category={category} questions={questions} onOpen={handleOpen}
-                              onAddQuestion={handleAddQuestion}
-                              onDeleteQuestion={handleDeleteQuestion}>
-            {loading ? <div>Loading...</div> : undefined}
-        </CategoryQuestionCard>
+        <Fragment>
+            <NewQuestionDialog open={newQuestionDialogOpen} initialCategory={category.id}
+                               availableCategories={availableCategories}
+                               onSubmit={handleCreate}
+                               onClose={() => setNewQuestionDialogOpen(false)}></NewQuestionDialog>
+            <CategoryQuestionCard category={category} questions={questions} onOpen={handleOpen}
+                                  onAddQuestion={handleAddQuestion}
+                                  onDeleteQuestion={handleDeleteQuestion}>
+                {loading ? <div>Loading...</div> : undefined}
+            </CategoryQuestionCard>
+        </Fragment>
     )
 }
 
@@ -70,6 +92,10 @@ export function ManageCategoriesAndQuestions() {
     }, [fetchCategories]);
 
 
+    const handleAddedQuestion = ()=>{
+        fetchCategories()
+    }
+
     return (
         <LayoutDefault>
             <Title>Kategorien und Fragen verwalten</Title>
@@ -93,7 +119,7 @@ export function ManageCategoriesAndQuestions() {
             </div>
             <section className="flex flex-col gap-2 max-w-6xl mx-auto">
                 {categoriesLoading ? <div>Loading...</div> : categories.map((category, index) =>
-                    <LazyCategoryQuestionCard key={category.id} category={category}/>)}
+                    <LazyCategoryQuestionCard key={category.id} category={category} availableCategories={categories} onAddedQuestion={handleAddedQuestion}/>)}
             </section>
         </LayoutDefault>
     )
