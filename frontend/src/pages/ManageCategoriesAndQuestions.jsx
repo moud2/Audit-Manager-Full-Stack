@@ -25,12 +25,11 @@ const LazyCategoryQuestionCard = ({category}) => {
         }).finally(() => {
             setLoading(false)
         })
-    }, [])
+    }, [category])
 
     const handleAddQuestion = () => {
         alert('Add question for category ' + category.name);
     }
-
 
     const handleEditQuestion = (question) => {
         alert('Edit Question with id ' + question.id);
@@ -72,7 +71,7 @@ export function ManageCategoriesAndQuestions() {
 
     useEffect(() => {
         fetchCategories()
-    }, []);
+    }, [fetchCategories]);
 
 
     return (
