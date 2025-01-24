@@ -2,7 +2,6 @@ import { LayoutDefault } from "../layouts/LayoutDefault.jsx";
 import {Button, Input} from "@mui/material";
 import Title from "../components/Textareas/Title.jsx";
 import {useState} from "react";
-import {AlertWithMessage} from "../components/ErrorHandling/index.js";
 
 /**
  * ManageCategoriesAndQuestions Component
@@ -35,11 +34,20 @@ export function ManageCategoriesAndQuestions() {
         link.remove();
     }
 
+    /**
+     * Handles the file selection event and sets the selected file to the state.
+     *
+     * @param {Event} e - The event triggered by the file input.
+     */
     const handleFileChange = (e) => {
-        console.log(e.target.files[0]);
         setFile(e.target.files[0]);
     }
 
+    /**
+     * Uploads the selected file to the backend using a POST request.
+     *
+     * @returns {Promise<void>} A promise that resolves when the upload is completed.
+     */
     const handleFileUpload = async () => {
         const formData = new FormData();
         formData.append('file', file);
@@ -66,6 +74,10 @@ export function ManageCategoriesAndQuestions() {
         }
     };
 
+    /**
+     * Toggles the file input visibility and triggers the file upload process
+     * if the file input is already visible.
+     */
     const handleButtonClick = () => {
         if (showFileInput) {
             handleFileUpload();
@@ -80,6 +92,8 @@ export function ManageCategoriesAndQuestions() {
             <Title>Kategorien und Fragen verwalten</Title>
             <div className="flex flex-col items-center space-y-4">
                 <div className="flex justify-center space-x-4">
+
+                    {/*Daten exportieren Button*/}
                     <Button
                         data-cy="ExportQuestionsButton"
                         variant="outlined"
@@ -89,6 +103,7 @@ export function ManageCategoriesAndQuestions() {
                         Daten exportieren
                     </Button>
 
+                    {/*Button changes from "Daten importieren" to "Hochladen" after clicking */}
                     <Button
                         data-cy="ImportQuestionsButton"
                         variant="outlined"
@@ -99,6 +114,7 @@ export function ManageCategoriesAndQuestions() {
                     </Button>
                 </div>
 
+                {/*File input is only shown after clicking the "Daten importieren" Button*/}
                 {showFileInput && (
                     <div>
                         <Input
