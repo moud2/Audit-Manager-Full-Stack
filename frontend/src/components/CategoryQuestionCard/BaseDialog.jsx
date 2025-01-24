@@ -38,9 +38,6 @@ export function BaseDialog({children, actions, title, onClose, open}) {
             <DialogContent dividers>
                 {children}
             </DialogContent>
-            <DialogActions>
-                {actions}
-            </DialogActions>
         </BootstrapDialog>
 
     )

@@ -5,8 +5,10 @@ import CategoryQuestionCard from "../components/CategoryQuestionCard/CategoryQue
 import {Fragment, useCallback, useEffect, useState} from "react";
 import api from "../api.js";
 import NewQuestionDialog from "../components/CategoryQuestionCard/NewQuestionDialog.jsx";
+import AddIcon from "@mui/icons-material/Add";
+import NewCategoryDialog from "../components/CategoryQuestionCard/NewCategoryDialog.jsx";
 
-const LazyCategoryQuestionCard = ({category, availableCategories = [], onAddedQuestion}) => {
+const LazyCategoryQuestionCard = ({category, availableCategories = []}) => {
     const [questions, setQuestions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [openedOnce, setOpenedOnce] = useState(false);
@@ -124,6 +126,22 @@ export function ManageCategoriesAndQuestions() {
         fetchCategories()
     }
 
+    const [newCategoryDialogOpen, setNewCategoryDialogOpen] = useState(false);
+
+    const handleNewCategory = (category)=>{
+        api.post("/v1/categories/new" , {
+            name: category.name,
+        }).then((response) => {
+            setCategories((oldCategories)=>[...oldCategories, response.data])
+            // todo: success message
+        }).catch((err) => {
+            alert("Fehler beim Erstellen der Kategorie. :(");
+            // todo: error
+        }).finally(()=>{
+            setNewCategoryDialogOpen(false)
+        })
+    }
+
     return (
         <LayoutDefault>
             <Title>Kategorien und Fragen verwalten</Title>
@@ -145,7 +163,16 @@ export function ManageCategoriesAndQuestions() {
                     Daten importieren
                 </Button>
             </div>
-            <section className="flex flex-col gap-2 max-w-6xl mx-auto">
+            <section className="flex flex-col gap-2 max-w-6xl mx-auto p-2">
+                <NewCategoryDialog open={newCategoryDialogOpen} onClose={()=>setNewCategoryDialogOpen(false)} onSubmit={handleNewCategory}></NewCategoryDialog>
+                <Button
+                    fullWidth
+                    startIcon={<AddIcon />}
+                    variant="outlined"
+                    onClick={()=>setNewCategoryDialogOpen(true)}
+                >
+                    Kategorie hinzufügen
+                </Button>
                 {categoriesLoading ? <div>Loading...</div> : categories.map((category, index) =>
                     <LazyCategoryQuestionCard key={category.id} category={category} availableCategories={categories} onAddedQuestion={handleAddedQuestion}/>)}
             </section>
