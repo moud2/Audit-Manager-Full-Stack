@@ -1,8 +1,6 @@
 import {LayoutDefault} from "../layouts/LayoutDefault.jsx";
 import {Button} from "@mui/material";
 import Title from "../components/Textareas/Title.jsx";
-import {useState} from "react";
-import {AlertWithMessage} from "../components/ErrorHandling/index.js";
 import CategoryQuestionCard from "../components/CategoryQuestionCard/CategoryQuestionCard.jsx";
 import {Fragment, useCallback, useEffect, useState} from "react";
 import api from "../api.js";
