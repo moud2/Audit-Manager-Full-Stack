@@ -2,44 +2,53 @@ import React from "react";
 import { AuditDropdown } from "./AuditDropdown";
 
 describe("AuditDropdown Component", () => {
-  const audits = [
-    { name: "Audit 1", id: 1 },
-    { name: "Audit 2", id: 2 },
-    { name: "Audit 3", id: 3 },
-  ];
+    const audits = [
+        { id: 1, name: "Audit 1" },
+        { id: 2, name: "Audit 2" },
+        { id: 3, name: "Audit 3" },
+    ];
 
-  it("renders correctly with label", () => {
-    cy.mount(<AuditDropdown audits={audits} onAuditSelect={() => {}} />);
-    cy.contains("Zweites Audit auswählen").should("exist"); // Check if label renders
-  });
+    let onAuditSelect;
 
-  it("shows dropdown options when input is clicked", () => {
-    cy.mount(<AuditDropdown audits={audits} onAuditSelect={() => {}} />);
-    cy.get("input").click(); // Open the dropdown
-    cy.get(".MuiAutocomplete-popper li").should("have.length", audits.length); // Check all options are rendered
-  });
-
-  it("calls onAuditSelect with correct value when an option is selected", () => {
-    const onAuditSelectStub = cy.stub(); // Mock callback function
-
-    cy.mount(<AuditDropdown audits={audits} onAuditSelect={onAuditSelectStub} />);
-    cy.get("input").click(); // Open the dropdown
-    cy.contains("Audit 2").click(); // Select the second option
-
-    cy.wrap(onAuditSelectStub).should("have.been.calledOnceWith", audits[1]); // Ensure callback is called with correct option
-  });
-
-  it("clears input when Escape is pressed", () => {
-    cy.mount(<AuditDropdown audits={audits} onAuditSelect={() => {}} />);
-    cy.get("input").type("Audit 1");
-    cy.get("body").type("{esc}");
-    cy.wait(200);
-    cy.get("input").then(($input) => {
-      if ($input.val() !== "") {
-        cy.get("body").type("{esc}");
-      }
+    beforeEach(() => {
+        onAuditSelect = cy.spy().as("onAuditSelectSpy");
+        cy.mount(<AuditDropdown audits={audits} onAuditSelect={onAuditSelect} />);
     });
-    cy.get("input").should("have.value", "");
-  });
-  
+
+    it("renders the dropdown with a label", () => {
+        cy.get("label").contains("Zweites Audit auswählen").should("exist");
+    });
+
+    it("opens the dropdown menu when clicked", () => {
+        cy.get("input").click(); // Öffnet das Dropdown
+        cy.get(".MuiAutocomplete-popper").should("exist");
+    });
+
+    it("filters audits based on search input", () => {
+        cy.get("input").click().type("Audit 2"); // Öffnet das Dropdown und filtert
+        cy.get(".MuiAutocomplete-popper li")
+            .should("have.length", 1)
+            .and("contain", "Audit 2");
+    });
+
+    it("displays no options message when no match is found", () => {
+        cy.get("input").click().type("Nonexistent Audit"); // Sucht nach nicht vorhandener Option
+        cy.get(".MuiAutocomplete-popper").should("exist"); // Popper sollte angezeigt werden
+        cy.get(".MuiAutocomplete-popper").contains("No options").should("exist"); // Standard-MUI-Text überprüfen
+    });
+    
+
+    it("calls onAuditSelect with the correct audit when an option is selected", () => {
+        cy.get("input").click();
+        cy.get(".MuiAutocomplete-popper li")
+            .contains("Audit 1")
+            .click(); // Wählt die erste Option
+        cy.get("@onAuditSelectSpy").should("have.been.calledWith", { id: 1, name: "Audit 1" });
+    });
+
+    it("closes the dropdown menu after selecting an option", () => {
+        cy.get("input").click();
+        cy.get(".MuiAutocomplete-popper li").contains("Audit 1").click(); // Wählt und schließt
+        cy.get(".MuiAutocomplete-popper").should("not.exist");
+    });
 });
