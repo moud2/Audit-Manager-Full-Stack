@@ -36,12 +36,12 @@ export function QuestionListItem({ question, options, onChange }) {
     background: ${theme.palette.mode === 'dark' ? '#000' : '#fff'};
     border: 1px solid ${theme.palette.mode === 'dark' ? '#555' : '#ddd'};
     &:hover {
-      border-color: #c4171f;
+      border-color: #4B5563;
     }
     &:focus {
       outline: 0;
-      border-color: #c4171f;
-      box-shadow: 0 0 0 3px rgba(196, 23, 31, 0.25);
+      border-color: #4B5563;
+      box-shadow: 0 0 0 3px rgba(75, 85, 99, 0.25);
     }
     &:focus-visible {
       outline: 0;

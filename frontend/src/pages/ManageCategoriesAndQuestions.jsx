@@ -18,14 +18,12 @@ export function ManageCategoriesAndQuestions() {
                 <Button
                     data-cy="ExportQuestionsButton"
                     onClick={handleExportQuestionsClick}
-                    color="primary"
                 >
                     Daten exportieren
                 </Button>
                 <Button
                     data-cy="ImportQuestionsButton"
                     onClick={handleImportQuestionsClick}
-                    color="primary"
                 >
                     Daten importieren
                 </Button>

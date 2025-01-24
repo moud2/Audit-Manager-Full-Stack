@@ -5,6 +5,9 @@ const theme = createTheme({
         primary: {
             main: '#c4171f', // Dein Rot für Schrift und Umrandung
         },
+        secondary: {
+            main: '#4B5563'
+        },
         background: {
             default: '#e0e0e0', // Optional: Grau für die offene Leiste
         },
