@@ -153,7 +153,7 @@ export function LayoutDefault({ progress, children }) {
 
             </Drawer>
 
-            <Main open={open} className="flex-1 ml-64 overflow-y-auto" id="scroll-main">
+            <Main open={open} className="flex-1 ml-64 px-10 pb-4 overflow-y-auto" id="scroll-main">
                 {children}
             </Main>
 
