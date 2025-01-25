@@ -68,8 +68,8 @@ export function Dashboard() {
         <LayoutDefault>
             <div className="w-full h-full p-5">
                 <Title>Dashboard</Title>
-                <h2 className="font-bold">Filter</h2>
-                <TextField id="outlined-basic" label="Kundenname" variant="outlined" color="primary" onChange={handleCustomerFilterChange} />
+                <h2 className="font-bold mb-1">Filter</h2>
+                <TextField label="Kundenname" color="primary" onChange={handleCustomerFilterChange} />
                 <AuditGrid data={data} loading={loading} error={error} />
             </div>
         </LayoutDefault>

@@ -19,11 +19,12 @@ function LinearProgressWithLabel({ value }) {
                     sx={{
                         height: 10,
                         borderRadius: 5,
+                        backgroundColor: 'background.default',
                     }}
                 />
             </Box>
             <Box sx={{ minWidth: 35 }}>
-                <Typography variant="body2" color="text.secondary">{`${Math.round(value)}%`}</Typography>
+                <Typography variant="body2" color="secondary">{`${Math.round(value)}%`}</Typography>
             </Box>
         </Box>
     );

@@ -3,19 +3,19 @@ import { createTheme, ThemeProvider as MuiThemeProvider } from '@mui/material/st
 const theme = createTheme({
     palette: {
         primary: {
-            main: '#c4171f', // Dein Rot für Schrift und Umrandung
+            main: '#c4171f', //Softline Rot
         },
         secondary: {
-            main: '#4B5563'
+            main: '#4B5563' //tailwind gray-600
         },
         background: {
-            default: '#e0e0e0', // Optional: Grau für die offene Leiste
+            default: '#E0E0E0', //tailwind gray-300
         },
     },
     components: {
         MuiButton: {
             defaultProps: {
-                variant: 'outlined', // Setzt outlined als Standard
+                variant: 'outlined',
             },
         },
     },
