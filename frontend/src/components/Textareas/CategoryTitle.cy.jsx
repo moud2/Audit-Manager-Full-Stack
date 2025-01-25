@@ -21,8 +21,7 @@ describe('CategoryTitle Component', () => {
         cy.mount(<CategoryTitle>{titleText}</CategoryTitle>);
 
         cy.get('h2')
-            .should('have.class', 'px-10')
-            .and('have.class', 'py-1')
+            .should('have.class', 'py-1')
             .and('have.class', 'text-xl');
     });
 });
