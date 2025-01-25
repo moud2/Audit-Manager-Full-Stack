@@ -2,7 +2,10 @@ import { LayoutDefault } from "../layouts/LayoutDefault.jsx";
 import { Button } from "@mui/material";
 import Title from "../components/Textareas/Title.jsx";
 import {useState} from "react";
-import {AlertWithMessage} from "../components/ErrorHandling/index.js";
+import { LoadingScreen } from "../components/LoadingState";
+import { handleApiError } from "../utils/handleApiError";
+import { useLoadingProgress } from "../components/LoadingState/useLoadingProgress";
+import { AlertWithMessage } from "../components/ErrorHandling";
 
 /**
  * ManageCategoriesAndQuestions Component
@@ -14,6 +17,10 @@ import {AlertWithMessage} from "../components/ErrorHandling/index.js";
  * @constructor
  */
 export function ManageCategoriesAndQuestions() {
+
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false);
+
 
     /**
      * Handle the export questions button click.
@@ -39,6 +46,10 @@ export function ManageCategoriesAndQuestions() {
      */
     const handleImportQuestionsClick = async () => {
         // ToDo: implement functionality
+    }
+
+    if (loading) {
+        return <LoadingScreen progress={loadingProgress} message="Loading, please wait..." />;
     }
 
     return (

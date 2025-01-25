@@ -5,6 +5,10 @@ import { AuditDropdown } from "../components/CompareAudit/AuditDropdown.jsx";
 import { AuditComparisonCard } from "../components/CompareAudit/AuditComparisonCard.jsx";
 import api from "../api";
 import Title from "../components/Textareas/Title.jsx";
+import { LoadingScreen } from "../components/LoadingState";
+import { handleApiError } from "../utils/handleApiError";
+import { useLoadingProgress } from "../components/LoadingState/useLoadingProgress";
+import { AlertWithMessage } from "../components/ErrorHandling";
 
 /**
  * CompareAudits component renders a page for comparing two audits.
@@ -21,6 +25,7 @@ export function CompareAudits() {
     const [filteredAudits, setFilteredAudits] = useState([]);
     const [filters, setFilters] = useState({ customer: "", date: "" });
     const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     /**
      * Fetches audit progress and category-specific progress data from the API.
@@ -32,7 +37,6 @@ export function CompareAudits() {
     const fetchAuditData = useCallback(async (auditId, setAudit, errorMessage) => {
         try {
             const progressResponse = await api.get(`/v1/audits/${auditId}/progress`);
-            console.log("API Response:", progressResponse.data);
 
             const auditData = {
                 id: auditId,
@@ -44,31 +48,37 @@ export function CompareAudits() {
                 })),
             };
 
-            console.log("Processed Audit Data:", auditData);
-
             setAudit(auditData);
         } catch (err) {
-            console.error(errorMessage, err);
+            const errorMessage = handleApiError(err); // Use handleApiError
             setError(errorMessage);
         }
     }, [allAudits]);
+
+    // Use the custom loading progress hook
+    const loadingProgress = useLoadingProgress(loading);
 
     /**
      * Fetches the list of all available audits for selection.
      */
     useEffect(() => {
+        setLoading(true);
         const fetchAllAudits = async () => {
             try {
                 const response = await api.get('/v1/audits');
                 setAllAudits(response.data);
                 setFilteredAudits(response.data);
             } catch {
-                setError("Fehler beim Laden der Audit-Liste.");
+                const errorMessage = handleApiError(err); // Use handleApiError
+                setError(errorMessage || "Fehler beim Laden der Audit-Liste.");
+            } finally {
+                setLoading(false);
             }
         };
-
+    
         fetchAllAudits();
     }, []);
+    
 
     /**
      * Fetches data for the selected audit after all audits are loaded.
@@ -109,8 +119,13 @@ export function CompareAudits() {
         setFilters(prev => ({ ...prev, [filterType]: value }));
     };
 
+    if (loading) {
+        return <LoadingScreen progress={loadingProgress} message="Loading, please wait..." />;
+    }
+
     return (
         <LayoutDefault>
+            {error && <AlertWithMessage severity="error" title="Fehler" message={error} />}
             <div className="max-w-6xl mx-auto px-4">
                 <Title>Audits vergleichen</Title>
 
