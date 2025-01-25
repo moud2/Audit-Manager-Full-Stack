@@ -49,8 +49,8 @@ export function CompareAudits() {
             };
 
             setAudit(auditData);
-        } catch (err) {
-            const errorMessage = handleApiError(err); // Use handleApiError
+        } catch (error) {
+            const errorMessage = handleApiError(error); // Use handleApiError
             setError(errorMessage);
         }
     }, [allAudits]);
@@ -69,7 +69,7 @@ export function CompareAudits() {
                 setAllAudits(response.data);
                 setFilteredAudits(response.data);
             } catch {
-                const errorMessage = handleApiError(err); // Use handleApiError
+                const errorMessage = handleApiError(error); // Use handleApiError
                 setError(errorMessage || "Fehler beim Laden der Audit-Liste.");
             } finally {
                 setLoading(false);
