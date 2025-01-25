@@ -1,40 +1,57 @@
-import React from "react";
-import { SidebarProvider } from "../../src/layouts/SidebarContext";
-import LayoutDefault from "../../src/layouts/LayoutDefault"; // Die zu testende Komponente
-import { MemoryRouter } from "react-router-dom";
-import { mount } from 'cypress/react';
+import React, { useContext } from "react";
+import { SidebarProvider, default as SidebarContext } from "./SidebarContext";
 
-describe("Sidebar Component with Context", () => {
-    beforeEach(() => {
-      // Wrappen der Layout-Komponente mit SidebarProvider und MemoryRouter
-      mount(
-        <SidebarProvider>
-          <MemoryRouter>
-            <LayoutDefault />
-          </MemoryRouter>
-        </SidebarProvider>
-      );
-    });
-  
-    it("should render the sidebar", () => {
-      cy.get('[data-cy=sidebar]').should("exist");
-    });
-  
-    it("should open the sidebar when clicking the menu icon", () => {
-      cy.get('[data-cy=menu-icon]').click();
-      cy.get('[data-cy=sidebar]').should("be.visible");
-    });
-  
-    it("should close the sidebar when clicking the close icon", () => {
-      cy.get('[data-cy=menu-icon]').click();
-      cy.get('[data-cy=close-icon]').click();
-      cy.get('[data-cy=sidebar]').should("not.be.visible");
-    });
-  
-    it("should toggle sidebar state when clicking the menu icon multiple times", () => {
-      cy.get('[data-cy=menu-icon]').click();
-      cy.get('[data-cy=sidebar]').should("be.visible");
-      cy.get('[data-cy=close-icon]').click();
-      cy.get('[data-cy=sidebar]').should("not.be.visible");
-    });
+describe("SidebarContext", () => {
+  const TestComponent = () => {
+    const { open, toggleSidebar, openSidebar, closeSidebar } = useContext(SidebarContext);
+
+    return (
+      <div>
+        <p data-cy="sidebar-state">{open ? "open" : "closed"}</p>
+        <button data-cy="toggle-button" onClick={toggleSidebar}>Toggle</button>
+        <button data-cy="open-button" onClick={openSidebar}>Open</button>
+        <button data-cy="close-button" onClick={closeSidebar}>Close</button>
+      </div>
+    );
+  };
+
+  it("should toggle the sidebar state", () => {
+    cy.mount(
+      <SidebarProvider>
+        <TestComponent />
+      </SidebarProvider>
+    );
+
+    cy.get('[data-cy="sidebar-state"]').should("have.text", "closed");
+    cy.get('[data-cy="toggle-button"]').click();
+    cy.get('[data-cy="sidebar-state"]').should("have.text", "open");
+    cy.get('[data-cy="toggle-button"]').click();
+    cy.get('[data-cy="sidebar-state"]').should("have.text", "closed");
   });
+
+  it("should open the sidebar", () => {
+    cy.mount(
+      <SidebarProvider>
+        <TestComponent />
+      </SidebarProvider>
+    );
+
+    cy.get('[data-cy="sidebar-state"]').should("have.text", "closed");
+    cy.get('[data-cy="open-button"]').click();
+    cy.get('[data-cy="sidebar-state"]').should("have.text", "open");
+  });
+
+  it("should close the sidebar", () => {
+    cy.mount(
+      <SidebarProvider>
+        <TestComponent />
+      </SidebarProvider>
+    );
+
+    cy.get('[data-cy="sidebar-state"]').should("have.text", "closed");
+    cy.get('[data-cy="open-button"]').click();
+    cy.get('[data-cy="sidebar-state"]').should("have.text", "open");
+    cy.get('[data-cy="close-button"]').click();
+    cy.get('[data-cy="sidebar-state"]').should("have.text", "closed");
+  });
+});
