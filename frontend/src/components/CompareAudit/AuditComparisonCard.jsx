@@ -29,7 +29,6 @@ export function AuditComparisonCard({ name, progress, categoryProgress }) {
                 <p className="text-center text-m">Gesamtfortschritt</p>
             </div>
 
-            {/*<DownloadWrapper>*/}
             <div data-cy={"RadarChart"} className="w-full flex justify-center">
                 {labels.length > 0 && data.length > 0 ? (
                     <RadarChart labels={labels} currentData={data} width={50} height={50} />
@@ -37,7 +36,6 @@ export function AuditComparisonCard({ name, progress, categoryProgress }) {
                     <p className="text-sm text-gray-500">Keine Daten für Kategorien verfügbar</p>
                 )}
             </div>
-            {/*</DownloadWrapper>*/}
         </div>
     );
 }

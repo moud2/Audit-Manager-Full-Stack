@@ -94,7 +94,6 @@ export function Evaluation() {
         <LayoutDefault>
             <Title>Evaluation</Title>
 
-            {/*<DownloadWrapper>*/}
                 {/* Current Audit Progress Bar */}
                 <div
                     data-cy={"CurrentProgressBar"}
@@ -105,7 +104,6 @@ export function Evaluation() {
                     </Box>
                     <p className="text-center text-xl">Gesamtbewertung</p>
                 </div>
-            {/*</DownloadWrapper>*/}
 
             {/* Radar Chart */}
             <DownloadWrapper>
