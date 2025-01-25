@@ -94,13 +94,11 @@ export function NewAudit() {
         return <LoadingScreen progress={loadingProgress} message="Daten werden geladen..." />;
     }
 
-    if (error) {
-        return <AlertWithMessage severity="error" title="Fehler" message={error} />;
-    }
 
     return (
         <LayoutDefault>
             <div>
+                {error && <AlertWithMessage severity="error" title="Fehler" message={error} />} {/* Fehleranzeige */}
                 <Title>Neues Audit anlegen</Title>
 
                 {/* Validation Alert */}

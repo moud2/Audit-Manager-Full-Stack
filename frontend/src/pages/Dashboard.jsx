@@ -2,43 +2,43 @@ import { LayoutDefault } from "../layouts/LayoutDefault.jsx";
 import AuditGrid from "../components/AuditGrid/AuditGrid.jsx";
 import { useState, useEffect, useMemo } from "react";
 import api from "../api.js";
-import { Input, debounce, TextField } from "@mui/material";
+import { debounce, TextField } from "@mui/material";
 import Title from "../components/Textareas/Title.jsx";
 import { LoadingScreen } from "../components/LoadingState";
-import { AlertWithMessage } from "../components/ErrorHandling";
 import { handleApiError } from "../utils/handleApiError";
 import { useLoadingProgress } from "../components/LoadingState/useLoadingProgress";
+import { AlertWithMessage } from "../components/ErrorHandling";
 
 export function Dashboard() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [customerName, setCustomerName] = useState("");
+    const [searchTerm, setSearchTerm] = useState("");
 
-    const [debouncedCustomerName, setDebouncedCustomerName] = useState(customerName);
+    const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
-    const debouncedCustomerUpdate = useMemo(
+    const debouncedSearchUpdate = useMemo(
         () =>
             debounce((value) => {
-                setDebouncedCustomerName(value);
+                setDebouncedSearchTerm(value);
             }, 300),
-        [setDebouncedCustomerName],
+        []
     );
 
-    const handleCustomerFilterChange = (e) => {
-        setCustomerName(e.target.value);
-        debouncedCustomerUpdate(e.target.value);
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+        debouncedSearchUpdate(e.target.value);
     };
 
     // Use the custom loading progress hook
     const loadingProgress = useLoadingProgress(loading);
 
+    // Load data initial Render
     useEffect(() => {
         setLoading(true);
         api
             .get("/v1/audits", {
                 params: {
-                    customer: debouncedCustomerName?.length ? debouncedCustomerName : undefined,
                     sortBy: "createdAt",
                     sortDirection: "desc",
                 },
@@ -48,28 +48,41 @@ export function Dashboard() {
                 setError(null);
             })
             .catch((err) => {
-                const errorMessage = handleApiError(err);
-                setError(errorMessage);
+                setError(handleApiError(err));
             })
             .finally(() => setLoading(false));
-    }, [debouncedCustomerName]);
-    
-    
+    }, []);
+
+    // Filter data based on the search
+    useEffect(() => {
+
+        api
+            .get("/v1/audits", {
+                params: {
+                    search: debouncedSearchTerm?.length ? debouncedSearchTerm : undefined,
+                    sortBy: "createdAt",
+                    sortDirection: "desc",
+                },
+            })
+            .then((response) => {
+                setData(response.data);
+                setError(null);
+            })
+            .catch((err) => {
+                setError(handleApiError(err));
+            });
+    }, [debouncedSearchTerm]);
 
     if (loading) {
         return <LoadingScreen progress={loadingProgress} message="Loading, please wait..." />;
-    }
-
-    if (error) {
-        return <AlertWithMessage severity="error" title="Error" message={error} />;
     }
 
     return (
         <LayoutDefault>
             <div className="w-full h-full p-5">
                 <Title>Dashboard</Title>
-                <h2 className="font-bold mb-1">Filter</h2>
-                <TextField label="Kundenname" color="primary" onChange={handleCustomerFilterChange} />
+                <TextField label="Suche" value={searchTerm} onChange={handleSearchChange} />
+                {error && <AlertWithMessage severity="error" title="Fehler" message={error} />}
                 <AuditGrid data={data} loading={loading} error={error} />
             </div>
         </LayoutDefault>

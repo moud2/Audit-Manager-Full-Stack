@@ -53,9 +53,26 @@ describe('Evaluation Page Tests', () => {
         cy.get('[data-cy="RadarChart"]').should('be.visible');
     });
 
+    it('sollte sicherstellen, dass Download-Buttons im DownloadWrapper existieren', () => {
+        // Check DownloadWrapper CurrentProgressBar
+        cy.get('[data-cy="chart-wrapper"]')
+            .first()
+            .within(() => {
+                cy.contains('button', 'JPEG').should('exist').and('be.visible');
+                cy.contains('button', 'PNG').should('exist').and('be.visible');
+            });
+
+        // Check DownloadWrapper RadarChart
+        cy.get('[data-cy="chart-wrapper"]')
+            .last()
+            .within(() => {
+                cy.contains('button', 'JPEG').should('exist').and('be.visible');
+                cy.contains('button', 'PNG').should('exist').and('be.visible');
+            });
+    });
     it('Audit Export Button sollte angezeigt und klickbar sein', () => {
         cy.get('[data-cy="ExportAuditButton"]')
-            .should('be.visible')
+            .scrollIntoView().should('be.visible')
             .should('not.be.disabled');
     });
 
