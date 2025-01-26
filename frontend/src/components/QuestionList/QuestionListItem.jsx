@@ -99,7 +99,7 @@ export function QuestionListItem({ question, options, onChange }) {
     }
 
     return (
-        <div key={question.id} className="px-10 py-1">
+        <div key={question.id} className="py-1">
             <div className="flex items-center justify-between">
                 <h3 className="w-3/5" data-cy="question-text">{question.question}</h3>
                 <FormGroup className="w-2/5 flex justify-end" row>

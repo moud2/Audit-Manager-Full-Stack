@@ -79,12 +79,10 @@ export function Dashboard() {
 
     return (
         <LayoutDefault>
-            <div className="w-full h-full p-5">
                 <Title>Dashboard</Title>
                 <TextField id="outlined-basic" label="Suche" variant="outlined" value={searchTerm} onChange={handleSearchChange} />
                 {error && <AlertWithMessage severity="error" title="Fehler" message={error} />}
                 <AuditGrid data={data} loading={loading} error={error} />
-            </div>
         </LayoutDefault>
     );
 }
