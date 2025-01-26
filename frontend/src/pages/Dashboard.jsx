@@ -81,7 +81,7 @@ export function Dashboard() {
         <LayoutDefault>
             <div className="w-full h-full p-5">
                 <Title>Dashboard</Title>
-                <TextField label="Suche" value={searchTerm} onChange={handleSearchChange} />
+                <TextField data-cy="dashboard-search-field" label="Suche" value={searchTerm} onChange={handleSearchChange} />
                 {error && <AlertWithMessage severity="error" title="Fehler" message={error} />}
                 <AuditGrid data={data} loading={loading} error={error} />
             </div>
