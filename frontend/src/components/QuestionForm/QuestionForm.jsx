@@ -1,5 +1,6 @@
-import {Button, FormControl, Input, InputLabel, MenuItem, Select} from "@mui/material";
+import {Button, FormControl, Input, InputLabel, MenuItem, Select, TextField} from "@mui/material";
 import React from "react";
+import {TextareaAutosize} from "@mui/base/TextareaAutosize";
 
 export function QuestionForm({
                                  value, onChange = (_value) => {
@@ -18,8 +19,15 @@ export function QuestionForm({
     return (
         <form className="flex flex-col gap-2">
             <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Frage</InputLabel>
-                <Input data-cy="question-form-question-name" value={value?.name} onChange={(e) => setQuestion(e.target.value)}></Input>
+                <TextField
+                    data-cy="question-form-question-name"
+                    label="Frage"
+                    value={value?.name}
+                    onChange={(e) => setQuestion(e.target.value)}
+                    multiline
+                    minRows={1}
+                    fullWidth
+                />
             </FormControl>
             {categoryOptions && <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">Kategorie</InputLabel>
@@ -27,7 +35,7 @@ export function QuestionForm({
                     data-cy="question-form-category-select"
                     value={value?.category}
                     onChange={(event) => setCategory(event.target.value)}
-                    label="Kategorie" variant="outlined">
+                    label="Kategorie" >
                     {categoryOptions.map(cat => (
                         <MenuItem data-cy="question-form-category-item" value={cat?.id} key={cat.id}>{cat?.name}</MenuItem>
                     ))}

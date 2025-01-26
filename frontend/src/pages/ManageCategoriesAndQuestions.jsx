@@ -164,7 +164,6 @@ export function ManageCategoriesAndQuestions() {
                 <Button
                     fullWidth
                     startIcon={<AddIcon />}
-                    variant="outlined"
                     onClick={()=>setNewCategoryDialogOpen(true)}
                 >
                     Kategorie hinzufügen

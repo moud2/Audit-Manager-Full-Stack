@@ -20,7 +20,16 @@ export function BaseDialog({children, actions, title, onClose, open}) {
             aria-labelledby="customized-dialog-title"
             open={open}
         >
-            <DialogTitle sx={{m: 0, p: 2}} id="customized-dialog-title">
+            <DialogTitle
+                sx={{
+                    p: 2,
+                    width: '600px',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                }}
+                id="customized-dialog-title"
+            >
                 {title}
             </DialogTitle>
             <IconButton
@@ -30,7 +39,7 @@ export function BaseDialog({children, actions, title, onClose, open}) {
                     position: 'absolute',
                     right: 8,
                     top: 8,
-                    color: theme.palette.grey[500],
+                    color: 'secondary',
                 })}
             >
                 <CloseIcon/>
