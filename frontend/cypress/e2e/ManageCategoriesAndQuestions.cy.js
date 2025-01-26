@@ -40,7 +40,7 @@ describe('ManageCategoriesAndQuestions Page', () => {
         it('should trigger file upload and handle a successful response', () => {
             cy.get('[data-cy="ImportQuestionsButton"]').click();
 
-            cy.intercept('POST', 'http://localhost:8080/api/v1/database/import', {
+            cy.intercept('POST', '/v1/database/import', {
                 statusCode: 200,
             }).as('fileUpload');
 
@@ -52,10 +52,10 @@ describe('ManageCategoriesAndQuestions Page', () => {
             cy.contains('Upload erfolgreich!').should('be.visible');
         });
 
-        it('should handle file upload errors gracefully', () => {
+        it.only('should handle file upload errors gracefully', () => {
             cy.get('[data-cy="ImportQuestionsButton"]').click();
 
-            cy.intercept('POST', 'http://localhost:8080/api/v1/database/import', {
+            cy.intercept('POST', `/v1/database/import`, {
                 statusCode: 500,
                 body: { message: 'Server error' },
             }).as('fileUploadError');

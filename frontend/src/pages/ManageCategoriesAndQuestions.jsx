@@ -58,7 +58,7 @@ export function ManageCategoriesAndQuestions() {
         }
 
         try {
-            const response = await fetch('http://localhost:8080/api/v1/database/import', {
+            const response = await fetch('/v1/database/import', {
                 method: 'POST',
                 body: formData,
             });
