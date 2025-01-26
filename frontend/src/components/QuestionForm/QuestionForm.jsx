@@ -1,6 +1,5 @@
 import {Button, FormControl, Input, InputLabel, MenuItem, Select, TextField} from "@mui/material";
 import React from "react";
-import {TextareaAutosize} from "@mui/base/TextareaAutosize";
 
 export function QuestionForm({
                                  value, onChange = (_value) => {

@@ -1,4 +1,4 @@
-import {Button, FormControl, Input, InputLabel, TextField} from "@mui/material";
+import {Button, FormControl, TextField} from "@mui/material";
 import React from "react";
 
 export function CategoryForm({value, onChange = (_value) => {}, onSubmit = () => {} }) {
