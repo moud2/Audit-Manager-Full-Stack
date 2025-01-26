@@ -52,7 +52,7 @@ describe('ManageCategoriesAndQuestions Page', () => {
             cy.contains('Upload erfolgreich!').should('be.visible');
         });
 
-        it.only('should handle file upload errors gracefully', () => {
+        it('should handle file upload errors gracefully', () => {
             cy.get('[data-cy="ImportQuestionsButton"]').click();
 
             cy.intercept('POST', `/v1/database/import`, {
