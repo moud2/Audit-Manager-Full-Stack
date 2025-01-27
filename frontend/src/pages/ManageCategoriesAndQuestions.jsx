@@ -58,10 +58,11 @@ export function ManageCategoriesAndQuestions() {
         }
 
         try {
-            const response = await fetch('http://localhost:8080/api/v1/database/import', {
+            const response = await fetch(((import.meta.env.VITE_BACKEND_URL || "/api") + '/v1/database/import'), {
                 method: 'POST',
                 body: formData,
             });
+
 
             if (response.ok) {
                 setUploadStatus('Upload erfolgreich!');
@@ -92,22 +93,14 @@ export function ManageCategoriesAndQuestions() {
             <Title>Kategorien und Fragen verwalten</Title>
             <div className="flex flex-col items-center space-y-4">
                 <div className="flex justify-center space-x-4">
-
-                    {/*Daten exportieren Button*/}
                     <Button
                         data-cy="ExportQuestionsButton"
-                        variant="outlined"
-                        color="error"
                         onClick={handleExportQuestionsClick}
                     >
                         Daten exportieren
                     </Button>
-
-                    {/*Button changes from "Daten importieren" to "Hochladen" after clicking */}
                     <Button
                         data-cy="ImportQuestionsButton"
-                        variant="outlined"
-                        color="error"
                         onClick={handleButtonClick}
                     >
                         {showFileInput ? "Hochladen" : "Daten importieren"}
