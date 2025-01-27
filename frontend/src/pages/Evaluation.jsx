@@ -82,7 +82,7 @@ export function Evaluation() {
      * PDF file in preview mode.
      */
     const handleExportClick = () => {
-        const exportUrl = (import.meta.env.VITE_BACKEND_URL || "/api") + `/v1/audits/${auditId}/exporrt`;
+        const exportUrl = (import.meta.env.VITE_BACKEND_URL || "/api") + `/v1/audits/${auditId}/export`;
     
         fetch(exportUrl)
             .then(response => {
