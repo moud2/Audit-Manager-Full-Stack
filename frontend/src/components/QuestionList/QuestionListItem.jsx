@@ -32,19 +32,16 @@ export function QuestionListItem({ question, options, onChange }) {
     line-height: 1.5;
     padding: 8px;
     border-radius: 12px 12px 0px 12px;
-    color: ${theme.palette.mode === 'dark' ? '#fff' : '#000'};
-    background: ${theme.palette.mode === 'dark' ? '#000' : '#fff'};
-    border: 1px solid ${theme.palette.mode === 'dark' ? '#555' : '#ddd'};
+    color: #000;
+    background: #fff;
+    border: 1px solid #ddd;
     &:hover {
-      border-color: #3399FF;
+      border-color: #4B5563;
     }
     &:focus {
       outline: 0;
-      border-color: #3399FF;
-      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
-    }
-    &:focus-visible {
-      outline: 0;
+      border-color: #4B5563;
+      box-shadow: 0 0 0 3px rgba(75, 85, 99, 0.25);
     }
   `
     ), []);
@@ -99,7 +96,7 @@ export function QuestionListItem({ question, options, onChange }) {
     }
 
     return (
-        <div key={question.id} className="px-10 py-1">
+        <div key={question.id} className="py-1">
             <div className="flex items-center justify-between">
                 <h3 className="w-3/5" data-cy="question-text">{question.question}</h3>
                 <FormGroup className="w-2/5 flex justify-end" row>
