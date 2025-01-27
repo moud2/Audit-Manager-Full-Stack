@@ -92,35 +92,32 @@ export function Evaluation() {
 
     return (
         <LayoutDefault>
-            <div className="p-4 flex flex-col items-center max-w-5xl mx-auto">
-                <Title>Evaluation</Title>
+            <Title>Evaluation</Title>
 
-                <DownloadWrapper>
-                    {/* Current Audit Progress Bar */}
-                    <div
-                        data-cy={"CurrentProgressBar"}
-                        className="w-full flex flex-col justify-center items-center h-20 mb-6">
+                {/* Current Audit Progress Bar */}
+                <div
+                    data-cy={"CurrentProgressBar"}
+                    className="w-full flex flex-col justify-center items-center mt-2">
 
-                        <Box className="text-center" sx={{width: '80%'}}>
-                            <LinearProgressWithLabel value={currentAuditProgress}/>
-                        </Box>
-                        <p className="text-center text-xl">Gesamtbewertung</p>
-                    </div>
-                </DownloadWrapper>
+                    <Box className="text-center" sx={{width: '80%'}}>
+                        <LinearProgressWithLabel value={currentAuditProgress}/>
+                    </Box>
+                    <p className="text-center text-xl">Gesamtbewertung</p>
+                </div>
 
-                {/* Radar Chart */}
-                <DownloadWrapper>
-                    <div data-cy={"RadarChart"} className="w-full flex justify-center">
-                        <RadarChart
-                            labels={categoryProgress.map(category => category.categoryName)}
-                            currentData={categoryProgress.map(category => category.currentCategoryProgress)}
-                            width={50}
-                            height={50}
-                        />
-                    </div>
-                </DownloadWrapper>
+            {/* Radar Chart */}
+            <DownloadWrapper>
+                <div data-cy={"RadarChart"} className="w-full flex justify-center">
+                    <RadarChart
+                        labels={categoryProgress.map(category => category.categoryName)}
+                        currentData={categoryProgress.map(category => category.currentCategoryProgress)}
+                        width={100}
+                        height={60}
+                    />
+                </div>
+            </DownloadWrapper>
 
-                <div className="flex justify-center mr-8 space-x-4 mb-11">
+                <div className="flex justify-center space-x-4">
                     <Button
                         onClick={() => navigate(`/compare-audits/${auditId}`)}
                     >
@@ -133,9 +130,6 @@ export function Evaluation() {
                         Audit Exportieren
                     </Button>
                 </div>
-
-
-            </div>
         </LayoutDefault>
     );
 }

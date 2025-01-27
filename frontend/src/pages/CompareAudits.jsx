@@ -112,7 +112,6 @@ export function CompareAudits() {
 
     return (
         <LayoutDefault>
-            <div className="max-w-6xl mx-auto px-4">
                 <Title>Audits vergleichen</Title>
 
                 {/* Filter Inputs */}
@@ -140,7 +139,7 @@ export function CompareAudits() {
                     onAuditSelect={handleAuditSelect}
                 />
 
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-2 gap-6 mb-4">
                     {selectedAudit && (
                         <AuditComparisonCard
                             name={selectedAudit.name}
@@ -160,7 +159,6 @@ export function CompareAudits() {
                         </div>
                     )}
                 </div>
-            </div>
         </LayoutDefault>
     );
 }

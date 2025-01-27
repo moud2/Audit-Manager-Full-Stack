@@ -25,7 +25,6 @@ const Main = styled('main', {
     shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
     flexGrow: 1,
-    marginLeft: open ? 0 : `-${drawerWidth}px`,
     transition: theme.transitions.create('margin', {
         easing: open
             ? theme.transitions.easing.easeOut
@@ -60,9 +59,18 @@ export function LayoutDefault({ progress, children }) {
     const isEvaluationPage = location.pathname.includes("/evaluation");
 
     return (
-        <Box className="flex overflow-hidden h-full">
+        <Box className="flex overflow-hidden h-full"
+        sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100vh',
+            marginLeft: open ? 0 : `-${drawerWidth}px`,
+        }}>
+            {/* Header */}
+            <Box sx={{ height: 74 }}>
+                <Header data-cy="header"/>
+            </Box>
             {/* Icon-Button zum Öffnen der Sidebar */}
-            <Header />
             <IconButton
                 color="inherit"
                 aria-label="open drawer"
@@ -146,13 +154,16 @@ export function LayoutDefault({ progress, children }) {
 
             </Drawer>
 
-            <Main open={open} className="flex-1 ml-64 overflow-y-auto" id="scroll-main">
-                <DrawerHeader /> {/* Platzhalter, um Platz für den Sidebar-Header zu schaffen */}
+            <Main open={open} className="flex-1 ml-64 px-10 pb-4 overflow-y-auto" id="scroll-main">
                 <CustomThemeProvider>
                     {children}
                 </CustomThemeProvider>
             </Main>
-            <Footer />
+
+            {/* Footer */}
+            <Box sx={{ height: 64, marginLeft: open ? 0 : `+${drawerWidth}px` }}>
+                <Footer data-cy="footer"/>
+            </Box>
         </Box>
     );
 }
