@@ -70,8 +70,7 @@ export function CompareAudits() {
                 setAllAudits(response.data);
                 setFilteredAudits(response.data);
             } catch {
-                const errorMessage = handleApiError(error); // Use handleApiError
-                setError(errorMessage || "Fehler beim Laden der Audit-Liste.");
+                setError("Fehler beim Laden der Audit-Liste.");
             } finally {
                 setLoading(false);
             }
