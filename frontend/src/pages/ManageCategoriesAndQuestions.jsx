@@ -44,8 +44,8 @@ const LazyCategoryQuestionCard = ({category, availableCategories = []}) => {
             categoryId: newQuestion.category,
             name: newQuestion.name
         }).then(response => {
+            if(newQuestion.category !== category.id) return
             setQuestions?.((oldQuestions)=>[...oldQuestions, response.data])
-            // todo: show success message
         }).catch(err => {
             alert('Error creating question') // TODO
         }).finally(()=>{
