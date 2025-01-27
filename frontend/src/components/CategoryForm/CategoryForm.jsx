@@ -11,7 +11,7 @@ export function CategoryForm({value, onChange = (_value) => {}, onSubmit = () =>
         <form className="flex flex-col gap-2">
             <FormControl fullWidth>
                 <TextField
-                    data-cy="category-form-question-name"
+                    data-cy="category-form-category-name"
                     label="Kategorie"
                     value={value.name}
                     onChange={(e) => setCategory(e.target.value)}
