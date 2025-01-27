@@ -1,20 +1,24 @@
 package com.insight.backend.service.rating;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.util.List;
-import java.awt.Color;
-
 import com.insight.backend.exception.AuditNotFoundException;
 import com.insight.backend.exception.PdfGenerationException;
 import com.insight.backend.model.Audit;
 import com.insight.backend.model.Rating;
 import com.insight.backend.repository.AuditRepository;
 import com.lowagie.text.*;
+import com.lowagie.text.Font;
+import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.awt.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.util.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PdfGeneratorService {
@@ -23,65 +27,97 @@ public class PdfGeneratorService {
     private AuditRepository auditRepository;
 
     public ByteArrayInputStream createPdf(long auditId) {
-        // Retrieve Audit
         Audit audit = auditRepository.findById(auditId)
-                .orElseThrow(() -> new AuditNotFoundException(auditId));
+                .orElseThrow(() -> new AuditNotFoundException("Audit ID " + auditId + " not found"));
 
-        List<Rating> ratings = List.copyOf(audit.getRatings());
+        Set<Rating> ratings = new HashSet<>(audit.getRatings());
 
-        // Initialize PDF Document
         Document document = new Document();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
         try {
-            PdfWriter.getInstance(document, out);
+            PdfWriter writer = PdfWriter.getInstance(document, out);
             document.open();
 
-            // Set font styles
-            Font titleFont = new Font(Font.HELVETICA, 18, Font.BOLD, Color.BLUE);
-            Font headerFont = new Font(Font.HELVETICA, 14, Font.BOLD, Color.BLACK);
-            Font normalFont = new Font(Font.HELVETICA, 12, Font.NORMAL, Color.BLACK);
-
-            // Add Title
-            Paragraph title = new Paragraph("Audit Report", titleFont);
-            title.setAlignment(Element.ALIGN_CENTER);
-            document.add(title);
+            // Add Header
+            Font headerFont = new Font(Font.HELVETICA, 14, Font.BOLD);
+            document.add(new Paragraph("Audit Report", headerFont));
+            document.add(new Paragraph("Audit ID: " + audit.getId(), new Font(Font.HELVETICA, 10)));
+            document.add(new Paragraph("Audit Title: " + audit.getName(), new Font(Font.HELVETICA, 10)));
+            document.add(new Paragraph("Customer: " + audit.getCustomer(), new Font(Font.HELVETICA, 10)));
             document.add(new Paragraph("\n"));
 
-            // Add Audit Info
-            document.add(new Paragraph("Audit ID: " + audit.getId(), headerFont));
-            document.add(new Paragraph("Audit Title: " + audit.getName(), normalFont));
-            document.add(new Paragraph("Customer: " + audit.getCustomer(), normalFont));
-            document.add(new Paragraph("\n"));
+            // Group Ratings by Category
+            Map<String, List<Rating>> groupedRatings = ratings.stream()
+                    .collect(Collectors.groupingBy(r -> r.getQuestion().getCategory().getName()));
 
-            // Create Table for Ratings
-            PdfPTable table = new PdfPTable(5); // 5 Columns
-            table.setWidthPercentage(100);
-            table.setSpacingBefore(10f);
-            table.setSpacingAfter(10f);
+            // Iterate over each category
+            for (Map.Entry<String, List<Rating>> entry : groupedRatings.entrySet()) {
+                // Add Category Title with Background
+                String categoryName = entry.getKey();
+                Font categoryFont = new Font(Font.HELVETICA, 12, Font.BOLD, Color.WHITE);
+                PdfPTable categoryTable = new PdfPTable(1);
+                PdfPCell categoryCell = new PdfPCell(new Phrase(categoryName, categoryFont));
+                categoryCell.setBackgroundColor(new Color(100, 150, 255));
+                categoryCell.setPadding(5);
+                categoryCell.setBorder(Rectangle.NO_BORDER);
+                categoryTable.addCell(categoryCell);
+                document.add(categoryTable);
 
-            // Table Headers
-            String[] headers = {"Rating ID", "Question", "Comment", "Points", "Is N/A"};
-            for (String header : headers) {
-                PdfPCell cell = new PdfPCell(new Phrase(header, headerFont));
-                cell.setBackgroundColor(Color.LIGHT_GRAY);
-                cell.setPadding(5);
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                table.addCell(cell);
+                // Add Questions for the Category
+                for (Rating rating : entry.getValue()) {
+                    PdfPTable questionTable = new PdfPTable(1);
+                    questionTable.setWidthPercentage(100);
+                    questionTable.setSpacingBefore(5);
+                    PdfPCell questionCell = new PdfPCell();
+                    questionCell.setPadding(10);
+                    questionCell.setBorderColor(new Color(200, 200, 200));
+                    questionCell.setBorderWidth(0.5f);
+                    questionCell.setBorder(Rectangle.BOX);
+                    questionCell.setUseBorderPadding(true);
+
+                    // Question
+                    Paragraph question = new Paragraph("Question: " +
+                            (rating.getQuestion() != null ? rating.getQuestion().getName() : "Unknown question"),
+                            new Font(Font.HELVETICA, 10, Font.BOLD));
+                    questionCell.addElement(question);
+
+                    // Answer
+                    Paragraph answer = new Paragraph("Comment: " +
+                            (rating.getComment() != null ? rating.getComment() : "No comment"),
+                            new Font(Font.HELVETICA, 9));
+                    questionCell.addElement(answer);
+
+                    // Checkbox for Points
+                    PdfPTable pointsTable = new PdfPTable(6);
+                    pointsTable.setSpacingBefore(5);
+                    pointsTable.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+                    String[] pointLabels = {"N/A", "1", "2", "3", "4", "5"};
+                    for (int i = 0; i < pointLabels.length; i++) {
+                        PdfPCell pointCell = new PdfPCell(new Phrase(pointLabels[i], new Font(Font.HELVETICA, 9)));
+                        pointCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                        pointCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                        pointCell.setBorder(Rectangle.BOX);
+
+                        // Highlight the selected point
+                        if ((rating.getPoints() != null && i == rating.getPoints()) || (i == 0 && rating.getNa())) {
+                            pointCell.setBackgroundColor(new Color(100, 255, 100));
+                        }
+
+                        pointsTable.addCell(pointCell);
+                    }
+                    questionCell.addElement(pointsTable);
+
+                    questionTable.addCell(questionCell);
+                    document.add(questionTable);
+                }
+
+                document.add(new Paragraph("\n"));
             }
 
-            // Add Ratings to Table
-            for (Rating rating : ratings) {
-                table.addCell(new Phrase(String.valueOf(rating.getId()), normalFont));
-                table.addCell(new Phrase(rating.getQuestion().getName(), normalFont));
-                table.addCell(new Phrase(rating.getComment(), normalFont));
-                table.addCell(new Phrase(String.valueOf(rating.getPoints()), normalFont));
-                table.addCell(new Phrase(String.valueOf(rating.getNa()), normalFont));
-            }
-
-            document.add(table);
         } catch (DocumentException e) {
-            throw new PdfGenerationException(e.getMessage());
+            throw new PdfGenerationException("Error while generating PDF", e);
         } finally {
             document.close();
         }

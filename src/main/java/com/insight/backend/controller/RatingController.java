@@ -81,7 +81,8 @@ public class RatingController {
      */
     @GetMapping("/api/v1/audits/{auditId}/ratings")
     public ResponseEntity<Object> getRatings(@PathVariable("auditId") Long auditId) {
-        Audit audit = findAuditService.findAuditById(auditId).orElseThrow(() -> new AuditNotFoundException(auditId));
+        Audit audit = findAuditService.findAuditById(auditId).orElseThrow(() -> new AuditNotFoundException("Audit ID " + auditId + " not found"));
+
         List<Rating> ratings = new ArrayList<>(audit.getRatings());
         List<RatingDTO> ratingDTOs = ratingMapper.convertToRatingDTOs(ratings);
         return ResponseEntity.ok(ratingDTOs);

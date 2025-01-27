@@ -5,7 +5,7 @@ package com.insight.backend.exception;
  * This exception results in an HTTP status code of 404 (NOT FOUND).
  */
 public class AuditNotFoundException extends RuntimeException {
-    public AuditNotFoundException(Long auditId) {
-        super("Audit with id " + auditId + " not found");
+    public AuditNotFoundException(String message) {
+        super(message);
     }
 }

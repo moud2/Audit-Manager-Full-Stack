@@ -98,7 +98,8 @@ public class AuditsController {
     @GetMapping("/api/v1/audits/{auditId}/progress")
     public ResponseEntity<?> getAuditProgress(@PathVariable Long auditId) {
         // Prüfen, ob das Audit existiert
-        Audit audit = findAuditService.findAuditById(auditId).orElseThrow(() -> new AuditNotFoundException(auditId));
+        Audit audit = findAuditService.findAuditById(auditId).orElseThrow(() -> new AuditNotFoundException("Audit ID " + auditId + " not found"));
+
 
         // Prüfen, ob das Audit gelöscht wurde
         if (audit.getDeletedAt() != null) {
@@ -121,7 +122,8 @@ public class AuditsController {
      */
     @DeleteMapping("/api/v1/audits/{auditId}")
     public ResponseEntity<Void> softDeleteAudit(@PathVariable("auditId") Long auditId) {
-        Audit auditToDelete = findAuditService.findAuditById(auditId).orElseThrow(() -> new AuditNotFoundException(auditId));
+        Audit auditToDelete = findAuditService.findAuditById(auditId).orElseThrow(() -> new AuditNotFoundException("Audit ID " + auditId + " not found"));
+
         try {
             deleteAuditService.softDeleteAudit(auditToDelete);
         } catch (IllegalArgumentException e) {
