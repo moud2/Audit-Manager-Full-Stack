@@ -58,10 +58,11 @@ export function ManageCategoriesAndQuestions() {
         }
 
         try {
-            const response = await fetch('/v1/database/import', {
+            const response = await fetch(((import.meta.env.VITE_BACKEND_URL || "/api") + '/v1/database/import'), {
                 method: 'POST',
                 body: formData,
             });
+
 
             if (response.ok) {
                 setUploadStatus('Upload erfolgreich!');
