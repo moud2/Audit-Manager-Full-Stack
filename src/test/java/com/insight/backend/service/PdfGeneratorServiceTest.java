@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.insight.backend.model.Audit;
+import com.insight.backend.model.Category;
 import com.insight.backend.model.Question;
 import com.insight.backend.model.Rating;
 import com.insight.backend.repository.AuditRepository;
@@ -38,11 +39,16 @@ class PdfGeneratorServiceTest {
         mockAudit.setId(1L);
         mockAudit.setName("Sample Audit");
 
+        // Mock a Category
+        Category mockCategory = new Category();
+        mockCategory.setName("Sample Category");
+
+
         //Mock a Question
         Question mockQuestion = new Question();
         mockQuestion.setId(1L);
         mockQuestion.setName("Sample Question");
-
+        mockQuestion.setCategory(mockCategory);
         // Mock a Rating
         Rating mockRating = new Rating();
         mockRating.setId(1L);
