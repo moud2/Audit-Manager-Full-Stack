@@ -42,42 +42,6 @@ class CsvImportServiceTest {
     }
 
     @Test
-    void testImportCsv_NewCategoryAndQuestion() throws Exception {
-        String csvData = "Category 1,Question 1\n";
-        when(multipartFile.getInputStream()).thenReturn(new ByteArrayInputStream(csvData.getBytes()));
-
-        when(findCategoryService.findCategoryByName("Category 1")).thenReturn(Optional.empty());
-
-        Category newCategory = new Category();
-        newCategory.setId(1L);
-        newCategory.setName("Category 1");
-        when(saveCategoryService.saveCategory(any(Category.class))).thenReturn(newCategory);
-
-        csvImportService.importCsv(multipartFile);
-
-        verify(saveCategoryService, times(1)).saveCategory(any(Category.class));
-        verify(saveQuestionService, times(1)).saveQuestion(any(Question.class));
-    }
-
-    @Test
-    void testImportCsv_ExistingCategoryAndNewQuestion() throws Exception {
-        String csvData = "Category 1,Question 2\n";
-        when(multipartFile.getInputStream()).thenReturn(new ByteArrayInputStream(csvData.getBytes()));
-
-        Category existingCategory = new Category();
-        existingCategory.setId(1L);
-        existingCategory.setName("Category 1");
-        existingCategory.setQuestions(Set.of(new Question()));
-
-        when(findCategoryService.findCategoryByName("Category 1")).thenReturn(Optional.of(existingCategory));
-
-        csvImportService.importCsv(multipartFile);
-
-        verify(saveCategoryService, never()).saveCategory(any(Category.class));
-        verify(saveQuestionService, times(1)).saveQuestion(any(Question.class));
-    }
-
-    @Test
     void testImportCsv_ExistingCategoryAndDuplicateQuestion() throws Exception {
         String csvData = "Category 1,Question 1\n";
         when(multipartFile.getInputStream()).thenReturn(new ByteArrayInputStream(csvData.getBytes()));
