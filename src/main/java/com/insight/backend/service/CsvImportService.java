@@ -3,6 +3,7 @@ package com.insight.backend.service;
 import com.insight.backend.model.Category;
 import com.insight.backend.model.Question;
 import com.insight.backend.service.category.SaveCategoryService;
+import com.insight.backend.service.category.FindCategoryService;
 import com.insight.backend.service.question.SaveQuestionService;
 import com.opencsv.CSVReader;
 import org.springframework.stereotype.Service;
@@ -12,16 +13,19 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class CsvImportService {
 
     private final SaveCategoryService saveCategoryService;
     private final SaveQuestionService saveQuestionService;
+    private final FindCategoryService findCategoryService;
 
-    public CsvImportService(SaveCategoryService saveCategoryService, SaveQuestionService saveQuestionService) {
+    public CsvImportService(SaveCategoryService saveCategoryService, SaveQuestionService saveQuestionService, FindCategoryService findCategoryService) {
         this.saveCategoryService = saveCategoryService;
         this.saveQuestionService = saveQuestionService;
+        this.findCategoryService = findCategoryService;
     }
 
     /**
@@ -43,13 +47,16 @@ public class CsvImportService {
 
                 String categoryName = row[0];
                 String questionContent = row[1];
-
-                Category category = categoryMap.computeIfAbsent(categoryName, name -> {
+                Optional<Category> category1 = findCategoryService.findCategoryByName(categoryName);
+                Category category = category1.orElse(categoryMap.computeIfAbsent(categoryName, name -> {
                     Category newCategory = new Category();
                     newCategory.setName(name);
                     return saveCategoryService.saveCategory(newCategory);
-                });
+                }));
 
+
+
+                // Erstelle eine neue Frage und füge sie der Kategorie hinzu
                 Question question = new Question();
                 question.setName(questionContent);
                 question.setCategory(category);
