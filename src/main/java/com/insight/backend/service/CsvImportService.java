@@ -38,6 +38,7 @@ public class CsvImportService {
         try (CSVReader csvReader = new CSVReader(new InputStreamReader(file.getInputStream()))) {
             List<String[]> rows = csvReader.readAll();
 
+            // Kategorie-Cache, um Doppeleinfügungen zu vermeiden
             Map<String, Category> categoryMap = new HashMap<>();
 
             for (String[] row : rows) {
@@ -47,14 +48,25 @@ public class CsvImportService {
 
                 String categoryName = row[0];
                 String questionContent = row[1];
-                Optional<Category> category1 = findCategoryService.findCategoryByName(categoryName);
-                Category category = category1.orElse(categoryMap.computeIfAbsent(categoryName, name -> {
-                    Category newCategory = new Category();
-                    newCategory.setName(name);
-                    return saveCategoryService.saveCategory(newCategory);
-                }));
 
+                // Zuerst prüfen, ob die Kategorie bereits existiert
+                Category category = categoryMap.computeIfAbsent(categoryName, name -> {
+                    Optional<Category> existingCategory = findCategoryService.findCategoryByName(name);
+                    return existingCategory.orElseGet(() -> {
+                        // Wenn die Kategorie nicht existiert, erstellen und speichern
+                        Category newCategory = new Category();
+                        newCategory.setName(name);
+                        return saveCategoryService.saveCategory(newCategory);
+                    });
+                });
 
+                // Prüfen, ob die Frage bereits in der Kategorie existiert
+                boolean questionExists = category.getQuestions().stream()
+                        .anyMatch(q -> q.getName().equalsIgnoreCase(questionContent));
+                if (questionExists) {
+                    // Überspringe die Frage, wenn sie bereits existiert
+                    continue;
+                }
 
                 // Erstelle eine neue Frage und füge sie der Kategorie hinzu
                 Question question = new Question();
@@ -64,4 +76,5 @@ public class CsvImportService {
             }
         }
     }
+
 }
