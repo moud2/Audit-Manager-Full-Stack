@@ -28,7 +28,7 @@ public class PdfGeneratorService {
 
     public ByteArrayInputStream createPdf(long auditId) {
         Audit audit = auditRepository.findById(auditId)
-                .orElseThrow(() -> new AuditNotFoundException("Audit ID " + auditId + " not found"));
+                .orElseThrow(() -> new AuditNotFoundException(auditId));
 
         Set<Rating> ratings = new HashSet<>(audit.getRatings());
 
@@ -117,7 +117,7 @@ public class PdfGeneratorService {
             }
 
         } catch (DocumentException e) {
-            throw new PdfGenerationException("Error while generating PDF", e);
+            throw new PdfGenerationException(e.getMessage());
         } finally {
             document.close();
         }
