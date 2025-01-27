@@ -5,7 +5,7 @@ import { AuditDropdown } from "../components/CompareAudit/AuditDropdown.jsx";
 import { AuditComparisonCard } from "../components/CompareAudit/AuditComparisonCard.jsx";
 import api from "../api";
 import Title from "../components/Textareas/Title.jsx";
-import {Input, TextField} from "@mui/material";
+import {TextField } from "@mui/material";
 import { LoadingScreen } from "../components/LoadingState";
 import { handleApiError } from "../utils/handleApiError";
 import { useLoadingProgress } from "../components/LoadingState/useLoadingProgress";

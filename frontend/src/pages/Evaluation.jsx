@@ -82,13 +82,29 @@ export function Evaluation() {
      * PDF file in preview mode.
      */
     const handleExportClick = () => {
-        const link = document.createElement('a');
-        link.target = "_blank";
-        link.href = (import.meta.env.VITE_BACKEND_URL || "/api") + `/v1/audits/${auditId}/export`;
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
+        const exportUrl = (import.meta.env.VITE_BACKEND_URL || "/api") + `/v1/audits/${auditId}/exporrt`;
+    
+        fetch(exportUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Fehler beim Export des Audits.");
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', `Audit_${auditId}.pdf`);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            })
+            .catch(err => {
+                setError(err.message || "Ein unbekannter Fehler ist aufgetreten.");
+            });
     };
+    
 
     return (
         <LayoutDefault>
