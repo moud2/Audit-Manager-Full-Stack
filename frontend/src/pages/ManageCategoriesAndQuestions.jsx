@@ -101,28 +101,26 @@ export function ManageCategoriesAndQuestions() {
     return (
         <LayoutDefault>
             <Title>Kategorien und Fragen verwalten</Title>
+            {/* Fehler-Alert */}
+            <CustomAlert
+                show={!!errorMessage}
+                severity="error"
+                message={errorMessage}
+                onClose={() => setErrorMessage(null)}
+                sx={{
+                    backgroundColor: "#f8d7da",
+                    color: "#721c24",
+                    border: "1px solid #f5c6cb",
+                }}
+            />
+            {/* Erfolgs-Alert */}
+            <CustomAlert
+                show={!!successMessage}
+                severity="success"
+                message={successMessage}
+                onClose={() => setSuccessMessage(null)}
+            />
             <div className="flex flex-col items-center space-y-4">
-                {/* Fehler-Alert */}
-                <CustomAlert
-                    show={!!errorMessage}
-                    severity="error"
-                    message={errorMessage}
-                    onClose={() => setErrorMessage(null)}
-                    sx={{
-                        backgroundColor: "#f8d7da",
-                        color: "#721c24",
-                        border: "1px solid #f5c6cb",
-                    }}
-                />
-
-                {/* Erfolgs-Alert */}
-                <CustomAlert
-                    show={!!successMessage}
-                    severity="success"
-                    message={successMessage}
-                    onClose={() => setSuccessMessage(null)}
-                />
-
                 <div className="flex justify-center space-x-4">
                     <Button
                         data-cy="ExportQuestionsButton"
