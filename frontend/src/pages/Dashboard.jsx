@@ -79,9 +79,9 @@ export function Dashboard() {
 
     return (
         <LayoutDefault>
+                {error && <AlertWithMessage severity="error" title="Fehler" message={error} />}
                 <Title>Dashboard</Title>
                 <TextField data-cy="dashboard-search-field" label="Suche" value={searchTerm} onChange={handleSearchChange} />
-                {error && <AlertWithMessage severity="error" title="Fehler" message={error} />}
                 <AuditGrid data={data} loading={loading} error={error} />
         </LayoutDefault>
     );
