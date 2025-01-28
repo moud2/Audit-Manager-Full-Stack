@@ -1,5 +1,6 @@
 import {
     Button,
+    IconButton,
     Paper,
     Table,
     TableBody,
@@ -8,6 +9,7 @@ import {
     TableHead,
     TableRow
 } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 
 export default function QuestionTable({questions=[], onDelete, onNew}) {
@@ -33,6 +35,9 @@ export default function QuestionTable({questions=[], onDelete, onNew}) {
                                 {row.name}
                             </TableCell>
                             <TableCell align="right">
+                                <div className="flex justify-end">
+                                    {onDelete && <IconButton data-cy="question-table-delete-button" onClick={()=>onDelete?.(row)}><DeleteIcon></DeleteIcon></IconButton>}
+                                </div>
                             </TableCell>
                         </TableRow>
                     ))}

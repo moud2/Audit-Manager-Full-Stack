@@ -35,9 +35,9 @@ const LazyCategoryQuestionCard = ({category, availableCategories = []}) => {
         setNewQuestionDialogOpen(true)
     }
 
-    const handleDeleteQuestion = (question) => {
-        alert('Delete Question with id ' + question.id);
-    }
+    // const handleDeleteQuestion = (question) => {
+    //     alert('Delete Question with id ' + question.id);
+    // }
 
 
     function handleCreate(newQuestion) {
@@ -61,8 +61,7 @@ const LazyCategoryQuestionCard = ({category, availableCategories = []}) => {
                                onSubmit={handleCreate}
                                onClose={() => setNewQuestionDialogOpen(false)}></NewQuestionDialog>
             <CategoryQuestionCard category={category} questions={questions} onOpen={handleOpen}
-                                  onAddQuestion={handleAddQuestion}
-                                  onDeleteQuestion={handleDeleteQuestion}>
+                                  onAddQuestion={handleAddQuestion}>
                 {loading ? <div>Loading...</div> : undefined}
             </CategoryQuestionCard>
         </Fragment>
