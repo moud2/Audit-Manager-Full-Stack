@@ -50,14 +50,26 @@ export function Evaluation() {
     useEffect(() => {
         setLoading(true);
         api.get(`/v1/audits/${auditId}/progress`)
-            .then((response) => {
+            .then(response => {
                 const { currentAuditProgress, categoryProgress } = response.data;
+
+                const augmentedCategories = [...categoryProgress];
+
+                while (augmentedCategories.length < 3) {
+                    augmentedCategories.push({
+                        categoryName: "",
+                        currentCategoryProgress: 0, // Fortschritt für Platzhalter auf 0 setzen
+                    });
+                }
+
                 setCurrentAuditProgress(currentAuditProgress);
-                setCategoryProgress(categoryProgress || []);
+                setCategoryProgress(augmentedCategories);
             })
             .catch((err) => {
-                //const errorMessage = handleApiError(err);
-                setError("Fehler beim Laden der Bewertungsdaten.");
+                // Use the handleApiError utility function to generate a user-friendly error message
+                const errorMessage = handleApiError(err);
+                console.error("Error loading ratings data:", err);
+                setError(errorMessage);
             })
             .finally(() => setLoading(false));
     }, [auditId]);

@@ -35,20 +35,30 @@ export function CompareAudits() {
      * @param {Function} setAudit - State setter function for updating the audit data (selectedAudit or secondAudit).
      * @param {string} errorMessage - Error message to display if the API request fails.
      */
-    const fetchAuditData = useCallback(async (auditId, setAudit, errorMessage) => {
+    const fetchAuditData = useCallback(async (auditId, setAudit, setError) => {
         try {
             const progressResponse = await api.get(`/v1/audits/${auditId}/progress`);
-
+    
+            let categoryProgress = (progressResponse.data.categoryProgress || []).map(category => ({
+                categoryName: category.categoryName,
+                currentCategoryProgress: category.currentCategoryProgress,
+            }));
+    
+            // Platzhalterkategorien hinzufügen, wenn weniger als 3 vorhanden sind
+            while (categoryProgress.length < 3) {
+                categoryProgress.push({
+                    categoryName: "", // Leerer Name für Platzhalter
+                    currentCategoryProgress: 0, // Fortschritt auf 0 setzen
+                });
+            }
+    
             const auditData = {
                 id: auditId,
                 name: allAudits.find(a => a.id === parseInt(auditId))?.name || `Audit ${auditId}`,
                 overallProgress: progressResponse.data.currentAuditProgress || 0,
-                categoryProgress: (progressResponse.data.categoryProgress || []).map(category => ({
-                    categoryName: category.categoryName,
-                    currentCategoryProgress: category.currentCategoryProgress,
-                })),
+                categoryProgress: categoryProgress,
             };
-
+    
             setAudit(auditData);
         } catch (error) {
             const errorMessage = handleApiError(error); // Use handleApiError
