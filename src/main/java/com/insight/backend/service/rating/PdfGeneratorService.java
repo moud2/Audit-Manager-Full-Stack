@@ -58,7 +58,7 @@ public class PdfGeneratorService {
                 Font categoryFont = new Font(Font.HELVETICA, 12, Font.BOLD, Color.WHITE);
                 PdfPTable categoryTable = new PdfPTable(1);
                 PdfPCell categoryCell = new PdfPCell(new Phrase(categoryName, categoryFont));
-                categoryCell.setBackgroundColor(new Color(100, 150, 255));
+                categoryCell.setBackgroundColor(new Color(196, 23, 31));
                 categoryCell.setPadding(5);
                 categoryCell.setBorder(Rectangle.NO_BORDER);
                 categoryTable.addCell(categoryCell);
@@ -102,7 +102,7 @@ public class PdfGeneratorService {
 
                         // Highlight the selected point
                         if ((rating.getPoints() != null && i == rating.getPoints()) || (i == 0 && rating.getNa())) {
-                            pointCell.setBackgroundColor(new Color(100, 255, 100));
+                            pointCell.setBackgroundColor(new Color(224, 224, 224));
                         }
 
                         pointsTable.addCell(pointCell);
