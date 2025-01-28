@@ -1,5 +1,22 @@
 describe('ManageCategoriesAndQuestions Page', () => {
     beforeEach(() => {
+        cy.intercept('GET', '/api/v1/categories', {
+            statusCode: 200,
+            body: [
+                {
+                    id: 1,
+                    name: 'Category 1',
+                },
+                {
+                    id: 2,
+                    name: 'Category 2',
+                },
+                {
+                    id: 3,
+                    name: 'Category 3',
+                },
+            ],
+        }).as('getCategories');
         cy.visit('http://localhost:5173/#/manage-categories-and-questions');
     });
 
