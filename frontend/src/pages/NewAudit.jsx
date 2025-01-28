@@ -18,6 +18,7 @@ export function NewAudit() {
     const [name, setName] = useState("");
     const [customerName, setCustomerName] = useState("");
     const [loading, setLoading] = useState(true);
+    const [processing, setProcessing] = useState(false);
     const [error, setError] = useState(null);
     const [validationError, setValidationError] = useState(null); // Validation messages
     const [successMessage, setSuccessMessage] = useState(null); // Success message
@@ -38,7 +39,7 @@ export function NewAudit() {
             return;
         }
 
-        setLoading(true); // Start loading for the creation process
+        setProcessing(true);
         api
             .post("/v1/audits/new", {
                 name: name,
@@ -47,18 +48,25 @@ export function NewAudit() {
             })
             .then((response) => {
                 setSuccessMessage(`Audit "${response.data.name}" wurde erfolgreich erstellt!`);
+
+                setTimeout(() => {
+                    setProcessing(false);
+                    setLoading(true);
+                }, 2000);
+
                 setError(null); // Clear any previous errors
 
                 // Navigate after timeout
                 setTimeout(() => {
                     navigate("/perform-audit/" + response.data.id);
+                    setLoading(false);
                 }, 2500);
             })
             .catch((err) => {
                 const errorMessage = handleApiError(err); // Use handleApiError
                 setError(errorMessage);
+                setLoading(false);
             })
-            .finally(() => setLoading(false)); // End loading
     };
 
     const handleNameChange = (e) => {
@@ -151,6 +159,7 @@ export function NewAudit() {
                 <div className="flex justify-end">
                     <Button
                         onClick={handleCreateAuditClick}
+                        disabled={processing}
                     >
                         Audit erstellen
                     </Button>
