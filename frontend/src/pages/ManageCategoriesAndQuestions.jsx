@@ -1,15 +1,15 @@
-import {LayoutDefault} from "../layouts/LayoutDefault.jsx";
-import {Button} from "@mui/material";
+import { LayoutDefault } from "../layouts/LayoutDefault.jsx";
+import { Button } from "@mui/material";
 import Title from "../components/Textareas/Title.jsx";
 import { CustomAlert } from "../components/ErrorHandling/CustomAlert";
 import CategoryQuestionCard from "../components/CategoryQuestionCard/CategoryQuestionCard.jsx";
-import {Fragment, useCallback, useEffect, useState} from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import api from "../api.js";
 import NewQuestionDialog from "../components/CategoryQuestionCard/NewQuestionDialog.jsx";
 import AddIcon from "@mui/icons-material/Add";
 import NewCategoryDialog from "../components/CategoryQuestionCard/NewCategoryDialog.jsx";
 
-const LazyCategoryQuestionCard = ({category, availableCategories = []}) => {
+const LazyCategoryQuestionCard = ({ category, availableCategories = [], setErrorMessage, setSuccessMessage }) => {
     const [questions, setQuestions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [openedOnce, setOpenedOnce] = useState(false);
@@ -20,20 +20,25 @@ const LazyCategoryQuestionCard = ({category, availableCategories = []}) => {
             await fetchQuestions();
             setOpenedOnce(true);
         }
-    }
+    };
 
     const fetchQuestions = useCallback(() => {
         setLoading(true);
-        return api.get(`/v1/categories/${category.id}/questions`).then((response) => {
-            setQuestions(response.data);
-        }).finally(() => {
-            setLoading(false)
-        })
-    }, [category])
+        return api.get(`/v1/categories/${category.id}/questions`)
+            .then((response) => {
+                setQuestions(response.data);
+            })
+            .catch(() => {
+                setErrorMessage("Fehler beim Laden der Fragen.");
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    }, [category, setErrorMessage]);
 
     const handleAddQuestion = () => {
-        setNewQuestionDialogOpen(true)
-    }
+        setNewQuestionDialogOpen(true);
+    };
 
     // const handleDeleteQuestion = (question) => {
     //     alert('Delete Question with id ' + question.id);
@@ -41,31 +46,42 @@ const LazyCategoryQuestionCard = ({category, availableCategories = []}) => {
 
 
     function handleCreate(newQuestion) {
-        api.post('/v1/questions/new', {
+        api.post("/v1/questions/new", {
             categoryId: newQuestion.category,
-            name: newQuestion.name
-        }).then(response => {
-            if(newQuestion.category !== category.id) return
-            setQuestions?.((oldQuestions)=>[...oldQuestions, response.data])
-        }).catch(err => {
-            alert('Error creating question') // TODO
-        }).finally(()=>{
-            setNewQuestionDialogOpen(false)
+            name: newQuestion.name,
         })
+            .then((response) => {
+                if (newQuestion.category !== category.id) return;
+                setQuestions?.((oldQuestions) => [...oldQuestions, response.data]);
+                setSuccessMessage("Frage erfolgreich hinzugefügt.");
+            })
+            .catch(() => {
+                setErrorMessage("Fehler beim Erstellen der Frage.");
+            })
+            .finally(() => {
+                setNewQuestionDialogOpen(false);
+            });
     }
 
     return (
         <Fragment>
-            <NewQuestionDialog open={newQuestionDialogOpen} initialCategory={category.id}
-                               availableCategories={availableCategories}
-                               onSubmit={handleCreate}
-                               onClose={() => setNewQuestionDialogOpen(false)}></NewQuestionDialog>
-            <CategoryQuestionCard category={category} questions={questions} onOpen={handleOpen}
-                                  onAddQuestion={handleAddQuestion}>
+            <NewQuestionDialog
+                open={newQuestionDialogOpen}
+                initialCategory={category.id}
+                availableCategories={availableCategories}
+                onSubmit={handleCreate}
+                onClose={() => setNewQuestionDialogOpen(false)}
+            />
+            <CategoryQuestionCard
+                category={category}
+                questions={questions}
+                onOpen={handleOpen}
+                onAddQuestion={handleAddQuestion}
+            >
                 {loading ? <div>Loading...</div> : undefined}
             </CategoryQuestionCard>
         </Fragment>
-    )
+    );
 }
 
 /**
@@ -132,7 +148,7 @@ export function ManageCategoriesAndQuestions() {
         formData.append("file", file);
 
         try {
-            const response = await fetch(((import.meta.env.VITE_BACKEND_URL || "/api") + "/v1/database/import"), {
+            const response = await fetch((import.meta.env.VITE_BACKEND_URL || "/api") + "/v1/database/import", {
                 method: "POST",
                 body: formData,
             });
@@ -157,7 +173,7 @@ export function ManageCategoriesAndQuestions() {
     const handleButtonClick = () => {
         if (showFileInput) {
             handleFileUpload();
-            setShowFileInput(false)
+            setShowFileInput(false);
         } else {
             setShowFileInput(true);
         }
@@ -168,37 +184,40 @@ export function ManageCategoriesAndQuestions() {
 
     const fetchCategories = useCallback(() => {
         setCategoriesLoading(true);
-        return api.get('/v1/categories').then((response) => {
-            setCategories(response.data);
-        }).finally(() => {
-            setCategoriesLoading(false);
-        })
-    }, [])
+        return api.get("/v1/categories")
+            .then((response) => {
+                setCategories(response.data);
+            })
+            .finally(() => {
+                setCategoriesLoading(false);
+            });
+    }, []);
 
     useEffect(() => {
-        fetchCategories()
+        fetchCategories();
     }, [fetchCategories]);
 
-
-    const handleAddedQuestion = ()=>{
-        fetchCategories()
-    }
+    const handleAddedQuestion = () => {
+        fetchCategories();
+    };
 
     const [newCategoryDialogOpen, setNewCategoryDialogOpen] = useState(false);
 
-    const handleNewCategory = (category)=>{
-        api.post("/v1/categories/new" , {
+    const handleNewCategory = (category) => {
+        api.post("/v1/categories/new", {
             name: category.name,
-        }).then((response) => {
-            setCategories((oldCategories)=>[...oldCategories, response.data])
-            // todo: success message
-        }).catch((err) => {
-            alert("Fehler beim Erstellen der Kategorie. :(");
-            // todo: error
-        }).finally(()=>{
-            setNewCategoryDialogOpen(false)
         })
-    }
+            .then((response) => {
+                setCategories((oldCategories) => [...oldCategories, response.data]);
+                setSuccessMessage("Kategorie erfolgreich hinzugefügt.");
+            })
+            .catch(() => {
+                setErrorMessage("Fehler beim Erstellen der Kategorie.");
+            })
+            .finally(() => {
+                setNewCategoryDialogOpen(false);
+            });
+    };
 
     return (
         <LayoutDefault>
@@ -242,24 +261,39 @@ export function ManageCategoriesAndQuestions() {
                 {showFileInput && (
                     <div>
                         <input
-                            type="file"
-                            accept=".csv"
-                            onChange={handleFileChange}
+                        type="file"
+                        accept=".csv"
+                        onChange={handleFileChange}
                         />
                     </div>
                 )}
             </div>
             <section className="flex flex-col gap-2 max-w-6xl mx-auto p-2">
-                <NewCategoryDialog open={newCategoryDialogOpen} onClose={()=>setNewCategoryDialogOpen(false)} onSubmit={handleNewCategory}></NewCategoryDialog>
+                <NewCategoryDialog
+                    open={newCategoryDialogOpen}
+                    onClose={() => setNewCategoryDialogOpen(false)}
+                    onSubmit={handleNewCategory}
+                />
                 <Button
                     fullWidth
                     startIcon={<AddIcon />}
-                    onClick={()=>setNewCategoryDialogOpen(true)}
+                    onClick={() => setNewCategoryDialogOpen(true)}
                 >
                     Kategorie hinzufügen
                 </Button>
-                {categoriesLoading ? <div>Loading...</div> : categories.map((category, index) =>
-                    <LazyCategoryQuestionCard key={category.id} category={category} availableCategories={categories} onAddedQuestion={handleAddedQuestion}/>)}
+                {categoriesLoading ? (
+                    <div>Loading...</div>
+                ) : (
+                    categories.map((category) => (
+                        <LazyCategoryQuestionCard
+                            key={category.id}
+                            category={category}
+                            availableCategories={categories}
+                            setErrorMessage={setErrorMessage}
+                            setSuccessMessage={setSuccessMessage}
+                        />
+                    ))
+                )}
             </section>
         </LayoutDefault>
     );
