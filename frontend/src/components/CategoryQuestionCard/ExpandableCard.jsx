@@ -38,6 +38,7 @@ export default function ExpandableCard({children, onExpandChange, title}) {
     return (
         <Card sx={{padding: 0}}>
             <CardHeader
+                data-cy="expandable-card-title"
                 title={title}
                 action={<ExpandMore
                     expand={expanded}
@@ -45,7 +46,7 @@ export default function ExpandableCard({children, onExpandChange, title}) {
                     aria-expanded={expanded}
                     aria-label="show more"
                 >
-                    <ExpandMoreOutlined />
+                    <ExpandMoreOutlined data-cy="expandable-card-button"/>
                 </ExpandMore>}
             >
             </CardHeader>

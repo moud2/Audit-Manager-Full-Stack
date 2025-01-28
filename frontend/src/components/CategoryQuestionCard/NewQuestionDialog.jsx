@@ -1,4 +1,4 @@
-import {BaseDialog} from "./BaseDialog.jsx";
+import BaseDialog from "./BaseDialog.jsx";
 import {QuestionForm} from "../QuestionForm/QuestionForm.jsx";
 import {useState} from "react";
 
