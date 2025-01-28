@@ -86,4 +86,21 @@ public class RatingController {
         List<RatingDTO> ratingDTOs = ratingMapper.convertToRatingDTOs(ratings);
         return ResponseEntity.ok(ratingDTOs);
     }
+
+    /**
+     * GET request for getting a pdf export.
+     *
+     * @return a ResponseEntity containing link to download a pdf
+     */
+
+    @GetMapping("/api/v1/audits/{auditId}/export")
+    public ResponseEntity<Long> exportAudit(@PathVariable("auditId") long auditId) {
+        try {
+            // Debug: Nur die auditId zurückgeben
+            return ResponseEntity.ok(auditId);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }
