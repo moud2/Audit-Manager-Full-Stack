@@ -4,7 +4,7 @@ import com.insight.backend.exception.AuditNotFoundException;
 import com.insight.backend.exception.PdfGenerationException;
 import com.insight.backend.model.Audit;
 import com.insight.backend.model.Rating;
-import com.insight.backend.repository.AuditRepository;
+import com.insight.backend.service.audit.FindAuditService;
 import com.lowagie.text.*;
 import com.lowagie.text.Font;
 import com.lowagie.text.Rectangle;
@@ -20,15 +20,19 @@ import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @Service
 public class PdfGeneratorService {
+    private FindAuditService findAuditService;
 
     @Autowired
-    private AuditRepository auditRepository;
+    public PdfGeneratorService(FindAuditService findAuditService) {
+        this.findAuditService = findAuditService;
+    }
 
     public ByteArrayInputStream createPdf(long auditId) {
-        Audit audit = auditRepository.findById(auditId)
-                .orElseThrow(() -> new AuditNotFoundException(auditId));
+        Audit audit = findAuditService.findAuditById(auditId).orElseThrow(() -> new AuditNotFoundException(auditId));
+
 
         Set<Rating> ratings = new HashSet<>(audit.getRatings());
 
