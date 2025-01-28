@@ -3,7 +3,7 @@ import api from "../api.js";
 import { LayoutDefault } from "../layouts/LayoutDefault.jsx";
 import { Table } from "../components/Table/Table.jsx";
 import { useNavigate } from "react-router-dom";
-import {TextField, Alert, Collapse, IconButton, Button} from "@mui/material";
+import { TextField, Button } from "@mui/material";
 import Title from "../components/Textareas/Title.jsx";
 import { handleApiError } from "../utils/handleApiError";
 import { LoadingScreen } from "../components/LoadingState";
@@ -148,7 +148,7 @@ export function NewAudit() {
                         }
                     }}
                 />
-                <div className="flex justify-end mt-3 mr-10 ml-3 mb-20">
+                <div className="flex justify-end">
                     <Button
                         onClick={handleCreateAuditClick}
                     >

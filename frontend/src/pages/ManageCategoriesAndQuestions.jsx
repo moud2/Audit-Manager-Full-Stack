@@ -1,7 +1,8 @@
 import { LayoutDefault } from "../layouts/LayoutDefault.jsx";
-import {Button, Input} from "@mui/material";
+import { Button, Input } from "@mui/material";
 import Title from "../components/Textareas/Title.jsx";
-import {useState} from "react";
+import { useState } from "react";
+import { CustomAlert } from "../components/ErrorHandling/CustomAlert";
 
 /**
  * ManageCategoriesAndQuestions Component
@@ -15,63 +16,73 @@ import {useState} from "react";
 export function ManageCategoriesAndQuestions() {
     const [file, setFile] = useState(null);
     const [showFileInput, setShowFileInput] = useState(false);
-    const [uploadStatus, setUploadStatus] = useState('');
-
+    const [errorMessage, setErrorMessage] = useState(null);
+    const [successMessage, setSuccessMessage] = useState(null);
 
     /**
      * Handle the export questions button click.
-     *
-     * Creates an anchor element, sets the download attribute to trigger the download
-     * of the exported questions as a CSV file, and simulates a click to start the download.
      */
-    const handleExportQuestionsClick = () => {
-        const link = document.createElement('a');
-        link.target = "_blank";
-        link.href = (import.meta.env.VITE_BACKEND_URL || "/api") + "/v1/database/export";
-        link.setAttribute('download', 'DatabaseExport.csv');
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-    }
+    const handleExportQuestionsClick = async () => {
+        try {
+            const response = await fetch((import.meta.env.VITE_BACKEND_URL || "/api") + "/v1/database/export");
+    
+            if (!response.ok) {
+                throw new Error("Fehler beim Export der Daten. Der Server hat nicht erfolgreich geantwortet.");
+            }
+    
+            const blob = await response.blob();
+            const link = document.createElement("a");
+            link.href = window.URL.createObjectURL(blob);
+            link.setAttribute("download", "DatabaseExport.csv");
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+    
+            setSuccessMessage("Daten wurden erfolgreich exportiert.");
+            setErrorMessage(null); 
+        } catch (error) {
+            setErrorMessage(error.message || "Ein unbekannter Fehler ist aufgetreten.");
+            setSuccessMessage(null); 
+        }
+    };
+    
 
     /**
      * Handles the file selection event and sets the selected file to the state.
-     *
-     * @param {Event} e - The event triggered by the file input.
      */
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
-    }
+    };
 
     /**
      * Uploads the selected file to the backend using a POST request.
-     *
-     * @returns {Promise<void>} A promise that resolves when the upload is completed.
      */
     const handleFileUpload = async () => {
-        const formData = new FormData();
-        formData.append('file', file);
-
         if (!file) {
-            alert("Bitte wähle eine Datei aus!");
+            setErrorMessage("Bitte wählen Sie eine Datei aus!");
+            setSuccessMessage(null);
             return;
         }
 
+        const formData = new FormData();
+        formData.append("file", file);
+
         try {
-            const response = await fetch(((import.meta.env.VITE_BACKEND_URL || "/api") + '/v1/database/import'), {
-                method: 'POST',
+            const response = await fetch(((import.meta.env.VITE_BACKEND_URL || "/api") + "/v1/database/import"), {
+                method: "POST",
                 body: formData,
             });
 
-
             if (response.ok) {
-                setUploadStatus('Upload erfolgreich!');
+                setSuccessMessage("Upload erfolgreich!");
+                setErrorMessage(null);
             } else {
-                setUploadStatus('Upload fehlgeschlagen.');
+                setErrorMessage("Upload fehlgeschlagen.");
+                setSuccessMessage(null);
             }
         } catch (error) {
-            console.error('Fehler beim Hochladen:', error);
-            setUploadStatus('Ein Fehler ist aufgetreten.');
+            setErrorMessage("Ein Fehler ist beim Hochladen aufgetreten.");
+            setSuccessMessage(null);
         }
     };
 
@@ -87,10 +98,28 @@ export function ManageCategoriesAndQuestions() {
         }
     };
 
-
     return (
         <LayoutDefault>
             <Title>Kategorien und Fragen verwalten</Title>
+            {/* Fehler-Alert */}
+            <CustomAlert
+                show={!!errorMessage}
+                severity="error"
+                message={errorMessage}
+                onClose={() => setErrorMessage(null)}
+                sx={{
+                    backgroundColor: "#f8d7da",
+                    color: "#721c24",
+                    border: "1px solid #f5c6cb",
+                }}
+            />
+            {/* Erfolgs-Alert */}
+            <CustomAlert
+                show={!!successMessage}
+                severity="success"
+                message={successMessage}
+                onClose={() => setSuccessMessage(null)}
+            />
             <div className="flex flex-col items-center space-y-4">
                 <div className="flex justify-center space-x-4">
                     <Button
@@ -117,9 +146,7 @@ export function ManageCategoriesAndQuestions() {
                         />
                     </div>
                 )}
-
-                {uploadStatus && <p className="text-sm text-red-600">{uploadStatus}</p>}
             </div>
         </LayoutDefault>
-    )
+    );
 }
