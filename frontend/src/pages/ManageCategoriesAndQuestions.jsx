@@ -1,5 +1,5 @@
 import { LayoutDefault } from "../layouts/LayoutDefault.jsx";
-import { Button, Input } from "@mui/material";
+import {Button} from "@mui/material";
 import Title from "../components/Textareas/Title.jsx";
 import { useState } from "react";
 import { CustomAlert } from "../components/ErrorHandling/CustomAlert";
@@ -93,6 +93,7 @@ export function ManageCategoriesAndQuestions() {
     const handleButtonClick = () => {
         if (showFileInput) {
             handleFileUpload();
+            setShowFileInput(false)
         } else {
             setShowFileInput(true);
         }
@@ -139,7 +140,7 @@ export function ManageCategoriesAndQuestions() {
                 {/*File input is only shown after clicking the "Daten importieren" Button*/}
                 {showFileInput && (
                     <div>
-                        <Input
+                        <input
                             type="file"
                             accept=".csv"
                             onChange={handleFileChange}
