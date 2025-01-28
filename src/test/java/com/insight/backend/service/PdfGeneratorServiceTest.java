@@ -8,7 +8,7 @@ import com.insight.backend.model.Audit;
 import com.insight.backend.model.Category;
 import com.insight.backend.model.Question;
 import com.insight.backend.model.Rating;
-import com.insight.backend.repository.AuditRepository;
+import com.insight.backend.service.audit.FindAuditService;
 import com.insight.backend.service.rating.PdfGeneratorService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 class PdfGeneratorServiceTest {
 
     @Mock
-    private AuditRepository auditRepository;
+    private FindAuditService findAuditService;
 
     @InjectMocks
     private PdfGeneratorService pdfGeneratorService;
@@ -62,7 +62,7 @@ class PdfGeneratorServiceTest {
         mockAudit.setRatings(ratings);
 
         // Mock Repository Behavior
-        when(auditRepository.findById(1L)).thenReturn(java.util.Optional.of(mockAudit));
+        when(findAuditService.findAuditById(1L)).thenReturn(java.util.Optional.of(mockAudit));
 
         // Call the Service
         ByteArrayInputStream result = pdfGeneratorService.createPdf(1L);
