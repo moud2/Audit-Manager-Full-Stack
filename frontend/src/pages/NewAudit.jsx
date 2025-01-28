@@ -148,7 +148,7 @@ export function NewAudit() {
                         }
                     }}
                 />
-                <div className="flex justify-end mt-3 mr-10 ml-3 mb-20">
+                <div className="flex justify-end">
                     <Button
                         onClick={handleCreateAuditClick}
                     >
