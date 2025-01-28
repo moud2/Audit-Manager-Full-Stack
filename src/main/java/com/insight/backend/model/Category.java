@@ -1,6 +1,7 @@
 package com.insight.backend.model;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -29,7 +30,7 @@ public class Category {
 
     @JsonIgnore
     @OneToMany(mappedBy = "category")
-    private Set<Question> questions;
+    private Set<Question> questions = new HashSet<>();
 
     private LocalDateTime deletedAt;
 
