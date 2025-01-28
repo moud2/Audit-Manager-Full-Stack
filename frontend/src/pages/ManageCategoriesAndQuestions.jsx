@@ -1,8 +1,7 @@
 import { LayoutDefault } from "../layouts/LayoutDefault.jsx";
-import { Button } from "@mui/material";
+import {Button, Input} from "@mui/material";
 import Title from "../components/Textareas/Title.jsx";
 import {useState} from "react";
-import {AlertWithMessage} from "../components/ErrorHandling/index.js";
 
 /**
  * ManageCategoriesAndQuestions Component
@@ -14,6 +13,10 @@ import {AlertWithMessage} from "../components/ErrorHandling/index.js";
  * @constructor
  */
 export function ManageCategoriesAndQuestions() {
+    const [file, setFile] = useState(null);
+    const [showFileInput, setShowFileInput] = useState(false);
+    const [uploadStatus, setUploadStatus] = useState('');
+
 
     /**
      * Handle the export questions button click.
@@ -32,31 +35,90 @@ export function ManageCategoriesAndQuestions() {
     }
 
     /**
-     * Handle the import questions button click.
+     * Handles the file selection event and sets the selected file to the state.
      *
-     * Placeholder for functionality to import questions.
-     * To be implemented in the future.
+     * @param {Event} e - The event triggered by the file input.
      */
-    const handleImportQuestionsClick = async () => {
-        // ToDo: implement functionality
+    const handleFileChange = (e) => {
+        setFile(e.target.files[0]);
     }
+
+    /**
+     * Uploads the selected file to the backend using a POST request.
+     *
+     * @returns {Promise<void>} A promise that resolves when the upload is completed.
+     */
+    const handleFileUpload = async () => {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        if (!file) {
+            alert("Bitte wähle eine Datei aus!");
+            return;
+        }
+
+        try {
+            const response = await fetch(((import.meta.env.VITE_BACKEND_URL || "/api") + '/v1/database/import'), {
+                method: 'POST',
+                body: formData,
+            });
+
+
+            if (response.ok) {
+                setUploadStatus('Upload erfolgreich!');
+            } else {
+                setUploadStatus('Upload fehlgeschlagen.');
+            }
+        } catch (error) {
+            console.error('Fehler beim Hochladen:', error);
+            setUploadStatus('Ein Fehler ist aufgetreten.');
+        }
+    };
+
+    /**
+     * Toggles the file input visibility and triggers the file upload process
+     * if the file input is already visible.
+     */
+    const handleButtonClick = () => {
+        if (showFileInput) {
+            handleFileUpload();
+        } else {
+            setShowFileInput(true);
+        }
+    };
+
 
     return (
         <LayoutDefault>
             <Title>Kategorien und Fragen verwalten</Title>
-            <div className="flex justify-center space-x-4">
-                <Button
-                    data-cy="ExportQuestionsButton"
-                    onClick={handleExportQuestionsClick}
-                >
-                    Daten exportieren
-                </Button>
-                <Button
-                    data-cy="ImportQuestionsButton"
-                    onClick={handleImportQuestionsClick}
-                >
-                    Daten importieren
-                </Button>
+            <div className="flex flex-col items-center space-y-4">
+                <div className="flex justify-center space-x-4">
+                    <Button
+                        data-cy="ExportQuestionsButton"
+                        onClick={handleExportQuestionsClick}
+                    >
+                        Daten exportieren
+                    </Button>
+                    <Button
+                        data-cy="ImportQuestionsButton"
+                        onClick={handleButtonClick}
+                    >
+                        {showFileInput ? "Hochladen" : "Daten importieren"}
+                    </Button>
+                </div>
+
+                {/*File input is only shown after clicking the "Daten importieren" Button*/}
+                {showFileInput && (
+                    <div>
+                        <Input
+                            type="file"
+                            accept=".csv"
+                            onChange={handleFileChange}
+                        />
+                    </div>
+                )}
+
+                {uploadStatus && <p className="text-sm text-red-600">{uploadStatus}</p>}
             </div>
         </LayoutDefault>
     )
