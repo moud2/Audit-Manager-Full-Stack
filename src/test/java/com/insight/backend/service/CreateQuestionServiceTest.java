@@ -76,6 +76,7 @@ public class CreateQuestionServiceTest {
         assertEquals("Question Name", response.getName());
         assertNotNull(response.getId());
         assertEquals(1L, response.getId());
+        assertEquals(category1, response.getCategory());
 
         // verify function of Mocks
         verify(findCategoryService, times(1)).findCategoryById(1L);
