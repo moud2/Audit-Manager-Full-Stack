@@ -131,6 +131,6 @@ public class Category {
      * @return true if the category is deleted, false otherwise.
      */
     public boolean isDeleted(){
-        return deletedAt !=null; 
+        return deletedAt !=null;
     }
 }
