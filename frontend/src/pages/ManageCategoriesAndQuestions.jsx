@@ -72,7 +72,6 @@ const LazyCategoryQuestionCard = ({category, availableCategories = []}) => {
         api.delete(`/v1/questions/${deleteQuestion.id}`, {
         }).then(response => {
             setQuestions?.((oldQuestions) => oldQuestions.filter(question => question.id !== deleteQuestion.id))
-            // todo: show success message
         }).catch(err => {
             alert('Error delete question') // TODO
         }).finally(()=>{
@@ -83,11 +82,13 @@ const LazyCategoryQuestionCard = ({category, availableCategories = []}) => {
     const handleDeleteCat = (deleteCategory)=>{
         api.delete(`/v1/categories/${deleteCategory.id}`, {
         }).then((response) => {
-            setCategories?.((oldCategories) => oldCategories.filter(category => category.id !== deleteCategory.id))
-            // todo: show success message
+            //mangelhafte Variante:
+            window.location.reload(); //läd die Seite neu
+            
+            //Fehlerhafte Variante: setCategories ist nicht erreichbar
+            //setCategories?.((oldCategories) => oldCategories.filter(category => category.id !== deleteCategory.id))
         }).catch((err) => {
-            alert("Fehler beim Löschen der Kategorie: ");
-            // todo: error
+            alert("Error delete category"); // TODO
         }).finally(()=>{
             setDeleteCategoryDialogOpen(false)
         })
