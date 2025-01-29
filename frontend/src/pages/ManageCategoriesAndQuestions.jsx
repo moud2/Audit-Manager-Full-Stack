@@ -8,12 +8,18 @@ import api from "../api.js";
 import NewQuestionDialog from "../components/CategoryQuestionCard/NewQuestionDialog.jsx";
 import AddIcon from "@mui/icons-material/Add";
 import NewCategoryDialog from "../components/CategoryQuestionCard/NewCategoryDialog.jsx";
+import LoadingScreen from "../components/LoadingState/LoadingScreen";
+import { useLoadingProgress } from "../components/LoadingState/useLoadingProgress";
+import { CircularProgress } from "@mui/material";
 
 const LazyCategoryQuestionCard = ({ category, availableCategories = [], setErrorMessage, setSuccessMessage }) => {
     const [questions, setQuestions] = useState([]);
     const [loading, setLoading] = useState(true);
+    const questionLoadingProgress = useLoadingProgress(loading);
     const [openedOnce, setOpenedOnce] = useState(false);
     const [newQuestionDialogOpen, setNewQuestionDialogOpen] = useState(false);
+    const [categoriesLoading, setCategoriesLoading] = useState(true);
+    
 
     const handleOpen = async () => {
         if (!openedOnce) {
@@ -78,7 +84,7 @@ const LazyCategoryQuestionCard = ({ category, availableCategories = [], setError
                 onOpen={handleOpen}
                 onAddQuestion={handleAddQuestion}
             >
-                {loading ? <div>Loading...</div> : undefined}
+                {loading ? <CircularProgress size={24} color="error" /> : null}
             </CategoryQuestionCard>
         </Fragment>
     );
@@ -98,6 +104,9 @@ export function ManageCategoriesAndQuestions() {
     const [showFileInput, setShowFileInput] = useState(false);
     const [errorMessage, setErrorMessage] = useState(null);
     const [successMessage, setSuccessMessage] = useState(null);
+    const [categories, setCategories] = useState([]);
+    const [categoriesLoading, setCategoriesLoading] = useState(true); // 💡 Erst `categoriesLoading` definieren
+    const categoryLoadingProgress = useLoadingProgress(categoriesLoading);
 
     /**
      * Handle the export questions button click.
@@ -179,14 +188,15 @@ export function ManageCategoriesAndQuestions() {
         }
     };
 
-    const [categories, setCategories] = useState([]);
-    const [categoriesLoading, setCategoriesLoading] = useState(true);
 
     const fetchCategories = useCallback(() => {
         setCategoriesLoading(true);
         return api.get("/v1/categories")
             .then((response) => {
                 setCategories(response.data);
+            })
+            .catch(() => {
+                setErrorMessage("Fehler beim Laden der Kategorien.");
             })
             .finally(() => {
                 setCategoriesLoading(false);
@@ -282,7 +292,7 @@ export function ManageCategoriesAndQuestions() {
                     Kategorie hinzufügen
                 </Button>
                 {categoriesLoading ? (
-                    <div>Loading...</div>
+                    <LoadingScreen progress={categoryLoadingProgress} message="Kategorien werden geladen..." small />
                 ) : (
                     categories.map((category) => (
                         <LazyCategoryQuestionCard
