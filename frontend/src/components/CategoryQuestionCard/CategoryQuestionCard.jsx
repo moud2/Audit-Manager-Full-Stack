@@ -10,7 +10,7 @@ export default function CategoryQuestionCard({onOpen, children, questions, categ
         }
     }
 
-    const handleDeleteCategory = (category)=>{
+    const handleDeleteCategory = ()=>{
         onDeleteCategory?.(category)
     }
 
@@ -24,7 +24,7 @@ export default function CategoryQuestionCard({onOpen, children, questions, categ
 
 
     return (
-        <ExpandableCard onExpandChange={handleExpandChange} title={category?.name} category={category} onDelete={handleDeleteCategory}>
+        <ExpandableCard onExpandChange={handleExpandChange} title={category?.name} onDelete={handleDeleteCategory}>
             {children ? children : <QuestionTable questions={questions} onNew={handleNew} onDelete={handleDelete}></QuestionTable>}
         </ExpandableCard>
     )

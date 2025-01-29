@@ -29,7 +29,7 @@ const ExpandMore = styled((props) => {
     ],
 }));
 
-export default function ExpandableCard({children, onExpandChange, title, category, onDelete}) {
+export default function ExpandableCard({children, onExpandChange, title, onDelete}) {
     const [expanded, setExpanded] = useState(false);
 
     const handleExpandClick = () => {
@@ -38,7 +38,7 @@ export default function ExpandableCard({children, onExpandChange, title, categor
     };
 
         const handleDeleteClick = () => {
-        onDelete?.(category);
+        onDelete?.();
     };
 
 
