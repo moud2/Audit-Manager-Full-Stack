@@ -8,12 +8,20 @@ import api from "../api.js";
 import NewQuestionDialog from "../components/CategoryQuestionCard/NewQuestionDialog.jsx";
 import AddIcon from "@mui/icons-material/Add";
 import NewCategoryDialog from "../components/CategoryQuestionCard/NewCategoryDialog.jsx";
+import DeleteQuestionDialog from "../components/CategoryQuestionCard/DeleteQuestionDialog.jsx";
+import DeleteCategoryDialog from "../components/CategoryQuestionCard/DeleteCategoryDialog.jsx";
+
 
 const LazyCategoryQuestionCard = ({category, availableCategories = []}) => {
     const [questions, setQuestions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [openedOnce, setOpenedOnce] = useState(false);
     const [newQuestionDialogOpen, setNewQuestionDialogOpen] = useState(false);
+    const [deleteQuestionDialogOpen, setDeleteQuestionDialogOpen] = useState(false);
+    const [deleteQuestion, setDeleteQuestion] = useState();    
+    const [deleteCategoryDialogOpen, setDeleteCategoryDialogOpen] = useState(false);
+    const [deleteCategory, setDeleteCategory] = useState();
+
 
     const handleOpen = async () => {
         if (!openedOnce) {
@@ -35,9 +43,15 @@ const LazyCategoryQuestionCard = ({category, availableCategories = []}) => {
         setNewQuestionDialogOpen(true)
     }
 
-    // const handleDeleteQuestion = (question) => {
-    //     alert('Delete Question with id ' + question.id);
-    // }
+    const handleDeleteQuestion = (question) => {
+        setDeleteQuestionDialogOpen(true),
+        setDeleteQuestion(question)
+    }
+
+    const handleDeleteCategory = (category) => {
+        setDeleteCategoryDialogOpen(true),
+        setDeleteCategory(category)
+    }
 
 
     function handleCreate(newQuestion) {
@@ -52,7 +66,33 @@ const LazyCategoryQuestionCard = ({category, availableCategories = []}) => {
         }).finally(()=>{
             setNewQuestionDialogOpen(false)
         })
+    }    
+
+    function handleDeleteQues(deleteQuestion) {
+        api.delete(`/v1/questions/${deleteQuestion.id}`, {
+        }).then(response => {
+            setQuestions?.((oldQuestions) => oldQuestions.filter(question => question.id !== deleteQuestion.id))
+            // todo: show success message
+        }).catch(err => {
+            alert('Error delete question') // TODO
+        }).finally(()=>{
+            setDeleteQuestionDialogOpen(false)
+        })
     }
+
+    const handleDeleteCat = (deleteCategory)=>{
+        api.delete(`/v1/categories/${deleteCategory.id}`, {
+        }).then((response) => {
+            setCategories?.((oldCategories) => oldCategories.filter(category => category.id !== deleteCategory.id))
+            // todo: show success message
+        }).catch((err) => {
+            alert("Fehler beim Löschen der Kategorie: ");
+            // todo: error
+        }).finally(()=>{
+            setDeleteCategoryDialogOpen(false)
+        })
+    }
+
 
     return (
         <Fragment>
@@ -60,8 +100,18 @@ const LazyCategoryQuestionCard = ({category, availableCategories = []}) => {
                                availableCategories={availableCategories}
                                onSubmit={handleCreate}
                                onClose={() => setNewQuestionDialogOpen(false)}></NewQuestionDialog>
+            <DeleteQuestionDialog open={deleteQuestionDialogOpen} 
+                                  deleteQuestion={deleteQuestion}
+                                  onSubmit={handleDeleteQues}
+                                  onClose={() => setDeleteQuestionDialogOpen(false)}></DeleteQuestionDialog>
+            <DeleteCategoryDialog open={deleteCategoryDialogOpen} 
+                                  deleteCategory={deleteCategory}
+                                  onSubmit={handleDeleteCat}
+                                  onClose={()=>setDeleteCategoryDialogOpen(false)}></DeleteCategoryDialog>
             <CategoryQuestionCard category={category} questions={questions} onOpen={handleOpen}
-                                  onAddQuestion={handleAddQuestion}>
+                                  onAddQuestion={handleAddQuestion}
+                                  onDeleteCategory={handleDeleteCategory}
+                                  onDeleteQuestion={handleDeleteQuestion}>
                 {loading ? <div>Loading...</div> : undefined}
             </CategoryQuestionCard>
         </Fragment>

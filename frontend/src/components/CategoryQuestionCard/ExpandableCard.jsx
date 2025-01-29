@@ -2,6 +2,8 @@ import {Card, CardActions, CardContent, CardHeader, Collapse, IconButton} from "
 import {styled} from "@mui/material/styles";
 import {useState} from "react";
 import {ExpandMoreOutlined} from "@mui/icons-material";
+import DeleteIcon from '@mui/icons-material/Delete';
+
 
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -27,7 +29,7 @@ const ExpandMore = styled((props) => {
     ],
 }));
 
-export default function ExpandableCard({children, onExpandChange, title}) {
+export default function ExpandableCard({children, onExpandChange, title, category, onDelete}) {
     const [expanded, setExpanded] = useState(false);
 
     const handleExpandClick = () => {
@@ -35,19 +37,32 @@ export default function ExpandableCard({children, onExpandChange, title}) {
         setExpanded(!expanded);
     };
 
+        const handleDeleteClick = () => {
+        onDelete?.(category);
+    };
+
+
     return (
         <Card sx={{padding: 0}}>
-            <CardHeader
+            <CardHeader            
                 data-cy="expandable-card-title"
                 title={title}
-                action={<ExpandMore
-                    expand={expanded}
-                    onClick={handleExpandClick}
-                    aria-expanded={expanded}
-                    aria-label="show more"
-                >
-                    <ExpandMoreOutlined data-cy="expandable-card-button"/>
-                </ExpandMore>}
+                action={
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <IconButton onClick={handleDeleteClick}>
+                            <DeleteIcon />
+                        </IconButton>
+                                
+                        <ExpandMore
+                            expand={expanded}
+                            onClick={handleExpandClick}
+                            aria-expanded={expanded}
+                            aria-label="show more"
+                        >
+                            <ExpandMoreOutlined data-cy="expandable-card-button"/>
+                        </ExpandMore>
+                    </div>
+                }
             >
             </CardHeader>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
