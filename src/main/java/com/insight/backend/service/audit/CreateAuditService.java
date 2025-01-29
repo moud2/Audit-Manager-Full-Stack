@@ -63,13 +63,15 @@ public class CreateAuditService {
             Category category = findCategoryService.findCategoryById(categoryId).orElseThrow(()-> new NonExistentAuditCategoryException(categoryId));
 
             for (Question question : category.getQuestions()) {
+                if (question.getDeletedAt() != null) {
+                    continue;
+                }
+
                 Rating rating = new Rating();
                 rating.setQuestion(question);
                 rating.setAudit(audit);
                 ratings.add(rating);
             }
-
-
         }
 
         saveAuditService.saveAudit(audit);
