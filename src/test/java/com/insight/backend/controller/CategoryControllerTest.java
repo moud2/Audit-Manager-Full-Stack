@@ -186,7 +186,7 @@ public void testDeleteCategory_Success() throws Exception {
     when(findCategoryService.findCategoryById(1L)).thenReturn(Optional.of(category1));
     doNothing().when(deleteCategoryService).softDeleteCategory(category1);
 
-    mockMvc.perform(delete("/categories/1"))
+    mockMvc.perform(delete("/api/v1/categories/1"))
             .andExpect(status().isNoContent());
 
     verify(findCategoryService, times(1)).findCategoryById(1L);
@@ -206,7 +206,7 @@ public void testDeleteCategory_DeletionFailed() throws Exception {
     // Simulate failure in soft deletion
     doThrow(new IllegalArgumentException("Cannot delete category")).when(deleteCategoryService).softDeleteCategory(category1);
     
-    mockMvc.perform(MockMvcRequestBuilders.delete("/categories/1"))
+    mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/categories/1"))
             .andExpect(status().isInternalServerError())
             .andExpect(jsonPath("$.message").value("Category with ID 1 could not be deleted"));
 
@@ -224,7 +224,7 @@ public void testDeleteCategory_DeletionFailed() throws Exception {
 public void testDeleteCategory_NotFound() throws Exception {
     when(findCategoryService.findCategoryById(1L)).thenReturn(Optional.empty());
     
-    mockMvc.perform(delete("/categories/1"))
+    mockMvc.perform(delete("/api/v1/categories/1"))
             .andExpect(status().isNotFound())
             .andExpect(jsonPath("$.message").value("Category with the id '1' not found"));
 
