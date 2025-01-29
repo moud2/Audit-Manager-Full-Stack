@@ -2,7 +2,6 @@ package com.insight.backend.model;
 
 import java.time.LocalDateTime;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -82,17 +81,6 @@ public class Category {
     }
 
     /**
-     * Gets the set of questions that have not been deleted.
-     *
-     * @return Set of undeleted questions.
-     */
-    public Set<Question> getUndeletedQuestions() {
-        return questions.stream()
-                .filter(q -> q.getDeletedAt() == null)
-                .collect(Collectors.toSet());
-    }
-
-    /**
      * Sets the questions associated with this category.
      *
      * @param questions Set of questions to be linked to the category.
@@ -142,6 +130,6 @@ public class Category {
      * @return true if the category is deleted, false otherwise.
      */
     public boolean isDeleted(){
-        return deletedAt != null;
+        return deletedAt !=null;
     }
 }
