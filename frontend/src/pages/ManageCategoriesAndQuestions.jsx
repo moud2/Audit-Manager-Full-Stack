@@ -121,7 +121,7 @@ export function ManageCategoriesAndQuestions() {
             setSuccessMessage("Daten wurden erfolgreich exportiert.");
             setErrorMessage(null);
         } catch (error) {
-            setErrorMessage(error.message || "Ein unbekannter Fehler ist aufgetreten.");
+            setErrorMessage("Ein unbekannter Fehler ist aufgetreten.");
             setSuccessMessage(null);
         }
     };
