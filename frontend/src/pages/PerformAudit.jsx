@@ -134,7 +134,7 @@ export function PerformAudit() {
     const fetchProgress = useCallback(() => {
         api.get(`/v1/audits/${auditId}/progress`)
             .then(response => {
-                setProgress(response.data);
+                setProgress(response.data.categoryProgress.sort((a, b) => a.categoryId - b.categoryId));
             })
             .catch(err => {
                 console.error('Error fetching progress data:', err);
@@ -243,7 +243,7 @@ export function PerformAudit() {
 
     return (
         <LayoutDefault
-            progress={progress.categoryProgress}
+            progress={progress}
         >
             {patchError && <AlertWithMessage severity="error" title="Fehler" message={patchError} />}
             <Title>Audit durchführen</Title>
