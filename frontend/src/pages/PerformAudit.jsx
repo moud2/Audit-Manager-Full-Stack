@@ -216,9 +216,21 @@ export function PerformAudit() {
         ]);
     }, [debouncedPatchQuestion]);
 
-
-
-
+    /**
+     * useEffect hook to fetch and process audit ratings from the backend API.
+     * It is triggered whenever the `auditId` changes.
+     *
+     * - Sets `loading` to `true` before making the API request.
+     * - Fetches the ratings data for the given `auditId`.
+     * - Transforms the received data and updates the `sortedQuestions` state.
+     * - If an error occurs, it is processed using `handleApiError` and stored in `error`.
+     * - Once the request completes (success or failure), `loading` is set to `false`.
+     *
+     * @type {EffectCallback}
+     *
+     * Dependencies:
+     * - `auditId`: Triggers the effect when it changes.
+     */
     useEffect(() => {
         setLoading(true);
         api.get(`/v1/audits/${auditId}/ratings`)
