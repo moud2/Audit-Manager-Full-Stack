@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.insight.backend.dto.AuditResponseDTO;
 import com.insight.backend.dto.NewAuditDTO;
+import com.insight.backend.exception.DuplicateCategoryIdException;
 import com.insight.backend.exception.NonExistentAuditCategoryException;
 import com.insight.backend.model.Audit;
 import com.insight.backend.model.Category;
@@ -50,7 +51,7 @@ public class CreateAuditService {
     public AuditResponseDTO createAudit(NewAuditDTO newAuditDTO) {
         // Validate for duplicate Category-IDs
         if (newAuditDTO.getCategories().size() != new HashSet<>(newAuditDTO.getCategories()).size()) {
-            throw new IllegalArgumentException("Duplicate Category-IDs are not allowed.");
+            throw new DuplicateCategoryIdException();
         }
         Audit audit = new Audit();
         audit.setName(newAuditDTO.getName());

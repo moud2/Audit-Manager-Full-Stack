@@ -1,5 +1,6 @@
 package com.insight.backend.controller;
 
+import com.insight.backend.exception.DatabaseSeedingException;
 import com.insight.backend.service.DatabaseSeederService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,12 +14,17 @@ public class DatabaseSeederController {
         this.databaseSeederService = databaseSeederService;
     }
 
+    /**
+     * Seeds the database with data from the seed files.
+     *
+     * @return a ResponseEntity containing a string confirming the seeding
+     */
     @GetMapping("/api/v1/database/seed")
     public ResponseEntity<String> seedDatabase() {
         try {
             databaseSeederService.seedDatabaseFromFiles();
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Error seeding database: " + e.getMessage());
+            throw new DatabaseSeedingException(e.getMessage());
         }
         return ResponseEntity.ok("Database seeded successfully");
     }

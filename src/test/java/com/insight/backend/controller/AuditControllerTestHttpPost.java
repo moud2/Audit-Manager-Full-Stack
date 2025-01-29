@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.Arrays;
 import java.util.Collections;
 
+import com.insight.backend.exception.DuplicateCategoryIdException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -182,13 +183,14 @@ public class AuditControllerTestHttpPost {
 
         // Mock the service to throw IllegalArgumentException
         when(createAuditService.createAudit(any(NewAuditDTO.class)))
-                .thenThrow(new IllegalArgumentException("Duplicate Category-IDs are not allowed."));
+                .thenThrow(new DuplicateCategoryIdException());
 
         mockMvc.perform(post("/api/v1/audits/new")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newAuditDTO)))
                 .andExpect(status().isBadRequest()) // Expecting status code 400
-                .andExpect(jsonPath("$").value("Duplicate Category-IDs are not allowed.")); // Error message validation
+                .andExpect(jsonPath("$.message").value("Duplicate Category-IDs are not allowed.")) // Fehlernachricht validieren
+                .andExpect(jsonPath("$.error").value("Bad Request")); // Überprüfung auf den Fehler-Typ
     }
 
 }

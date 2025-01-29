@@ -1,7 +1,10 @@
 package com.insight.backend.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
+import com.insight.backend.model.Category;
 
 /**
  * Data Transfer Object equivalent to JSON object of GET-Request /api/v1/audits and /api/v1/audits/new Response.
@@ -20,6 +23,12 @@ public class QuestionResponseDTO {
     @NotBlank(message = "Name cannot be blank")
     @Size(max = 255, message = "Name should be up to 4096 characters")
     private String name;
+
+    /**
+     * The category to which the question belongs.
+     */
+    @NotNull(message = "Category can not be null")
+    private Category category;
 
     /**
      * Getter method for ID.
@@ -55,5 +64,23 @@ public class QuestionResponseDTO {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * Getter method for Category.
+     *
+     * @return the category to which the question belongs
+     */
+    public Category getCategory() {
+        return category;
+    }
+
+    /**
+     * Setter method for Category.
+     *
+     * @param category the category to which the question belongs
+     */
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

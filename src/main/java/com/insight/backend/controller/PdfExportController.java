@@ -35,25 +35,18 @@ public class PdfExportController {
      */
 
     @GetMapping(path = "/api/v1/audits/{auditId}/export", produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<InputStreamResource> auditReport(@PathVariable("auditId") long auditId) throws IOException {
-        try {
+    public ResponseEntity<InputStreamResource> auditReport(@PathVariable("auditId") long auditId) {
+        // Generate PDF
+        ByteArrayInputStream bis = pdfGeneratorService.createPdf(auditId);
 
-            // Generate PDF
-            ByteArrayInputStream bis = pdfGeneratorService.createPdf(auditId);
+        // Set HTTP headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "inline; filename=Report.pdf");
 
-            // Set HTTP headers
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Content-Disposition", "inline; filename=Report.pdf");
-
-            // Return the PDF as a response
-            return ResponseEntity.ok()
-                    .headers(headers)
-                    .contentType(MediaType.APPLICATION_PDF)
-                    .body(new InputStreamResource(bis));
-
-        } catch (Exception e) {
-            // Temporary error handling
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        // Return the PDF as a response
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(new InputStreamResource(bis));
     }
 }

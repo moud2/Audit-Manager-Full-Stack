@@ -5,9 +5,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.insight.backend.model.Audit;
+import com.insight.backend.model.Category;
 import com.insight.backend.model.Question;
 import com.insight.backend.model.Rating;
-import com.insight.backend.repository.AuditRepository;
+import com.insight.backend.service.audit.FindAuditService;
 import com.insight.backend.service.rating.PdfGeneratorService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,7 @@ import static org.mockito.Mockito.when;
 class PdfGeneratorServiceTest {
 
     @Mock
-    private AuditRepository auditRepository;
+    private FindAuditService findAuditService;
 
     @InjectMocks
     private PdfGeneratorService pdfGeneratorService;
@@ -38,11 +39,16 @@ class PdfGeneratorServiceTest {
         mockAudit.setId(1L);
         mockAudit.setName("Sample Audit");
 
+        // Mock a Category
+        Category mockCategory = new Category();
+        mockCategory.setName("Sample Category");
+
+
         //Mock a Question
         Question mockQuestion = new Question();
         mockQuestion.setId(1L);
         mockQuestion.setName("Sample Question");
-
+        mockQuestion.setCategory(mockCategory);
         // Mock a Rating
         Rating mockRating = new Rating();
         mockRating.setId(1L);
@@ -56,7 +62,7 @@ class PdfGeneratorServiceTest {
         mockAudit.setRatings(ratings);
 
         // Mock Repository Behavior
-        when(auditRepository.findById(1L)).thenReturn(java.util.Optional.of(mockAudit));
+        when(findAuditService.findAuditById(1L)).thenReturn(java.util.Optional.of(mockAudit));
 
         // Call the Service
         ByteArrayInputStream result = pdfGeneratorService.createPdf(1L);
