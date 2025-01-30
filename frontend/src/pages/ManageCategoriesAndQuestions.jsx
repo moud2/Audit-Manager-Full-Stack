@@ -18,14 +18,12 @@ import DeleteCategoryDialog from "../components/CategoryQuestionCard/DeleteCateg
 const LazyCategoryQuestionCard = ({ category, availableCategories = [], onDelete, setErrorMessage, setSuccessMessage }) => {
     const [questions, setQuestions] = useState([]);
     const [loading, setLoading] = useState(true);
-    const questionLoadingProgress = useLoadingProgress(loading);
     const [openedOnce, setOpenedOnce] = useState(false);
     const [newQuestionDialogOpen, setNewQuestionDialogOpen] = useState(false);
     const [deleteQuestionDialogOpen, setDeleteQuestionDialogOpen] = useState(false);
     const [deleteQuestion, setDeleteQuestion] = useState();
     const [deleteCategoryDialogOpen, setDeleteCategoryDialogOpen] = useState(false);
     const [deleteCategory, setDeleteCategory] = useState();
-    const [categoriesLoading, setCategoriesLoading] = useState(true);
     
 
     const handleOpen = async () => {
@@ -84,11 +82,12 @@ const LazyCategoryQuestionCard = ({ category, availableCategories = [], onDelete
 
     function handleDeleteQues(deleteQuestion) {
         api.delete(`/v1/questions/${deleteQuestion.id}`, {}).then(response => {
-            setQuestions?.((oldQuestions) => oldQuestions.filter(question => question.id !== deleteQuestion.id))
+            setQuestions?.((oldQuestions) => oldQuestions.filter(question => question.id !== deleteQuestion.id));
+            setSuccessMessage("Frage wurde erfolgreich gelöscht.");
         }).catch(err => {
-            alert('Error delete question') // TODO
+            setErrorMessage("Fehler beim Löschen der Frage.");
         }).finally(() => {
-            setDeleteQuestionDialogOpen(false)
+            setDeleteQuestionDialogOpen(false);
         })
     }
 
@@ -131,7 +130,7 @@ export function ManageCategoriesAndQuestions() {
     const [errorMessage, setErrorMessage] = useState(null);
     const [successMessage, setSuccessMessage] = useState(null);
     const [categories, setCategories] = useState([]);
-    const [categoriesLoading, setCategoriesLoading] = useState(true); // 💡 Erst `categoriesLoading` definieren
+    const [categoriesLoading, setCategoriesLoading] = useState(true);
     const categoryLoadingProgress = useLoadingProgress(categoriesLoading);
 
     /**
@@ -253,15 +252,16 @@ export function ManageCategoriesAndQuestions() {
         .finally(() => {
             setNewCategoryDialogOpen(false);
         });
-};
+    };
 
     const handleDeleteCategory = (category) => {
         api.delete(`/v1/categories/${category.id}`, {}).then(() => {
-            setCategories?.((oldCategories) => oldCategories.filter(c => c.id !== category.id))
-        }).catch((err) => {
-            alert("Error delete category"); // TODO
+            setCategories?.((oldCategories) => oldCategories.filter(c => c.id !== category.id));
+            setSuccessMessage("Kategorie wurde erfolgreich gelöscht.");
+        }).catch(() => {
+            setErrorMessage("Fehler beim Löschen der Kategorie.");
         })
-    }
+    };
 
     return (
         <LayoutDefault>
