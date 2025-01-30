@@ -1,7 +1,7 @@
 import { LayoutDefault } from "../layouts/LayoutDefault.jsx";
 import { Button } from "@mui/material";
 import Title from "../components/Textareas/Title.jsx";
-import {CustomAlert} from "../components/ErrorHandling/CustomAlert";
+import { CustomAlert } from "../components/ErrorHandling/CustomAlert";
 import CategoryQuestionCard from "../components/CategoryQuestionCard/CategoryQuestionCard.jsx";
 import { Fragment, useCallback, useEffect, useState } from "react";
 import api from "../api.js";
