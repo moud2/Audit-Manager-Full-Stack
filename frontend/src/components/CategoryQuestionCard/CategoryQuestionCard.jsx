@@ -2,7 +2,7 @@ import ExpandableCard from "./ExpandableCard.jsx";
 import QuestionTable from "./QuestionTable.jsx";
 
 
-export default function CategoryQuestionCard({onOpen, children, questions, category, onAddQuestion, onDeleteQuestion}) {
+export default function CategoryQuestionCard({onOpen, children, questions, category, onAddQuestion, onDeleteQuestion, onDeleteCategory}) {
 
     const handleExpandChange = (expanded) => {
         if(expanded) {
@@ -10,13 +10,22 @@ export default function CategoryQuestionCard({onOpen, children, questions, categ
         }
     }
 
+    const handleDeleteCategory = ()=>{
+        onDeleteCategory?.(category)
+    }
+
     const handleNew = () => {
         onAddQuestion?.();
     }
 
+    const handleDelete = (question)=>{
+        onDeleteQuestion?.(question)
+    }
+
+
     return (
-        <ExpandableCard onExpandChange={handleExpandChange} title={category?.name}>
-            {children ? children : <QuestionTable questions={questions} onNew={handleNew} onDelete={onDeleteQuestion}></QuestionTable>}
+        <ExpandableCard onExpandChange={handleExpandChange} title={category?.name} onDelete={handleDeleteCategory}>
+            {children ? children : <QuestionTable questions={questions} onNew={handleNew} onDelete={handleDelete}></QuestionTable>}
         </ExpandableCard>
     )
 }
