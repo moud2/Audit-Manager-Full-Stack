@@ -51,4 +51,11 @@ describe('<CategoryQuestionCard />', () => {
         cy.wrap(onDeleteQuestion).should('have.been.calledOnce')
     })
 
+    it('should call onDeleteCategories when delete is clicked', () => {
+        const onDeleteCategory = cy.stub()
+        cy.mount(<CategoryQuestionCard category={{name: "Hello"}} questions={[{id: 1, name: "question"}]} onDeleteCategory={onDeleteCategory}/>)
+          cy.get('[data-cy="expandable-card-delete-button"]').click()
+          cy.wrap(onDeleteCategory).should('have.been.calledOnce')
+      })
+
 })

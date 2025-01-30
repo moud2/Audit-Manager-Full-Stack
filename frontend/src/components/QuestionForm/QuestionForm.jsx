@@ -1,6 +1,15 @@
-import {Button, FormControl, Input, InputLabel, MenuItem, Select, TextField} from "@mui/material";
+import {Button, FormControl, InputLabel, MenuItem, Select, TextField} from "@mui/material";
 import React from "react";
 
+/**
+ * The form for creating a new question
+ *
+ * @param value - the initial value of the form
+ * @param onChange - function to call when the form value changes
+ * @param categoryOptions - the options for the category select
+ * @param onSubmit - function to call when the form is submitted
+ * @returns {Element} - the react element
+ */
 export function QuestionForm({
                                  value, onChange = (_value) => {
     }, categoryOptions = [], onSubmit = () => {
@@ -34,9 +43,10 @@ export function QuestionForm({
                     data-cy="question-form-category-select"
                     value={value?.category}
                     onChange={(event) => setCategory(event.target.value)}
-                    label="Kategorie" >
+                    label="Kategorie">
                     {categoryOptions.map(cat => (
-                        <MenuItem data-cy="question-form-category-item" value={cat?.id} key={cat.id}>{cat?.name}</MenuItem>
+                        <MenuItem data-cy="question-form-category-item" value={cat?.id}
+                                  key={cat.id}>{cat?.name}</MenuItem>
                     ))}
                 </Select>
             </FormControl>}

@@ -26,4 +26,11 @@ describe('<CategoryQuestionCard />', () => {
         cy.get('[data-cy="child"]').should('exist')
     })
 
+    it('should call onDelete when delete is clicked', () => {
+        const onDelete = cy.stub()
+        cy.mount(<ExpandableCard onDelete={onDelete}/>)
+        cy.get('[data-cy="expandable-card-delete-button"]').click()
+        cy.wrap(onDelete).should('have.been.calledOnce')
+    })
+
 })
