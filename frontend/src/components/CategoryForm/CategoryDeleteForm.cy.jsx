@@ -4,7 +4,7 @@ import {CategoryDeleteForm} from "./CategoryDeleteForm.jsx";
 describe('<CategoryDeleteForm />', () => {
     it('renders', () => {
         // see: https://on.cypress.io/mounting-react
-        cy.mount(<CategoryDeleteForm />)
+        cy.mount(<CategoryDeleteForm category={{name: ""}} />)
     })
 
     it('can render category name', ()=>{

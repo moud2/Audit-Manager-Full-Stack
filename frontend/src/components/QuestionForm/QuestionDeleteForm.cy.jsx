@@ -4,7 +4,7 @@ import {QuestionDeleteForm} from "./QuestionDeleteForm.jsx";
 describe('<QuestionDeleteForm />', () => {
   it('renders', () => {
     // see: https://on.cypress.io/mounting-react
-    cy.mount(<QuestionDeleteForm value={{name: "", category: ""}}/>)
+    cy.mount(<QuestionDeleteForm question={{name: "", category: ""}}/>)
   })
 
   it('can render question name', ()=>{
