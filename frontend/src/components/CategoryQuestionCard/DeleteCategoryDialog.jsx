@@ -1,5 +1,4 @@
 import {BaseDialog} from "./BaseDialog.jsx";
-import {useState} from "react";
 import {CategoryDeleteForm} from "../CategoryForm/CategoryDeleteForm.jsx";
 
 export default function DeleteCategoryDialog ({onClose, open, onSubmit, deleteCategory}) {
@@ -7,7 +6,7 @@ export default function DeleteCategoryDialog ({onClose, open, onSubmit, deleteCa
         <BaseDialog title="Kategorie löschen" onClose={onClose} open={open}>
             <CategoryDeleteForm 
                 category={deleteCategory} 
-                onSubmit={()=>onSubmit(deleteCategory)}>
+                onSubmit={onSubmit}>
             </CategoryDeleteForm>
         </BaseDialog>
     )

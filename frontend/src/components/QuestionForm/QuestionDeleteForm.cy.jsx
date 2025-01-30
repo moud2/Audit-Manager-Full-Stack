@@ -7,15 +7,12 @@ describe('<QuestionDeleteForm />', () => {
     cy.mount(<QuestionDeleteForm question={{name: "", category: ""}}/>)
   })
 
-  it('can render question name', ()=>{
-    cy.mount(<QuestionDeleteForm question={{name: "Hello", category: ""}}/>)
-    cy.get('[data-cy="question-name"] > div > textarea').should('have.question', 'Hello')
+  it('can render question and category name', ()=>{
+    cy.mount(<QuestionDeleteForm question={{name: "Hello", category: {name: "Kat"}}}/>)
+    cy.get('[data-cy=question-form] > p:nth-of-type(1)').should('have.text', 'Frage: Hello')
+    cy.get('[data-cy=question-form] > p:nth-of-type(2)').should('have.text', 'Kategorie: Kat')
   })
 
-  it('can render category name', ()=>{
-    cy.mount(<QuestionDeleteForm question={{name: "", category: "Hey"}}/>)
-    cy.get('[data-cy="category-name"] > div > textarea').should('have.question', 'Hey')
-  })
 
   it('can submit form', ()=>{
     const onSubmit = cy.stub()

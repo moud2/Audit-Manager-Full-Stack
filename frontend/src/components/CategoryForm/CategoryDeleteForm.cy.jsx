@@ -9,7 +9,7 @@ describe('<CategoryDeleteForm />', () => {
 
     it('can render category name', ()=>{
         cy.mount(<CategoryDeleteForm category={{name: "Hello"}} />)
-        cy.get('[data-cy="category-name"] > div > textarea').should('have.category', 'Hello')
+        cy.get('[data-cy="category-form"] > p').should('have.text', 'Kategorie: Hello')
     })
 
     it('can submit form', ()=>{

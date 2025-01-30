@@ -1,7 +1,7 @@
 import {LayoutDefault} from "../layouts/LayoutDefault.jsx";
 import {Button} from "@mui/material";
 import Title from "../components/Textareas/Title.jsx";
-import { CustomAlert } from "../components/ErrorHandling/CustomAlert";
+import {CustomAlert} from "../components/ErrorHandling/CustomAlert";
 import CategoryQuestionCard from "../components/CategoryQuestionCard/CategoryQuestionCard.jsx";
 import {Fragment, useCallback, useEffect, useState} from "react";
 import api from "../api.js";
@@ -12,13 +12,13 @@ import DeleteQuestionDialog from "../components/CategoryQuestionCard/DeleteQuest
 import DeleteCategoryDialog from "../components/CategoryQuestionCard/DeleteCategoryDialog.jsx";
 
 
-const LazyCategoryQuestionCard = ({category, availableCategories = []}) => {
+const LazyCategoryQuestionCard = ({category, availableCategories = [], onDelete}) => {
     const [questions, setQuestions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [openedOnce, setOpenedOnce] = useState(false);
     const [newQuestionDialogOpen, setNewQuestionDialogOpen] = useState(false);
     const [deleteQuestionDialogOpen, setDeleteQuestionDialogOpen] = useState(false);
-    const [deleteQuestion, setDeleteQuestion] = useState();    
+    const [deleteQuestion, setDeleteQuestion] = useState();
     const [deleteCategoryDialogOpen, setDeleteCategoryDialogOpen] = useState(false);
     const [deleteCategory, setDeleteCategory] = useState();
 
@@ -44,12 +44,12 @@ const LazyCategoryQuestionCard = ({category, availableCategories = []}) => {
     }
 
     const handleDeleteQuestion = (question) => {
-        setDeleteQuestionDialogOpen(true),
+        setDeleteQuestionDialogOpen(true)
         setDeleteQuestion(question)
     }
 
     const handleDeleteCategory = (category) => {
-        setDeleteCategoryDialogOpen(true),
+        setDeleteCategoryDialogOpen(true)
         setDeleteCategory(category)
     }
 
@@ -59,41 +59,24 @@ const LazyCategoryQuestionCard = ({category, availableCategories = []}) => {
             categoryId: newQuestion.category,
             name: newQuestion.name
         }).then(response => {
-            if(newQuestion.category !== category.id) return
-            setQuestions?.((oldQuestions)=>[...oldQuestions, response.data])
+            if (newQuestion.category !== category.id) return
+            setQuestions?.((oldQuestions) => [...oldQuestions, response.data])
         }).catch(err => {
             alert('Error creating question') // TODO
-        }).finally(()=>{
+        }).finally(() => {
             setNewQuestionDialogOpen(false)
         })
-    }    
+    }
 
     function handleDeleteQues(deleteQuestion) {
-        api.delete(`/v1/questions/${deleteQuestion.id}`, {
-        }).then(response => {
+        api.delete(`/v1/questions/${deleteQuestion.id}`, {}).then(response => {
             setQuestions?.((oldQuestions) => oldQuestions.filter(question => question.id !== deleteQuestion.id))
         }).catch(err => {
             alert('Error delete question') // TODO
-        }).finally(()=>{
+        }).finally(() => {
             setDeleteQuestionDialogOpen(false)
         })
     }
-
-    const handleDeleteCat = (deleteCategory)=>{
-        api.delete(`/v1/categories/${deleteCategory.id}`, {
-        }).then((response) => {
-            //mangelhafte Variante:
-            window.location.reload(); //läd die Seite neu
-            
-            //Fehlerhafte Variante: setCategories ist nicht erreichbar
-            //setCategories?.((oldCategories) => oldCategories.filter(category => category.id !== deleteCategory.id))
-        }).catch((err) => {
-            alert("Error delete category"); // TODO
-        }).finally(()=>{
-            setDeleteCategoryDialogOpen(false)
-        })
-    }
-
 
     return (
         <Fragment>
@@ -101,14 +84,14 @@ const LazyCategoryQuestionCard = ({category, availableCategories = []}) => {
                                availableCategories={availableCategories}
                                onSubmit={handleCreate}
                                onClose={() => setNewQuestionDialogOpen(false)}></NewQuestionDialog>
-            <DeleteQuestionDialog open={deleteQuestionDialogOpen} 
+            <DeleteQuestionDialog open={deleteQuestionDialogOpen}
                                   deleteQuestion={deleteQuestion}
                                   onSubmit={handleDeleteQues}
                                   onClose={() => setDeleteQuestionDialogOpen(false)}></DeleteQuestionDialog>
-            <DeleteCategoryDialog open={deleteCategoryDialogOpen} 
+            <DeleteCategoryDialog open={deleteCategoryDialogOpen}
                                   deleteCategory={deleteCategory}
-                                  onSubmit={handleDeleteCat}
-                                  onClose={()=>setDeleteCategoryDialogOpen(false)}></DeleteCategoryDialog>
+                                  onSubmit={onDelete}
+                                  onClose={() => setDeleteCategoryDialogOpen(false)}></DeleteCategoryDialog>
             <CategoryQuestionCard category={category} questions={questions} onOpen={handleOpen}
                                   onAddQuestion={handleAddQuestion}
                                   onDeleteCategory={handleDeleteCategory}
@@ -231,30 +214,37 @@ export function ManageCategoriesAndQuestions() {
     }, [fetchCategories]);
 
 
-    const handleAddedQuestion = ()=>{
+    const handleAddedQuestion = () => {
         fetchCategories()
     }
 
     const [newCategoryDialogOpen, setNewCategoryDialogOpen] = useState(false);
 
-    const handleNewCategory = (category)=>{
-        api.post("/v1/categories/new" , {
+    const handleNewCategory = (category) => {
+        api.post("/v1/categories/new", {
             name: category.name,
         }).then((response) => {
-            setCategories((oldCategories)=>[...oldCategories, response.data])
+            setCategories((oldCategories) => [...oldCategories, response.data])
             // todo: success message
         }).catch((err) => {
             alert("Fehler beim Erstellen der Kategorie. :(");
             // todo: error
-        }).finally(()=>{
+        }).finally(() => {
             setNewCategoryDialogOpen(false)
+        })
+    }
+
+    const handleDeleteCategory = (category) => {
+        api.delete(`/v1/categories/${category.id}`, {}).then(() => {
+            setCategories?.((oldCategories) => oldCategories.filter(c => c.id !== category.id))
+        }).catch((err) => {
+            alert("Error delete category"); // TODO
         })
     }
 
     return (
         <LayoutDefault>
             <Title>Kategorien und Fragen verwalten</Title>
-            {/* Fehler-Alert */}
             <CustomAlert
                 show={!!errorMessage}
                 severity="error"
@@ -266,7 +256,6 @@ export function ManageCategoriesAndQuestions() {
                     border: "1px solid #f5c6cb",
                 }}
             />
-            {/* Erfolgs-Alert */}
             <CustomAlert
                 show={!!successMessage}
                 severity="success"
@@ -301,16 +290,19 @@ export function ManageCategoriesAndQuestions() {
                 )}
             </div>
             <section className="flex flex-col gap-2 max-w-6xl mx-auto p-2">
-                <NewCategoryDialog open={newCategoryDialogOpen} onClose={()=>setNewCategoryDialogOpen(false)} onSubmit={handleNewCategory}></NewCategoryDialog>
+                <NewCategoryDialog open={newCategoryDialogOpen} onClose={() => setNewCategoryDialogOpen(false)}
+                                   onSubmit={handleNewCategory}></NewCategoryDialog>
                 <Button
                     fullWidth
-                    startIcon={<AddIcon />}
-                    onClick={()=>setNewCategoryDialogOpen(true)}
+                    startIcon={<AddIcon/>}
+                    onClick={() => setNewCategoryDialogOpen(true)}
                 >
                     Kategorie hinzufügen
                 </Button>
                 {categoriesLoading ? <div>Loading...</div> : categories.map((category, index) =>
-                    <LazyCategoryQuestionCard key={category.id} category={category} availableCategories={categories} onAddedQuestion={handleAddedQuestion}/>)}
+                    <LazyCategoryQuestionCard key={category.id} category={category} availableCategories={categories}
+                                              onAddedQuestion={handleAddedQuestion}
+                                              onDelete={() => handleDeleteCategory(category)}/>)}
             </section>
         </LayoutDefault>
     );

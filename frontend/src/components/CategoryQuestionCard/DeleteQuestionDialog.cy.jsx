@@ -13,10 +13,10 @@ describe('<DeleteQuestionDialog />', () => {
     })
 
     it('should call onSubmit with the correct object when form is submitted', () => {
-          const onSubmit = cy.stub()
+        const onSubmit = cy.stub()
         cy.mount(<DeleteQuestionDialog open={true} onSubmit={onSubmit}/>)
-        cy.get('[data-cy="question-name"]').type('Question Name')
         cy.get('[data-cy="question-form-submit-button"]').click()
         cy.wrap(onSubmit).should('have.been.calledOnce')
-        cy.wrap(onSubmit).should('have.been.calledWith', {name: 'Question Name'})   })
+
+    })
 })
