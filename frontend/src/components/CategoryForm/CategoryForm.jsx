@@ -1,6 +1,14 @@
 import {Button, FormControl, TextField} from "@mui/material";
 import React from "react";
 
+/**
+ * The form for creating a new category
+ *
+ * @param value - the initial value of the form
+ * @param onChange - function to call when the form value changes
+ * @param onSubmit - function to call when the form is submitted
+ * @returns {Element} - the react element
+ */
 export function CategoryForm({value, onChange = (_value) => {}, onSubmit = () => {} }) {
 
     const setCategory = (name) => {
