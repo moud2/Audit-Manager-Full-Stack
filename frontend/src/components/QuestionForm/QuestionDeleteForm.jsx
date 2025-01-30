@@ -1,23 +1,14 @@
-    import {Button, Typography} from "@mui/material";
+    import {Button} from "@mui/material";
     import React from "react";
+    import Text from "../Textareas/Text.jsx";
+
 
     export function QuestionDeleteForm({ question, onSubmit = () => {} }) {
 
         return (
             <form className="flex flex-col gap-2">
-                <div>
-                    <Typography variant="subtitle1">Frage:</Typography>
-                    <Typography data-cy="question-name" style={{ marginTop: '8px' }}>
-                        {question?.name}
-                    </Typography>
-                </div>
-                <div>
-                    <Typography variant="subtitle1">Kategorie:</Typography>
-                    <Typography data-cy="category-name" style={{ marginTop: '8px' }}>
-                        {question?.category.name}
-                    </Typography>
-                </div>
-
+                <Text data-cy="question-name">Frage: {question?.name}</Text>
+                <Text data-cy="category-name">Kategorie: {question?.category.name}</Text>
                 <Button data-cy="question-form-submit-button" onClick={onSubmit}>Delete</Button>
             </form>)
     }

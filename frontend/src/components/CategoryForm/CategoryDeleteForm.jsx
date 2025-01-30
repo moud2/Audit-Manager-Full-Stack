@@ -1,16 +1,12 @@
-import {Button, Typography} from "@mui/material";
+import {Button} from "@mui/material";
 import React from "react";
+import Text from "../Textareas/Text.jsx";
 
 export function CategoryDeleteForm({category, onSubmit = () => {} }) {
 
     return (
         <form className="flex flex-col gap-2">
-            <div>
-                <Typography variant="subtitle1">Kategorie:</Typography>
-                <Typography data-cy="category-name" style={{ marginTop: '8px' }}>
-                    {category?.name}
-                </Typography>
-            </div>
+            <Text data-cy="category-name">Kategorie: {category?.name}</Text>
             <Button data-cy="category-form-submit-button" onClick={onSubmit}>Delete</Button>
         </form>
     )

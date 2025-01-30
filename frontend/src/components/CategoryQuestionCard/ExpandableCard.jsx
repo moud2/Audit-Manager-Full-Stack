@@ -49,7 +49,7 @@ export default function ExpandableCard({children, onExpandChange, title, onDelet
                 title={title}
                 action={
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <IconButton onClick={handleDeleteClick}>
+                        <IconButton data-cy="expandable-card-delete-button" onClick={handleDeleteClick}>
                             <DeleteIcon />
                         </IconButton>
                                 
