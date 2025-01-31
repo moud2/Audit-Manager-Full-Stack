@@ -33,8 +33,13 @@ public class PdfGeneratorService {
     public ByteArrayInputStream createPdf(long auditId) {
         Audit audit = findAuditService.findAuditById(auditId).orElseThrow(() -> new AuditNotFoundException(auditId));
 
+        Font headerFont = new Font(Font.HELVETICA, 14, Font.BOLD);
+        Font normalFont = new Font(Font.HELVETICA, 10);
+        Font whiteBoldFont = new Font(Font.HELVETICA, 12, Font.BOLD, Color.WHITE);
 
-        Set<Rating> ratings = new HashSet<>(audit.getRatings());
+
+        List<Rating> ratings = new ArrayList<>(audit.getRatings());
+        ratings.sort(Comparator.comparing(r -> r.getQuestion().getName()));
 
         Document document = new Document();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -43,12 +48,12 @@ public class PdfGeneratorService {
             PdfWriter writer = PdfWriter.getInstance(document, out);
             document.open();
 
-            // Add Header
-            Font headerFont = new Font(Font.HELVETICA, 14, Font.BOLD);
+
+
             document.add(new Paragraph("Audit Report", headerFont));
-            document.add(new Paragraph("Audit ID: " + audit.getId(), new Font(Font.HELVETICA, 10)));
-            document.add(new Paragraph("Audit Title: " + audit.getName(), new Font(Font.HELVETICA, 10)));
-            document.add(new Paragraph("Customer: " + audit.getCustomer(), new Font(Font.HELVETICA, 10)));
+            document.add(new Paragraph("Audit ID: " + audit.getId(), normalFont));
+            document.add(new Paragraph("Audit Title: " + audit.getName(),normalFont));
+            document.add(new Paragraph("Customer: " + audit.getCustomer(), normalFont));
             document.add(new Paragraph("\n"));
 
             // Group Ratings by Category
@@ -59,9 +64,8 @@ public class PdfGeneratorService {
             for (Map.Entry<String, List<Rating>> entry : groupedRatings.entrySet()) {
                 // Add Category Title with Background
                 String categoryName = entry.getKey();
-                Font categoryFont = new Font(Font.HELVETICA, 12, Font.BOLD, Color.WHITE);
                 PdfPTable categoryTable = new PdfPTable(1);
-                PdfPCell categoryCell = new PdfPCell(new Phrase(categoryName, categoryFont));
+                PdfPCell categoryCell = new PdfPCell(new Phrase(categoryName, whiteBoldFont));
                 categoryCell.setBackgroundColor(new Color(196, 23, 31));
                 categoryCell.setPadding(5);
                 categoryCell.setBorder(Rectangle.NO_BORDER);
@@ -93,11 +97,11 @@ public class PdfGeneratorService {
                     questionCell.addElement(answer);
 
                     // Checkbox for Points
-                    PdfPTable pointsTable = new PdfPTable(6);
+                    PdfPTable pointsTable = new PdfPTable(7);
                     pointsTable.setSpacingBefore(5);
                     pointsTable.setHorizontalAlignment(Element.ALIGN_CENTER);
 
-                    String[] pointLabels = {"N/A", "1", "2", "3", "4", "5"};
+                    String[] pointLabels = {"N/A","0", "1", "2", "3", "4", "5"};
                     for (int i = 0; i < pointLabels.length; i++) {
                         PdfPCell pointCell = new PdfPCell(new Phrase(pointLabels[i], new Font(Font.HELVETICA, 9)));
                         pointCell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -105,9 +109,12 @@ public class PdfGeneratorService {
                         pointCell.setBorder(Rectangle.BOX);
 
                         // Highlight the selected point
-                        if ((rating.getPoints() != null && i == rating.getPoints()) || (i == 0 && rating.getNa())) {
-                            pointCell.setBackgroundColor(new Color(224, 224, 224));
+                        if (rating.getPoints() != null && i == rating.getPoints() + 1) {
+                            pointCell.setBackgroundColor(new Color(224, 224, 224)); // Highlight selected point
+                        } else if (i == 0 && Boolean.TRUE.equals(rating.getNa())) {
+                            pointCell.setBackgroundColor(new Color(224, 224, 224)); // Highlight N/A
                         }
+
 
                         pointsTable.addCell(pointCell);
                     }
