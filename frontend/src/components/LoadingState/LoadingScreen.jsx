@@ -5,22 +5,23 @@ import { CircularProgressWithLabel } from "./CircularProgressWithLabel";
 /**
  * LoadingScreen
  *
- * A full-screen loading component displaying a circular progress with a percentage label.
+ * Displays a circular loading indicator with a message.
  *
  * @param {number} progress - The loading progress percentage (0-100).
  * @param {string} message - The message to display under the progress indicator.
+ * @param {boolean} small - If true, displays a smaller loading indicator.
  */
-function LoadingScreen({ progress = 0, message = "Loading..." }) {
+function LoadingScreen({ progress = 0, message = "Loading...", small = false }) {
     return (
         <Box
-            className="flex items-center justify-center h-screen"
             display="flex"
             flexDirection="column"
             alignItems="center"
             justifyContent="center"
+            sx={small ? { padding: "8px" } : { height: "100vh" }}
         >
-            <CircularProgressWithLabel value={progress} />
-            <Typography variant="body1" color="error" sx={{ mt: 2 }}>
+            <CircularProgressWithLabel value={progress} size={small ? 40 : 80} />
+            <Typography variant="body2" color="error" sx={{ mt: 1 }}>
                 {message}
             </Typography>
         </Box>
