@@ -2,6 +2,13 @@ import {Button} from "@mui/material";
 import React from "react";
 import Text from "../Textareas/Text.jsx";
 
+/**
+ * Form for deleting a category
+ *
+ * @param category - the category to delete
+ * @param onSubmit - function to call when the form is submitted
+ * @returns {Element} - the react element
+ */
 export function CategoryDeleteForm({category, onSubmit = () => {} }) {
 
     return (
