@@ -1,0 +1,2 @@
+rootProject.name = 'backend'
+System.setProperty("sonar.gradle.skipCompile", "true")
